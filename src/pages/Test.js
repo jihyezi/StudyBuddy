@@ -2,8 +2,13 @@ import Comments from "../components/Comments";
 import Inputfield from "../components/Inputfield";
 import InputButton from "../components/InputButton";
 import StudyPost from "../components/StudyPost";
+import CommunityPostSmall from "../components/CommunityPostSmall";
+
 import profile from '../assets/images/profile1.png'
 import arrow from '../assets/icons/arrow_down.png'
+import communityImg from '../assets/images/communityimg.png';
+import palette from '../assets/icons/palette.png';
+
 
 const data = {
     nickname: '페이커',
@@ -32,6 +37,15 @@ const data4 = {
     type: '온라인'
 }
 
+const data5 = {
+    communityimg: communityImg,
+    communityname: '정보처리기사',
+    person: 4,
+    post: 100,
+    date: '2024-06-11',
+    commmunityicon: palette
+}
+
 const Test = () => {
     return (
         <div>
@@ -39,6 +53,7 @@ const Test = () => {
             <Inputfield title={data2.title} placeholder={data2.placeholder} />
             <InputButton title={data3.title} placeholder={data3.placeholder} btnimg={data3.btnimg} />
             <StudyPost state={data4.state} title={data4.title} content={data4.content} tag={data4.tag} person={data4.person} type={data4.type} />
+            <CommunityPostSmall communityimg={data5.communityimg} communityname={data5.communityname} person={data5.person} post={data5.post} date={data5.date} commmunityicon={data5.commmunityicon} />
         </div>
     )
 }
