@@ -218,11 +218,14 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border: 1px solid #DDD;
 }
 
 .community-post-left {
     display: flex;
     margin-left: 20px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .community-post-image {
@@ -272,8 +275,9 @@
 
 .community-post-icon-wrapper {
     position: relative;
-    width: 48px;
-    height: 48px;
+    width: 30px;
+    height: 39px;
+    margin-right: 30px;
 }
 
 .community-post-icon-background {
@@ -287,6 +291,4 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 18px;
-    height: 18px;
-}
-
+    height: 18px;}
