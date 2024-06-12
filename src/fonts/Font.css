@@ -1,0 +1,74 @@
+@font-face {
+  font-family: "BalooTammudu";
+  src: url("./BalooTammudu-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BalooTammudu2-Bold";
+  src: url("./BalooTammudu2-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BalooTammudu2-ExtraBold";
+  src: url("./BalooTammudu2-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BalooTammudu2-Medium";
+  src: url("./BalooTammudu2-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BalooTammudu2-Regular";
+  src: url("./BalooTammudu2-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BalooTammudu2-SemiBold";
+  src: url("./BalooTammudu2-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-Black";
+  src: url("./NotoSansKR-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-Bold";
+  src: url("./NotoSansKR-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-ExtraBold";
+  src: url("./NotoSansKR-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-ExtraLight";
+  src: url("./NotoSansKR-ExtraLight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-Light";
+  src: url("./NotoSansKR-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-Medium";
+  src: url("./NotoSansKR-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-Regular";
+  src: url("./NotoSansKR-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-SemiBold";
+  src: url("./NotoSansKR-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NotoSans-Thin";
+  src: url("./NotoSansKR-Thin.ttf") format("truetype");
+}
