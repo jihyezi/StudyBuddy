@@ -1,0 +1,17 @@
+.myMessage {
+  padding: 10px 25px 10px 25px;
+  border-radius: 30px;
+  background-color: rgba(255, 116, 116, 0.7);
+  color: #ffffff;
+  font-family: "NotoSans-Regular";
+}
+
+.myMessageLast {
+  padding: 10px 25px 10px 25px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  background-color: rgba(255, 116, 116, 0.7);
+  color: #ffffff;
+  font-family: "NotoSans-Regular";
+}
