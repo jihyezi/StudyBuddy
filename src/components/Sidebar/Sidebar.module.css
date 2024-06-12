@@ -3,7 +3,7 @@
   flex-direction: column;
   border-right: 1px solid #dddddd;
   height: 100%;
-  margin-left: calc(10vw - 100px);
+  margin-left: calc(10vw - 90px);
 }
 
 .logo {
