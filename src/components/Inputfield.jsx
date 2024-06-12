@@ -1,12 +1,12 @@
 import React from "react";
-import './Components.css';
+import styles from './Inputfield.module.css'
 
 const Inputfield = (props) => {
     return (
-        <div className="InputContainer">
-            <div className="Title">{props.title}</div>
+        <div className={styles.InputContainer}>
+            <div className={styles.Title}>{props.title}</div>
             <input
-                className="InputField"
+                className={styles.InputField}
                 type="text"
                 placeholder={props.placeholder} />
         </div>

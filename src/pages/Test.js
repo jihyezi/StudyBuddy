@@ -1,4 +1,4 @@
-import Comments from "../components/Comments";
+import Comments from "../components/Comments"
 import Inputfield from "../components/Inputfield";
 import InputButton from "../components/InputButton";
 import StudyPost from "../components/StudyPost";
@@ -29,7 +29,7 @@ const data3 = {
 }
 
 const data4 = {
-    state: '1',
+    state: '1', // 1: 모집중 / 2: 모집완료
     title: '정보보안기사 온라인 스터디',
     content: '정보처리기사 온라인 스터디 모집합니다! 디코에서 주 3회 스터디 진행할 예정입니다!!',
     tag: ["정보보안기사", "온라인 스터디", "자격증"],
