@@ -1,0 +1,9 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.home::-webkit-scrollbar {
+  display: none;
+}

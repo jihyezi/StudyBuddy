@@ -1,0 +1,56 @@
+.searchUserModal {
+  border: 1px solid #dddddd;
+  border-radius: 30px;
+}
+
+.searchUserModalHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px 15px 20px 15px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.closeIcon {
+  width: 24px;
+  height: 24px;
+  padding-top: 6px;
+}
+
+.newMessage {
+  color: #969696;
+  font-family: "BalooTammudu";
+  font-size: 18px;
+}
+
+.send {
+  padding-top: 6px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 20px;
+  background-color: rgba(255, 116, 116, 0.7);
+  color: #ffffff;
+  font-family: "BalooTammudu";
+}
+
+.searchUserModalMiddle {
+  border-bottom: 1px solid #dddddd;
+  padding: 15px 10px 15px 10px;
+}
+
+.sendTo {
+  color: #969696;
+  font-family: "BalooTammudu";
+  margin-right: 10px;
+}
+
+.input {
+  border: none;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #bdbdbd;
+  font-family: "BalooTammudu2-Regular";
+  font-size: 16px;
+}
