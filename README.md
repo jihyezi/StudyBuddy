@@ -1,1 +1,1 @@
-studybuddy
+studybuddy dev
