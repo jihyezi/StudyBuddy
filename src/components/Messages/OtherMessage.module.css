@@ -1,0 +1,17 @@
+.otherMessage {
+  padding: 10px 25px 10px 25px;
+  border-radius: 30px;
+  background-color: rgba(221, 221, 221, 0.7);
+  color: #333333;
+  font-family: "NotoSans-Regular";
+}
+
+.otherMessageLast {
+  padding: 10px 25px 10px 25px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  background-color: rgba(221, 221, 221, 0.7);
+  color: #333333;
+  font-family: "NotoSans-Regular";
+}
