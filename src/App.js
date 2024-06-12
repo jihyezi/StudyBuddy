@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import './App.css';
-import Test from './pages/Test';
-
-function App() {
-  return (
-    <div className="App">
-      <Test />
-    </div>
-=======
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 
@@ -51,7 +41,6 @@ function App() {
         <Recommended />
       </Center>
     </BrowserRouter>
->>>>>>> cf718ff68e772f760289e2796bf2f6f9e853120f
   );
 }
 
