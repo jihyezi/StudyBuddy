@@ -1,0 +1,43 @@
+.header {
+  border-bottom: 1px solid #dddddd;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin: 15px 25px 15px 25px;
+}
+
+.headerName {
+  color: #333333;
+  font-family: "BalooTammudu";
+  font-size: 18px;
+}
+
+.cancel,
+.post {
+  margin-left: 15px;
+  padding: 8px 24px 8px 24px;
+  border-radius: 10px;
+  font-family: "NotoSans-SemiBold";
+  color: #ffffff;
+}
+
+.cancel {
+  background-color: #c7c7c7;
+}
+
+.post {
+  background-color: #ff7474;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 25px;
+}
