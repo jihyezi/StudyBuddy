@@ -17,9 +17,12 @@ import Post from "pages/Post/Post";
 import Recommended from "pages/Recommended/Recommended";
 
 const Center = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: row;
+  margin-left: 250px; /* 사이드바의 너비만큼 왼쪽 여백 추가 */
+  width: calc(100% - 250px); /* 사이드바를 제외한 나머지 너비 설정 */
+  height: 100vh;
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 설정 */
 `;
 
 function App() {

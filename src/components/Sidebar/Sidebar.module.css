@@ -1,9 +1,18 @@
 .side {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
   display: flex;
   flex-direction: column;
   border-right: 1px solid #dddddd;
+  min-width: 50px;
+  max-width: 280px;
+  width: 250px;
   height: 100%;
-  margin-left: calc(10vw - 100px);
+  padding-left: 26px;
+  z-index: 10;
+  /* margin-left: calc(10vw - 100px); */
 }
 
 .logo {
@@ -21,7 +30,7 @@
 
 .menu {
   display: block;
-  margin-left: 40px;
+  margin-left: 10px;
   padding: 10px;
   min-width: 275px;
 }
@@ -38,10 +47,10 @@
 
 .post {
   text-align: center;
-  margin-left: 40px;
-  margin-right: 40px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  width: 220px;
+  height: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 50px;
   color: #ffffff;
   background-color: #ff7474;
