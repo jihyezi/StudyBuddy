@@ -4,6 +4,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
+  height: 490px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -91,7 +92,7 @@
 }
 
 .userList {
-  max-height: 200px;
+  max-height: 350px;
   overflow-y: auto;
   min-height: 200px; /* Minimum height */
 }
