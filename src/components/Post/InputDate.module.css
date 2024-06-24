@@ -31,6 +31,7 @@
   border-style: solid;
   border-color: #b6b6b6;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .inputPlaceholder {

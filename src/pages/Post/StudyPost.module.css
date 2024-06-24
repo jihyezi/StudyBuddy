@@ -46,7 +46,25 @@
   font-size: 14px;
 }
 
-.iconWrapper {
+.albumIconWrapper {
+  position: absolute;
+  right: 65px;
+  bottom: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #ff7474;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.albumIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.fileIconWrapper {
   position: absolute;
   right: 10px;
   bottom: 20px;
@@ -59,7 +77,7 @@
   justify-content: center;
 }
 
-.albumIcon {
+.fileIcon {
   width: 20px;
   height: 20px;
 }

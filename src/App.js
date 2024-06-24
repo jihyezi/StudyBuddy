@@ -15,7 +15,10 @@ import Messages from "pages/Messages/Messages";
 import Bookmarks from "pages/Bookmarks/Bookmarks";
 import Profile from "pages/Profile/Profile";
 import Post from "pages/Post/Post";
+import CommunityPost from "pages/Post/CommunityPost";
+import StudyPost from "pages/Post/StudyPost";
 import Recommended from "pages/Recommended/Recommended";
+
 //supabase 데이터 인스톨(차후 수정이나 최적화 가능)
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
@@ -59,7 +62,9 @@ function App() {
             <Route path="/messages" element={<Messages />} />
             <Route path="/bookmarks" element={<Bookmarks />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/post" element={<Post />} />
+            {/* <Route path="/post" element={<Post />} /> */}
+            {/* <Route path="/post" element={<CommunityPost />} /> */}
+            <Route path="/post" element={<StudyPost />} />
           </Routes>
         </div>
       </div>

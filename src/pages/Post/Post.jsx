@@ -9,24 +9,14 @@ import InputSelect from "components/Post/InputSelect";
 import InputModal from "components/Post/InputModal";
 import InputDate from "components/Post/InputDate";
 
+//icon
+import album from "assets/icons/Post/album.png";
+
 const Post = ({}) => {
   return (
     <div>
-      <Header />
+      <Header title={"Post"} />
       <div className={styles.postContainer}>
-        <InputFile
-          title={"대표 이미지"}
-          placeholder={"커뮤니티 대표 이미지를 넣어주세요."}
-        />
-        <InputText
-          title={"이름"}
-          placeholder={"커뮤니티 이름을 입력해주세요."}
-        />
-        <InputText
-          title={"설명"}
-          placeholder={"커뮤니티에 대해 간단하게 설명해주세요."}
-        />
-        <InputSelect title={"분류"} placeholder={"분류를 선택해주세요"} />
         <InputText title={"제목"} placeholder={"제목을 입력해 주세요."} />
         <div
           style={{
@@ -45,6 +35,15 @@ const Post = ({}) => {
         </div>
         <InputModal title={"책"} placeholder={"책을 입력해 주세요."} />
         <InputModal title={"결과"} placeholder={"결과를 입력해 주세요."} />
+        <div className={styles.inputContainer}>
+          <div className={styles.inputTitle}>공부방법</div>
+          <div className={styles.inputWrapper}>
+            <input className={styles.inputField} type="text" />
+            <div className={styles.iconWrapper}>
+              <img src={album} alt="albumIcon" className={styles.albumIcon} />
+            </div>
+          </div>
+        </div>
         <InputFile title={"자료"} placeholder={"파일을 첨부해 주세요."} />
       </div>
     </div>
