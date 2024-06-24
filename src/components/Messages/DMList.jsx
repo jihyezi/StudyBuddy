@@ -50,7 +50,7 @@ const dummyData = [
 ];
 function DMList() {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [isSending, setIsSending] = useState(false); // 추가된 부분
+  const [isSending, setIsSending] = useState(false);
 
   const handleUserClick = (user) => {
     if (selectedUser && selectedUser.id === user.id) {
@@ -61,7 +61,12 @@ function DMList() {
   };
 
   const handleNewMessageClick = () => {
-    setIsSending(true); // 추가된 부분
+    setIsSending(true);
+  };
+
+  const handleSendMessage = (user) => {
+    setSelectedUser(user);
+    setIsSending(false);
   };
 
   return (
@@ -104,7 +109,10 @@ function DMList() {
         </div>
       )}
       {isSending && (
-        <DMSend setIsSending={setIsSending} dummyData={dummyData} />
+        <DMSend
+          setIsSending={setIsSending}
+          setSelectedUser={handleSendMessage}
+        />
       )}
     </div>
   );

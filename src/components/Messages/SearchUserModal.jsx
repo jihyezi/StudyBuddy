@@ -9,6 +9,7 @@ const SearchUserModal = ({
   selectedUser,
   handleSearchChange,
   searchTerm,
+  onSendMessage,
 }) => {
   return (
     <div className={styles.searchUserModal}>
@@ -20,7 +21,7 @@ const SearchUserModal = ({
           onClick={() => setIsSending(false)}
         />
         <div className={styles.newMessage}>New Message</div>
-        <div className={styles.send} onClick={() => setIsSending(false)}>
+        <div className={styles.send} onClick={onSendMessage}>
           Send
         </div>
       </div>
