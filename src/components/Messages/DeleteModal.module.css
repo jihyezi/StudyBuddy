@@ -1,7 +1,30 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
 .deleteModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border: 1px solid #dddddd;
   border-radius: 20px;
-  min-width: 600px;
+  width: 600px;
+  height: 300px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-family: "Baloo Tammudu 2", sans-serif;
 }
 
 .modalQuestion {
@@ -10,7 +33,6 @@
   text-align: center;
   border-bottom: 1px solid #dddddd;
   color: #606060;
-  font-family: "BalooTammudu";
   font-size: 32px;
 }
 
@@ -20,8 +42,8 @@
   text-align: center;
   border-bottom: 1px solid #dddddd;
   color: #ff7474;
-  font-family: "BalooTammudu2-SemiBold";
   font-size: 24px;
+  cursor: pointer;
 }
 
 .modalCancel {
@@ -29,6 +51,6 @@
   padding-bottom: 8px;
   text-align: center;
   color: #606060;
-  font-family: "BalooTammudu2-SemiBold";
   font-size: 24px;
+  cursor: pointer;
 }

@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styles from "./MyMessage.module.css";
-import "fonts/Font.css";
 
-const MyMessage = ({}) => {
+const MyMessage = ({ message, last }) => {
   return (
-    <>
-      <div className={styles.myMessage}>MyMessage</div>
-      <div className={styles.myMessageLast}>MyMessage</div>
-    </>
+    <div className={styles.myMessageWrapper}>
+      <div className={last ? styles.myMessageLast : styles.myMessage}>
+        {message}
+      </div>
+    </div>
   );
 };
+
 export default MyMessage;
