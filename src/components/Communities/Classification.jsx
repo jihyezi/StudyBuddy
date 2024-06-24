@@ -6,7 +6,7 @@ import leftArrow from '../../assets/icons/left_arrow.png';
 import rightArrow from '../../assets/icons/right_arrow.png';
 
 const Classification = ({ onEventSelect }) => {
-  const [scrollState, setScrollState] = useState('right');
+  const [scrollState, setScrollState] = useState('start');
   const [selectedButton, setSelectedButton] = useState('🔥');
 
   const containerRef = useRef(null);
@@ -49,10 +49,14 @@ const Classification = ({ onEventSelect }) => {
   const handleScroll = () => {
     const { current } = containerRef;
     if (current) {
-      if (current.scrollLeft <= (current.scrollWidth - current.clientWidth) / 2) {
-        setScrollState('right');
+      const isAtStart = current.scrollLeft === 0;
+      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth;
+      if (isAtStart) {
+        setScrollState('start');
+      } else if (isAtEnd) {
+        setScrollState('end');
       } else {
-        setScrollState('left');
+        setScrollState('middle');
       }
     }
   };
@@ -72,16 +76,19 @@ const Classification = ({ onEventSelect }) => {
   const moveRight = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft = current.scrollWidth - current.clientWidth;
+      current.scrollLeft += current.clientWidth - 20;
+      handleScroll();
     }
   };
 
   const moveLeft = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft = 0;
+      current.scrollLeft -= current.clientWidth - 20;
+      handleScroll();
     }
   };
+
 
   return (
     <div className={styles.stackTagsArea}>
@@ -96,14 +103,14 @@ const Classification = ({ onEventSelect }) => {
           </button>
         ))}
       </div>
-      {isOverflow && scrollState === 'right' && (
+      {isOverflow && (scrollState === 'middle' || scrollState === 'start') && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxRight}`}>
           <button className={styles.scrollButton} onClick={moveRight}>
             <img src={rightArrow} style={{ width: 30, height: 30 }} alt="Right Arrow" />
           </button>
         </div>
       )}
-      {isOverflow && scrollState === 'left' && (
+      {isOverflow && (scrollState === 'middle' || scrollState === 'end') && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxLeft}`}>
           <button className={styles.scrollButton} onClick={moveLeft}>
             <img src={leftArrow} style={{ width: 30, height: 30 }} alt="Left Arrow" />

@@ -7,9 +7,8 @@ const getPostsByEvent = (event) => {
 };
 
 const CommunityPostList = ({ selectedEvent }) => {
-    const postList = selectedEvent
-        ? getPostsByEvent(selectedEvent)
-        : [];
+
+    const postList = selectedEvent ? getPostsByEvent(selectedEvent) : [];
 
     return (
         <div>

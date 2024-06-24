@@ -1,6 +1,5 @@
 .stackTagsArea {
   position: relative;
-  width: 800px;
   margin-left: -16px;
   margin-right: -16px;
 }
@@ -13,8 +12,8 @@
   margin-right: 32px;
   gap: 10px;
   scroll-behavior: smooth;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
 
 .classContainer::-webkit-scrollbar {

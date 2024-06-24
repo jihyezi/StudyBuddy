@@ -1,11 +1,6 @@
 .header {
-  position: fixed;
   border-bottom: 1px solid #dddddd;
-  min-width: 750px;
-  height: 60px; /* 헤더 높이 설정 */
-  background-color: white; /* 배경색 추가 */
-  width: 100%; /* 헤더가 화면 전체 너비를 차지하도록 설정 */
-  z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
+  min-width: 700px;
 }
 
 .backIcon {

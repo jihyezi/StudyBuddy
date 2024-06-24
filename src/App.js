@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 //component
@@ -17,19 +17,23 @@ import Post from "pages/Post/Post";
 import Recommended from "pages/Recommended/Recommended";
 
 const Center = styled.div`
+  margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
+  width: 80%;
+  height: 100vh;
   display: flex;
   flex-direction: row;
-  margin-left: 250px; /* 사이드바의 너비만큼 왼쪽 여백 추가 */
-  width: calc(100% - 250px); /* 사이드바를 제외한 나머지 너비 설정 */
-  height: 100vh;
-  overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 설정 */
 `;
 
-function App() {
+const Content = styled.div`
+  flex: 1; /* 차지할 수 있는 모든 공간을 차지하도록 설정 */
+`;
+
+const MainContent = () => {
+  const location = useLocation(); // 현재 경로를 가져옴
+
   return (
-    <BrowserRouter>
-      <Center>
-        <Sidebar />
+    <>
+      <Content>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
@@ -41,7 +45,18 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
         </Routes>
-        <Recommended />
+      </Content>
+      {location.pathname === "/communities" && <Recommended />} {/* 경로가 /communities일 때만 Recommended를 렌더링 */}
+    </>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Sidebar />
+      <Center>
+        <MainContent />
       </Center>
     </BrowserRouter>
   );

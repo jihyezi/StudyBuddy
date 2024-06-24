@@ -1,11 +1,12 @@
 .recommended {
-  position: sticky;
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  border-left: 1px solid #dddddd;
-  padding: 40px 40px 40px 40px;
-  margin-right: calc(10vw - 100px);
+  /* border-left: 1px solid #dddddd; */
+  padding: 40px 10px;
+  height: 100vh;
+  /* margin-right: calc(10vw - 100px); */
 }
 
 .recommendedHead {
