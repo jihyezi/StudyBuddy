@@ -1,0 +1,102 @@
+.StudyPostContainer {
+    display: flex;
+    padding-left: 25px;
+    padding-top: 20px;
+}
+
+.StudyPostWrapper {
+    width: 630px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: 1px solid #DDD;
+}
+
+.StudyPostTitleContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.StudyPostState {
+    background: #FF7474;
+    border-radius: 25px;
+    padding: 4px 8px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.StudyPostState2 {
+    background: #9A9A9A;
+    border-radius: 25px;
+    padding: 4px 8px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.StudyPostTitle {
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.StudyPostDescription {
+    margin-left: 4px;
+    margin-bottom: 12px;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.StudyPostTags {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-left: 4px;
+    margin-bottom: 20px;
+}
+
+.StudyPostTag {
+    border: 1px solid #DDD;
+    border-radius: 25px;
+    padding: 4px 8px;
+    font-size: 10px;
+    color: #656565;
+}
+
+.StudyPostFooter {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.StudyPostIconGroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.StudyPostIcon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.StudyPostIcon img {
+    width: 18px;
+    height: 18px;
+}
+
+.StudyPostIcon span {
+    color: #9C9C9C;
+    font-size: 12px;
+}
