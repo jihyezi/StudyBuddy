@@ -1,0 +1,7 @@
+.postContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-top: 50px;
+}
