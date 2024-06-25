@@ -5,7 +5,7 @@
   gap: 20px;
   border-left: 1px solid #dddddd;
   padding: 40px 40px 40px 40px;
-  margin-right: calc(10vw - 100px);
+  /* margin-right: calc(10vw - 90px); */
 }
 
 .recommendedHead {
