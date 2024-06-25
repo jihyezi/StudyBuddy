@@ -15,6 +15,7 @@ import Bookmarks from "pages/Bookmarks/Bookmarks";
 import Profile from "pages/Profile/Profile";
 import Post from "pages/Post/Post";
 import Recommended from "pages/Recommended/Recommended";
+import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -44,9 +45,10 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
+          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
         </Routes>
       </Content>
-      {location.pathname === "/communities" && <Recommended />} {/* 경로가 /communities일 때만 Recommended를 렌더링 */}
+      {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
     </>
   );
 };

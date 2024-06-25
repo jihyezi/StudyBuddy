@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useIsOverflow from 'components/useIsOverflow';
 
 // image
@@ -12,7 +12,7 @@ import profile from '../../assets/icons/Communities/communityprofile.jpeg'
 const JoinCommunity = ({ onEventSelect }) => {
   const [scrollState, setScrollState] = useState('start');
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const navigate = useNavigate();
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
@@ -72,7 +72,15 @@ const JoinCommunity = ({ onEventSelect }) => {
   const handleClick = (item) => {
     setSelectedItem(item);
     onEventSelect(item);
+    navigate(`/CommunityDetailsPage`, {
+      state: {
+        id: `${item.id}`,
+        img: `${item.img}`,
+        community: `${item.community}`,
+      },
+    });
   };
+
 
   const handleScroll = () => {
     const { current } = containerRef;
@@ -114,22 +122,12 @@ const JoinCommunity = ({ onEventSelect }) => {
             className={styles.classification}
             onClick={() => handleClick(item)}
           >
-            <Link
-              to={`/community/${item.id}`}
-              key={index}
-              style={{
-                color: "#333333",
-                textDecoration: "none",
-                verticalAlign: "middle",
-              }}
-            >
-              <div className={styles.joinCommunity}>
-                <div className={styles.communityImageContainer}>
-                  <img className={styles.communityImage} src={item.img} alt="cat" />
-                </div>
-                <div className={styles.communityName}>{item.community}</div>
+            <div className={styles.joinCommunity}>
+              <div className={styles.communityImageContainer}>
+                <img className={styles.communityImage} src={item.img} alt="cat" />
               </div>
-            </Link>
+              <div className={styles.communityName}>{item.community}</div>
+            </div>
           </div>
         ))}
 
