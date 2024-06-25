@@ -1,0 +1,51 @@
+.side {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dddddd;
+  height: 100%;
+  width: 350px;
+  margin-left: calc(10vw - 90px);
+}
+
+.logo {
+  width: 63px;
+  height: 50px;
+  margin-left: 40px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.menus {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu {
+  display: block;
+  margin-left: 40px;
+  padding: 10px;
+  min-width: 275px;
+}
+
+.menuOn {
+  font-family: "BalooTammudu";
+  font-size: 20px;
+}
+
+.menuOff {
+  font-family: "BalooTammudu2-Regular";
+  font-size: 20px;
+}
+
+.post {
+  text-align: center;
+  margin-left: 40px;
+  margin-right: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #ff7474;
+  font-family: "BalooTammudu";
+  font-size: 20px;
+}

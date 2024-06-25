@@ -1,0 +1,116 @@
+.closeButton {
+  position: absolute;
+  top: 30px;
+  right: 25px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+}
+.modalImageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+  padding-bottom: 70px;
+}
+.ModalImg {
+  top: "50%";
+  left: "50%";
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.inputField {
+  width: 340px;
+  height: 42px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  font-size: 17px;
+}
+.inputField::placeholder {
+  color: #ddd; /* 플레이스홀더 텍스트 색상 */
+  font-size: 17px; /* 플레이스홀더 텍스트 크기 */
+  font-weight: 600;
+  padding-left: 10px;
+}
+.inputField:focus {
+  border: 1px solid #ff7474;
+  outline: none; /* 선택 시 파란 테두리 제거 */
+}
+
+.inputField:hover {
+  border: 1px solid #ff7474;
+}
+.loginButton {
+  width: 365px;
+  height: 52px;
+  padding: 10px;
+  border: none;
+  border-radius: 52px;
+  background-color: #ff7474;
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.loginButton:hover {
+  background-color: #ee5d5d;
+}
+
+.linkText {
+  font-size: 15px;
+  font-weight: 600;
+  color: #7c7c7c;
+}
+.linkText:hover {
+  color: #494949;
+}
+.textdev {
+  height: 6px;
+  border: 2px solid #ddd;
+  border-radius: 2px;
+}
+
+.linksContainer {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 5px;
+  width: 65%;
+  margin-top: 5px;
+}
+
+.SignUptext {
+  font-size: 12px;
+  font-weight: 600;
+  color: #7c7c7c;
+}
+
+.SignUpContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 50px;
+}
+.passwordContainer {
+  position: relative;
+}
+
+.passwordIcon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  margin-right: 10px;
+}

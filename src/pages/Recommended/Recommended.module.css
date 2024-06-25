@@ -1,0 +1,15 @@
+.recommended {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-left: 1px solid #dddddd;
+  padding: 40px 40px 40px 40px;
+  /* margin-right: calc(10vw - 90px); */
+}
+
+.recommendedHead {
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 20px;
+}
