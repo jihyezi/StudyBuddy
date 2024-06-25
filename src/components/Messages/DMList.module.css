@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@400;500;600;700&display=swap");
+
+.dmListContainer {
+  display: flex;
+  height: 100vh;
+  font-family: "Manrope", sans-serif;
+}
+
+.modal {
+  width: 435px;
+  height: 100vh;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  padding: 10px;
+  font-size: 1.5em;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+
+.messageList {
+  padding: 10px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+}
+
+.noMessages {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+}
+
+.messageItem {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.messageItem.selected {
+  background-color: #f0f0f0;
+}
+
+.profileImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin-right: 10px;
+}
+
+.messageContent {
+  flex: 1;
+}
+
+.messageHeader {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.id {
+  color: #888;
+  margin-right: 5px;
+}
+
+.text {
+  color: #333;
+}
+
+.noChat {
+  width: 685px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+}
+
+.newMessageIcon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 10px;
+}
+
+.newMessageText {
+  font-family: "Baloo Tammudu 2", sans-serif;
+  display: flex;
+  width: 179px;
+  height: 38px;
+  border-radius: 52px;
+  font-size: 17px;
+  color: white;
+  background-color: #ff7474;
+  align-items: center;
+  justify-content: center;
+}

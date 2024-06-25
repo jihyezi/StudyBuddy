@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import styles from "./App.module.css";
 
 //component
 import Sidebar from "components/Sidebar/Sidebar";
@@ -14,8 +15,20 @@ import Messages from "pages/Messages/Messages";
 import Bookmarks from "pages/Bookmarks/Bookmarks";
 import Profile from "pages/Profile/Profile";
 import Post from "pages/Post/Post";
+import CommunityPost from "pages/Post/CommunityPost";
+import StudyPost from "pages/Post/StudyPost";
 import Recommended from "pages/Recommended/Recommended";
 import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
+
+//supabase 데이터 인스톨(차후 수정이나 최적화 가능)
+import { createClient } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+
+const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
+const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -46,6 +59,7 @@ const MainContent = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
           <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
+          <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
       {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
@@ -54,6 +68,27 @@ const MainContent = () => {
 };
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        let { data: users, error } = await supabase.from("User").select("*");
+
+        if (error) {
+          console.error("Error fetching users:", error);
+        } else {
+          setUsers(users);
+          console.log("User data:", users);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <BrowserRouter>
       <Sidebar />
@@ -62,6 +97,7 @@ function App() {
       </Center>
     </BrowserRouter>
   );
+
 }
 
 export default App;
