@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    margin-left: 40px;
+    flex-direction: column;
+}
+
+.title {
+    margin-bottom: 20px;
+    font-family: "BalooTammudu2-Bold";
+    font-size: 26px;
+    color: #808080;
+}
+
+.ruleList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ruleItem {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: #DDDDDD;
+    background: white;
+    border-style: solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "NotoSans-Regular";
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    color: #808080;
+    line-height: 50px;
+}
+
+.ruleText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "NotoSans-Regular";
+    font-weight: 600;
+    font-size: 18px;
+    color: #808080;
+}
