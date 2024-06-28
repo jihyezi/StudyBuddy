@@ -5,7 +5,7 @@ import "fonts/Font.css";
 // icon
 import back from "assets/icons/Communities/back.png";
 
-const Header = ({}) => {
+const Header = ({ }) => {
   return (
     <div className={styles.header}>
       <img className={styles.backIcon} src={back} alt="back" />

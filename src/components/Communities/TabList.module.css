@@ -1,0 +1,45 @@
+.communityDetailClick {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #dddddd;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .communityTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% / 4);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .communityTabClick {
+    width: 50px;
+    border: 3px solid #ff7474;
+    border-radius: 36px;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .communityPopularPost,
+  .communityRecentPost,
+  .communityRule,
+  .communityMember {
+    color: #606060;
+    font-family: "NotoSans-Regular";
+    font-size: 16px;
+    display: block;
+    text-align: center;
+  }
+  
+  .selected {
+    color: #ff7474;
+  }
+
+  

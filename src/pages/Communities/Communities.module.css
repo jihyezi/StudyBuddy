@@ -1,8 +1,14 @@
+.community {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dddddd;
+}
+
 .classification {
   display: flex;
   flex-direction: row;
   gap: 15px;
-  margin-top: 15px;
+  margin-top: 12px;
   margin-bottom: 15px;
 }
 

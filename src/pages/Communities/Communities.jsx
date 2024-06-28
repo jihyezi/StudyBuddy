@@ -8,29 +8,30 @@ import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
 import CommunityDetailClick from "components/Communities/CommunityDetailClick";
 import Post from "components/Communities/Post";
+import PostList from "components/Communities/CommunityPostList";
+import JoinPostList from "components/Communities/CommunityJoinPostList";
+import Recommended from "pages/Recommended/Recommended";
+import { dummyPostData } from "components/Dummydata";
 
-const Communities = ({}) => {
+const Communities = ({ }) => {
+  const [selectedEvent, setSelectEvent] = useState('');
+
+
+  const handleEventSelect = (event) => {
+    setSelectEvent(event);
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className={styles.community}>
       <Header />
       <div className={styles.classification}>
-        <Classification />
+        {/* <Classification onEventSelect={handleEventSelect} /> */}
+        <JoinCommunity onEventSelect={handleEventSelect} />
       </div>
-      <div className={styles.joinCommunity}>
-        <JoinCommunity />
-      </div>
-      <div>
-        <CommunityDetailClick />
-      </div>
-      <div>
-        <Post />
-        <Post />
-      </div>
+
+      {/* <PostList postData={dummyPostData} selectedEvent={selectedEvent} /> */}
+
+      <JoinPostList postData={dummyPostData} />
     </div>
   );
 };
