@@ -1,0 +1,80 @@
+.chatContainer {
+  font-family: "Manrope", sans-serif;
+  width: 680px;
+  display: flex;
+  flex-direction: column;
+}
+.chatHeader {
+  padding: 10px;
+  font-size: 1.5em;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+
+.headerText {
+  flex-grow: 1;
+}
+
+.chatDate {
+  font-size: 0.9em;
+  color: #888;
+  margin-left: 10px;
+}
+
+.deleteIcon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.chatContent {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.messageGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.dateDivider {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #888;
+  margin: 10px 0;
+}
+
+.chatInputContainer {
+  width: 620px;
+  height: 53px;
+  display: flex;
+  padding: 0px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.chatButton {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #ff7474;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
