@@ -23,7 +23,7 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-const Sidebar = ({}) => {
+const Sidebar = ({ }) => {
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },

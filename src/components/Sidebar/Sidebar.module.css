@@ -1,10 +1,15 @@
 .side {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20%; /* 사이드바의 너비를 20%로 설정 */
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 1px solid #dddddd;
+  z-index: 1000; /* 필요에 따라 z-index 설정 */
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #dddddd;
-  height: 100%;
-  width: 350px;
-  margin-left: calc(10vw - 90px);
+  align-items: center;
 }
 
 .logo {
@@ -38,11 +43,13 @@
 }
 
 .post {
+  align-items: center;
+  justify-content: center;
   text-align: center;
   margin-left: 40px;
-  margin-right: 40px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin-right: 50px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   border-radius: 50px;
   color: #ffffff;
   background-color: #ff7474;

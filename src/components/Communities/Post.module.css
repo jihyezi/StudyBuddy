@@ -1,6 +1,6 @@
 .post {
   border-bottom: 1px solid #dddddd;
-  max-width: 750px;
+  width: 100%;
 }
 
 .communityName {
@@ -59,18 +59,23 @@
   font-size: 12px;
 }
 
+.postContent {
+  margin-bottom: 30px;
+}
+
 .postTitle,
 .postPeriod,
 .postResult {
   color: #333333;
   font-family: "NotoSans-Regular";
+  line-height: 12px;
 }
 
 .postETC {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-right: 20px;
+  margin-right: 90px;
   margin-bottom: 10px;
 }
 
