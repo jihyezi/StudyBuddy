@@ -1,0 +1,61 @@
+.notifications-container {
+  padding: 5px;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  left: 350px;
+  width: 435px;
+  height: 100%;
+}
+
+.notifications-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.notifications-container :last-child {
+  border-bottom: none;
+}
+.notification-section {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.notification-section h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.notification-item .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc; /* 회색 원 */
+  margin-right: 10px;
+}
+
+.notification-text {
+  flex-grow: 1;
+}
+
+.notification-text .user {
+  font-weight: bold;
+}
+
+.notification-details {
+  color: #888;
+  font-size: 12px;
+}
+
+.notification-details .topic {
+  font-weight: bold;
+}
+
+.notification-details .time {
+  margin-left: 5px;
+}
