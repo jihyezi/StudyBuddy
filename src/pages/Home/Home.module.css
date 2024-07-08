@@ -1,9 +1,40 @@
 .home {
-  display: flex;
+  display: block;
   flex-direction: column;
   overflow-y: auto;
 }
 
 .home::-webkit-scrollbar {
   display: none;
+}
+
+.top {
+  width: 1115;
+  height: 247;
+  left: 325;
+  background: #ff7474;
+}
+
+.scrollContainer {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent wrapping of child elements */
+  -ms-overflow-style: none; /* for Internet Explorer and Edge */
+}
+
+.hotCommunityItem {
+  margin-right: 25px; /* Example margin, adjust as necessary */
+}
+
+.SliderText {
+  position: relative;
+  width: 348px;
+  height: 54px;
+  top: 139px;
+  left: 10%;
+  gap: 0;
+  opacity: 1; /* opacity 값을 1로 설정하여 보이게 함 */
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 27.32px;
 }

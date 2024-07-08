@@ -1,7 +1,7 @@
 import React from "react";
 import styles from './CommunityPostSmall.module.css'
 
-import imgbackground from '../assets/images/bookmarkbackground.png';
+import imgbackground from 'assets/images/bookmarkbackground.png';
 
 const CommunityPostSmall = (props) => {
     return (

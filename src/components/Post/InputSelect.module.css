@@ -1,0 +1,77 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  gap: 25px;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.inputTitle {
+  text-align: right;
+  color: #808080;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+}
+
+.inputClick {
+  flex-grow: 1;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #b6b6b6;
+  cursor: pointer;
+}
+
+.inputClickIsOpen {
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #ff7474;
+}
+
+.inputPlaceholder {
+  color: #b6b6b6;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.inputIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.dropdown {
+  position: absolute;
+  bottom: -310px;
+  transform: translateX(-5%);
+  width: 300px;
+  max-height: 300px;
+  border: 1.5px solid #b6b6b6;
+  border-radius: 8px;
+  background-color: white;
+  z-index: 1;
+  overflow-y: auto;
+}
+
+.dropdownOption {
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #333;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.dropdownOption:hover {
+  background-color: #f1f1f1;
+}
