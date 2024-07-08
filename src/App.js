@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import styles from "./App.module.css";
 
 //component
 import Sidebar from "components/Sidebar/Sidebar";
@@ -23,12 +22,11 @@ import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 //supabase 데이터 인스톨(차후 수정이나 최적화 가능)
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 
 const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -58,11 +56,12 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
-          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
+          <Route path="/communitydetail" element={<CommunityDetailsPage />} />
           <Route path="/post" element={<StudyPost />} />
+          <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      {(location.pathname === "/communities" || location.pathname === "/communitydetail" || location.pathname === "/bookmarks" || location.pathname === "/bookmarkdetail") && <Recommended />}
     </>
   );
 };
