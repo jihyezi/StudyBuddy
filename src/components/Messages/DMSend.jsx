@@ -17,9 +17,10 @@ const dummyData = [
 
 function DMSend({ setIsSending, setSelectedUser }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedUser, setLocalSelectedUser] = useState(null);
 
   const handleUserClick = (user) => {
-    setSelectedUser(user);
+    setLocalSelectedUser(user);
   };
 
   const handleSearchChange = (e) => {
@@ -31,7 +32,10 @@ function DMSend({ setIsSending, setSelectedUser }) {
   );
 
   const handleSendMessage = () => {
-    setIsSending(false); // Close the DMSend modal after selecting a user
+    if (selectedUser) {
+      setSelectedUser(selectedUser);
+      setIsSending(false); // Close the DMSend modal after selecting a user
+    }
   };
 
   return (
@@ -40,7 +44,7 @@ function DMSend({ setIsSending, setSelectedUser }) {
         setIsSending={setIsSending}
         filteredUsers={filteredUsers}
         handleUserClick={handleUserClick}
-        selectedUser={null}
+        selectedUser={selectedUser}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
         onSendMessage={handleSendMessage}

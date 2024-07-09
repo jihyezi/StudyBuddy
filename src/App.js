@@ -28,8 +28,6 @@ const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-
-
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
   width: 80%;
@@ -53,22 +51,26 @@ const MainContent = () => {
           <Route path="/explore" element={<Explore />} />
           <Route path="/communities" element={<Communities />} />
           <Route path="/studies" element={<Studies />} />
-          <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
-          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
+          <Route
+            path="/CommunityDetailsPage"
+            element={<CommunityDetailsPage />}
+          />
           <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      {(location.pathname === "/communities" ||
+        location.pathname === "/CommunityDetailsPage") && <Recommended />}
     </>
   );
 };
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -88,16 +90,22 @@ function App() {
 
     fetchUsers();
   }, []);
-
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
   return (
     <BrowserRouter>
-      <Sidebar />
+      <Sidebar toggleNotifications={toggleNotifications} />
       <Center>
         <MainContent />
+        <Notifications
+          showNotifications={showNotifications}
+          setShowNotifications={setShowNotifications}
+          toggleNotifications={toggleNotifications}
+        />
       </Center>
     </BrowserRouter>
   );
-
 }
 
 export default App;

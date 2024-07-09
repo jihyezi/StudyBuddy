@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Notifications.css";
 
-const Notifications = () => {
+const Notifications = ({ showNotifications,toggleNotification }) => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -46,138 +46,14 @@ const Notifications = () => {
       },
       {
         date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },
-      {
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
-      },{
-        date: "이번 주",
-        items: [ {
-          user: "시각디자인기사",
-          action: "커뮤니티에 새 글이 작성되었습니다.",
-          time: "1일전",
-          topic: "시각디자인기사",
-          avatar: "", // 이미지 경로가 비어 있음
-        },],
+        items: [],
       },
     ];
     setNotifications(fetchedNotifications);
   }, []);
 
   return (
-    <div className="notifications-container">
+    <div className={`notifications-container ${showNotifications ? 'slide-in' : 'slide-out'}`}>
       <h1>Notifications</h1>
       {notifications.map((section, index) => (
         <div key={index} className="notification-section">
