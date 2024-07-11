@@ -28,8 +28,11 @@ const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> jaeho3
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
   width: 80%;
@@ -58,11 +61,23 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
+<<<<<<< HEAD
           <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
           <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
       {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
+=======
+          <Route
+            path="/CommunityDetailsPage"
+            element={<CommunityDetailsPage />}
+          />
+          <Route path="/post" element={<StudyPost />} />
+        </Routes>
+      </Content>
+      {(location.pathname === "/communities" ||
+        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+>>>>>>> jaeho3
     </>
   );
 };
@@ -97,7 +112,10 @@ function App() {
       </Center>
     </BrowserRouter>
   );
+<<<<<<< HEAD
 
+=======
+>>>>>>> jaeho3
 }
 
 export default App;
