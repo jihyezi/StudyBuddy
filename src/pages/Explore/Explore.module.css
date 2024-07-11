@@ -7,6 +7,7 @@
   align-items: center;
   margin-top: 40px;
   margin-bottom: 40px;
+  position: relative; /* Add position relative */
 }
 .InputWrapper {
   position: relative;
@@ -56,6 +57,48 @@
   background-color: #e76969;
 }
 
+.SearchHistoryContainer {
+  position: absolute;
+  top: 52px;
+  left: 100px;
+  width: 1043px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.SearchText {
+  padding-bottom: 10px;
+}
+.SearchHistoryList {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  list-style-type: none;
+  padding-top: 10px;
+}
+
+.SearchHistoryItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.SearchHistoryItem:hover {
+  background: #ececec;
+}
+
+.HistoryTextContainer {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+.deletebutton {
+  /* border-radius: 1px solid #fff; */
+}
+
 .PopularTagContainer {
   width: 100%;
   height: 144px;
@@ -96,4 +139,40 @@
   font-weight: 600;
   font-size: 14px;
   color: #656565;
+}
+
+.HotCommunitiesContainer {
+  padding-top: 30px;
+  height: 252px;
+  border-bottom: 1px solid #ddd;
+}
+
+.HotCommunityContainer {
+  position: relative;
+  padding-left: 5%;
+  gap: 30px;
+  display: flex;
+}
+.scrollContainer {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent wrapping of child elements */
+  -ms-overflow-style: none; /* for Internet Explorer and Edge */
+}
+
+.hotCommunityItem {
+  margin-right: 25px; /* Example margin, adjust as necessary */
+}
+
+.PopularStudyContainer {
+  padding-top: 30px;
+  height: 252px;
+  /* border-bottom: 1px solid #ddd; */
+}
+.StudyPostContainer {
+  position: relative;
+  padding-left: 4%;
+  gap: 30px;
+  display: flex;
+  flex-direction: column; /* Add this line to change the direction to column */
 }

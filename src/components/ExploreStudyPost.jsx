@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./StudyPost.module.css";
+import styles from "./ExploreStudyPost.module.css";
 
 import heart_off from "../assets/icons/favorite_off.png";
 import heart_on from "../assets/icons/favorite_on.png";
@@ -28,7 +28,7 @@ const StudyPost = (props) => {
           ))}
         </div>
 
-        <div className={styles.StudyPostFooter}>
+        {/* <div className={styles.StudyPostFooter}>
           <div className={styles.StudyPostIconGroup}>
             <div className={styles.StudyPostIcon}>
               <img src={person} alt="person" />
@@ -62,7 +62,7 @@ const StudyPost = (props) => {
               <img src={share} alt="share" />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
