@@ -14,14 +14,14 @@ const Notifications = ({ showNotifications,toggleNotification }) => {
             action: "님이 회원님의 게시물을 좋아합니다.",
             time: "46분전",
             topic: "정보처리기사",
-            avatar: "", // 이미지 경로가 비어 있음
+            avatar: "", 
           },
           {
             user: "Keria",
             action: "님이 회원님의 게시물에 댓글을 남겼습니다.",
             time: "1시간전",
             topic: "TOEIC",
-            avatar: "", // 이미지 경로가 비어 있음
+            avatar: "",
           },
         ],
       },
@@ -33,14 +33,14 @@ const Notifications = ({ showNotifications,toggleNotification }) => {
             action: "커뮤니티에 새 글이 작성되었습니다.",
             time: "1일전",
             topic: "시각디자인기사",
-            avatar: "", // 이미지 경로가 비어 있음
+            avatar: "", 
           },
           {
             user: "Zeus",
             action: "님이 회원님을 단톡방에 초대했습니다.",
             time: "1일전",
             topic: "Messages",
-            avatar: "", // 이미지 경로가 비어 있음
+            avatar: "", 
           },
         ],
       },

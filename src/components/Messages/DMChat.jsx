@@ -1,47 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./DMChat.module.css";
 import MyMessage from "./MyMessage";
 import OtherMessage from "./OtherMessage";
 import DeleteIcon from "assets/icons/Messages/Delete.png";
 import DeleteModal from "./DeleteModal";
+import { supabase } from "App"; // Supabase 인스턴스 불러오기
 
-const dummyChatData = [
-  { type: "other", message: "확인하세요! 👌", date: "2024.06.24" },
-  { type: "other", message: "확인했습니다! 👌", date: "2024.06.24" },
-  { type: "my", message: "좋은 정보 감사합니다!", date: "2024.06.24" },
-  { type: "other", message: "네, 감사합니다!", date: "2024.06.25" },
-  { type: "my", message: "다음에 또 알려주세요.", date: "2024.06.25" },
-  { type: "other", message: "알겠습니다!", date: "2024.06.25" },
-];
+const userId = "abcd"; // 실제 사용자 ID로 설정해야 합니다
 
-const isLastMessage = (index, array) => {
-  return (
-    index === array.length - 1 || array[index + 1].type !== array[index].type
-  );
-};
-
-const isFirstMessage = (index, array) => {
-  return index === 0 || array[index - 1].type !== array[index].type;
-};
-
-function DMChat({ selectedUser, chatData = [] }) {
+const DMChat = ({ selectedUser, chatData = [] }) => {
+  const [messages, setMessages] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [useDummyData, setUseDummyData] = useState(false);
+  const [messageInput, setMessageInput] = useState("");
 
-  const handleDeleteClick = () => {
-    setShowDeleteModal(true);
+  useEffect(() => {
+    if (selectedUser) {
+      fetchMessages();
+      const messageSubscription = supabase
+        .channel('custom-all-channel')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'DirectMessage' }, (payload) => {
+          setMessages((prevMessages) => [payload.new, ...prevMessages]);
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(messageSubscription);
+      };
+    }
+  }, [selectedUser]);
+
+  const fetchMessages = async () => {
+    const { data, error } = await supabase
+      .from("DirectMessage")
+      .select("*")
+      .eq("receiverid", selectedUser.id)
+      .order("createdat", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching messages:", error);
+    } else {
+      setMessages(data);
+    }
   };
 
-  const handleCloseModal = () => {
-    setShowDeleteModal(false);
-  };
+  const sendMessage = async () => {
+    if (messageInput.trim() === "") return;
 
-  const toggleChatData = () => {
-    setUseDummyData(!useDummyData);
-  };
+    const { error } = await supabase.from("DirectMessage").insert([
+      {
+        senderid: userId,
+        receiverid: selectedUser.id,
+        content: messageInput,
+        createdat: new Date().toISOString(),
+      },
+    ]);
 
-  const dataToUse = useDummyData ? dummyChatData : chatData;
+    if (error) {
+      console.error("Error sending message:", error);
+    } else {
+      setMessageInput("");
+    }
+  };
 
   return (
     <div className={styles.chatContainer}>
@@ -57,54 +77,49 @@ function DMChat({ selectedUser, chatData = [] }) {
             src={DeleteIcon}
             alt="Delete Chat"
             className={styles.deleteIcon}
-            onClick={handleDeleteClick}
+            onClick={() => setShowDeleteModal(true)}
           />
         )}
       </div>
       <div className={styles.chatContent}>
-      {dataToUse.length > 0 ? (
-  dataToUse.map((chat, index) => {
-    const showProfileImage =
-      isFirstMessage(index, dataToUse) && chat.type === "other";
-    const lastMessage = isLastMessage(index, dataToUse);
-    const showDateDivider =
-      index === 0 || dataToUse[index - 1].date !== chat.date;
+        {messages.length > 0 ? (
+          messages.map((chat, index) => {
+            const showProfileImage =
+              index === 0 || messages[index - 1].senderid !== chat.senderid;
+            const lastMessage =
+              index === messages.length - 1 ||
+              messages[index + 1].senderid !== chat.senderid;
 
-    return (
-      <div key={index} className={styles.messageGroup}>
-        {showDateDivider && (
-          <div className={styles.dateDivider}>{chat.date}</div>
-        )}
-        {showProfileImage && <div className={styles.profileImage}></div>}
-        {chat.type === "my" ? (
-          lastMessage ? (
-            <MyMessage key={index} message={chat.message} last={true} />
-          ) : (
-            <MyMessage key={index} message={chat.message} />
-          )
-        ) : lastMessage ? (
-          <OtherMessage key={index} message={chat.message} last={true} />
+            return (
+              <div key={index} className={styles.messageGroup}>
+                {showProfileImage && <div className={styles.profileImage}></div>}
+                {chat.senderid === userId ? (
+                  <MyMessage key={index} message={chat.content} last={lastMessage} />
+                ) : (
+                  <OtherMessage key={index} message={chat.content} last={lastMessage} />
+                )}
+              </div>
+            );
+          })
         ) : (
-          <OtherMessage key={index} message={chat.message} />
+          <div className={styles.noMessages}>No messages</div>
         )}
-      </div>
-    );
-  })
-) : (
-  <div className={styles.noMessages}></div>
-)}
       </div>
       <div className={styles.chatInputContainer}>
-        <input className={styles.chatInput} placeholder="메시지 입력하기" />
-        <button className={styles.chatButton}>보내기</button>
+        <input
+          className={styles.chatInput}
+          placeholder="메시지 입력하기"
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
+        />
+        <button className={styles.chatButton} onClick={sendMessage}>
+          보내기
+        </button>
       </div>
-      <button onClick={toggleChatData} className={styles.toggleButton}>
-        {useDummyData ? "Show Empty Chat" : "Show Dummy Data"}
-      </button>
-      {showDeleteModal && <DeleteModal onClose={handleCloseModal} />}
+      {showDeleteModal && <DeleteModal onClose={() => setShowDeleteModal(false)} />}
     </div>
   );
-}
+};
 
 DMChat.propTypes = {
   selectedUser: PropTypes.object,
