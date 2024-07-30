@@ -56,7 +56,7 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
-          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
+          <Route path="/communitydetail" element={<CommunityDetailsPage />} />
           <Route path="/post" element={<StudyPost />} />
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
         </Routes>
