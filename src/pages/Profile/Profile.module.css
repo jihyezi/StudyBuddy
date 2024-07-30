@@ -1,18 +1,16 @@
 .container {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #DDDDDD;
+}
+
+
+.info {
+    position: relative;
 }
 
 .imageWrapper {
     display: flex;
     position: relative;
-}
-
-.imageContainer {
-    display: flex;
-    width: 100%;
-    height: 100%;
 }
 
 .image {
@@ -22,40 +20,19 @@
     background-color: #DDDDDD;
 }
 
-.iconWrapper {
-    position: absolute;
-    top: 0;
-    right: 10px;
-}
-
-.communityPostIconWrapper {
-    position: relative;
-}
-
-.communityPostIconBackground {
-    width: 50px;
-    height: 50px;
-}
-
-.communityPostIconPalette {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50px;
-    height: 50px;
-}
-
-.info {
-    position: relative;
-}
-
 .profileImgContainer {
     position: absolute;
     bottom: -80px; 
     left: 10%;
     transform: translateX(-50%);
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
+}
+
+.imageContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 
 .profileImg {
@@ -67,22 +44,17 @@
 }
 
 .details {
-    padding-left: 8%;
+    padding-left: 40px;
     padding-right: 27px;
     padding-top: 70px;
     margin-bottom: 16px;
 }
 
-.header {
+.edit {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 4px;
-}
-
-.infoList {
-    display: flex;
-    flex-direction: column;
 }
 
 .communityName {
@@ -93,56 +65,45 @@
 }
 
 .joinButton {
-    width: 52px;
-    height: 32px;
+    width: 90px;
+    height: 40px;
     background-color: #FF7474;
-    border-radius: 8px;
-    border-color: #FF7474;
+    border-radius: 30px;
+    border: none;
     justify-content: center;
     align-items: center;
+    text-align: center;
     color: white;
-    cursor: pointer;
+    font-size: 16px;
+    font-family: "BalooTammudu2-SemiBold";
+    transition: background-color 0.3s ease;
+}
+
+.joinButton:hover {
+    background-color: #f75858;
+}
+
+.infoList {
+    display: flex;
+    flex-direction: column;
 }
 
 .description1 {
     color: #333333;
-    font-size: 28px;
+    font-size: 22px;
     font-family: "NotoSans-SemiBold";
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .description2 {
     color: #606060;
-    font-size: 18px;
-    font-family: "NotoSans-SemiBold";
+    font-size: 16px;
+    font-family: "NotoSans-Regular";
     margin-bottom: 20px;
 }
 
 .description3 {
     color: #333333;
-    font-size: 18px;
-    font-family: "NotoSans-SemiBold";
+    font-size: 16px;
+    font-family: "NotoSans-Regular";
 }
-
-
-.communityPostIconWrapper {
-    position: relative;
-    width: 30px;
-    height: 39px;
-    margin-right: 30px;
-}
-
-.communityPostIconBackground {
-    width: 100%;
-    height: 100%;
-}
-
-.communityPostIconPalette {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 18px;
-    height: 18px;
-}
-

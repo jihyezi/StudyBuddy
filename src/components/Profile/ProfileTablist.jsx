@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ProfileTablist.module.css';
 import JoinPostList from 'components/Communities/CommunityJoinPostList';
-import Post from 'components/Communities/Post';
-import { dummyPostData } from "components/Dummydata";
-import RulePage from 'pages/Communities/RulePage';
-import MemberPage from 'pages/Communities/MemberPage';
+import { dummyPostData } from 'components/Dummydata';
 
 export const ProfileTablist = () => {
     const [currentTab, clickTab] = useState(0);
@@ -24,12 +21,14 @@ export const ProfileTablist = () => {
         <div>
             <div className={styles.communityDetailClick}>
                 {menuArr.map((el, index) => (
-                    <div key={index} className={styles.communityTab} onClick={() => selectMenuHandler(index)}>
-                        <span className={
-                            index === currentTab
-                                ? `${styles[`community${el.name}Post`]} ${styles.selected}`
-                                : styles[`community${el.name}Post`]
-                        }>
+                    <div
+                        key={index}
+                        className={styles.communityTab}
+                        onClick={() => selectMenuHandler(index)}
+                    >
+                        <span
+                            className={`${styles.communityTabText} ${index === currentTab ? styles.selected : ''}`}
+                        >
                             {el.name}
                         </span>
                         {index === currentTab && <div className={styles.communityTabClick} />}
@@ -37,7 +36,7 @@ export const ProfileTablist = () => {
                 ))}
             </div>
             <div className={styles.desc}>
-                <p>{menuArr[currentTab].content}</p>
+                {menuArr[currentTab].content}
             </div>
         </div>
     );

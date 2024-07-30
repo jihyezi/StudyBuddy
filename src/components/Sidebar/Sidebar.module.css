@@ -64,7 +64,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* 수정된 부분: 공백을 제거하고 .post:hover로 변경 */
 .post:hover {
   background-color: #f75858;
 }
