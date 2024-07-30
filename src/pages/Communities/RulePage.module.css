@@ -46,8 +46,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: "NotoSans-Regular";
-    font-weight: 600;
-    font-size: 18px;
+    font-family: "NotoSans-SemiBold";
+    font-size: 16px;
     color: #808080;
 }

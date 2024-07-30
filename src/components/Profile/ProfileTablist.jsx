@@ -26,9 +26,11 @@ export const ProfileTablist = () => {
                         className={styles.communityTab}
                         onClick={() => selectMenuHandler(index)}
                     >
-                        <span
-                            className={`${styles.communityTabText} ${index === currentTab ? styles.selected : ''}`}
-                        >
+                        <span className={
+                            index === currentTab
+                                ? `${styles[`community${el.name}Post`]} ${styles.selected}`
+                                : styles[`community${el.name}Post`]
+                        }>
                             {el.name}
                         </span>
                         {index === currentTab && <div className={styles.communityTabClick} />}
