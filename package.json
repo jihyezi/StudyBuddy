@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@supabase/supabase-js": "^2.43.5",
+    "@react-oauth/google": "^0.12.1",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/supabase-js": "^2.44.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,15 +15,9 @@
     "react-horizontal-scrolling-menu": "^7.1.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.1",
-<<<<<<< HEAD
-    "react-slick": "^0.30.2",
-    "slick-carousel": "^1.8.1",
-    "react-scripts": "^5.0.1",
-=======
     "react-scripts": "^5.0.1",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
->>>>>>> jaeho3
     "styled-components": "^6.1.11",
     "web-vitals": "^2.1.4"
   },
