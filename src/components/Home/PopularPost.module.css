@@ -3,6 +3,7 @@
   padding-bottom: 15px;
   border: 1px solid #dddddd;
   border-radius: 8px;
+  width: calc(100% - 50px);
   max-width: 350px;
   /* max-height: 100px; */
 }

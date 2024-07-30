@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styles from "./Recommended.module.css";
 import "fonts/Font.css";
 
@@ -6,14 +6,19 @@ import "fonts/Font.css";
 import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
 
-const Recommended = ({}) => {
+const Recommended = ({ }) => {
   return (
-    <div className={styles.recommended}>
+    <div className={styles.recommendedContainer}>
       <div className={styles.recommendedHead}>회원님을 위한 추천👍🏻</div>
-      <HotCommunity />
-      <PopularPost />
-      <PopularPost />
+      <div className={styles.recommended}>
+        <div className={styles.recommendedPosts}>
+          <HotCommunity />
+          <PopularPost />
+          <PopularPost />
+        </div>
+      </div>
     </div>
   );
 };
+
 export default Recommended;

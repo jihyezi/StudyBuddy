@@ -1,9 +1,9 @@
 .community {
+  width: calc(100% - 50px);
   position: relative;
   padding-bottom: 15px;
   border: 1px solid #dddddd;
   border-radius: 8px;
-  min-width: 350px;
 }
 
 .classificationIcon {
@@ -32,23 +32,26 @@
 .communityName {
   margin-top: 20px;
   margin-bottom: 15px;
-  margin-left: 25px;
+  margin-left: 16px;
   color: #ff7474;
+  font-size: 16px;
   font-family: "NotoSans-Bold";
 }
 
 .communityDetail {
   margin-top: 0px;
   margin-bottom: 5px;
-  margin-left: 25px;
+  margin-left: 16px;
+  gap: 6px;
   color: #606060;
 }
 
 .communityDetailTitle {
-  margin-right: 10px;
+  font-size: 14px;
   font-family: "NotoSans-SemiBold";
 }
 
 .communityDetailContent {
+  font-size: 14px;
   font-family: "NotoSans-Regular";
 }
