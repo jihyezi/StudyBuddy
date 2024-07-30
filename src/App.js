@@ -59,14 +59,9 @@ const MainContent = () => {
           <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
           <Route path="/post" element={<StudyPost />} />
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
-          {(location.pathname === "/communities" || location.pathname === "/communitydetail" || location.pathname === "/bookmarks" || location.pathname === "/bookmarkdetail") && <Recommended />}
-          <Route
-            path="/CommunityDetailsPage"
-            element={<CommunityDetailsPage />}
-          />
-          <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
+      {(location.pathname === "/communities" || location.pathname === "/communitydetail" || location.pathname === "/bookmarks" || location.pathname === "/bookmarkdetail") && <Recommended />}
     </>
   );
 };

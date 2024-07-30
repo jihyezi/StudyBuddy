@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect, useState, useRef } from "react";
-const Explore = ({}) => {
-  return <div>Explore</div>;
-};
-=======
 import React, { useState } from "react";
 import Header from "components/Explore/Header";
 import styles from "./Explore.module.css";
@@ -18,7 +12,7 @@ import R from "assets/icons/Explore/R.png";
 import HotCommunity from "components/Home/HotCommunity";
 import StudyPost from "components/ExploreStudyPost";
 
-const Explore = ({}) => {
+const Explore = ({ }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory, setSearchHistory] = useState([
     "온라인 스터디",
@@ -158,5 +152,4 @@ const Explore = ({}) => {
   );
 };
 
->>>>>>> jaeho3
 export default Explore;
