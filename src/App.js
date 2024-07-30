@@ -56,12 +56,17 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
-          <Route path="/communitydetail" element={<CommunityDetailsPage />} />
+          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
           <Route path="/post" element={<StudyPost />} />
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
+          {(location.pathname === "/communities" || location.pathname === "/communitydetail" || location.pathname === "/bookmarks" || location.pathname === "/bookmarkdetail") && <Recommended />}
+          <Route
+            path="/CommunityDetailsPage"
+            element={<CommunityDetailsPage />}
+          />
+          <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" || location.pathname === "/communitydetail" || location.pathname === "/bookmarks" || location.pathname === "/bookmarkdetail") && <Recommended />}
     </>
   );
 };
@@ -96,7 +101,6 @@ function App() {
       </Center>
     </BrowserRouter>
   );
-
 }
 
 export default App;
