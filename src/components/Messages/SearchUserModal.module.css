@@ -3,14 +3,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 440px;
   height: 490px;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  padding: 20px;
+  padding-top: 10px;
 }
 
 .searchUserModalHeader {
@@ -40,7 +40,7 @@
 
 .send {
   width: 60px;
-  height: 26px;
+  height: 30px;
   text-align: center;
   padding: 0px;
   border-radius: 20px;
@@ -52,10 +52,11 @@
 }
 
 .searchUserModalMiddle {
-  border-bottom: 1px solid #ddd;
-  padding: 15px 10px;
+  padding: 10px 10px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 4px;
 }
 
 .sendTo {
@@ -104,6 +105,10 @@
   cursor: pointer;
 }
 
+.userItem:hover {
+  background-color: #ddd;
+}
+
 .userItem.selected {
   background-color: #f0f0f0;
 }
@@ -126,9 +131,14 @@
 }
 
 .username {
-  font-weight: bold;
+  font-family: "Manrope-SemiBold";
+  font-weight: 600;
+  color: #333333;
+  font-size: 14px;
 }
 
 .id {
+  font-family: "Manrope-Regular";
   color: #888;
+  font-size: 12px;
 }

@@ -47,16 +47,16 @@ const SearchUserModal = ({
           />
         )}
       </div>
+
       <div className={styles.userList}>
         {!selectedUser &&
           (filteredUsers || []).map((user, index) => (
             <div
               key={index}
-              className={`${styles.userItem} ${
-                selectedUser && selectedUser.id === user.id
-                  ? styles.selected
-                  : ""
-              }`}
+              className={`${styles.userItem} ${selectedUser && selectedUser.id === user.id
+                ? styles.selected
+                : ""
+                }`}
               onClick={() => handleUserClick(user)}
             >
               <div className={styles.profileImage}></div>
