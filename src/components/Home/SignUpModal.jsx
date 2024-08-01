@@ -6,6 +6,12 @@ import close from "assets/icons/Home/close.png";
 import signUpimg from "assets/images/Home/signUpimg.png";
 import passwordicon from "assets/icons/Home/password.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
+const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 const customStyles = {
   content: {
     width: "520px",
@@ -28,18 +34,55 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const [username, setUsername] = useState("");
   const [allChecked, setAllChecked] = useState(false);
   const [over14Checked, setOver14Checked] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(""); // 에러 메시지 상태
 
-  const handleSignUp = () => {
-    // 회원가입 로직을 여기에 추가합니다
-    console.log("Nickname:", nickname);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setError("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    if (!allChecked || !over14Checked || !termsChecked || !privacyChecked) {
+      setError("모든 동의 항목을 확인해주세요.");
+      return;
+    }
+
+    // Supabase Auth를 사용하여 회원가입
+    const { user, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (signUpError) {
+      console.error("회원가입 오류:", signUpError.message);
+      setError("회원가입 실패: " + signUpError.message);
+      return;
+    }
+
+    // 회원가입 후 추가 정보 저장
+    const { error: dbError } = await supabase.from("User").insert([
+      {
+        email: email,
+        nickname: nickname,
+        username: username,
+        password: password,
+        createdat: new Date(),
+      },
+    ]);
+
+    if (dbError) {
+      console.error("DB 저장 오류:", dbError.message);
+      setError("회원가입 실패: " + dbError.message);
+      return;
+    }
+
+    console.log("회원가입 성공:", user);
+    closeModal(); // 모달 닫기
   };
 
   const handleAllChecked = () => {
@@ -60,6 +103,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -89,6 +133,13 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
             placeholder="이메일"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className={styles.inputField}
+          />
+          <input
+            type="text"
+            placeholder="사용자 이름"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className={styles.inputField}
           />
           <div className={styles.passwordContainer}>
@@ -121,6 +172,8 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
               className={styles.passwordIcon}
             />
           </div>
+
+          {error && <div className={styles.error}>{error}</div>}
 
           <div className={styles.checkboxContainer}>
             <div className={styles.checkboxItem}>

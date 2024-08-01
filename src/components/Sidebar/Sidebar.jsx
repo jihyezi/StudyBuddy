@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
-
+import { useAuth } from "../../contexts/AuthContext"; // useAuth 훅
 //icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
@@ -24,9 +24,6 @@ import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
 const Sidebar = ({}) => {
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const dropdownRef = useRef(null);
-
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
@@ -110,27 +107,9 @@ const Sidebar = ({}) => {
               </div>
             );
           })}
-
-          <div
-            className={styles.post}
-            onClick={handlePostClick}
-            ref={dropdownRef}
-          >
-            Post
-            {dropdownVisible && (
-              <div className={styles.dropdown}>
-                <Link to="/create-post" className={styles.dropdownItem}>
-                  게시물 작성
-                </Link>
-                <Link to="/create-community" className={styles.dropdownItem}>
-                  커뮤니티 개설
-                </Link>
-                <Link to="/create-study" className={styles.dropdownItem}>
-                  스터디 생성
-                </Link>
-              </div>
-            )}
-          </div>
+          <Link to={"/post"} style={{ textDecoration: "none" }}>
+            <div className={styles.post}>Post</div>
+          </Link>
         </div>
       </div>
     </div>

@@ -56,29 +56,4 @@
   background-color: #ff7474;
   font-family: "BalooTammudu";
   font-size: 20px;
-  cursor: pointer;
-}
-
-.dropdown {
-  position: absolute;
-  /* top: 100%; */
-  right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  z-index: 10;
-  margin-top: 5px;
-}
-
-.dropdownItem {
-  display: block;
-  padding: 10px;
-  text-decoration: none;
-  color: #333;
-  font-family: "NotoSans-Regular";
-  font-size: 14px;
-}
-
-.dropdownItem:hover {
-  background-color: rgba(0, 0, 0, 0.1);
 }
