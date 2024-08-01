@@ -13,10 +13,11 @@ import Profile from "pages/Profile/Profile";
 import Post from "pages/Post/Post";
 import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import Recommended from "pages/Recommended/Recommended";
+import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
-import LoginModal from "components/Home/LoginModal"; // 로그인 모달 컴포넌트
-import { AuthProvider, useAuth } from "./contexts/AuthContext"; // 인증 컨텍스트
-import supabase from "components/supabaseClient"; // supabase 클라이언트
+import LoginModal from "components/Home/LoginModal";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import supabase from "components/supabaseClient";
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -57,12 +58,13 @@ const MainContent = () => {
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/post" element={<Post />} />
+          <Route path="/create-post" element={<Post />} />
+          <Route path="/create-community" element={<CommunityPost />} />
+          <Route path="/create-study" element={<StudyPost />} />
           <Route
             path="/CommunityDetailsPage"
             element={<CommunityDetailsPage />}
           />
-          <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
       {(location.pathname === "/communities" ||
