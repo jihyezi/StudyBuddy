@@ -70,7 +70,10 @@ const Home = ({ }) => {
 
   return (
     <div className={styles.home}>
-      <Slider {...settings} style={{ backgroundColor: "#FF74741A" }}>
+      <Slider
+        {...settings}
+        style={{ display: "grid", backgroundColor: "#FF74741A" }}
+      >
         <div
           style={{
             position: "relative",
@@ -351,7 +354,7 @@ const Home = ({ }) => {
           </div>
         </div>
       </div>
-      {/* <LoginModal /> */}
+      <LoginModal />
     </div>
   );
 };

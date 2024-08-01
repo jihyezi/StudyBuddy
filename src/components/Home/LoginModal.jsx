@@ -3,11 +3,13 @@ import Modal from "react-modal";
 import styles from "./LoginModal.module.css"; // 스타일을 CSS 모듈로 가져오기
 
 import EmailLoginModal from "./EmailLoginModal";
-
 import googleimg from "assets/icons/Home/googleimg.png";
 import emailimg from "assets/icons/Home/emailimg.png";
 import close from "assets/icons/Home/close.png";
 import modalMain from "assets/images/Home/modalMain.png";
+import { GoogleLogin } from "@react-oauth/google";
+import GoogleLoginButton from "./GoogleLoginButton";
+
 // 모달을 화면 가운데에 위치시키기 위한 스타일
 const customStyles = {
   content: {
@@ -27,21 +29,12 @@ const customStyles = {
 
 Modal.setAppElement("#root"); // 접근성 향상을 위해 루트 엘리먼트를 설정
 
-const LoginModal = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+const LoginModal = ({ modalIsOpen, closeModal, openEmailLoginModal }) => {
   const [emailModalIsOpen, setEmailModalIsOpen] = useState(false);
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
 
   const openEmailModal = () => {
     setEmailModalIsOpen(true);
-    setModalIsOpen(false);
+    closeModal();
   };
 
   const closeEmailModal = () => {
@@ -50,9 +43,6 @@ const LoginModal = () => {
 
   return (
     <div>
-      <button onClick={openModal} className={styles.openButton}>
-        로그인
-      </button>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -64,16 +54,13 @@ const LoginModal = () => {
         </div>
         <div>
           <button onClick={closeModal} className={styles.closeButton}>
-            <img src={close} />
+            <img src={close} alt="close" />
           </button>
         </div>
         <div className={styles.buttonContainer}>
-          <button className={styles.googleButton}>
-            <img src={googleimg} style={{ paddingRight: 20 }} />
-            Google 로그인
-          </button>
+          {/* <GoogleLoginButton /> */}
           <button className={styles.emailButton} onClick={openEmailModal}>
-            <img src={emailimg} style={{ paddingRight: 20 }} />
+            <img src={emailimg} style={{ paddingRight: 20 }} alt="email" />
             Email 로그인
           </button>
         </div>
