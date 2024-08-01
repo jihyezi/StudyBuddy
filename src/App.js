@@ -55,15 +55,12 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
-          <Route
-            path="/CommunityDetailsPage"
-            element={<CommunityDetailsPage />}
-          />
+
+          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
           <Route path="/post" element={<StudyPost />} />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
     </>
   );
 };
