@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import styles from "./Post.module.css";
-import { supabase } from "App";
+// import { supabase } from "App";
 
 // component
 import Header from "components/Post/Header";
@@ -44,36 +44,34 @@ const Post = () => {
   //   console.log("종료 날짜:", endDate);
   // };
 
-  const handlePost = async () => {
-    // 데이터 삽입
-    const { data, error } = await supabase
-      .from("Post") // 테이블 이름
-      .insert([
-        {
-          // title: inputTextValue,
-          // start_date: startDate,
-          // end_date: endDate,
-          postid: 1,
-          userid: 2,
-          communityid: 1,
-          title: inputTextValue,
-          content: inputTextValue,
-          attachments: [inputTextValue],
-          createdat: startDate,
-          updatedat: endDate,
-        },
-      ]);
+  // const handlePost = async () => {
+  //   const { data, error } = await supabase
+  //     .from("Post")
+  //     .insert([
+  //       {
 
-    if (error) {
-      console.error("Error inserting data:", error);
-    } else {
-      console.log("Data inserted successfully:", data);
-    }
-  };
+  //         postid: 1,
+  //         userid: 2,
+  //         communityid: 1,
+  //         title: inputTextValue,
+  //         content: inputTextValue,
+  //         attachments: [inputTextValue],
+  //         createdat: startDate,
+  //         updatedat: endDate,
+  //       },
+  //     ]);
+
+  //   if (error) {
+  //     console.error("Error inserting data:", error);
+  //   } else {
+  //     console.log("Data inserted successfully:", data);
+  //   }
+  // };
 
   return (
     <div>
-      <Header title={"Post"} onPost={handlePost} />
+      {/* <Header title={"Post"} onPost={handlePost} /> */}
+      <Header title={"Post"} />
       <div className={styles.postContainer}>
         <InputText
           title={"제목"}

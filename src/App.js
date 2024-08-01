@@ -10,35 +10,14 @@ import Notifications from "pages/Notifications/Notifications";
 import Messages from "pages/Messages/Messages";
 import Bookmarks from "pages/Bookmarks/Bookmarks";
 import Profile from "pages/Profile/Profile";
-
-//Post
 import Post from "pages/Post/Post";
-<<<<<<< HEAD
+import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
+import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
-
-//DetailPost
-import DetailPost from "pages/Post/DetailPost";
-import DetailStudyPost from "pages/Studies/DetailStudyPost";
-
-import Recommended from "pages/Recommended/Recommended";
-import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
-
-//supabase 데이터 인스톨(차후 수정이나 최적화 가능)
-import { createClient } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
-
-const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-export const supabase = createClient(supabaseUrl, supabaseKey);
-=======
-import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
-import Recommended from "pages/Recommended/Recommended";
-import StudyPost from "pages/Post/StudyPost";
-import LoginModal from "components/Home/LoginModal"; // 로그인 모달 컴포넌트
-import { AuthProvider, useAuth } from "./contexts/AuthContext"; // 인증 컨텍스트
-import supabase from "components/supabaseClient"; // supabase 클라이언트
->>>>>>> 8c15273007a325a276d3ff43d0975903f493ece5
+import LoginModal from "components/Home/LoginModal";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import supabase from "components/supabaseClient";
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -74,34 +53,23 @@ const MainContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/communities" element={<Communities />} />
-          <Route path="/studies" element={<DetailPost />} />
+          <Route path="/studies" element={<Studies />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
-<<<<<<< HEAD
           <Route path="/create-post" element={<Post />} />
           <Route path="/create-community" element={<CommunityPost />} />
           <Route path="/create-study" element={<StudyPost />} />
-=======
-          <Route path="/post" element={<Post />} />
->>>>>>> 8c15273007a325a276d3ff43d0975903f493ece5
           <Route
             path="/CommunityDetailsPage"
             element={<CommunityDetailsPage />}
           />
-<<<<<<< HEAD
-=======
-          <Route path="/post" element={<StudyPost />} />
->>>>>>> 8c15273007a325a276d3ff43d0975903f493ece5
         </Routes>
       </Content>
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage") && <Recommended />}
-<<<<<<< HEAD
-=======
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
->>>>>>> 8c15273007a325a276d3ff43d0975903f493ece5
     </>
   );
 };
@@ -138,10 +106,6 @@ const App = () => {
       </BrowserRouter>
     </AuthProvider>
   );
-<<<<<<< HEAD
-}
-=======
 };
->>>>>>> 8c15273007a325a276d3ff43d0975903f493ece5
 
 export default App;
