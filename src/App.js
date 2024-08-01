@@ -14,9 +14,16 @@ import Notifications from "pages/Notifications/Notifications";
 import Messages from "pages/Messages/Messages";
 import Bookmarks from "pages/Bookmarks/Bookmarks";
 import Profile from "pages/Profile/Profile";
+
+//Post
 import Post from "pages/Post/Post";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
+
+//DetailPost
+import DetailPost from "pages/Post/DetailPost";
+import DetailStudyPost from "pages/Studies/DetailStudyPost";
+
 import Recommended from "pages/Recommended/Recommended";
 import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 
@@ -26,9 +33,7 @@ import { useEffect, useState } from "react";
 
 const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -52,17 +57,22 @@ const MainContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/communities" element={<Communities />} />
-          <Route path="/studies" element={<Studies />} />
+          <Route path="/studies" element={<DetailPost />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/post" element={<Post />} />
-          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
-          <Route path="/post" element={<StudyPost />} />
+          <Route path="/create-post" element={<Post />} />
+          <Route path="/create-community" element={<CommunityPost />} />
+          <Route path="/create-study" element={<StudyPost />} />
+          <Route
+            path="/CommunityDetailsPage"
+            element={<CommunityDetailsPage />}
+          />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      {(location.pathname === "/communities" ||
+        location.pathname === "/CommunityDetailsPage") && <Recommended />}
     </>
   );
 };
@@ -97,7 +107,6 @@ function App() {
       </Center>
     </BrowserRouter>
   );
-
 }
 
 export default App;

@@ -44,3 +44,14 @@
   width: 20px;
   height: 20px;
 }
+
+.datePickerContainer {
+  position: absolute;
+  top: 23%;
+  left: 31%;
+  z-index: 1000;
+}
+
+.datePicker {
+  margin-top: 5px;
+}
