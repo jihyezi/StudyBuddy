@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 
 const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-export const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
