@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect, useState, useRef } from "react";
-const Explore = ({}) => {
-  return <div>Explore</div>;
-};
-=======
 import React, { useState } from "react";
 import Header from "components/Explore/Header";
 import styles from "./Explore.module.css";
@@ -64,21 +58,23 @@ const Explore = ({}) => {
     <div className={styles.Explore}>
       <Header />
       <div className={styles.SearchContainer}>
-        <div className={styles.InputWrapper}>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleInputChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            className={styles.SearchInput}
-            placeholder="제목, 커뮤니티, 스터디를 검색해보세요."
-          />
-          <img src={Search} alt="Search" className={styles.SearchIcon} />
+        <div className={styles.InputContainer}>
+          <div className={styles.InputWrapper}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className={styles.SearchInput}
+              placeholder="제목, 커뮤니티, 스터디를 검색해보세요."
+            />
+            <img src={Search} alt="Search" className={styles.SearchIcon} />
+          </div>
+          <button onClick={handleSearch} className={styles.SearchButton}>
+            Search
+          </button>
         </div>
-        <button onClick={handleSearch} className={styles.SearchButton}>
-          Search
-        </button>
         {isFocused && (
           <div className={styles.SearchHistoryContainer}>
             <ul className={styles.SearchHistoryList}>
@@ -158,5 +154,4 @@ const Explore = ({}) => {
   );
 };
 
->>>>>>> jaeho3
 export default Explore;

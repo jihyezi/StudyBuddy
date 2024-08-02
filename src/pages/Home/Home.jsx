@@ -70,14 +70,10 @@ const Home = ({}) => {
 
   return (
     <div className={styles.home}>
-<<<<<<< HEAD
       <Slider
         {...settings}
-        style={{ backgroundColor: "#FF74741A", position: "relative" }}
+        style={{ display: "grid", backgroundColor: "#FF74741A" }}
       >
-=======
-      <Slider {...settings} style={{ backgroundColor: "#FF74741A" }}>
->>>>>>> jaeho3
         <div
           style={{
             position: "relative",
@@ -102,11 +98,6 @@ const Home = ({}) => {
         <div className={styles.SliderText}>3</div>
         <div className={styles.SliderText}>4</div>
       </Slider>
-<<<<<<< HEAD
-
-      {/* dddddddddddddddddddddddddddddddddddd */}
-=======
->>>>>>> jaeho3
       <div style={{ borderBottom: "1px solid #ddd", height: 302 }}>
         <div
           style={{
@@ -363,7 +354,7 @@ const Home = ({}) => {
           </div>
         </div>
       </div>
-      {/* <LoginModal /> */}
+      <LoginModal />
     </div>
   );
 };

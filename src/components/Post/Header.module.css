@@ -25,6 +25,7 @@
   border-radius: 10px;
   font-family: "NotoSans-SemiBold";
   color: #ffffff;
+  cursor: pointer;
 }
 
 .cancel {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
@@ -23,7 +23,10 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-const Sidebar = ({toggleNotifications }) => {
+const Sidebar = ({}) => {
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const dropdownRef = useRef(null);
+
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
@@ -45,6 +48,23 @@ const Sidebar = ({toggleNotifications }) => {
     bookmarks: { off: bookmarks_off, on: bookmarks_on },
     profile: { off: profile_off, on: profile_on },
   };
+
+  const handlePostClick = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div style={{ alignItems: "flex-end" }}>
@@ -112,9 +132,27 @@ const Sidebar = ({toggleNotifications }) => {
               </div>
             );
           })}
-          <Link to={"/post"} style={{ textDecoration: "none" }}>
-            <div className={styles.post}>Post</div>
-          </Link>
+
+          <div
+            className={styles.post}
+            onClick={handlePostClick}
+            ref={dropdownRef}
+          >
+            Post
+            {dropdownVisible && (
+              <div className={styles.dropdown}>
+                <Link to="/create-post" className={styles.dropdownItem}>
+                  게시물 작성
+                </Link>
+                <Link to="/create-community" className={styles.dropdownItem}>
+                  커뮤니티 개설
+                </Link>
+                <Link to="/create-study" className={styles.dropdownItem}>
+                  스터디 생성
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

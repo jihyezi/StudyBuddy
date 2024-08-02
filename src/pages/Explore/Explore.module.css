@@ -2,9 +2,10 @@
  } */
 
 .SearchContainer {
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
+  padding-left: 10%;
   margin-top: 40px;
   margin-bottom: 40px;
   position: relative; /* Add position relative */
@@ -48,6 +49,7 @@
   color: white;
   border: none;
   display: flex;
+
   justify-content: center; /* 가로 방향 중앙 정렬 */
   align-items: center; /* 세로 방향 중앙 정렬 */
   cursor: pointer;
@@ -59,8 +61,8 @@
 
 .SearchHistoryContainer {
   position: absolute;
-  top: 52px;
-  left: 100px;
+  /* top: 100%;
+  left: 12%; */
   width: 1043px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -175,4 +177,8 @@
   gap: 30px;
   display: flex;
   flex-direction: column; /* Add this line to change the direction to column */
+}
+
+.InputContainer {
+  display: flex;
 }

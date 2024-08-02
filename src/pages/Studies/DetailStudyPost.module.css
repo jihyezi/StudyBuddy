@@ -1,0 +1,160 @@
+.studiesStatus {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: inline-block;
+  padding: 5px 20px 5px 20px;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #ff7474;
+  font-family: "NotoSans-SemiBold";
+}
+
+.studiesTitle {
+  margin-top: 30px;
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 36px;
+}
+
+.postWriterProfile,
+.commentWriterProfile {
+  width: 50px;
+  height: 50px;
+}
+
+.postWriterNickname {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+}
+
+.postWriteDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #606060;
+  font-family: "NotoSans-Medium";
+}
+.revise,
+.delete {
+  color: #606060;
+  font-family: "NotoSans-Medium";
+}
+
+.studiesDetails {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.studiesDetailIndex {
+  color: #606060;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+  text-align: right;
+}
+
+.studiesDetail {
+  color: #333333;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+}
+
+.studiesIntro {
+  padding-bottom: 24px;
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 24px;
+  border-bottom: 3px solid #dddddd;
+}
+
+.studiesComments {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 25px;
+  padding-bottom: 25px;
+  border-bottom: 3px solid #dddddd;
+}
+
+.studiesComment {
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 24px;
+}
+
+.likeIcon,
+.shareIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.studiesContent {
+  padding: 30px 30px 30px 30px;
+  color: #333333;
+  font-family: "NotoSans-Medium";
+  font-size: 20px;
+}
+
+.commentWriter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.commentWriterNickname {
+  color: #2d2d2d;
+  font-family: "NotoSans-SemiBold";
+}
+
+.commentWriterDate {
+  color: #9e9e9e;
+  font-family: "NotoSans-Regular";
+}
+
+.comments {
+  color: #2d2d2d;
+  font-family: "NotoSans-Regular";
+}
+
+.reply {
+  color: #9e9e9e;
+  font-family: "NotoSans-Regular";
+  font-size: 12px;
+}
+
+.inputField {
+  flex-grow: 1;
+  margin-left: 15px;
+  height: 100px;
+  padding-left: 16px;
+  border-radius: 30px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #dddddd;
+  outline-color: #ff7474;
+}
+
+.inputField::placeholder {
+  color: #dddddd;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.register {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: inline-block;
+  padding: 5px 20px 5px 20px;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #ff7474;
+  font-family: "NotoSans-Medium";
+}
