@@ -54,7 +54,6 @@ const MainContent = () => {
           <Route path="/explore" element={<Explore />} />
           <Route path="/communities" element={<Communities />} />
           <Route path="/studies" element={<Studies />} />
-          <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
@@ -76,6 +75,7 @@ const MainContent = () => {
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -95,17 +95,22 @@ const App = () => {
 
     fetchUsers();
   }, []);
-
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Sidebar />
-        <Center>
-          <MainContent />
-        </Center>
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <Sidebar toggleNotifications={toggleNotifications} />
+      <Center>
+        <MainContent />
+        <Notifications
+          showNotifications={showNotifications}
+          setShowNotifications={setShowNotifications}
+          toggleNotifications={toggleNotifications}
+        />
+      </Center>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

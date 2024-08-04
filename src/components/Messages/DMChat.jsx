@@ -62,40 +62,37 @@ function DMChat({ selectedUser, chatData = [] }) {
         )}
       </div>
       <div className={styles.chatContent}>
-        {dataToUse.length > 0 ? (
-          dataToUse.map((chat, index) => {
-            const showProfileImage =
-              isFirstMessage(index, dataToUse) && chat.type === "other";
-            const lastMessage = isLastMessage(index, dataToUse);
-            return (
-              <div key={index} className={styles.messageGroup}>
-                {showProfileImage && (
-                  <div className={styles.profileImage}></div>
-                )}
-                {chat.type === "my" ? (
-                  lastMessage ? (
-                    <MyMessage key={index} message={chat.message} last={true} />
-                  ) : (
-                    <MyMessage key={index} message={chat.message} />
-                  )
-                ) : lastMessage ? (
-                  <OtherMessage
-                    key={index}
-                    message={chat.message}
-                    last={true}
-                  />
-                ) : (
-                  <OtherMessage key={index} message={chat.message} />
-                )}
-                {(index === 0 || dataToUse[index - 1].date !== chat.date) && (
-                  <div className={styles.dateDivider}>{chat.date}</div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <div className={styles.noMessages}></div>
+      {dataToUse.length > 0 ? (
+  dataToUse.map((chat, index) => {
+    const showProfileImage =
+      isFirstMessage(index, dataToUse) && chat.type === "other";
+    const lastMessage = isLastMessage(index, dataToUse);
+    const showDateDivider =
+      index === 0 || dataToUse[index - 1].date !== chat.date;
+
+    return (
+      <div key={index} className={styles.messageGroup}>
+        {showDateDivider && (
+          <div className={styles.dateDivider}>{chat.date}</div>
         )}
+        {showProfileImage && <div className={styles.profileImage}></div>}
+        {chat.type === "my" ? (
+          lastMessage ? (
+            <MyMessage key={index} message={chat.message} last={true} />
+          ) : (
+            <MyMessage key={index} message={chat.message} />
+          )
+        ) : lastMessage ? (
+          <OtherMessage key={index} message={chat.message} last={true} />
+        ) : (
+          <OtherMessage key={index} message={chat.message} />
+        )}
+      </div>
+    );
+  })
+) : (
+  <div className={styles.noMessages}></div>
+)}
       </div>
       <div className={styles.InputContainer}>
         <div className={styles.chatInputContainer}>

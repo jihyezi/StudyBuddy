@@ -7,7 +7,7 @@ import profile from 'assets/images/faker2.jpg'
 import profile2 from 'assets/images/gromit.jpeg'
 import profile3 from 'assets/images/profile1.png'
 
-const dummyData = [
+const initialDummyData = [
   {
     profile: profile,
     username: "우제",
@@ -62,6 +62,7 @@ const dummyData = [
 function DMList() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [dummyData, setDummyData] = useState(initialDummyData);
 
   const handleUserClick = (user) => {
     if (selectedUser && selectedUser.id === user.id) {
@@ -76,6 +77,15 @@ function DMList() {
   };
 
   const handleSendMessage = (user) => {
+    if (!dummyData.some((item) => item.id === user.id)) {
+      const newUser = {
+        username: user.username,
+        id: user.id,
+        date: new Date().toISOString().split("T")[0],
+        message: "New message",
+      };
+      setDummyData((prevData) => [...prevData, newUser]);
+    }
     setSelectedUser(user);
     setIsSending(false);
   };
