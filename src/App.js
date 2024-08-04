@@ -33,7 +33,7 @@ const Content = styled.div`
 
 const MainContent = () => {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -64,8 +64,18 @@ const MainContent = () => {
             path="/CommunityDetailsPage"
             element={<CommunityDetailsPage />}
           />
+          <Route path="/create-post" element={<Post />} />
+          <Route path="/create-community" element={<CommunityPost />} />
+          <Route path="/create-study" element={<StudyPost />} />
+          <Route
+            path="/CommunityDetailsPage"
+            element={<CommunityDetailsPage />}
+          />
         </Routes>
       </Content>
+      {(location.pathname === "/communities" ||
+        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
@@ -95,22 +105,27 @@ const App = () => {
 
     fetchUsers();
   }, []);
+
+  // 상태 전환 함수
   const toggleNotifications = () => {
-    setShowNotifications(!showNotifications);
+    setShowNotifications((prevShowNotifications) => !prevShowNotifications);
   };
+
   return (
-    <BrowserRouter>
-      <Sidebar toggleNotifications={toggleNotifications} />
-      <Center>
-        <MainContent />
-        <Notifications
-          showNotifications={showNotifications}
-          setShowNotifications={setShowNotifications}
-          toggleNotifications={toggleNotifications}
-        />
-      </Center>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Sidebar toggleNotifications={toggleNotifications} />
+        <Center>
+          <MainContent />
+          <Notifications
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            toggleNotifications={toggleNotifications}
+          />
+        </Center>
+      </BrowserRouter>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
