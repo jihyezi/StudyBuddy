@@ -21,7 +21,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1;
+  /* z-index: 1; */
   position: relative;
   padding-left: 16px;
   padding-right: 16px;
@@ -36,4 +36,14 @@
   color: #b6b6b6;
   font-family: "NotoSans-Regular";
   font-size: 14px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(221, 221, 221, 0.3);
+  z-index: 99;
 }

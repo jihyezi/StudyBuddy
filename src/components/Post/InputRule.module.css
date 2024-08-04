@@ -25,6 +25,7 @@
   border-style: solid;
   border-color: #b6b6b6;
   padding: 6px 10px 6px 10px;
+  cursor: pointer;
 }
 
 .addIcon {
@@ -69,6 +70,9 @@
   width: 30px;
   height: 30px;
   padding: 10px;
+}
+
+.ruleTextInput {
 }
 
 .ruleText {

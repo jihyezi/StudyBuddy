@@ -4,7 +4,7 @@ import DMChat from "./DMChat";
 import DMSend from "./DMSend"; // 추가된 부분
 import SendMessageIcon from "assets/icons/Messages/SendMessage.png";
 
-const dummyData = [
+const initialDummyData = [
   {
     username: "우제",
     id: "godthunderzeus",
@@ -48,9 +48,11 @@ const dummyData = [
     message: "확인했습니다! 👌",
   },
 ];
+
 function DMList() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [dummyData, setDummyData] = useState(initialDummyData);
 
   const handleUserClick = (user) => {
     if (selectedUser && selectedUser.id === user.id) {
@@ -65,6 +67,15 @@ function DMList() {
   };
 
   const handleSendMessage = (user) => {
+    if (!dummyData.some((item) => item.id === user.id)) {
+      const newUser = {
+        username: user.username,
+        id: user.id,
+        date: new Date().toISOString().split("T")[0],
+        message: "New message",
+      };
+      setDummyData((prevData) => [...prevData, newUser]);
+    }
     setSelectedUser(user);
     setIsSending(false);
   };

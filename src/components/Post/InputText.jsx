@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styles from "./InputText.module.css";
 import "fonts/Font.css";
 
@@ -10,6 +10,7 @@ const InputText = (props) => {
         className={styles.inputField}
         type="text"
         placeholder={props.placeholder}
+        onChange={props.onChange}
       />
     </div>
   );

@@ -6,7 +6,8 @@ import close from "assets/icons/Home/close.png";
 import emailloginimg from "assets/images/Home/emailloginimg.png";
 import passwordicon from "assets/icons/Home/password.png";
 import SignUpModal from "./SignUpModal"; // SignUpModal 가져오기
-
+import supabase from "../supabaseClient"; // supabase 클라이언트 가져오기
+// 로그인
 const customStyles = {
   content: {
     width: "520px",
@@ -29,11 +30,22 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [signUpModalIsOpen, setSignUpModalIsOpen] = useState(false); // 회원가입 모달 상태
+  const [error, setError] = useState(""); // 오류 상태 추가
 
-  const handleLogin = () => {
-    // 로그인 로직을 여기에 추가합니다
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleLogin = async () => {
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error("Login error:", error.message);
+      setError("로그인 실패: " + error.message); // 오류 상태 업데이트
+    } else {
+      console.log("로그인 성공:", user);
+      closeModal(); // 모달 닫기
+      // 로그인 성공 후 상태 업데이트 또는 리다이렉션 처리
+    }
   };
 
   const navigateToFindAccount = () => {

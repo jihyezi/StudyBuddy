@@ -72,7 +72,7 @@ const Home = ({}) => {
     <div className={styles.home}>
       <Slider
         {...settings}
-        style={{ backgroundColor: "#FF74741A", position: "relative" }}
+        style={{ display: "grid", backgroundColor: "#FF74741A" }}
       >
         <div
           style={{
@@ -98,8 +98,6 @@ const Home = ({}) => {
         <div className={styles.SliderText}>3</div>
         <div className={styles.SliderText}>4</div>
       </Slider>
-
-      {/* dddddddddddddddddddddddddddddddddddd */}
       <div style={{ borderBottom: "1px solid #ddd", height: 302 }}>
         <div
           style={{
@@ -356,7 +354,7 @@ const Home = ({}) => {
           </div>
         </div>
       </div>
-      {/* <LoginModal /> */}
+      <LoginModal />
     </div>
   );
 };
