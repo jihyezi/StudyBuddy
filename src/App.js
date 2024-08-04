@@ -16,7 +16,7 @@ import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
 import LoginModal from "components/Home/LoginModal";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext"; // AuthProvider 추가
 import supabase from "components/supabaseClient";
 
 const Center = styled.div`
@@ -33,7 +33,7 @@ const Content = styled.div`
 
 const MainContent = () => {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -98,24 +98,23 @@ const App = () => {
 
   // 상태 전환 함수
   const toggleNotifications = () => {
-    setShowNotifications((prevShowNotifications) => {
-      const newState = !prevShowNotifications;
-      return newState;
-    });
+    setShowNotifications((prevShowNotifications) => !prevShowNotifications);
   };
 
   return (
-    <BrowserRouter>
-      <Sidebar toggleNotifications={toggleNotifications} />
-      <Center>
-        <MainContent />
-        <Notifications
-          showNotifications={showNotifications}
-          setShowNotifications={setShowNotifications}
-          toggleNotifications={toggleNotifications}
-        />
-      </Center>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Sidebar toggleNotifications={toggleNotifications} />
+        <Center>
+          <MainContent />
+          <Notifications
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            toggleNotifications={toggleNotifications}
+          />
+        </Center>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 
