@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Sidebar from "components/Sidebar/Sidebar";
@@ -13,8 +14,13 @@ import Profile from "pages/Profile/Profile";
 import Post from "pages/Post/Post";
 import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import Recommended from "pages/Recommended/Recommended";
+import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
+import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
+import LoginModal from "components/Home/LoginModal";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import supabase from "components/supabaseClient";
 import LoginModal from "components/Home/LoginModal";
 import { AuthProvider, useAuth } from "./contexts/AuthContext"; // AuthProvider 추가
 import supabase from "components/supabaseClient";
@@ -64,8 +70,18 @@ const MainContent = () => {
             path="/CommunityDetailsPage"
             element={<CommunityDetailsPage />}
           />
+          <Route path="/create-post" element={<Post />} />
+          <Route path="/create-community" element={<CommunityPost />} />
+          <Route path="/create-study" element={<StudyPost />} />
+          <Route
+            path="/CommunityDetailsPage"
+            element={<CommunityDetailsPage />}
+          />
         </Routes>
       </Content>
+      {(location.pathname === "/communities" ||
+        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
@@ -74,7 +90,9 @@ const MainContent = () => {
 };
 
 const App = () => {
+const App = () => {
   const [users, setUsers] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
