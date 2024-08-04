@@ -23,7 +23,7 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-const Sidebar = ({}) => {
+const Sidebar = ({ }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -32,7 +32,7 @@ const Sidebar = ({}) => {
     { name: "Explore", path: "/explore", text: "explore" },
     { name: "Communities", path: "/communities", text: "communities" },
     { name: "Studies", path: "/studies", text: "studies" },
-    { name: "Notifications", path: "#", text: "notifications" }, // Changed path to '#' to prevent page reload
+    { name: "Notifications", path: "/notifications", text: "notifications" },
     { name: "Messages", path: "/messages", text: "messages" },
     { name: "Bookmarks", path: "/bookmarks", text: "bookmarks" },
     { name: "Profile", path: "/profile", text: "profile" },
@@ -78,57 +78,33 @@ const Sidebar = ({}) => {
             const { off, on } = iconMapping[menu.text];
             return (
               <div className={styles.menu} key={index}>
-                {menu.text === "notifications" ? (
-                  <div
-                    className={styles.menuItem}
-                    onClick={toggleNotifications}
-                    style={{
-                      color: "#333333",
-                      textDecoration: "none",
-                      verticalAlign: "middle",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <img
-                      style={{
-                        width: 24,
-                        height: 24,
-                        verticalAlign: "middle",
-                      }}
-                      src={off}
-                      alt="icon"
-                    />
-                    <SidebarItem menu={menu} />
-                  </div>
-                ) : (
-                  <NavLink
-                    to={menu.path}
-                    key={index}
-                    style={{
-                      color: "#333333",
-                      textDecoration: "none",
-                      verticalAlign: "middle",
-                    }}
-                    className={({ isActive }) =>
-                      isActive ? styles.menuOn : styles.menuOff
-                    }
-                  >
-                    {({ isActive }) => (
-                      <>
-                        <img
-                          style={{
-                            width: 24,
-                            height: 24,
-                            verticalAlign: "middle",
-                          }}
-                          src={isActive ? on : off}
-                          alt="icon"
-                        />
-                        <SidebarItem menu={menu} />
-                      </>
-                    )}
-                  </NavLink>
-                )}
+                <NavLink
+                  to={menu.path}
+                  key={index}
+                  style={{
+                    color: "#333333",
+                    textDecoration: "none",
+                    verticalAlign: "middle",
+                  }}
+                  className={({ isActive }) =>
+                    isActive ? styles.menuOn : styles.menuOff
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <img
+                        style={{
+                          width: 24,
+                          height: 24,
+                          verticalAlign: "middle",
+                        }}
+                        src={isActive ? on : off}
+                        alt="icon"
+                      />
+                      <SidebarItem menu={menu} />
+                    </>
+                  )}
+                </NavLink>
               </div>
             );
           })}
