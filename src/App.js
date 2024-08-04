@@ -1,11 +1,7 @@
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import styles from "./App.module.css";
-
-//component
 import Sidebar from "components/Sidebar/Sidebar";
-
-//page
 import Home from "pages/Home/Home";
 import Explore from "pages/Explore/Explore";
 import Communities from "pages/Communities/Communities";
@@ -15,20 +11,14 @@ import Messages from "pages/Messages/Messages";
 import Bookmarks from "pages/Bookmarks/Bookmarks";
 import Profile from "pages/Profile/Profile";
 import Post from "pages/Post/Post";
-import CommunityPost from "pages/Post/CommunityPost";
+import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import StudyPost from "pages/Post/StudyPost";
 import Recommended from "pages/Recommended/Recommended";
-import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
-
-//supabase 데이터 인스톨(차후 수정이나 최적화 가능)
 import { createClient } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
 
 const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-
 
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -58,17 +48,19 @@ const MainContent = () => {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
-          <Route path="/CommunityDetailsPage" element={<CommunityDetailsPage />} />
-          <Route path="/post" element={<StudyPost />} />
+          <Route path="/community-details" element={<CommunityDetailsPage />} />
+          <Route path="/study-post" element={<StudyPost />} />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" || location.pathname === "/CommunityDetailsPage") && <Recommended />}
+      {(location.pathname === "/communities" ||
+        location.pathname === "/community-details") && <Recommended />}
     </>
   );
 };
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -89,15 +81,23 @@ function App() {
     fetchUsers();
   }, []);
 
+  // 상태 전환 함수
+  const toggleNotifications = () => {
+    setShowNotifications((prevShowNotifications) => {
+      const newState = !prevShowNotifications;
+      return newState;
+    });
+  };
+
   return (
     <BrowserRouter>
-      <Sidebar />
+      <Sidebar toggleNotifications={toggleNotifications} />
       <Center>
         <MainContent />
+        <Notifications showNotifications={showNotifications} />
       </Center>
     </BrowserRouter>
   );
-
 }
 
 export default App;

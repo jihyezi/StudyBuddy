@@ -4,7 +4,7 @@ import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
 
-//icons
+// Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
 import home_on from "assets/icons/Sidebar/home_on.png";
@@ -22,14 +22,13 @@ import bookmarks_off from "assets/icons/Sidebar/bookmarks_off.png";
 import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
-
-const Sidebar = ({ }) => {
+const Sidebar = ({ toggleNotifications }) => {
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
     { name: "Communities", path: "/communities", text: "communities" },
     { name: "Studies", path: "/studies", text: "studies" },
-    { name: "Notifications", path: "/notifications", text: "notifications" },
+    { name: "Notifications", path: "#", text: "notifications" }, // Use '#' for custom click event
     { name: "Messages", path: "/messages", text: "messages" },
     { name: "Bookmarks", path: "/bookmarks", text: "bookmarks" },
     { name: "Profile", path: "/profile", text: "profile" },
@@ -47,17 +46,39 @@ const Sidebar = ({ }) => {
   };
 
   return (
-    <div style={{ alignItems: "flex-end" }}>
-      <div className={styles.side}>
-        <div className={styles.menus}>
-          <Link to={"/"}>
-            <img className={styles.logo} src={logo} alt="logo" />
-          </Link>
+    <div className={styles.side}>
+      <div className={styles.menus}>
+        <Link to={"/"}>
+          <img className={styles.logo} src={logo} alt="logo" />
+        </Link>
 
-          {menus.map((menu, index) => {
-            const { off, on } = iconMapping[menu.text];
-            return (
-              <div className={styles.menu} key={index}>
+        {menus.map((menu, index) => {
+          const { off, on } = iconMapping[menu.text];
+          return (
+            <div className={styles.menu} key={index}>
+              {menu.text === "notifications" ? (
+                <div
+                  className={styles.menuItem}
+                  onClick={toggleNotifications} // Trigger toggle function
+                  style={{
+                    color: "#333333",
+                    textDecoration: "none",
+                    verticalAlign: "middle",
+                    cursor: "pointer",
+                  }}
+                >
+                  <img
+                    style={{
+                      width: 24,
+                      height: 24,
+                      verticalAlign: "middle",
+                    }}
+                    src={off}
+                    alt="icon"
+                  />
+                  <SidebarItem menu={menu} />
+                </div>
+              ) : (
                 <NavLink
                   to={menu.path}
                   key={index}
@@ -85,15 +106,16 @@ const Sidebar = ({ }) => {
                     </>
                   )}
                 </NavLink>
-              </div>
-            );
-          })}
-          <Link to={"/post"} style={{ textDecoration: "none" }}>
-            <div className={styles.post}>Post</div>
-          </Link>
-        </div>
+              )}
+            </div>
+          );
+        })}
+        <Link to={"/post"} style={{ textDecoration: "none" }}>
+          <div className={styles.post}>Post</div>
+        </Link>
       </div>
     </div>
   );
 };
+
 export default Sidebar;
