@@ -10,7 +10,7 @@ import R from "assets/icons/Explore/R.png";
 
 // import PopularPost from "components/Home/PopularPost";
 import HotCommunity from "components/Home/HotCommunity";
-import StudyPost from "components/ExploreStudyPost";
+import StudyPost from "components/Explore/ExploreStudyPost";
 
 const Explore = ({ }) => {
   const [searchQuery, setSearchQuery] = useState("");

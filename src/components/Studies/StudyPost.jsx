@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./StudyPost.module.css";
 
-import heart_off from "../assets/icons/favorite_off.png";
-import heart_on from "../assets/icons/favorite_on.png";
-import comment from "../assets/icons/comment.png";
-import share from "../assets/icons/share.png";
-import person from "../assets/icons/person.png";
+import heart_off from "assets/icons/favorite_off.png";
+import heart_on from "assets/icons/favorite_on.png";
+import comment from "assets/icons/comment.png";
+import share from "assets/icons/share.png";
+import person from "assets/icons/person.png";
 
 const StudyPost = (props) => {
   return (

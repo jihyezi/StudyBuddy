@@ -11,20 +11,16 @@ import PostList from "components/Communities/CommunityPostList";
 import JoinPostList from "components/Communities/CommunityJoinPostList";
 import Recommended from "pages/Recommended/Recommended";
 import { dummyPostData } from "components/Dummydata";
+import Toptab from "components/Studies/Toptab";
 
 const Studies = ({ }) => {
 
   return (
-    <div className={styles.community}>
+    <div className={styles.studycontainer}>
       <Header />
-      <div className={styles.classification}>
-        {/* <Classification onEventSelect={handleEventSelect} /> */}
-        <JoinCommunity />
+      <div className={styles.tabstyle}>
+        <Toptab />
       </div>
-
-      {/* <PostList postData={dummyPostData} selectedEvent={selectedEvent} /> */}
-
-      <JoinPostList postData={dummyPostData} />
     </div>
   );
 }

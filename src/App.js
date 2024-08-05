@@ -67,7 +67,7 @@ const MainContent = () => {
         </Routes>
       </Content>
       {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage" || location.pathname === "/bookmarks") && <Recommended />}
+        location.pathname === "/CommunityDetailsPage" || location.pathname === "/bookmarks" || location.pathname === "/studies") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
