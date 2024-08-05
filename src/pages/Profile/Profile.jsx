@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import LoginModal from "components/Home/LoginModal";
 const Profile = ({}) => {
-  return <div>Profile</div>;
+  return <div><LoginModal/></div>;
 };
 export default Profile;
