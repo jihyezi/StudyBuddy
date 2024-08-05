@@ -37,7 +37,6 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
       email,
       password,
     });
-
     if (error) {
       console.error("Login error:", error.message);
       setError("로그인 실패: " + error.message); // 오류 상태 업데이트

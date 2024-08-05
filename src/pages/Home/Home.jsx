@@ -14,7 +14,6 @@ import HomeImage from "assets/images/Home/OnBoardingImage1.png";
 import leftarrow from "assets/icons/Home/leftarrow.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
 import downarrow from "assets/icons/Home/downarrow.png";
-
 import LoginModal from "components/Home/LoginModal"; // 모달
 
 const Home = ({}) => {
@@ -72,7 +71,7 @@ const Home = ({}) => {
     <div className={styles.home}>
       <Slider
         {...settings}
-        style={{ display: "grid", backgroundColor: "#FF74741A" }}
+        style={{ backgroundColor: "#FF74741A", position: "relative" }}
       >
         <div
           style={{
@@ -98,6 +97,8 @@ const Home = ({}) => {
         <div className={styles.SliderText}>3</div>
         <div className={styles.SliderText}>4</div>
       </Slider>
+
+      {/* dddddddddddddddddddddddddddddddddddd */}
       <div style={{ borderBottom: "1px solid #ddd", height: 302 }}>
         <div
           style={{
