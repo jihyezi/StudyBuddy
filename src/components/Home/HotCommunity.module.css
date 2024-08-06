@@ -1,9 +1,10 @@
 .community {
-  width: calc(100% - 50px);
   position: relative;
-  padding-bottom: 15px;
+  padding: 16px 20px;
   border: 1px solid #dddddd;
   border-radius: 8px;
+  max-width: 300px;
+  width: 300px;
 }
 
 .classificationIcon {
@@ -30,28 +31,52 @@
 }
 
 .communityName {
-  margin-top: 20px;
-  margin-bottom: 15px;
-  margin-left: 16px;
   color: #ff7474;
   font-size: 16px;
   font-family: "NotoSans-Bold";
+  margin: 0;
+  margin-bottom: 16px;
 }
 
 .communityDetail {
   margin-top: 0px;
   margin-bottom: 5px;
-  margin-left: 16px;
-  gap: 6px;
   color: #606060;
 }
 
 .communityDetailTitle {
   font-size: 14px;
   font-family: "NotoSans-SemiBold";
+  margin-right: 12px;
 }
 
 .communityDetailContent {
   font-size: 14px;
   font-family: "NotoSans-Regular";
 }
+
+/* Small 사이즈 */
+.smallCommunity {
+  position: relative;
+  max-width: 300px; 
+  width: 220px;
+}
+
+.smallclassificationIcon {
+  position: absolute;
+  top: -1px;
+  left: 48%;
+  transform: translateX(350%);
+  width: 28px;
+  height: 37px;
+}
+
+.smallCommunityName {
+  font-size: 15px; 
+}
+
+.smallCommunityDetailTitle,
+.smallCommunityDetailContent {
+  font-size: 13px; 
+}
+

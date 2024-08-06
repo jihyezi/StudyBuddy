@@ -21,8 +21,8 @@ import supabase from "components/supabaseClient";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 
 const Center = styled.div`
-  margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
-  width: 80%;
+  margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
+  width: calc(100% - 250px);
   height: 100vh;
   display: flex;
   flex-direction: row;

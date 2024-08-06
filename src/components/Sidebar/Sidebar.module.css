@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 20%; /* 사이드바의 너비를 20%로 설정 */
+  min-width: 250px;
   height: 100%;
   background-color: #ffffff;
   border-right: 1px solid #dddddd;

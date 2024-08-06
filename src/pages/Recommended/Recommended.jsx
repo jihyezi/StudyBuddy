@@ -12,9 +12,9 @@ const Recommended = ({ }) => {
       <div className={styles.recommendedHead}>회원님을 위한 추천👍🏻</div>
       <div className={styles.recommended}>
         <div className={styles.recommendedPosts}>
-          <HotCommunity />
-          <PopularPost />
-          <PopularPost />
+          <HotCommunity small />
+          <PopularPost small />
+          <PopularPost small />
         </div>
       </div>
     </div>
