@@ -11,6 +11,7 @@ import R from "assets/icons/Explore/R.png";
 // import PopularPost from "components/Home/PopularPost";
 import HotCommunity from "components/Home/HotCommunity";
 import StudyPost from "components/Explore/ExploreStudyPost";
+import Tag from "components/Home/Tag";
 
 const Explore = ({ }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -70,56 +71,42 @@ const Explore = ({ }) => {
               placeholder="제목, 커뮤니티, 스터디를 검색해보세요."
             />
             <img src={Search} alt="Search" className={styles.SearchIcon} />
+            {isFocused && (
+              <div className={styles.SearchHistoryContainer}>
+                <ul className={styles.SearchHistoryList}>
+                  <div className={styles.SearchText}>최근 검색어</div>
+                  {searchHistory.map((historyItem, index) => (
+                    <li key={index} className={styles.SearchHistoryItem}>
+                      <div className={styles.HistoryTextContainer}>
+                        <img src={Exploresearch} />
+                        {historyItem}
+                        {/* <div>X</div>
+                    <img src={Exploredelete} /> */}
+                        {/* <button className={styles.deletebutton}>
+                      
+                    </button> */}
+                        {/* <button>
+                      
+                    </button> 이미지가 깨져서 보임 */}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <button onClick={handleSearch} className={styles.SearchButton}>
             Search
           </button>
         </div>
-        {isFocused && (
-          <div className={styles.SearchHistoryContainer}>
-            <ul className={styles.SearchHistoryList}>
-              <div className={styles.SearchText}>최근 검색어</div>
-              {searchHistory.map((historyItem, index) => (
-                <li key={index} className={styles.SearchHistoryItem}>
-                  <div className={styles.HistoryTextContainer}>
-                    <img src={Exploresearch} />
-                    {historyItem}
-                    {/* <div>X</div>
-                    <img src={Exploredelete} /> */}
-                    {/* <button className={styles.deletebutton}>
-                      
-                    </button> */}
-                    {/* <button>
-                      
-                    </button> 이미지가 깨져서 보임 */}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+
       </div>
       <div className={styles.PopularTagContainer}>
-        <div className={styles.CategoryText}>인기 태그🏷️</div>
-        <div className={styles.tagContainer}>
-          <button className={styles.arrowButton}>
-            <img src={L} alt="Left Arrow" />
-          </button>
-          <button className={styles.tagButton}>온라인 스터디</button>
-          <button className={styles.tagButton}>오프라인 스터디</button>
-          <button className={styles.tagButton}>정보처리기사</button>
-          <button className={styles.tagButton}>면접</button>
-          <button className={styles.tagButton}>프론트엔드</button>
-          <button className={styles.tagButton}>프로젝트</button>
-          <button className={styles.tagButton}>정보보안기사</button>
-          <button className={styles.tagButton}>JavaScript</button>
-          <button className={styles.arrowButton}>
-            <img src={R} alt="Right Arrow" />
-          </button>
-        </div>
+        <div className={styles.CategoryText}>인기 태그 🏷️</div>
+        <Tag />
       </div>
       <div className={styles.HotCommunitiesContainer}>
-        <div className={styles.CategoryText}>🔥HOT한 커뮤니티 </div>
+        <div className={styles.CategoryText}>🔥 HOT 커뮤니티 </div>
         <div className={styles.scrollContainer}>
           {/* 스크롤 기능 추가 해야함 */}
           <div className={styles.HotCommunityContainer}>
