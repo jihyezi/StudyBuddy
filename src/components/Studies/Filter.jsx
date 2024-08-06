@@ -12,7 +12,7 @@ const Filter = ({ placeholder }) => {
     const inputRef = useRef(null);
 
     // 고정된 옵션 목록
-    const selectOptions = selectList?.classifications || [];
+    const selectOptions = selectList?.studtyfilter || [];
 
     const handleClick = () => {
         setIsOpen(!isOpen);

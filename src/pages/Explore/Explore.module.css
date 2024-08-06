@@ -105,9 +105,6 @@
   align-items: center;
   gap: 10px;
 }
-.deletebutton {
-  /* border-radius: 1px solid #fff; */
-}
 
 .PopularTagContainer {
   width: 100%;

@@ -109,7 +109,8 @@ const Home = ({ }) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              marginBottom: 28
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
             🔥 HOT 커뮤니티
@@ -148,7 +149,8 @@ const Home = ({ }) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              marginBottom: 28
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
             ⭐️ 인기글
@@ -181,7 +183,8 @@ const Home = ({ }) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              marginBottom: 28
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
             최근 방문한 커뮤니티
@@ -216,6 +219,7 @@ const Home = ({ }) => {
               fontSize: 20,
               position: "relative",
               marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
             태그별 인기 스터디 🤗

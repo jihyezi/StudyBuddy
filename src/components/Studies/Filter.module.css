@@ -3,12 +3,12 @@
     flex-direction: row;
     align-items: center;
     flex-grow: 1;
-    width: 80px;
+    width: 60px;
 }
 
 .inputClick {
     flex-grow: 1;
-    width: 80px;
+    width: 60px;
     height: 40px;
     display: flex;
     justify-content: space-between;
@@ -18,7 +18,7 @@
     padding-left: 16px;
     padding-right: 16px;
     border-radius: 20px;
-    border-width: 1.5px;
+    border-width: 1px;
     border-style: solid;
     border-color: #b6b6b6;
     cursor: pointer;

@@ -2,12 +2,14 @@
   position: relative;
   margin-left: -16px;
   margin-right: -16px;
+  display: flex;
+  align-items: center;
 }
 
 .classContainer {
   display: flex;
   overflow-x: auto;
-  max-width: 750px;
+  max-width: 800px;
   margin-left: 32px;
   margin-right: 32px;
   gap: 10px;
@@ -59,17 +61,17 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  background: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0.804));
 }
 
 .overflowBoxRight {
   right: 0;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  background: linear-gradient(to left, rgb(255, 255, 255), rgba(255, 255, 255, 0.804));
 }
 
 .overflowBoxLeft {
   left: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  background: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0.804));
 }
 
 .scrollButton {
