@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
 
-//icons
+// Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
 import home_on from "assets/icons/Sidebar/home_on.png";
@@ -23,16 +23,17 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-const Sidebar = ({ }) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
+  const location = useLocation();
 
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
     { name: "Communities", path: "/communities", text: "communities" },
     { name: "Studies", path: "/studies", text: "studies" },
-    { name: "Notifications", path: "/notifications", text: "notifications" },
+    { name: "Notifications", path: "#", text: "notifications" },
     { name: "Messages", path: "/messages", text: "messages" },
     { name: "Bookmarks", path: "/bookmarks", text: "bookmarks" },
     { name: "Profile", path: "/profile", text: "profile" },
@@ -67,17 +68,41 @@ const Sidebar = ({ }) => {
   }, []);
 
   return (
-    <div style={{ alignItems: "flex-end" }}>
-      <div className={styles.side}>
-        <div className={styles.menus}>
-          <Link to={"/"}>
-            <img className={styles.logo} src={logo} alt="logo" />
-          </Link>
+    <div className={styles.side}>
+      <div className={styles.menus}>
+        <Link to={"/"}>
+          <img className={styles.logo} src={logo} alt="logo" />
+        </Link>
 
-          {menus.map((menu, index) => {
-            const { off, on } = iconMapping[menu.text];
-            return (
-              <div className={styles.menu} key={index}>
+        {menus.map((menu, index) => {
+          const { off, on } = iconMapping[menu.text];
+          return (
+            <div className={styles.menu} key={index}>
+              {menu.text === "notifications" ? (
+                <div
+                  className={styles.menuItem}
+                  onClick={toggleNotifications}
+                  style={{
+                    color: "#333333",
+                    textDecoration: "none",
+                    verticalAlign: "middle",
+                    cursor: "pointer",
+                    fontFamily: "BalooTammudu2-Regular",
+                    fontSize: 20
+                  }}
+                >
+                  <img
+                    style={{
+                      width: 24,
+                      height: 24,
+                      verticalAlign: "middle",
+                    }}
+                    src={isNotificationsOpen ? on : off}
+                    alt="icon"
+                  />
+                  <SidebarItem menu={menu} />
+                </div>
+              ) : (
                 <NavLink
                   to={menu.path}
                   key={index}
@@ -89,6 +114,9 @@ const Sidebar = ({ }) => {
                   className={({ isActive }) =>
                     isActive ? styles.menuOn : styles.menuOff
                   }
+                  onClick={() => {
+                    if (isNotificationsOpen) toggleNotifications();
+                  }}
                 >
                   {({ isActive }) => (
                     <>
@@ -105,33 +133,34 @@ const Sidebar = ({ }) => {
                     </>
                   )}
                 </NavLink>
-              </div>
-            );
-          })}
+              )}
+            </div>
+          );
+        })}
 
-          <div
-            className={styles.post}
-            onClick={handlePostClick}
-            ref={dropdownRef}
-          >
-            Post
-            {dropdownVisible && (
-              <div className={styles.dropdown}>
-                <Link to="/create-post" className={styles.dropdownItem}>
-                  게시물 작성
-                </Link>
-                <Link to="/create-community" className={styles.dropdownItem}>
-                  커뮤니티 개설
-                </Link>
-                <Link to="/create-study" className={styles.dropdownItem}>
-                  스터디 생성
-                </Link>
-              </div>
-            )}
-          </div>
+        <div
+          className={styles.post}
+          onClick={handlePostClick}
+          ref={dropdownRef}
+        >
+          Post
+          {dropdownVisible && (
+            <div className={styles.dropdown}>
+              <Link to="/create-post" className={styles.dropdownItem}>
+                게시물 작성
+              </Link>
+              <Link to="/create-community" className={styles.dropdownItem}>
+                커뮤니티 개설
+              </Link>
+              <Link to="/create-study" className={styles.dropdownItem}>
+                스터디 생성
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 export default Sidebar;

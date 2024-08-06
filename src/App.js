@@ -34,7 +34,7 @@ const Content = styled.div`
 
 const MainContent = () => {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -66,6 +66,8 @@ const MainContent = () => {
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
         </Routes>
       </Content>
+
+      <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage" || location.pathname === "/bookmarks" || location.pathname === "/studies") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
@@ -75,6 +77,7 @@ const MainContent = () => {
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -95,12 +98,22 @@ const App = () => {
     fetchUsers();
   }, []);
 
+  // 상태 전환 함수
+  const toggleNotifications = () => {
+    setShowNotifications((prevShowNotifications) => !prevShowNotifications);
+  };
+
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Sidebar />
+        <Sidebar toggleNotifications={toggleNotifications} />
         <Center>
           <MainContent />
+          <Notifications
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            toggleNotifications={toggleNotifications}
+          />
         </Center>
       </BrowserRouter>
     </AuthProvider>
