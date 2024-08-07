@@ -21,6 +21,8 @@ const InputSelect = (props) => {
         return selectList.people;
       case "기간":
         return selectList.period;
+      case "커뮤니티":
+        return selectList.joinCommunity;
       default:
         return selectList.classifications;
     }
@@ -30,8 +32,13 @@ const InputSelect = (props) => {
   };
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
+    setSelectedOption(option.name);
     setIsOpen(false);
+    if (option.communityId) {
+      // console.log(option.communityId);
+      props.onSelect(option);
+    }
+    props.onSelect(option.name);
   };
 
   const handleOutsideClick = (event) => {
@@ -71,7 +78,7 @@ const InputSelect = (props) => {
                 <div
                   key={index}
                   className={styles.dropdownOption}
-                  onClick={() => handleOptionClick(option.name)}
+                  onClick={() => handleOptionClick(option)}
                 >
                   {option.name}
                 </div>

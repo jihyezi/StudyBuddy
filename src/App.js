@@ -19,6 +19,9 @@ import LoginModal from "components/Home/LoginModal";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
 
+import DetailPost from "pages/Post/DetailPost";
+import DetailStudyPost from "pages/Studies/DetailStudyPost";
+
 const Center = styled.div`
   margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
   width: 80%;
@@ -53,7 +56,7 @@ const MainContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/communities" element={<Communities />} />
-          <Route path="/studies" element={<Studies />} />
+          <Route path="/studies" element={<DetailPost />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />

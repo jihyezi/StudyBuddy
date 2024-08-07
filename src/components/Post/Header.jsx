@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import "fonts/Font.css";
 
@@ -6,9 +7,20 @@ import "fonts/Font.css";
 import back from "assets/icons/Communities/back.png";
 
 const Header = (props) => {
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
   return (
     <div className={styles.header}>
-      <img className={styles.backIcon} src={back} alt="back" />
+      <img
+        className={styles.backIcon}
+        src={back}
+        alt="back"
+        onClick={handleBackClick}
+      />
       <div className={styles.headerName}>{props.title}</div>
       <div className={styles.rightSection}>
         <div className={styles.cancel}>취소</div>

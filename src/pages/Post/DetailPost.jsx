@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./DetailPost.module.css";
+import supabase from "components/supabaseClient";
 
 // component
 import Header from "components/Communities/Header";
@@ -21,10 +22,11 @@ import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
 const DetailPost = ({}) => {
+  const [postData, setPostData] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
 
   const moreClick = (event) => {
-    event.stopPropagation(); // 이벤트 버블링 방지
+    event.stopPropagation();
     setShowOptions(!showOptions);
     console.log(!showOptions);
   };
@@ -41,11 +43,78 @@ const DetailPost = ({}) => {
     } else {
       document.removeEventListener("click", handleClickOutside);
     }
-
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [showOptions]);
+
+  const fetchPostDataById = async (postId) => {
+    const { data, error } = await supabase
+      .from("Post")
+      .select("*")
+      .eq("postid", postId);
+
+    if (error) {
+      console.error("Error fetching post data:", error);
+      return null;
+    }
+    console.log(data);
+    return data[0];
+  };
+
+  useEffect(() => {
+    const getPostData = async () => {
+      const data = await fetchPostDataById(9);
+      setPostData(data);
+    };
+
+    getPostData();
+  }, []);
+
+  if (!postData) {
+    return <div>Loading...</div>;
+  }
+
+  const formatDescription = (description) => {
+    const regex = /!\[Image\]\((.*?)\)/g;
+    const parts = description.split("\n").flatMap((line, index) => {
+      const imageParts = line.split(regex);
+      return imageParts.map((part, i) => {
+        if (i % 2 === 1) {
+          return (
+            <img key={i} src={part} alt="Image" className={styles.image} />
+          );
+        }
+        return (
+          <React.Fragment key={i}>
+            {part}
+            <br />
+          </React.Fragment>
+        );
+      });
+    });
+    return parts;
+  };
+
+  const downloadFile = async (url, filename) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("네트워크 응답이 좋지 않습니다.");
+      }
+      const blob = await response.blob();
+      const a = document.createElement("a");
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error("파일 다운로드 중 오류 발생:", error);
+    }
+  };
 
   return (
     <div>
@@ -54,9 +123,7 @@ const DetailPost = ({}) => {
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
         <div className={styles.studiesStatus}>시각디자인기사</div>
-        <div className={styles.studiesTitle}>
-          시각디자인기사 2주만에 실기 합격할 수 있었던 방법😊
-        </div>
+        <div className={styles.studiesTitle}>{postData.title}</div>
         <div
           style={{
             display: "flex",
@@ -71,7 +138,9 @@ const DetailPost = ({}) => {
             alt="profile1"
           />
           <div className={styles.postWriterNickname}>페이커</div>
-          <div className={styles.postWriteDate}>2024.05.29</div>
+          <div className={styles.postWriteDate}>
+            {new Date(postData.createdat).toLocaleDateString()}
+          </div>
         </div>
         <div
           style={{
@@ -96,40 +165,55 @@ const DetailPost = ({}) => {
         >
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>준비기간</div>
-            <div className={styles.studiesDetail}>2024.05.01 ~ 2024.05.31</div>
+            <div className={styles.studiesDetail}>
+              {new Date(postData.startdate).toLocaleDateString()} ~{" "}
+              {new Date(postData.enddate).toLocaleDateString()}
+            </div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>책</div>
-            <div className={styles.studiesDetail}>시각디자인기사 실기</div>
+            <div className={styles.studiesDetail}>{postData.book}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>결과</div>
-            <div className={styles.studiesDetail}>합격</div>
+            <div className={styles.studiesDetail}>{postData.result}</div>
           </div>
         </div>
         <div style={{ marginTop: "70px" }}>
           <div className={styles.studiesIntro}>공부방법</div>
           <div style={{ padding: "30px 30px 30px 30px" }}>
             <div className={styles.studiesContent}>
-              <div>저는 우선 전공자입니다!~~ 해당 자료들로 공부했습니다!!</div>
+              {formatDescription(postData.content)}
             </div>
-            <div
-              style={{
-                display: "inline-block",
-                border: "1px solid #dddddd",
-                borderRadius: "8px",
-              }}
-            >
-              <div className={styles.postDetailFile}>
-                <img className={styles.folderIcon} src={folder} alt="folder" />
-                <div className={styles.filename}>시각디지안기사_실기1.pdf</div>
-                <img
-                  className={styles.downloadIcon}
-                  src={download}
-                  alt="download"
-                />
+
+            {postData.references.map((file, index) => (
+              <div
+                key={index}
+                style={{
+                  maxWidth: "400px",
+                  display: "block",
+                  border: "1px solid #dddddd",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  // padding: "10px",
+                }}
+                onClick={() => downloadFile(file.url, file.filename)}
+              >
+                <div className={styles.postDetailFile}>
+                  <img
+                    className={styles.folderIcon}
+                    src={folder}
+                    alt="folder"
+                  />
+                  <div className={styles.filename}>{file.filename}</div>
+                  <img
+                    className={styles.downloadIcon}
+                    src={download}
+                    alt="download"
+                  />
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
 
