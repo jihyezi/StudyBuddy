@@ -21,19 +21,30 @@
 .cancel,
 .post {
   margin-left: 15px;
-  padding: 8px 24px 8px 24px;
+  padding: 6px 24px;
   border-radius: 10px;
   font-family: "NotoSans-SemiBold";
+  font-size: 14px;
   color: #ffffff;
   cursor: pointer;
 }
 
 .cancel {
   background-color: #c7c7c7;
+  transition: background-color 0.3s ease;
+}
+
+.cancel:hover {
+  background-color: #878787;
 }
 
 .post {
   background-color: #ff7474;
+  transition: background-color 0.3s ease;
+}
+
+.post:hover {
+  background-color: #f75858;
 }
 
 .rightSection {
