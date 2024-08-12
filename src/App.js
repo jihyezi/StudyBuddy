@@ -19,6 +19,7 @@ import LoginModal from "components/Home/LoginModal";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const Center = styled.div`
   margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -79,24 +80,64 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        let { data: users, error } = await supabase.from("User").select("*");
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       let { data: users, error } = await supabase.from("User").select("*");
 
-        if (error) {
-          console.error("Error fetching users:", error);
+  //       if (error) {
+  //         console.error("Error fetching users:", error);
+  //       } else {
+  //         setUsers(users);
+  //         console.log("User data:", users);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
+
+  //   fetchUsers();
+  // }, []);
+
+  const [user, setUser] = useState(null);
+  const [imageUrl, setImageUrl] = useState(noprofile);
+  const userId = "de25587a-369d-45f5-b5ea-e6abc43d0ab5";
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const { data, error } = await supabase
+        .from("User")
+        .select("bio, birthdate, email, nickname, profileimage, username, backgroundimage")
+        .eq("userid", userId)
+
+      if (error) {
+        console.error("Error fetching user data:", error);
+      } else if (data && data.length > 0) {
+        const userData = data[0];
+        setUser(userData);
+
+        if (userData.profileimage) {
+          const { data: imageUrlData } = supabase
+            .storage
+            .from('Images')
+            .getPublicUrl(`profile/${userData.profileimage}`);
+
+          setImageUrl(imageUrlData.publicUrl);
         } else {
-          setUsers(users);
-          console.log("User data:", users);
+          setImageUrl(noprofile);
         }
-      } catch (error) {
-        console.error("Error:", error);
+
       }
     };
 
-    fetchUsers();
+    fetchUserData();
   }, []);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
+  console.log(imageUrl + 'app');
 
   // 상태 전환 함수
   const toggleNotifications = () => {
@@ -106,7 +147,7 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Sidebar toggleNotifications={toggleNotifications} />
+        <Sidebar toggleNotifications={toggleNotifications} userProfile={imageUrl} />
         <Center>
           <MainContent />
           <Notifications

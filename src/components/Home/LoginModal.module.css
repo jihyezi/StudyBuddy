@@ -17,10 +17,14 @@
 .closeButton {
   position: absolute;
   top: 30px;
-  right: 25px;
+  right: 30px;
   background: none;
   border: none;
   cursor: pointer;
+}
+.btn{
+  width: 20px;
+  height: 20px;
 }
 .modalImageContainer {
   flex: 1;
@@ -29,6 +33,9 @@
   align-items: center;
   padding-top: 60px;
   padding-bottom: 70px;
+}
+.modalImage {
+  width: 140px;
 }
 
 .buttonContainer {
@@ -49,9 +56,9 @@
   align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
   gap: 10px; /* 이미지와 텍스트 사이의 간격 */
   padding: 10px 20px;
-  font-family: "NotoSans-Bold";
-  font-size: 20px;
-  font-weight: 400;
+  font-family: "BalooTammudu2-Bold";
+  font-size: 18px;
+  font-weight: 700;
   border-radius: 52px;
   cursor: pointer;
 }

@@ -23,10 +23,12 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
+
+  console.log(userProfile + 'sidebar');
 
   const menus = [
     { name: "Home", path: "/", text: "home" },
@@ -47,7 +49,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
     notifications: { off: notifications_off, on: notifications_on },
     messages: { off: messages_off, on: messages_on },
     bookmarks: { off: bookmarks_off, on: bookmarks_on },
-    profile: { off: profile_off, on: profile_on },
+    profile: { off: profile_off, on: userProfile },
   };
 
   const handlePostClick = () => {
@@ -121,6 +123,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
                   {({ isActive }) => (
                     <>
                       <img
+                        className={menu.text === "profile" ? styles.profileImg : ""}
                         style={{
                           width: 24,
                           height: 24,
