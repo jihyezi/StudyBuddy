@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "components/Explore/Header";
+import Header from "components/Header";
 import styles from "./Explore.module.css";
 
 import Search from "assets/icons/Explore/search.png";
@@ -57,7 +57,7 @@ const Explore = ({ }) => {
 
   return (
     <div className={styles.Explore}>
-      <Header />
+      <Header headerName={'Explore'} />
       <div className={styles.SearchContainer}>
         <div className={styles.InputContainer}>
           <div className={styles.InputWrapper}>

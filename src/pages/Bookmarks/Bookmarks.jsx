@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styles from "./Bookmarks.module.css";
 
 // component
-import Header from "components/Communities/Header";
+import Header from "components/Header";
 import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
 import CommunityDetailClick from "components/Communities/CommunityDetailClick";
@@ -24,7 +24,7 @@ const Bookmarks = ({ }) => {
 
   return (
     <div className={styles.community}>
-      <Header />
+      <Header headerName={'Bookmarks'} />
       <div className={styles.classification}>
         <BookmarkJoin onEventSelect={handleEventSelect} />
       </div>
