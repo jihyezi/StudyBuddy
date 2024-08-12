@@ -46,7 +46,7 @@ function DMChat({ selectedUser, chatData = [] }) {
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
-        <div className={styles.profileImage}></div>
+        <img src={selectedUser.profile} className={styles.profileImage} />
         <div className={styles.headerText}>
           {selectedUser
             ? `${selectedUser.username} / @${selectedUser.id}`
@@ -94,10 +94,13 @@ function DMChat({ selectedUser, chatData = [] }) {
   <div className={styles.noMessages}></div>
 )}
       </div>
-      <div className={styles.chatInputContainer}>
-        <input className={styles.chatInput} placeholder="메시지 입력하기" />
-        <button className={styles.chatButton}>보내기</button>
+      <div className={styles.InputContainer}>
+        <div className={styles.chatInputContainer}>
+          <input className={styles.chatInput} placeholder="메시지 입력하기" />
+          <button className={styles.chatButton}>보내기</button>
+        </div>
       </div>
+
       <button onClick={toggleChatData} className={styles.toggleButton}>
         {useDummyData ? "Show Empty Chat" : "Show Dummy Data"}
       </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
@@ -23,17 +23,17 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-// Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
-const Sidebar = ({ toggleNotifications }) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
+  const location = useLocation();
 
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
     { name: "Communities", path: "/communities", text: "communities" },
     { name: "Studies", path: "/studies", text: "studies" },
-    { name: "Notifications", path: "#", text: "notifications" }, // Use '#' for custom click event
+    { name: "Notifications", path: "#", text: "notifications" },
     { name: "Messages", path: "/messages", text: "messages" },
     { name: "Bookmarks", path: "/bookmarks", text: "bookmarks" },
     { name: "Profile", path: "/profile", text: "profile" },
@@ -87,6 +87,8 @@ const Sidebar = ({ toggleNotifications }) => {
                     textDecoration: "none",
                     verticalAlign: "middle",
                     cursor: "pointer",
+                    fontFamily: "BalooTammudu2-Regular",
+                    fontSize: 20
                   }}
                 >
                   <img
@@ -95,7 +97,7 @@ const Sidebar = ({ toggleNotifications }) => {
                       height: 24,
                       verticalAlign: "middle",
                     }}
-                    src={off}
+                    src={isNotificationsOpen ? on : off}
                     alt="icon"
                   />
                   <SidebarItem menu={menu} />
@@ -112,6 +114,9 @@ const Sidebar = ({ toggleNotifications }) => {
                   className={({ isActive }) =>
                     isActive ? styles.menuOn : styles.menuOff
                   }
+                  onClick={() => {
+                    if (isNotificationsOpen) toggleNotifications();
+                  }}
                 >
                   {({ isActive }) => (
                     <>
@@ -157,4 +162,5 @@ const Sidebar = ({ toggleNotifications }) => {
     </div>
   );
 };
+
 export default Sidebar;

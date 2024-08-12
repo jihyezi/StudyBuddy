@@ -9,9 +9,8 @@
 }
 
 .top {
-  width: 1115;
-  height: 247;
-  left: 325;
+  width: 100%;
+  height: 240px;
   background: #ff7474;
 }
 
@@ -23,18 +22,20 @@
 }
 
 .hotCommunityItem {
-  margin-right: 25px; /* Example margin, adjust as necessary */
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.SliderText {
-  position: relative;
-  width: 348px;
-  height: 54px;
-  top: 139px;
-  left: 10%;
-  gap: 0;
-  opacity: 1; /* opacity 값을 1로 설정하여 보이게 함 */
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 27.32px;
+.newSearch {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.popularStudy {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }

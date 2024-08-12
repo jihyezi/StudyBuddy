@@ -25,7 +25,7 @@ const Communities = ({ }) => {
     <div className={styles.community}>
       <Header />
       <div className={styles.classification}>
-        {/* <Classification onEventSelect={handleEventSelect} /> */}
+        {/* <Classification onEventSelect={handleEventSelect} /> --> 가입한 커뮤니티가 없을 때 나오는 화면*/}
         <JoinCommunity onEventSelect={handleEventSelect} />
       </div>
 

@@ -51,4 +51,9 @@ export const selectList = {
     { name: "6개월 이상" },
     { name: "1년 이상" },
   ],
+  studtyfilter: [
+    { name: "전체" },
+    { name: "모집중" },
+    { name: "모집 완료" },
+  ],
 };

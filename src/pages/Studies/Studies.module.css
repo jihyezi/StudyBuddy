@@ -1,0 +1,12 @@
+.studycontainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-right: 1px solid #dddddd;
+}
+
+.tabstyle {
+  padding-right: 40px;
+  padding-left: 40px;
+}
+  

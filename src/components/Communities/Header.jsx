@@ -5,11 +5,11 @@ import "fonts/Font.css";
 // icon
 import back from "assets/icons/Communities/back.png";
 
-const Header = ({ }) => {
+const Header = ({ headerName }) => {
   return (
     <div className={styles.header}>
       <img className={styles.backIcon} src={back} alt="back" />
-      <span className={styles.headerName}>시각디자인기사</span>
+      <span className={styles.headerName}>{headerName}</span>
     </div>
   );
 };

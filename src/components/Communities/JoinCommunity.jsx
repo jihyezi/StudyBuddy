@@ -72,7 +72,7 @@ const JoinCommunity = ({ onEventSelect }) => {
   const handleClick = (item) => {
     setSelectedItem(item);
     onEventSelect(item);
-    navigate(`/CommunityDetailsPage`, {
+    navigate(`/communitydetail`, {
       state: {
         id: `${item.id}`,
         img: `${item.img}`,

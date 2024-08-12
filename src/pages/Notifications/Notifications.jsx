@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Notifications.css";
+import styles from "./Notifications.module.css";
 
 const Notifications = ({ showNotifications }) => {
   const [notifications, setNotifications] = useState([]);
@@ -54,30 +54,28 @@ const Notifications = ({ showNotifications }) => {
 
   return (
     <div
-      className={`notifications-container ${
-        showNotifications ? "slide-in" : "slide-out"
-      }`}
+      className={`${styles.notificationsContainer} ${showNotifications ? styles.slideIn : styles.slideOut}`}
     >
-      <h1>Notifications</h1>
+      <div className={styles.title}>Notifications</div>
       {notifications.map((section, index) => (
-        <div key={index} className="notification-section">
-          <h2>{section.date}</h2>
+        <div key={index} className={styles.notificationSection}>
+          <div className={styles.date}>{section.date}</div>
           {section.items.length > 0 ? (
             section.items.map((item, idx) => (
-              <div key={idx} className="notification-item">
-                <div className="avatar"></div>
-                <div className="notification-text">
-                  <span className="user">{item.user}</span>
-                  {item.action}
-                  <div className="notification-details">
-                    <span className="topic">{item.topic}</span> ·{" "}
-                    <span className="time">{item.time}</span>
+              <div key={idx} className={styles.notificationItem}>
+                <div className={styles.avatar}></div>
+                <div className={styles.notificationText}>
+                  <span className={styles.user}>{item.user}</span>
+                  <span className={styles.action}> {item.action}</span>
+                  <div className={styles.notificationDetails}>
+                    <span className={styles.topic}>{item.topic}</span> ·{" "}
+                    <span className={styles.time}>{item.time}</span>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <p>No notifications.</p>
+            <div className={styles.noNotifivation}>No notifications.</div>
           )}
         </div>
       ))}
