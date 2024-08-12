@@ -6,11 +6,11 @@ import "fonts/Font.css";
 import back from "assets/icons/Communities/back.png";
 
 const Header = ({ headerName }) => {
-  return (
-    <div className={styles.header}>
-      <img className={styles.backIcon} src={back} alt="back" />
-      <span className={styles.headerName}>{headerName}</span>
-    </div>
-  );
+    return (
+        <div className={styles.header}>
+            <img className={styles.backIcon} src={back} alt="back" />
+            <span className={styles.headerName}>{headerName}</span>
+        </div>
+    );
 };
 export default Header;

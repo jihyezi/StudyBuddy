@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styles from './Profile.module.css';
-import Header from "components/Communities/Header";
+import Header from "components/Header";
 import ProfileTablist from "components/Profile/ProfileTablist";
 import supabase from "components/supabaseClient";
 import nobackground from "assets/images/Profile/nobackground.png";
