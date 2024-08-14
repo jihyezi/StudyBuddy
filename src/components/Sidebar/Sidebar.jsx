@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
-
+import { useAuth } from "contexts/AuthContext"; // useAuth 훅을 가져옵니다.
 // Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
@@ -25,6 +25,7 @@ import profile_on from "assets/icons/Sidebar/profile_on.png";
 
 // Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
 const Sidebar = ({ toggleNotifications }) => {
+  const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -153,6 +154,26 @@ const Sidebar = ({ toggleNotifications }) => {
             </div>
           )}
         </div>
+        {user && (
+          <button
+            className={styles.logoutButton}
+            onClick={logout}
+            style={{
+              marginTop: "auto",
+              backgroundColor: "#f00",
+              color: "#fff",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              display: "block",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            로그아웃(임시)
+          </button>
+        )}
       </div>
     </div>
   );

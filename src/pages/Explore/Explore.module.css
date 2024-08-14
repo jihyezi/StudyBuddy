@@ -88,19 +88,32 @@
 }
 
 .SearchHistoryItem:hover {
-  background: #ececec;
+  /* background: #ececec; */
+  border: 1px solid #333;
 }
 
 .HistoryTextContainer {
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
-.deletebutton {
-  /* border-radius: 1px solid #fff; */
+.buttonContainer {
+  gap: 10px;
+  display: flex;
+  align-items: center;
 }
-
+.deletebutton {
+  background-color: white;
+  border: none; /* 테두리를 제거 */
+  cursor: pointer; /* 마우스를 올렸을 때 포인터로 변경 */
+  font-size: 16px; /* 텍스트 크기를 적당히 설정 */
+  padding: 0; /* 기본 패딩 제거 */
+  margin-right: 50px;
+}
+.deletebutton:hover {
+  background: #ececec;
+}
 .PopularTagContainer {
   width: 100%;
   height: 144px;

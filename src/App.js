@@ -15,7 +15,9 @@ import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
+import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
+import CommonLayout from "components/Explore/CommonLayout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
 
@@ -51,7 +53,22 @@ const MainContent = () => {
       <Content>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route
+            path="/explore"
+            element={
+              <CommonLayout>
+                <Explore />
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <CommonLayout>
+                <SearchResults />
+              </CommonLayout>
+            }
+          />
           <Route path="/communities" element={<Communities />} />
           <Route path="/studies" element={<Studies />} />
           <Route path="/messages" element={<Messages />} />
