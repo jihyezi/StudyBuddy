@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Header from "components/Explore/Header";
+// import Header from "components/Explore/Header";
 import styles from "./SearchResulus.module.css";
+
 const SearchResults = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");

@@ -23,13 +23,9 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
-<<<<<<< HEAD
 // Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
-const Sidebar = ({ toggleNotifications }) => {
-  const { user, logout } = useAuth();
-=======
 const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
->>>>>>> d15fb8376770b2463865efabbbba1707a70639e3
+  const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
@@ -94,7 +90,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
                     verticalAlign: "middle",
                     cursor: "pointer",
                     fontFamily: "BalooTammudu2-Regular",
-                    fontSize: 20
+                    fontSize: 20,
                   }}
                 >
                   <img
@@ -188,8 +184,4 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
     </div>
   );
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> d15fb8376770b2463865efabbbba1707a70639e3
 export default Sidebar;

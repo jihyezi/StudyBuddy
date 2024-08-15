@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "components/Explore/Header";
+// import Header from "components/Explore/Header";
 import styles from "pages/Explore/Explore.module.css"; // 새 스타일 파일 생성
 import Search from "assets/icons/Explore/search.png";
 import Exploresearch from "assets/icons/Explore/Explore_search.png";
-
+import Header from "components/Header";
 import {
   fetchSearchHistory,
   addSearchHistory,
@@ -73,7 +73,7 @@ const CommonLayout = ({ children }) => {
 
   return (
     <div className={styles.CommonLayout}>
-      <Header />
+      <Header headerName={"Explore"} />
       <div className={styles.SearchContainer}>
         <div className={styles.InputContainer}>
           <div className={styles.InputWrapper}>

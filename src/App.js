@@ -21,7 +21,7 @@ import CommonLayout from "components/Explore/CommonLayout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
-
+import Header from "components/Header";
 const Center = styled.div`
   margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
   width: calc(100% - 250px);
@@ -86,7 +86,9 @@ const MainContent = () => {
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage" || location.pathname === "/bookmarks" || location.pathname === "/studies") && <Recommended />}
+        location.pathname === "/CommunityDetailsPage" ||
+        location.pathname === "/bookmarks" ||
+        location.pathname === "/studies") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
