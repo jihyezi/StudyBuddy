@@ -17,8 +17,19 @@ import downarrow from "assets/icons/Home/downarrow.png";
 
 import LoginModal from "components/Home/LoginModal"; // 모달
 
-const Home = ({}) => {
+import onboardingimg from "assets/images/Home/OnBoarding.png";
+import Classification from "components/Communities/Classification";
+import Tag from "components/Home/Tag";
+
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const [selectedEvent, setSelectEvent] = useState('');
+
+
+  const handleEventSelect = (event) => {
+    setSelectEvent(event);
+  };
 
   const settings = {
     dots: true,
@@ -30,36 +41,43 @@ const Home = ({}) => {
     appendDots: (dots) => (
       <div
         style={{
+          display: 'flex',
           position: "absolute",
-          width: "140px",
-          height: "39px",
-          top: "93%",
-          left: 150,
+          width: "80px",
+          height: "32px",
+          top: 240,
+          left: 80,
           borderRadius: "8px",
           opacity: "0px",
           backgroundColor: "#FFF",
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
         <ul
           style={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "0",
+            padding: 0,
+            margin: 0,
+            gap: "3px",
+            alignItems: 'center',
+            justifyContent: 'center',
+            listStyleType: "none" // 기본 리스트 스타일 제거
           }}
         >
-          {dots}
+          {dots.map((dot, index) => (
+            <li key={index} style={{ display: 'flex', margin: "0 3px", width: "6px", height: "6px", justifyContent: 'center' }}>
+              {dot}
+            </li>
+          ))}
         </ul>
-      </div>
+      </div >
     ),
     customPaging: (i) => (
       <div
         style={{
-          width: "20px",
-          height: "20px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          width: "6px",
+          height: "6px",
           backgroundColor: i === currentSlide ? "#FF7474" : "#9c9c9c",
           // border: i === currentSlide ? "4px solid #fcc6c6" : "none",
           borderRadius: "50%",
@@ -72,37 +90,18 @@ const Home = ({}) => {
     <div className={styles.home}>
       <Slider
         {...settings}
-        style={{ display: "grid", backgroundColor: "#FF74741A" }}
+        style={{ display: "grid" }}
       >
-        <div
-          style={{
-            position: "relative",
-            backgroundColor: "#FF74741A",
-          }}
-        >
-          <div className={styles.SliderText}>
-            시험 준비나 학습에 도움이 되는 자료를 업로드하고 공유해 보세요📕
-          </div>
-          <img
-            src={HomeImage}
-            style={{
-              position: "relative",
-              width: 279.35,
-              height: 230,
-              top: -50,
-              left: "70%",
-            }}
-          />
-        </div>
-        <div className={styles.SliderText}>2</div>
-        <div className={styles.SliderText}>3</div>
-        <div className={styles.SliderText}>4</div>
+        <img src={onboardingimg} />
+        <img src={onboardingimg} />
+        <img src={onboardingimg} />
+        <img src={onboardingimg} />
       </Slider>
-      <div style={{ borderBottom: "1px solid #ddd", height: 302 }}>
+      <div style={{ borderBottom: "1px solid #ddd", padding: '30px 0px' }}>
         <div
           style={{
             position: "relative",
-            left: 40,
+            paddingLeft: 40
           }}
         >
           <div
@@ -110,26 +109,23 @@ const Home = ({}) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              top: 45,
-              left: 40,
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
-            Hot한 커뮤니티
+            🔥 HOT 커뮤니티
           </div>
           <div
             className={styles.scrollContainer}
             style={{
               position: "relative",
-              top: 79,
-              left: 40,
-              width: 1115,
-              maxWidth: 1115,
             }}
           >
             <div className={styles.hotCommunityItem}>
               <HotCommunity />
+              <HotCommunity />
+              <HotCommunity />
             </div>
-
             {/* 필요한 만큼 HotCommunity 컴포넌트 추가 */}
           </div>
         </div>
@@ -138,14 +134,14 @@ const Home = ({}) => {
       <div
         style={{
           borderBottom: "1px solid #ddd",
-          height: 237,
+          padding: '30px 0px'
           // position: "fixed",
         }}
       >
         <div
           style={{
             position: "relative",
-            left: 40,
+            paddingLeft: 40
           }}
         >
           <div
@@ -153,34 +149,33 @@ const Home = ({}) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              top: 35,
-              left: 40,
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
-            🔥인기글
+            ⭐️ 인기글
           </div>
           <div
             className={styles.scrollContainer}
             style={{
               position: "relative",
-              top: 60,
-              left: 40,
-              width: 1115,
-              maxWidth: 1115,
+              width: '100%',
             }}
           >
             <div className={styles.hotCommunityItem}>
+              <PopularPost />
+              <PopularPost />
               <PopularPost />
             </div>
           </div>
         </div>
       </div>
       {/*  */}
-      <div style={{ borderBottom: "1px solid #ddd", height: 400 }}>
+      <div style={{ borderBottom: "1px solid #ddd", padding: '30px 0px' }}>
         <div
           style={{
             position: "relative",
-            left: 40,
+            paddingLeft: 40
           }}
         >
           <div
@@ -188,8 +183,8 @@ const Home = ({}) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              top: 35,
-              left: 40,
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
             최근 방문한 커뮤니티
@@ -198,24 +193,24 @@ const Home = ({}) => {
             className={styles.scrollContainer}
             style={{
               position: "relative",
-              top: 60,
-              left: 40,
-              width: 1115,
-              maxWidth: 1115,
+              width: '100%',
             }}
           >
-            <div className={styles.hotCommunityItem}>
+            <div className={styles.newSearch}>
+              <RecentCommunity />
+              <RecentCommunity />
+              <RecentCommunity />
               <RecentCommunity />
             </div>
           </div>
         </div>
       </div>
       {/*  react slick 캐러셀  만들기*/}
-      <div>
+      <div style={{ padding: '30px 0px' }}>
         <div
           style={{
             position: "relative",
-            left: 40,
+            padding: '0px 40px'
           }}
         >
           <div
@@ -223,23 +218,28 @@ const Home = ({}) => {
               fontWeight: 700,
               fontSize: 20,
               position: "relative",
-              top: 35,
-              left: 40,
+              marginBottom: 28,
+              fontFamily: 'Manrope-Bold'
             }}
           >
-            태그별 인기 스터디
+            태그별 인기 스터디 🤗
           </div>
 
           <div
             style={{
               position: "relative",
-              top: 60,
-              left: 40,
-              width: 1115,
-              maxWidth: 1115,
+              width: '100%',
+              alignItems: 'center',
             }}
           >
-            <div
+
+            <Tag onEventSelect={handleEventSelect} />
+            <div className={styles.popularStudy}>
+              <PopularStudy />
+              <PopularStudy />
+              <PopularStudy />
+            </div>
+            {/* <div
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -350,7 +350,7 @@ const Home = ({}) => {
               >
                 more <img src={downarrow} />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

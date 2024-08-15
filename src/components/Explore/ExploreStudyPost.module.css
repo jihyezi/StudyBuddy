@@ -1,12 +1,11 @@
 .StudyPostContainer {
   display: flex;
-  padding-left: 25px;
   padding-top: 20px;
 }
 
 .StudyPostWrapper {
   width: 100%;
-  height: 130px;
+  padding-left: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -27,6 +26,7 @@
   padding: 4px 8px;
   color: white;
   font-size: 12px;
+  font-family: 'Manrope-SemiBold';
   font-weight: 600;
 }
 
@@ -36,20 +36,22 @@
   padding: 4px 8px;
   color: white;
   font-size: 12px;
+  font-family: 'Manrope-Semibold';
   font-weight: 600;
 }
 
 .StudyPostTitle {
   color: #333333;
-  font-size: 14px;
+  font-size: 18px;
+  font-family: 'Manrope-Semibold';
   font-weight: 600;
 }
 
 .StudyPostDescription {
-  margin-left: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
   color: #333333;
-  font-size: 14px;
+  font-family: "Manrope-Medium";
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -57,15 +59,15 @@
   display: flex;
   flex-direction: row;
   gap: 8px;
-  margin-left: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .StudyPostTag {
   border: 1px solid #ddd;
   border-radius: 25px;
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: 14px;
+  font-family: "Manrope-Medium";
   color: #656565;
 }
 

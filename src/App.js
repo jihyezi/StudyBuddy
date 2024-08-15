@@ -20,10 +20,11 @@ import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
+import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 
 const Center = styled.div`
-  margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
-  width: 80%;
+  margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
+  width: calc(100% - 250px);
   height: 100vh;
   display: flex;
   flex-direction: row;
@@ -71,30 +72,21 @@ const MainContent = () => {
           />
           <Route path="/communities" element={<Communities />} />
           <Route path="/studies" element={<Studies />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-post" element={<Post />} />
           <Route path="/create-community" element={<CommunityPost />} />
           <Route path="/create-study" element={<StudyPost />} />
-          <Route
-            path="/CommunityDetailsPage"
-            element={<CommunityDetailsPage />}
-          />
-          <Route path="/create-post" element={<Post />} />
-          <Route path="/create-community" element={<CommunityPost />} />
-          <Route path="/create-study" element={<StudyPost />} />
-          <Route
-            path="/CommunityDetailsPage"
-            element={<CommunityDetailsPage />}
-          />
+          <Route path="/communitydetail" element={<CommunityDetailsPage />} />
+          <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
         </Routes>
       </Content>
-      {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+        location.pathname === "/CommunityDetailsPage" || location.pathname === "/bookmarks" || location.pathname === "/studies") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );

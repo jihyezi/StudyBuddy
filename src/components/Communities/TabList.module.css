@@ -11,10 +11,17 @@
     justify-content: center;
     align-items: center;
     width: calc(100% / 4);
+    height: 60px;
     margin-top: 20px;
-    margin-bottom: 20px;
     position: relative;
     cursor: pointer;
+    font-family: "NotoSans-Medium";
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .communityTab:hover{
+    background-color: #dddddd;
   }
   
   .communityTabClick {
@@ -22,24 +29,19 @@
     border: 3px solid #ff7474;
     border-radius: 36px;
     position: absolute;
-    bottom: -20px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
   }
-  
-  .communityPopularPost,
-  .communityRecentPost,
-  .communityRule,
-  .communityMember {
-    color: #606060;
-    font-family: "NotoSans-Regular";
-    font-size: 16px;
-    display: block;
-    text-align: center;
-  }
-  
-  .selected {
-    color: #ff7474;
-  }
 
+  .communityTabText {
+    color: #606060;
+  }
   
+  .communityTabText.selected {
+    color: #ff7474; 
+  }
+  
+  .desc {
+    font-family: "NotoSans-Medium";
+  }
