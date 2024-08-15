@@ -20,10 +20,10 @@ const CommunityPost = (props) => {
   const [file, setFile] = useState(null);
 
   const handlePostClick = async () => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session.user.id);
-      setUserId(session.user.id);
-    });
+    // supabase.auth.getSession().then(({ data: { session } }) => {
+    //   console.log(session.user.id);
+    //   setUserId(session.user.id);
+    // });
 
     if (!file) return;
 
@@ -52,7 +52,7 @@ const CommunityPost = (props) => {
           updatedat: new Date(),
           field: field,
           rules: rules,
-          createdby: 2, // 5,7,1,2
+          createdby: "a4d3154f-8bc6-42e6-9172-a7c6ab094b13", //de25587a-369d-45f5-b5ea-e6abc43d0ab5
           image: url,
         },
       ]);

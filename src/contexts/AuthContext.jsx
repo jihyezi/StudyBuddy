@@ -34,6 +34,9 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    localStorage.removeItem("userId"); // 로컬 스토리지에서 userId 제거
+    localStorage.removeItem("sb-vrpwhfbfzqwmqlhwhbtu-auth-token"); // 인증 토큰 제거
+    window.location.reload(); // 페이지 새로고침
   };
 
   return (

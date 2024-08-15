@@ -4,6 +4,8 @@ import supabase from "components/supabaseClient";
 
 // component
 import Header from "components/Communities/Header";
+import DeleteModal from "components/Messages/DeleteModal";
+import Comment from "components/Post/Comment";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
@@ -23,30 +25,9 @@ import deleteIcon from "assets/icons/Post/delete.png";
 
 const DetailPost = ({}) => {
   const [postData, setPostData] = useState(null);
+  const [communityData, setCommunityData] = useState(null);
+  const [commentData, setCommentData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
-
-  const moreClick = (event) => {
-    event.stopPropagation();
-    setShowOptions(!showOptions);
-    console.log(!showOptions);
-  };
-
-  const handleClickOutside = (event) => {
-    if (!event.target.closest(".more-button-container")) {
-      setShowOptions(false);
-    }
-  };
-
-  useEffect(() => {
-    if (showOptions) {
-      document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [showOptions]);
 
   const fetchPostDataById = async (postId) => {
     const { data, error } = await supabase
@@ -58,14 +39,52 @@ const DetailPost = ({}) => {
       console.error("Error fetching post data:", error);
       return null;
     }
-    console.log(data);
     return data[0];
+  };
+
+  const fetchCommunityDataById = async (communityId) => {
+    const { data, error } = await supabase
+      .from("Community")
+      .select("*")
+      .eq("communityid", communityId);
+
+    if (error) {
+      console.error("Error fetching post data:", error);
+      return null;
+    }
+    return data[0];
+  };
+
+  const fetchCommentDataById = async (postId) => {
+    const { data, error } = await supabase
+      .from("Comment")
+      .select("*")
+      .eq("postid", postId);
+
+    if (error) {
+      console.log("Error fetching comment data:", error);
+      return null;
+    }
+    return data;
   };
 
   useEffect(() => {
     const getPostData = async () => {
-      const data = await fetchPostDataById(9);
-      setPostData(data);
+      const communityData = await fetchCommunityDataById(9);
+      console.log(communityData);
+
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        // console.log(session.user.id);
+        // setUserId(session.user.id);
+      });
+      // const data = await fetchPostDataById(9);
+      // setPostData(data);
+
+      // const communityData = await fetchCommunityDataById(data.communityid);
+      // setCommunityData(communityData);
+
+      // const commentData = await fetchCommentDataById(data.postid);
+      // setCommentData(commentData);
     };
 
     getPostData();
@@ -116,13 +135,33 @@ const DetailPost = ({}) => {
     }
   };
 
+  const registerClick = async (event) => {
+    const inputValue = document.querySelector(`.${styles.inputField}`).value;
+
+    const { data, error } = await supabase.from("Comment").insert([
+      {
+        postid: postData.postid,
+        userid: 7,
+        content: inputValue,
+        createdat: new Date(),
+        updatedat: new Date(),
+      },
+    ]);
+
+    if (error) {
+      console.error("Error inserting comment:", error);
+    } else {
+      console.log("Comment inserted:", data);
+    }
+  };
+
   return (
     <div>
       <Header title={"Studies"} />
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
-        <div className={styles.studiesStatus}>시각디자인기사</div>
+        <div className={styles.studiesStatus}>{communityData?.name}</div>
         <div className={styles.studiesTitle}>{postData.title}</div>
         <div
           style={{
@@ -240,141 +279,23 @@ const DetailPost = ({}) => {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "40px" }}
             >
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <div>
-                  <img
-                    className={styles.commentWriterProfile}
-                    src={profile2}
-                    alt="profile2"
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    marginLeft: "15px",
-                    gap: "5px",
-                  }}
-                >
-                  <div className={styles.commentWriter}>
-                    <span className={styles.commentWriterNickname}>손흥민</span>
-                    <span className={styles.commentWriterDate}>40분전</span>
-                  </div>
-                  <div className={styles.comments}>
-                    스터디 참가하고 싶어요!!
-                  </div>
-                  <div className={styles.reply}>답글달기</div>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  position: "relative",
-                }}
-              >
-                <div>
-                  <img
-                    className={styles.commentWriterProfile}
-                    src={profile4}
-                    alt="profile4"
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    marginLeft: "15px",
-                    gap: "5px",
-                    flex: 1,
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className={styles.commentWriter}>
-                      <span className={styles.commentWriterNickname}>
-                        케리아
-                      </span>
-                      <span className={styles.commentWriterDate}>5분전</span>
-                    </div>
-                    <button className={styles.moreButton} onClick={moreClick}>
-                      <img className={styles.moreIcon} src={more} alt="more" />
-                    </button>
-                    {showOptions && (
-                      <div className={styles.moreClick}>
-                        <div className={styles.moreClickEdit}>
-                          <div className={styles.moreClickEditText}>
-                            수정하기
-                          </div>
-                          <img
-                            className={styles.moreClickEditIcon}
-                            src={editIcon}
-                            alt="edit"
-                          />
-                        </div>
-                        <div className={styles.moreClickDelete}>
-                          <div className={styles.moreClickDeleteText}>
-                            삭제하기
-                          </div>
-                          <img
-                            className={styles.moreClickDeleteIcon}
-                            src={deleteIcon}
-                            alt="delete"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className={styles.comments}>
-                    정보처리기사 혼자 공부하기 힘들었는데... 저도 스터디
-                    참가하고 싶어요!!!!!!
-                  </div>
-                  <div className={styles.reply}>답글달기</div>
-                </div>
-              </div>
-
-              <div className={styles.editClick}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    border: "2px solid #dddddd",
-                    borderRadius: "12px",
-                    padding: "10px",
-                    flex: 1,
-                  }}
-                >
-                  <div
-                    style={{
-                      color: "#333333",
-                      fontFamily: "NotoSans-Medium",
-                      marginLeft: "15px",
-                      marginTop: "15px",
-                    }}
-                  >
-                    이민형
-                  </div>
-                  <input
-                    className={styles.inputField}
-                    type="text"
-                    placeholder="댓글을 입력하세요."
-                  />
-                  <div className={styles.cancelAndRegister}>
-                    <div className={styles.cancel}>취소</div>
-                    <div className={styles.editRegister}>등록</div>
-                  </div>
-                </div>
-              </div>
+              <Comment
+                userid={3}
+                content={commentData[1].content}
+                commentData={commentData[1]}
+              />
+              <Comment
+                userid={5}
+                content={commentData[0].content}
+                commentData={commentData[0]}
+              />
             </div>
+
             <div
               style={{
                 display: "flex",
                 flexDirection: "row",
-                marginTop: "50px",
+                marginTop: "70px",
               }}
             >
               <img
@@ -398,7 +319,9 @@ const DetailPost = ({}) => {
                   type="text"
                   placeholder="댓글을 입력하세요."
                 />
-                <div className={styles.register}>등록</div>
+                <div className={styles.register} onClick={registerClick}>
+                  등록
+                </div>
               </div>
             </div>
           </div>
