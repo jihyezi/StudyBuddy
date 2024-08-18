@@ -14,6 +14,7 @@ import HomeImage from "assets/images/Home/OnBoardingImage1.png";
 import leftarrow from "assets/icons/Home/leftarrow.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
 import downarrow from "assets/icons/Home/downarrow.png";
+
 import LoginModal from "components/Home/LoginModal"; // 모달
 
 import onboardingimg from "assets/images/Home/OnBoarding.png";
@@ -90,7 +91,6 @@ const Home = ({ }) => {
       <Slider
         {...settings}
         style={{ display: "grid" }}
-
       >
         <img src={onboardingimg} />
         <img src={onboardingimg} />
@@ -98,7 +98,6 @@ const Home = ({ }) => {
         <img src={onboardingimg} />
       </Slider>
       <div style={{ borderBottom: "1px solid #ddd", padding: '30px 0px' }}>
-
         <div
           style={{
             position: "relative",

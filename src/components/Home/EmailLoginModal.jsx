@@ -54,7 +54,6 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
         return;
       }
 
-
       console.log("로그인 성공:", user);
       localStorage.setItem("userId", user.id); // user.id 저장
       window.location.reload(); // 페이지 새로고침
