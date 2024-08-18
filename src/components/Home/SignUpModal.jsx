@@ -6,11 +6,7 @@ import close from "assets/icons/Home/close.png";
 import signUpimg from "assets/images/Home/signUpimg.png";
 import passwordicon from "assets/icons/Home/password.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import supabase from "components/supabaseClient";
 
 const customStyles = {
   content: {
@@ -41,7 +37,6 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(""); // 에러 메시지 상태
-
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       setError("비밀번호가 일치하지 않습니다.");
@@ -51,38 +46,67 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
       setError("모든 동의 항목을 확인해주세요.");
       return;
     }
-
-    // Supabase Auth를 사용하여 회원가입
-    const { user, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (signUpError) {
-      console.error("회원가입 오류:", signUpError.message);
-      setError("회원가입 실패: " + signUpError.message);
-      return;
+  
+    try {
+      // 이메일 및 사용자 이름 중복 체크
+      const { data: existingUser } = await supabase
+        .from("users")
+        .select("email, username")
+        .or(`email.eq.${email},username.eq.${username}`)
+        .single();
+  
+      if (existingUser) {
+        if (existingUser.email === email) {
+          setError("이미 등록된 이메일입니다.");
+        } else if (existingUser.username === username) {
+          setError("이미 사용 중인 사용자 이름입니다.");
+        }
+        return;
+      }
+  
+      // 회원가입 처리
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+  
+      if (signUpError) {
+        console.error("회원가입 오류:", signUpError.message);
+        setError("회원가입 실패: " + signUpError.message);
+        return;
+      }
+  
+      // 추가 정보 저장
+      const { data: session } = await supabase.auth.getSession();
+      const currentUserId = session?.user?.id;
+  
+      if (!currentUserId) {
+        setError("유저 정보를 불러오는 중 오류가 발생했습니다.");
+        return;
+      }
+  
+      const { error: dbError } = await supabase.from("users").insert([
+        {
+          userid: currentUserId,
+          email: email,
+          nickname: nickname,
+          username: username,
+          createdat: new Date().toISOString(),
+        },
+      ]);
+  
+      if (dbError) {
+        console.error("DB 저장 오류:", dbError.message);
+        setError("회원가입 실패: " + dbError.message);
+        return;
+      }
+  
+      console.log("회원가입 성공");
+      closeModal(); // 모달 닫기
+    } catch (error) {
+      console.error("Unexpected error during sign-up:", error.message);
+      setError("예기치 못한 오류 발생: " + error.message);
     }
-
-    // 회원가입 후 추가 정보 저장
-    const { error: dbError } = await supabase.from("User").insert([
-      {
-        email: email,
-        nickname: nickname,
-        username: username,
-        password: password,
-        createdat: new Date(),
-      },
-    ]);
-
-    if (dbError) {
-      console.error("DB 저장 오류:", dbError.message);
-      setError("회원가입 실패: " + dbError.message);
-      return;
-    }
-
-    console.log("회원가입 성공:", user);
-    closeModal(); // 모달 닫기
   };
 
   const handleAllChecked = () => {

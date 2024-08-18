@@ -1,3 +1,5 @@
+// SearchUserModal.js
+
 import React from "react";
 import styles from "./SearchUserModal.module.css";
 import close from "assets/icons/Messages/close.png";
@@ -29,7 +31,7 @@ const SearchUserModal = ({
         <span className={styles.sendTo}>Send to :</span>
         {selectedUser ? (
           <span className={styles.selectedUser}>
-            {selectedUser.username} / @{selectedUser.id}
+            {selectedUser.nickname} / @{selectedUser.username}
             <span
               className={styles.removeUser}
               onClick={() => handleUserClick(null)}
@@ -57,12 +59,19 @@ const SearchUserModal = ({
                 ? styles.selected
                 : ""
                 }`}
+
               onClick={() => handleUserClick(user)}
             >
-              <div className={styles.profileImage}></div>
+              <div className={styles.profileImage}>
+                {user.profileimage ? (
+                  <img src={user.profileimage} alt="Profile" />
+                ) : (
+                  <div className={styles.defaultProfileImage}></div>
+                )}
+              </div>
               <div className={styles.userInfo}>
-                <span className={styles.username}>{user.username}</span>
-                <span className={styles.id}>@{user.id}</span>
+                <span className={styles.username}>{user.nickname}</span>
+                <span className={styles.id}>@{user.username}</span>
               </div>
             </div>
           ))}
