@@ -33,18 +33,33 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
   const [error, setError] = useState(""); // 오류 상태 추가
 
   const handleLogin = async () => {
-    const { user, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      console.error("Login error:", error.message);
-      setError("로그인 실패: " + error.message); // 오류 상태 업데이트
-    } else {
+      if (error) {
+        console.error("로그인 오류:", error.message);
+        setError("로그인 실패: " + error.message);
+        return;
+      }
+
+      if (!user || !user.id) {
+        console.error("로그인 성공 후 사용자 정보가 없습니다.");
+        setError("로그인 성공 후 사용자 정보가 없습니다.");
+        return;
+      }
+
       console.log("로그인 성공:", user);
-      closeModal(); // 모달 닫기
-      // 로그인 성공 후 상태 업데이트 또는 리다이렉션 처리
+      localStorage.setItem("userId", user.id); // user.id 저장
+      window.location.reload(); // 페이지 새로고침
+    } catch (err) {
+      console.error("로그인 처리 중 오류 발생:", err.message);
+      setError("로그인 처리 중 오류 발생: " + err.message);
     }
   };
 

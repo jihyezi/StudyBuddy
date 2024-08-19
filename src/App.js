@@ -15,7 +15,9 @@ import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
+import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
+import CommonLayout from "components/Explore/CommonLayout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
@@ -53,7 +55,22 @@ const MainContent = () => {
       <Content>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route
+            path="/explore"
+            element={
+              <CommonLayout>
+                <Explore />
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <CommonLayout>
+                <SearchResults />
+              </CommonLayout>
+            }
+          />
           <Route path="/communities" element={<Communities />} />
           <Route path="/studies" element={<Studies />} />
           <Route path="/notifications" element={<Notifications />} />
@@ -70,7 +87,9 @@ const MainContent = () => {
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage" || location.pathname === "/bookmarks" || location.pathname === "/studies") && <Recommended />}
+        location.pathname === "/CommunityDetailsPage" ||
+        location.pathname === "/bookmarks" ||
+        location.pathname === "/studies") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -80,64 +99,25 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       let { data: users, error } = await supabase.from("User").select("*");
-
-  //       if (error) {
-  //         console.error("Error fetching users:", error);
-  //       } else {
-  //         setUsers(users);
-  //         console.log("User data:", users);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
-
-  const [user, setUser] = useState(null);
-  const [imageUrl, setImageUrl] = useState(noprofile);
-  const userId = "de25587a-369d-45f5-b5ea-e6abc43d0ab5";
-
   useEffect(() => {
-    const fetchUserData = async () => {
-      const { data, error } = await supabase
-        .from("User")
-        .select("bio, birthdate, email, nickname, profileimage, username, backgroundimage")
-        .eq("userid", userId)
+    const fetchUsers = async () => {
+      try {
+        let { data: users, error } = await supabase.from("User").select("*");
 
-      if (error) {
-        console.error("Error fetching user data:", error);
-      } else if (data && data.length > 0) {
-        const userData = data[0];
-        setUser(userData);
-
-        if (userData.profileimage) {
-          const { data: imageUrlData } = supabase
-            .storage
-            .from('Images')
-            .getPublicUrl(`profile/${userData.profileimage}`);
-
-          setImageUrl(imageUrlData.publicUrl);
+        if (error) {
+          console.error("Error fetching users:", error);
         } else {
-          setImageUrl(noprofile);
+          setUsers(users);
+          console.log("User data:", users);
         }
-
+      } catch (error) {
+        console.error("Error:", error);
       }
     };
 
-    fetchUserData();
+    fetchUsers();
   }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  console.log(imageUrl + 'app');
 
   // 상태 전환 함수
   const toggleNotifications = () => {
@@ -147,7 +127,7 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Sidebar toggleNotifications={toggleNotifications} userProfile={imageUrl} />
+        <Sidebar toggleNotifications={toggleNotifications} />
         <Center>
           <MainContent />
           <Notifications

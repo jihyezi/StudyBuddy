@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
-
+import { useAuth } from "contexts/AuthContext"; // useAuth 훅을 가져옵니다.
 // Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
@@ -23,12 +23,11 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
+// Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
 const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
+  const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
-  const location = useLocation();
-
-  console.log(userProfile + 'sidebar');
 
   const menus = [
     { name: "Home", path: "/", text: "home" },
@@ -49,7 +48,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
     notifications: { off: notifications_off, on: notifications_on },
     messages: { off: messages_off, on: messages_on },
     bookmarks: { off: bookmarks_off, on: bookmarks_on },
-    profile: { off: profile_off, on: userProfile },
+    profile: { off: profile_off, on: profile_on },
   };
 
   const handlePostClick = () => {
@@ -90,7 +89,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
                     verticalAlign: "middle",
                     cursor: "pointer",
                     fontFamily: "BalooTammudu2-Regular",
-                    fontSize: 20
+                    fontSize: 20,
                   }}
                 >
                   <img
@@ -161,9 +160,28 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
             </div>
           )}
         </div>
+        {user && (
+          <button
+            className={styles.logoutButton}
+            onClick={logout}
+            style={{
+              marginTop: "auto",
+              backgroundColor: "#f00",
+              color: "#fff",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              display: "block",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            로그아웃(임시)
+          </button>
+        )}
       </div>
     </div>
   );
 };
-
 export default Sidebar;

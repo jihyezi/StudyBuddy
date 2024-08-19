@@ -43,9 +43,9 @@ const CommunityDetailsPage = () => {
                         {isJoined ? '나가기' : '가입'}
                     </button>
                 </div>
-                <div className={styles.description}>정보보안기사 합격을 위한 커뮤니티입니다!</div>
+                <div className={styles.description}>{communityInfo.description}</div>
             </div>
-            <TabList />
+            <TabList communityInfo={communityInfo} />
         </div>
     )
 }
