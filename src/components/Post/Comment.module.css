@@ -1,0 +1,133 @@
+.commentWriterProfile {
+  width: 50px;
+  height: 50px;
+}
+
+.commentWriter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.commentWriterNickname {
+  color: #2d2d2d;
+  font-family: "NotoSans-SemiBold";
+}
+
+.commentWriterDate {
+  color: #9e9e9e;
+  font-family: "NotoSans-Regular";
+}
+
+.comments {
+  color: #2d2d2d;
+  font-family: "NotoSans-Regular";
+}
+
+.reply {
+  color: #9e9e9e;
+  font-family: "NotoSans-Regular";
+  font-size: 12px;
+}
+
+.moreButton {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
+
+.moreIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.moreClick {
+  position: absolute;
+  top: 30%;
+  right: 0;
+  z-index: 10;
+}
+
+.moreClickEdit,
+.moreClickDelete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+  padding: 8px;
+  background-color: #c8c8c8;
+  cursor: pointer;
+}
+
+.moreClickEdit {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom: 1px solid #ffffff;
+}
+
+.moreClickDelete {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.moreClickEditText,
+.moreClickDeleteText {
+  color: white;
+}
+
+.moreClickEditIcon,
+.moreClickDeleteIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.editClick {
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.inputField {
+  flex-grow: 1;
+  height: 100px;
+  padding-left: 15px;
+  padding-top: 15px;
+  border: none;
+  outline: none;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.inputField::placeholder {
+  color: #dddddd;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.cancelAndRegister {
+  display: flex;
+  flex-direction: row;
+  font-family: "NotoSans-Medium";
+  align-self: flex-end;
+}
+
+.cancel {
+  padding: 10px 25px 10px 25px;
+  color: #9c9c9c;
+  cursor: pointer;
+}
+
+.editRegister {
+  padding: 10px 25px 10px 25px;
+  border-radius: 10px;
+  color: #ff7474;
+  background-color: rgba(255, 116, 116, 0.12);
+  cursor: pointer;
+}

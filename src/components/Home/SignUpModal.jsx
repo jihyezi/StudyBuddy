@@ -54,20 +54,23 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
     }
 
     // Supabase Auth를 사용하여 회원가입
-    const { user, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: email,
+      password: password,
     });
 
     if (signUpError) {
       console.error("회원가입 오류:", signUpError.message);
       setError("회원가입 실패: " + signUpError.message);
       return;
+    } else {
+      console.log("회원가입 완료 : ", data.user.id);
     }
 
     // 회원가입 후 추가 정보 저장
     const { error: dbError } = await supabase.from("User").insert([
       {
+        userid: data.user.id,
         email: email,
         nickname: nickname,
         username: username,
@@ -82,7 +85,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
       return;
     }
 
-    console.log("회원가입 성공:", user);
+    console.log("회원가입 성공:", data);
     closeModal(); // 모달 닫기
   };
 

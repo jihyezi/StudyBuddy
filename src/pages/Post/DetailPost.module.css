@@ -43,6 +43,7 @@
 .delete {
   color: #606060;
   font-family: "NotoSans-Medium";
+  cursor: pointer;
 }
 
 .studiesDetails {
@@ -152,6 +153,7 @@
   gap: 45px;
   padding: 8px;
   background-color: #c8c8c8;
+  cursor: pointer;
 }
 
 .moreClickEdit {
@@ -223,6 +225,7 @@
   font-family: "NotoSans-Medium";
   align-self: flex-end;
   padding: 5px 20px;
+  cursor: pointer;
 }
 
 .editClick {
@@ -242,6 +245,7 @@
 .cancel {
   padding: 10px 25px 10px 25px;
   color: #9c9c9c;
+  cursor: pointer;
 }
 
 .editRegister {
@@ -249,4 +253,5 @@
   border-radius: 10px;
   color: #ff7474;
   background-color: rgba(255, 116, 116, 0.12);
+  cursor: pointer;
 }
