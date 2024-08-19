@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styles from "./Communities.module.css";
 
 // component
-import Header from "components/Communities/Header";
+import Header from "components/Header";
 import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
 import CommunityDetailClick from "components/Communities/CommunityDetailClick";
@@ -23,9 +23,9 @@ const Communities = ({ }) => {
 
   return (
     <div className={styles.community}>
-      <Header />
+      <Header headerName={'Communities'} />
       <div className={styles.classification}>
-        {/* <Classification onEventSelect={handleEventSelect} /> */}
+        {/* <Classification onEventSelect={handleEventSelect} /> --> 가입한 커뮤니티가 없을 때 나오는 화면*/}
         <JoinCommunity onEventSelect={handleEventSelect} />
       </div>
 

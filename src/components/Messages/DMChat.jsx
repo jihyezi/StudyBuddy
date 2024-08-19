@@ -46,7 +46,7 @@ function DMChat({ selectedUser, chatData = [] }) {
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
-        <div className={styles.profileImage}></div>
+        <img src={selectedUser.profile} className={styles.profileImage} />
         <div className={styles.headerText}>
           {selectedUser
             ? `${selectedUser.username} / @${selectedUser.id}`
@@ -62,45 +62,45 @@ function DMChat({ selectedUser, chatData = [] }) {
         )}
       </div>
       <div className={styles.chatContent}>
-        {dataToUse.length > 0 ? (
-          dataToUse.map((chat, index) => {
-            const showProfileImage =
-              isFirstMessage(index, dataToUse) && chat.type === "other";
-            const lastMessage = isLastMessage(index, dataToUse);
-            return (
-              <div key={index} className={styles.messageGroup}>
-                {showProfileImage && (
-                  <div className={styles.profileImage}></div>
-                )}
-                {chat.type === "my" ? (
-                  lastMessage ? (
-                    <MyMessage key={index} message={chat.message} last={true} />
-                  ) : (
-                    <MyMessage key={index} message={chat.message} />
-                  )
-                ) : lastMessage ? (
-                  <OtherMessage
-                    key={index}
-                    message={chat.message}
-                    last={true}
-                  />
-                ) : (
-                  <OtherMessage key={index} message={chat.message} />
-                )}
-                {(index === 0 || dataToUse[index - 1].date !== chat.date) && (
-                  <div className={styles.dateDivider}>{chat.date}</div>
-                )}
-              </div>
-            );
-          })
+      {dataToUse.length > 0 ? (
+  dataToUse.map((chat, index) => {
+    const showProfileImage =
+      isFirstMessage(index, dataToUse) && chat.type === "other";
+    const lastMessage = isLastMessage(index, dataToUse);
+    const showDateDivider =
+      index === 0 || dataToUse[index - 1].date !== chat.date;
+
+    return (
+      <div key={index} className={styles.messageGroup}>
+        {showDateDivider && (
+          <div className={styles.dateDivider}>{chat.date}</div>
+        )}
+        {showProfileImage && <div className={styles.profileImage}></div>}
+        {chat.type === "my" ? (
+          lastMessage ? (
+            <MyMessage key={index} message={chat.message} last={true} />
+          ) : (
+            <MyMessage key={index} message={chat.message} />
+          )
+        ) : lastMessage ? (
+          <OtherMessage key={index} message={chat.message} last={true} />
         ) : (
-          <div className={styles.noMessages}></div>
+          <OtherMessage key={index} message={chat.message} />
         )}
       </div>
-      <div className={styles.chatInputContainer}>
-        <input className={styles.chatInput} placeholder="메시지 입력하기" />
-        <button className={styles.chatButton}>보내기</button>
+    );
+  })
+) : (
+  <div className={styles.noMessages}></div>
+)}
       </div>
+      <div className={styles.InputContainer}>
+        <div className={styles.chatInputContainer}>
+          <input className={styles.chatInput} placeholder="메시지 입력하기" />
+          <button className={styles.chatButton}>보내기</button>
+        </div>
+      </div>
+
       <button onClick={toggleChatData} className={styles.toggleButton}>
         {useDummyData ? "Show Empty Chat" : "Show Dummy Data"}
       </button>

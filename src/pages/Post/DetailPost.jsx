@@ -3,7 +3,7 @@ import styles from "./DetailPost.module.css";
 import supabase from "components/supabaseClient";
 
 // component
-import Header from "components/Communities/Header";
+import Header from "components/Post/Header";
 import DeleteModal from "components/Messages/DeleteModal";
 import Comment from "components/Post/Comment";
 
@@ -68,15 +68,24 @@ const DetailPost = ({}) => {
     return data;
   };
 
+  const fetchUserDataById = async () => {
+    const { data, error } = await supabase.from("User").select("*");
+
+    if (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+    return data;
+  };
+
   useEffect(() => {
     const getPostData = async () => {
-      const communityData = await fetchCommunityDataById(9);
-      console.log(communityData);
-
       supabase.auth.getSession().then(({ data: { session } }) => {
-        // console.log(session.user.id);
+        console.log("user", session.user);
+        console.log(fetchUserDataById());
         // setUserId(session.user.id);
       });
+
       // const data = await fetchPostDataById(9);
       // setPostData(data);
 

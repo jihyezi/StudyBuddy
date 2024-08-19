@@ -62,9 +62,8 @@ const InputSelect = (props) => {
     <div className={styles.inputContainer} ref={inputRef}>
       <div className={styles.inputTitle}>{props.title}</div>
       <div
-        className={`${styles.inputClick} ${
-          isOpen ? styles.inputClickIsOpen : ""
-        }`}
+        className={`${styles.inputClick} ${isOpen ? styles.inputClickIsOpen : ""
+          }`}
         onClick={handleClick}
       >
         <span className={styles.inputPlaceholder} style={placeholderStyle}>

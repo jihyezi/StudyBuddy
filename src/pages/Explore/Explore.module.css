@@ -1,20 +1,22 @@
 /* .Explore {
- } */
+ }  */
 
 .SearchContainer {
-  display: block;
+  display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 10%;
+  width: 100%;
   margin-top: 40px;
   margin-bottom: 40px;
   position: relative; /* Add position relative */
 }
+
 .InputWrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
+
 .SearchIcon {
   position: absolute;
   left: 10px;
@@ -22,18 +24,19 @@
   height: 24px; /* 아이콘 크기 조정 */
   opacity: 1; /* 아이콘을 보이게 설정 */
 }
+
 .SearchInput {
-  width: 1000px;
+  width: 800px;
   height: 48px;
   border-radius: 8px;
-  border: 1px solid #b6b6b6;
+  border: 1px solid #ddd;
   padding: 0px 0px 0px 45px;
   font-size: 15px;
   font-weight: 700;
   color: "black";
-  border: 1px solid #ccc;
   margin-right: 30px;
 }
+
 .SearchInput::placeholder {
   color: #b6b6b6; /* placeholder 텍스트 색상 */
   font-size: 15px; /* placeholder 텍스트 크기 */
@@ -44,12 +47,12 @@
   height: 48px;
   padding: 10px 20px;
   font-size: 16px;
+  font-family: "BalooTammudu2-Bold";
   background-color: #ff7474;
   border-radius: 10px;
   color: white;
   border: none;
   display: flex;
-
   justify-content: center; /* 가로 방향 중앙 정렬 */
   align-items: center; /* 세로 방향 중앙 정렬 */
   cursor: pointer;
@@ -63,7 +66,8 @@
   position: absolute;
   /* top: 100%;
   left: 12%; */
-  width: 1043px;
+  width: 840px;
+  top: 60px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -73,10 +77,14 @@
 
 .SearchText {
   padding-bottom: 10px;
+  font-family: "Manrope-SemiBold";
+  color: #333;
 }
+
 .SearchHistoryList {
   font-size: 16px;
-  font-weight: 700;
+  font-family: "Manrope-SemiBold";
+  font-weight: 600;
   color: #333;
   list-style-type: none;
   padding-top: 10px;
@@ -88,32 +96,44 @@
 }
 
 .SearchHistoryItem:hover {
-  background: #ececec;
+  /* background: #ececec; */
+  border: 1px solid #333;
 }
 
 .HistoryTextContainer {
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
-.deletebutton {
-  /* border-radius: 1px solid #fff; */
+.buttonContainer {
+  gap: 10px;
+  display: flex;
+  align-items: center;
 }
-
+.deletebutton {
+  background-color: white;
+  border: none; /* 테두리를 제거 */
+  cursor: pointer; /* 마우스를 올렸을 때 포인터로 변경 */
+  font-size: 16px; /* 텍스트 크기를 적당히 설정 */
+  padding: 0; /* 기본 패딩 제거 */
+  margin-right: 50px;
+}
+.deletebutton:hover {
+  background: #ececec;
+}
 .PopularTagContainer {
   width: 100%;
-  height: 144px;
   border-bottom: 1px solid #ddd;
-  padding-top: 30px;
+  padding: 30px 0px;
 }
 
 .CategoryText {
   font-weight: 700;
   font-size: 20px;
   color: #333;
-  padding-left: 5%;
-  padding-bottom: 20px;
+  padding: 0px 40px;
+  margin-bottom: 30px;
 }
 
 .tagContainer {
@@ -144,16 +164,16 @@
 }
 
 .HotCommunitiesContainer {
-  padding-top: 30px;
-  height: 252px;
+  padding: 30px 0px;
   border-bottom: 1px solid #ddd;
 }
 
 .HotCommunityContainer {
   position: relative;
-  padding-left: 5%;
-  gap: 30px;
-  display: flex;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0px 40px;
 }
 .scrollContainer {
   display: flex;
@@ -167,14 +187,13 @@
 }
 
 .PopularStudyContainer {
-  padding-top: 30px;
-  height: 252px;
+  padding: 30px 0px;
   /* border-bottom: 1px solid #ddd; */
 }
+
 .StudyPostContainer {
   position: relative;
-  padding-left: 4%;
-  gap: 30px;
+  padding: 0px 40px;
   display: flex;
   flex-direction: column; /* Add this line to change the direction to column */
 }

@@ -3,7 +3,7 @@ import styles from "./DetailStudyPost.module.css";
 import supabase from "components/supabaseClient";
 
 // component
-import Header from "components/Communities/Header";
+import Header from "components/Post/Header";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";

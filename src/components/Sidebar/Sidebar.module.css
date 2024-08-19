@@ -1,19 +1,20 @@
+/* Sidebar.module.css */
+
 .side {
   position: fixed;
   top: 0;
   left: 0;
-  width: 20%; /* 사이드바의 너비를 20%로 설정 */
+  min-width: 250px;
   height: 100%;
   background-color: #ffffff;
   border-right: 1px solid #dddddd;
-  z-index: 1000; /* 필요에 따라 z-index 설정 */
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .logo {
-  width: 63px;
+  width: 65px;
   height: 50px;
   margin-left: 40px;
   margin-top: 15px;
@@ -26,10 +27,17 @@
 }
 
 .menu {
-  display: block;
-  margin-left: 40px;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
   padding: 10px;
-  min-width: 275px;
+  width: calc(100% - 60px);
+  transition: background-color 0.3s ease;
+  border-radius: 16px;
+}
+
+.menu:hover {
+  background-color: #f3f3f3;
 }
 
 .menuOn {
@@ -46,38 +54,38 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-left: 40px;
-  margin-right: 50px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  /* border-radius: 50px; */
-  border-radius: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 50px;
   color: #ffffff;
   background-color: #ff7474;
   font-family: "BalooTammudu";
   font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.post:hover {
+  background-color: #f75858;
 }
 
 .dropdown {
   position: absolute;
-  /* top: 100%; */
-  right: 0;
   background-color: white;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  z-index: 10;
-  margin-top: 5px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  margin-top: 10px;
 }
 
 .dropdownItem {
+  padding: 8px 16px;
   display: block;
-  padding: 10px;
-  text-decoration: none;
   color: #333;
-  font-family: "NotoSans-Regular";
-  font-size: 14px;
+  text-decoration: none;
 }
 
 .dropdownItem:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #f3f3f3;
 }

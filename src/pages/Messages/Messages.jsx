@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 
 // component
 import DMList from "components/Messages/DMList";

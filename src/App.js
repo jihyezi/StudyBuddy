@@ -15,16 +15,17 @@ import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
-import LoginModal from "components/Home/LoginModal";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import supabase from "components/supabaseClient";
-
 import DetailPost from "pages/Post/DetailPost";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
-
+import SearchResults from "pages/Explore/SearchResulus";
+import LoginModal from "components/Home/LoginModal";
+import CommonLayout from "components/Explore/CommonLayout";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import supabase from "components/supabaseClient";
+import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 const Center = styled.div`
-  margin-left: 20%; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
-  width: 80%;
+  margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
+  width: calc(100% - 250px);
   height: 100vh;
   display: flex;
   flex-direction: row;
@@ -36,7 +37,7 @@ const Content = styled.div`
 
 const MainContent = () => {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -54,7 +55,22 @@ const MainContent = () => {
       <Content>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route
+            path="/explore"
+            element={
+              <CommonLayout>
+                <Explore />
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <CommonLayout>
+                <SearchResults />
+              </CommonLayout>
+            }
+          />
           <Route path="/communities" element={<Communities />} />
           <Route path="/studies" element={<DetailPost />} />
           <Route path="/notifications" element={<Notifications />} />
@@ -64,14 +80,16 @@ const MainContent = () => {
           <Route path="/create-post" element={<Post />} />
           <Route path="/create-community" element={<CommunityPost />} />
           <Route path="/create-study" element={<StudyPost />} />
-          <Route
-            path="/CommunityDetailsPage"
-            element={<CommunityDetailsPage />}
-          />
+          <Route path="/communitydetail" element={<CommunityDetailsPage />} />
+          <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
         </Routes>
       </Content>
+
+      <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
-        location.pathname === "/CommunityDetailsPage") && <Recommended />}
+        location.pathname === "/CommunityDetailsPage" ||
+        location.pathname === "/bookmarks" ||
+        location.pathname === "/studies") && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -79,6 +97,7 @@ const MainContent = () => {
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -99,12 +118,22 @@ const App = () => {
     fetchUsers();
   }, []);
 
+  // 상태 전환 함수
+  const toggleNotifications = () => {
+    setShowNotifications((prevShowNotifications) => !prevShowNotifications);
+  };
+
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Sidebar />
+        <Sidebar toggleNotifications={toggleNotifications} />
         <Center>
           <MainContent />
+          <Notifications
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            toggleNotifications={toggleNotifications}
+          />
         </Center>
       </BrowserRouter>
     </AuthProvider>

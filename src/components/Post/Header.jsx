@@ -1,15 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import "fonts/Font.css";
 
 // icon
 import back from "assets/icons/Communities/back.png";
+import { useNavigate } from "react-router-dom";
 
 const Header = (props) => {
   const navigate = useNavigate();
-
-  const handleBackClick = () => {
+  const backBtn = () => {
     navigate(-1);
   };
 
@@ -19,7 +18,7 @@ const Header = (props) => {
         className={styles.backIcon}
         src={back}
         alt="back"
-        onClick={handleBackClick}
+        onClick={backBtn}
       />
       <div className={styles.headerName}>{props.title}</div>
       <div className={styles.rightSection}>

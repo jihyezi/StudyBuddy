@@ -63,30 +63,32 @@
     color: #FF7474;
     font-weight: 700;
     font-size: 20px;
-    font-family: "NotoSans-Regular";
+    font-family: "NotoSans-SemiBold";
 }
 
 .joinButton {
-    width: 52px;
-    height: 32px;
+    width: 58px;
+    height: 36px;
     background-color: white;
     border-radius: 8px;
     border: 1px solid #606060;
     justify-content: center;
     align-items: center;
     color: #606060;
+    font-size: 14px;
     cursor: pointer;
 }
 
 .joinButtonActive {
-    width: 52px;
-    height: 32px;
+    width: 58px;
+    height: 36px;
     background-color: #ff74742c;
     border-radius: 8px;
     justify-content: center;
     align-items: center;
     border: none;
     color: #FF7474;
+    font-size: 14px;
     cursor: pointer;
 }
 
@@ -94,7 +96,7 @@
     color: #606060;
     font-size: 16px;
     font-weight: 500;
-    font-family: "NotoSans-Regular";
+    font-family: "NotoSans-Medium";
 }
 
 

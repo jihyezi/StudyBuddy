@@ -53,24 +53,4 @@ export const selectList = {
     { name: "6개월 이상" },
     { name: "1년 이상" },
   ],
-
-  joinCommunity: [],
 };
-
-const fetchCommunityData = async () => {
-  const { data, error } = await supabase
-    .from("Community")
-    .select("communityid, name");
-
-  if (error) {
-    console.error("Error fetching community data:", error);
-    return;
-  }
-
-  selectList.joinCommunity = data.map((item) => ({
-    name: item.name,
-    communityId: item.communityid,
-  }));
-};
-
-fetchCommunityData();
