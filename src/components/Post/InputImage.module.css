@@ -2,13 +2,12 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex-grow: 1;
   gap: 25px;
   padding-left: 100px;
   padding-right: 100px;
 }
 
-.inputTitle {
+.inputText {
   text-align: right;
   color: #808080;
   font-family: "NotoSans-SemiBold";
@@ -16,20 +15,33 @@
   min-width: 100px;
 }
 
-.inputField {
+.inputClick {
   flex-grow: 1;
   height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
   padding-left: 16px;
+  padding-right: 16px;
   border-radius: 8px;
   border-width: 1.5px;
   border-style: solid;
   border-color: #b6b6b6;
-  outline-color: #ff7474;
-  color: #808080;
+  cursor: pointer;
 }
 
-.inputField::placeholder {
+.inputPlaceholder {
   color: #b6b6b6;
   font-family: "NotoSans-Regular";
   font-size: 14px;
+}
+
+.fileSelected {
+  color: #ff7474;
+}
+
+.inputIcon {
+  width: 16px;
+  height: 16px;
 }

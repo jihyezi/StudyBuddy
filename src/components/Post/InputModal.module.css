@@ -38,6 +38,10 @@
   font-size: 14px;
 }
 
+.activeText {
+  color: #808080;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -45,5 +49,5 @@
   right: 0;
   bottom: 0;
   background-color: rgba(221, 221, 221, 0.3);
-  z-index: 99;
+  z-index: 1000;
 }

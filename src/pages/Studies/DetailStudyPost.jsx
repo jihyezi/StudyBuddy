@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./DetailStudyPost.module.css";
+import supabase from "components/supabaseClient";
 
 // component
-import Header from "components/Communities/Header";
+import Header from "components/Post/Header";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
@@ -16,6 +17,56 @@ import profile4 from "assets/images/Profile/profile4.png";
 import image from "assets/images/Studies/studyIntroduce.png";
 
 const DetailStudyPost = ({}) => {
+  const [studyData, setStudyData] = useState(null);
+
+  const fetchStudyDataById = async (studyId) => {
+    const { data, error } = await supabase
+      .from("Study")
+      .select("*")
+      .eq("studyid", studyId);
+
+    if (error) {
+      console.error("Error fetching study data:", error);
+      return null;
+    }
+    console.log(data);
+    return data[0];
+  };
+
+  useEffect(() => {
+    const getStudyData = async () => {
+      const data = await fetchStudyDataById(6);
+      setStudyData(data);
+    };
+
+    getStudyData();
+  }, []);
+
+  if (!studyData) {
+    return <div>Loading...</div>;
+  }
+
+  const formatDescription = (description) => {
+    const regex = /!\[Image\]\((.*?)\)/g;
+    const parts = description.split("\n").flatMap((line, index) => {
+      const imageParts = line.split(regex);
+      return imageParts.map((part, i) => {
+        if (i % 2 === 1) {
+          return (
+            <img key={i} src={part} alt="Image" className={styles.image} />
+          );
+        }
+        return (
+          <React.Fragment key={i}>
+            {part}
+            <br />
+          </React.Fragment>
+        );
+      });
+    });
+    return parts;
+  };
+
   return (
     <div>
       <Header title={"Studies"} />
@@ -23,9 +74,7 @@ const DetailStudyPost = ({}) => {
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
         <div className={styles.studiesStatus}>모집 중</div>
-        <div className={styles.studiesTitle}>
-          정보처리기사 온라인 스터디 모집합니다~~~~🔥
-        </div>
+        <div className={styles.studiesTitle}>{studyData.title}</div>
         <div
           style={{
             display: "flex",
@@ -40,7 +89,9 @@ const DetailStudyPost = ({}) => {
             alt="profile1"
           />
           <div className={styles.postWriterNickname}>페이커</div>
-          <div className={styles.postWriteDate}>2024.05.29</div>
+          <div className={styles.postWriteDate}>
+            {new Date(studyData.createdat).toLocaleDateString()}
+          </div>
         </div>
         <div
           style={{
@@ -65,23 +116,23 @@ const DetailStudyPost = ({}) => {
         >
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>진행 방식</div>
-            <div className={styles.studiesDetail}>온라인</div>
+            <div className={styles.studiesDetail}>{studyData.proceed}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>모집인원</div>
-            <div className={styles.studiesDetail}>4명</div>
+            <div className={styles.studiesDetail}>{studyData.maxmembers}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>장소</div>
-            <div className={styles.studiesDetail}>디스코드</div>
+            <div className={styles.studiesDetail}>{studyData.location}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>기간</div>
-            <div className={styles.studiesDetail}>3개월</div>
+            <div className={styles.studiesDetail}>{studyData.duration}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>일정</div>
-            <div className={styles.studiesDetail}>주3회 1시</div>
+            <div className={styles.studiesDetail}>{studyData.schedule}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>태그</div>
@@ -91,11 +142,7 @@ const DetailStudyPost = ({}) => {
         <div style={{ marginTop: "70px" }}>
           <div className={styles.studiesIntro}>스터디 소개</div>
           <div className={styles.studiesContent}>
-            <div>
-              정보처리기사 온라인 스터디 모집합니다! 디코에서 주 3회 스터디
-              진행할 예정입니다!!
-            </div>
-            <img className={styles.image} src={image} alt="image" />
+            {formatDescription(studyData.description)}
           </div>
         </div>
 

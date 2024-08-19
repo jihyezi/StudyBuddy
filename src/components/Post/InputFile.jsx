@@ -9,56 +9,51 @@ import add from "assets/icons/Post/add_grey.png";
 
 const InputFile = (props) => {
   const fileInputRef = useRef(null);
-  const [fileName, setFileName] = useState(props.placeholder);
-  const [isFileSelected, setIsFileSelected] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleClick = (event) => {
-    if (!isFileSelected) {
-      event.stopPropagation();
-      fileInputRef.current.click();
-    }
-  };
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      setFileName(file.name);
-      setIsFileSelected(true);
-      setSelectedFile(file);
-      props.onFileSelect(file);
+      const files = Array.from(event.target.files);
+      const newFiles = [...selectedFiles, ...files];
+      setSelectedFiles(newFiles);
+      props.onFileSelect(newFiles);
     }
   };
 
-  const handleCancel = (event) => {
-    event.stopPropagation();
-    setFileName(props.placeholder);
-    setIsFileSelected(false);
+  const handleCancel = (index) => {
+    const updatedFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(updatedFiles);
+    props.onFileSelect(updatedFiles);
+    fileInputRef.current.value = null;
+  };
+
+  const handleAddClick = () => {
+    fileInputRef.current.click();
   };
 
   return (
     <div className={styles.inputContainer}>
       <div className={styles.inputText}>{props.title}</div>
-      <div className={styles.inputClick} onClick={handleClick}>
-        <input
-          style={{ display: "none" }}
-          type="file"
-          ref={fileInputRef}
-          onChange={handleChange}
-        />
-        <span
-          className={`${styles.inputPlaceholder} ${
-            isFileSelected ? styles.fileSelected : ""
-          }`}
-        >
-          {isFileSelected ? fileName : props.placeholder}
-        </span>
-        <img
-          className={styles.inputIcon}
-          src={isFileSelected ? cancel : file}
-          alt="inputIcon"
-          onClick={isFileSelected ? handleCancel : undefined}
-        />
+      <input
+        style={{ display: "none" }}
+        type="file"
+        ref={fileInputRef}
+        onChange={handleChange}
+        multiple
+      />
+      {selectedFiles.map((file, index) => (
+        <div key={index} className={styles.fileSelectedContainer}>
+          <span className={styles.fileName}>{file.name}</span>
+          <img
+            className={styles.inputIcon}
+            src={cancel}
+            alt="cancelIcon"
+            onClick={() => handleCancel(index)}
+          />
+        </div>
+      ))}
+      <div className={styles.addIconContainer} onClick={handleAddClick}>
+        <img className={styles.addIcon} src={add} alt="addIcon" />
       </div>
     </div>
   );
