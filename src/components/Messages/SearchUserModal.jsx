@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./SearchUserModal.module.css";
-import close from "assets/icons/Messages/close.png";
+import closeIcon from "assets/icons/Messages/close.png";
 
-const SearchUserModal = ({
+function SearchUserModal({
   setIsSending,
   filteredUsers,
   handleUserClick,
@@ -10,13 +10,13 @@ const SearchUserModal = ({
   handleSearchChange,
   searchTerm,
   onSendMessage,
-}) => {
+}) {
   return (
     <div className={styles.searchUserModal}>
       <div className={styles.searchUserModalHeader}>
         <img
           className={styles.closeIcon}
-          src={close}
+          src={closeIcon}
           alt="close"
           onClick={() => setIsSending(false)}
         />
@@ -29,7 +29,7 @@ const SearchUserModal = ({
         <span className={styles.sendTo}>Send to :</span>
         {selectedUser ? (
           <span className={styles.selectedUser}>
-            {selectedUser.username} / @{selectedUser.id}
+            {selectedUser.username}
             <span
               className={styles.removeUser}
               onClick={() => handleUserClick(null)}
@@ -50,19 +50,19 @@ const SearchUserModal = ({
 
       <div className={styles.userList}>
         {!selectedUser &&
-          (filteredUsers || []).map((user, index) => (
+          filteredUsers.map((user) => (
             <div
-              key={index}
-              className={`${styles.userItem} ${selectedUser && selectedUser.id === user.id
-                ? styles.selected
-                : ""
-                }`}
+              key={user.userid}
+              className={`${styles.userItem} ${
+                selectedUser && selectedUser.userid === user.userid
+                  ? styles.selected
+                  : ""
+              }`}
               onClick={() => handleUserClick(user)}
             >
-              <div className={styles.profileImage}></div>
+              <img src={user.profileimage} alt="Profile" className={styles.profileImage} />
               <div className={styles.userInfo}>
                 <span className={styles.username}>{user.username}</span>
-                <span className={styles.id}>@{user.id}</span>
               </div>
             </div>
           ))}
@@ -70,6 +70,6 @@ const SearchUserModal = ({
       </div>
     </div>
   );
-};
+}
 
 export default SearchUserModal;
