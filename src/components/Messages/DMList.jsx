@@ -20,7 +20,7 @@ function DMList() {
           // 현재 로그인한 유저의 Public 스키마 정보를 가져오기
           const { data: currentUserData, error: currentUserError } = await supabase
             .from("User")
-            .select("userid, username, profileimage")
+            .select("userid, username, nickname, profileimage")
             .eq("email", user.email)
             .single();  // 현재 로그인한 유저 정보
 
@@ -33,7 +33,7 @@ function DMList() {
           // 다른 유저들의 데이터를 가져오기 (현재 로그인한 유저 제외)
           const { data: otherUsersData, error: otherUsersError } = await supabase
             .from("User")
-            .select("userid, username, profileimage")
+            .select("userid, username, nickname, profileimage")
             .neq("email", user.email);  // 로그인한 유저의 이메일 제외
 
           if (otherUsersError) {
@@ -89,9 +89,9 @@ function DMList() {
               <div className={styles.messageContent}>
                 <div className={styles.messageHeader}>
                   <span className={styles.username}>{user.username}</span>
-                  <span className={styles.id}>@{user.userid}</span>
+                  <span className={styles.nickname}>@{user.nickname || user.username}</span>
                 </div>
-                <div className={styles.text}>Start chatting with {user.username}!</div>
+                <div className={styles.text}>Start chatting with {user.nickname || user.username}!</div>
               </div>
             </div>
           ))}
