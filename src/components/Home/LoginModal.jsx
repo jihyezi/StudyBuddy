@@ -13,8 +13,8 @@ import GoogleLoginButton from "./GoogleLoginButton";
 // 모달을 화면 가운데에 위치시키기 위한 스타일
 const customStyles = {
   content: {
-    width: "520px",
-    height: "479px",
+    width: "400px",
+    height: "440px",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -54,7 +54,7 @@ const LoginModal = ({ modalIsOpen, closeModal, openEmailLoginModal }) => {
         </div>
         <div>
           <button onClick={closeModal} className={styles.closeButton}>
-            <img src={close} alt="close" />
+            <img src={close} alt="close" className={styles.btn} />
           </button>
         </div>
         <div className={styles.buttonContainer}>

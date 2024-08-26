@@ -48,7 +48,7 @@
 .details {
     padding-left: 36px;
     padding-right: 27px;
-    padding-top: 20px;
+    padding-top: 30px;
     margin-bottom: 16px;
 }
 
@@ -62,8 +62,9 @@
 .communityName {
     color: #FF7474;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 22px;
     font-family: "NotoSans-SemiBold";
+    margin-bottom: 16px;
 }
 
 .joinButton {

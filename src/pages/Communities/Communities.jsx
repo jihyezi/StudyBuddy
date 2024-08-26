@@ -1,21 +1,37 @@
-import React, { useEffect, useState, useRef } from "react";
-
+import React, { useEffect, useState } from "react";
 import styles from "./Communities.module.css";
-
-// component
 import Header from "components/Header";
 import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
-import CommunityDetailClick from "components/Communities/CommunityDetailClick";
-import Post from "components/Communities/Post";
 import PostList from "components/Communities/CommunityPostList";
 import JoinPostList from "components/Communities/CommunityJoinPostList";
-import Recommended from "pages/Recommended/Recommended";
 import { dummyPostData } from "components/Dummydata";
+import { useAuth } from "contexts/AuthContext";
+import supabase from "components/supabaseClient";
 
-const Communities = ({ }) => {
+const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState('');
+  const [community, setCommunity] = useState([]);
+  const { user: sessionUser } = useAuth();
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase
+          .from("Community")
+          .select("*")
+          .eq("createdby", sessionUser.id);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setCommunity(data);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [sessionUser]);
 
   const handleEventSelect = (event) => {
     setSelectEvent(event);
@@ -24,15 +40,23 @@ const Communities = ({ }) => {
   return (
     <div className={styles.community}>
       <Header headerName={'Communities'} />
-      <div className={styles.classification}>
-        {/* <Classification onEventSelect={handleEventSelect} /> --> 가입한 커뮤니티가 없을 때 나오는 화면*/}
-        <JoinCommunity onEventSelect={handleEventSelect} />
-      </div>
-
-      {/* <PostList postData={dummyPostData} selectedEvent={selectedEvent} /> */}
-
-      <JoinPostList postData={dummyPostData} />
+      {community.length > 0 ? (
+        <>
+          <div className={styles.classification}>
+            <JoinCommunity onEventSelect={handleEventSelect} communityInfo={community} />
+          </div>
+          <JoinPostList postData={dummyPostData} />
+        </>
+      ) : (
+        <>
+          <div className={styles.classification}>
+            <Classification onEventSelect={handleEventSelect} />
+          </div>
+          <PostList postData={dummyPostData} selectedEvent={selectedEvent} />
+        </>
+      )}
     </div>
   );
 };
+
 export default Communities;

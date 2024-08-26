@@ -27,6 +27,7 @@
     transform: translateX(-50%);
     width: 140px;
     height: 140px;
+    object-fit: cover;
 }
 
 .imageContainer {
