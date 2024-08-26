@@ -72,9 +72,18 @@ const Notifications = ({ showNotifications }) => {
               }
 
               // 알림 내용 포맷
-              const content = notification.content.startsWith("You have received a new message from")
-                ? `${userMap[notification.content.split("from ")[1]] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`
-                : notification.content;
+              let content;
+              if (notification.content.startsWith("You have received a new message from")) {
+                content = `${userMap[notification.content.split("from ")[1]] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`;
+              } else if (notification.content.startsWith("A new post was created")) {
+                content = `${userMap[notification.content.split("by ")[1]] || "알 수 없는 유저"}님이 새 게시글을 작성하였습니다.`;
+              } else if (notification.content.startsWith("Your post was liked by")) {
+                content = `${userMap[notification.content.split("liked by ")[1]] || "알 수 없는 유저"}님이 게시글을 좋아합니다.`;
+              } else if (notification.content.startsWith("Your post received a new comment from")) {
+                content = `${userMap[notification.content.split("from ")[1]] || "알 수 없는 유저"}님이 게시글에 댓글을 남겼습니다.`;
+              } else {
+                content = notification.content;
+              }
 
               if (!acc[dateLabel]) {
                 acc[dateLabel] = [];
