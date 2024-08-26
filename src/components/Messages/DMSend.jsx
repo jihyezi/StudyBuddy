@@ -1,23 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "contexts/AuthContext";  // AuthContext에서 인증된 유저 정보 가져오기
+import supabase from "components/supabaseClient";
 import styles from "./DMSend.module.css";
 import SearchUserModal from "./SearchUserModal";
 
-const dummyData = [
-  { username: "우제", id: "godthunderzeus" },
-  { username: "현준", id: "hyunjun123" },
-  { username: "Faker(페이커)", id: "faker" },
-  { username: "이민형", id: "t1_gumay" },
-  { username: "류민석", id: "keria_minseok" },
-  { username: "김강희", id: "t1_roach" },
-  { username: "임재현", id: "lol_tom123" },
-  { username: "이재완", id: "T1_wolf" },
-  { username: "김정균", id: "T1_kkoma" },
-  { username: "장경환", id: "T1_marine" },
-];
-
 function DMSend({ setIsSending, setSelectedUser }) {
+  const { user } = useAuth();  // 현재 로그인한 유저 정보 가져오기
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setLocalSelectedUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (user) {
+        // 현재 로그인한 유저의 데이터를 제외하고 다른 유저들의 데이터 불러오기
+        const { data, error } = await supabase
+          .from("User")
+          .select("userid, username, profileimage")
+          .neq("email", user.email);  // 로그인한 유저의 이메일 제외
+
+        if (error) {
+          console.error("Error fetching users:", error.message);
+        } else {
+          setFilteredUsers(data);  // 다른 유저 데이터 설정
+        }
+      }
+    };
+
+    fetchUsers();
+  }, [user]);
 
   const handleUserClick = (user) => {
     setLocalSelectedUser(user);
@@ -25,16 +36,17 @@ function DMSend({ setIsSending, setSelectedUser }) {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+    const filtered = filteredUsers.filter(
+      (user) =>
+        user.username.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setFilteredUsers(filtered);
   };
-
-  const filteredUsers = dummyData.filter(
-    (user) => user.username.includes(searchTerm) || user.id.includes(searchTerm)
-  );
 
   const handleSendMessage = () => {
     if (selectedUser) {
-      setSelectedUser(selectedUser);
-      setIsSending(false); // Close the DMSend modal after selecting a user
+      setSelectedUser(selectedUser);  // 선택된 유저 설정
+      setIsSending(false);  // 모달 닫기
     }
   };
 
