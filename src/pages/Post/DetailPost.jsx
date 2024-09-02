@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./DetailPost.module.css";
 import supabase from "components/supabaseClient";
+import { useLocation } from "react-router-dom";
 
 // component
 import Header from "components/Post/Header";
@@ -23,81 +24,114 @@ import download from "assets/icons/Post/file_download.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const DetailPost = ({}) => {
+const DetailPost = ({ }) => {
   const [postData, setPostData] = useState(null);
   const [communityData, setCommunityData] = useState(null);
   const [commentData, setCommentData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
+  const location = useLocation();
+  const postInfo = location.state;
 
-  const fetchPostDataById = async (postId) => {
-    const { data, error } = await supabase
-      .from("Post")
-      .select("*")
-      .eq("postid", postId);
+  // const fetchPostDataById = async (postId) => {
+  //   const { data, error } = await supabase
+  //     .from("Post")
+  //     .select("*")
+  //     .eq("postid", postId);
 
-    if (error) {
-      console.error("Error fetching post data:", error);
-      return null;
-    }
-    return data[0];
-  };
+  //   if (error) {
+  //     console.error("Error fetching post data:", error);
+  //     return null;
+  //   }
+  //   return data[0];
+  // };
 
-  const fetchCommunityDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("Community")
-      .select("*")
-      .eq("communityid", communityId);
+  // const fetchCommunityDataById = async (communityId) => {
+  //   const { data, error } = await supabase
+  //     .from("Community")
+  //     .select("*")
+  //     .eq("communityid", communityId);
 
-    if (error) {
-      console.error("Error fetching post data:", error);
-      return null;
-    }
-    return data[0];
-  };
+  //   if (error) {
+  //     console.error("Error fetching post data:", error);
+  //     return null;
+  //   }
+  //   return data[0];
+  // };
 
-  const fetchCommentDataById = async (postId) => {
-    const { data, error } = await supabase
-      .from("Comment")
-      .select("*")
-      .eq("postid", postId);
+  // const fetchCommentDataById = async (postId) => {
+  //   const { data, error } = await supabase
+  //     .from("Comment")
+  //     .select("*")
+  //     .eq("postid", postId);
 
-    if (error) {
-      console.log("Error fetching comment data:", error);
-      return null;
-    }
-    return data;
-  };
+  //   if (error) {
+  //     console.log("Error fetching comment data:", error);
+  //     return null;
+  //   }
+  //   return data;
+  // };
 
-  const fetchUserDataById = async () => {
-    const { data, error } = await supabase.from("User").select("*");
+  // const fetchUserDataById = async () => {
+  //   const { data, error } = await supabase.from("User").select("*");
 
-    if (error) {
-      console.error("Error fetching user data:", error);
-      return null;
-    }
-    return data;
-  };
+  //   if (error) {
+  //     console.error("Error fetching user data:", error);
+  //     return null;
+  //   }
+  //   return data;
+  // };
 
   useEffect(() => {
-    const getPostData = async () => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        console.log("user", session.user);
-        console.log(fetchUserDataById());
-        // setUserId(session.user.id);
-      });
+    //   const getPostData = async () => {
+    //     supabase.auth.getSession().then(({ data: { session } }) => {
+    //       console.log("user", session.user);
+    //       console.log(fetchUserDataById());
+    //       // setUserId(session.user.id);
+    //     });
 
-      // const data = await fetchPostDataById(9);
-      // setPostData(data);
+    //     // const data = await fetchPostDataById(9);
+    //     // setPostData(data);
 
-      // const communityData = await fetchCommunityDataById(data.communityid);
-      // setCommunityData(communityData);
+    //     // const communityData = await fetchCommunityDataById(data.communityid);
+    //     // setCommunityData(communityData);
 
-      // const commentData = await fetchCommentDataById(data.postid);
-      // setCommentData(commentData);
+    //     // const commentData = await fetchCommentDataById(data.postid);
+    //     // setCommentData(commentData);
+    //   };
+
+    //   getPostData();
+    // }, []);
+    const fetchPostDataById = async (postId) => {
+      const { data, error } = await supabase
+        .from("Post")
+        .select("*")
+        .eq("postid", postId);
+
+      if (error) {
+        console.error("Error fetching post data:", error);
+        return;
+      }
+      setPostData(data[0]);
     };
 
-    getPostData();
-  }, []);
+    const fetchCommentDataById = async (postId) => {
+      const { data, error } = await supabase
+        .from("Comment")
+        .select("*")
+        .eq("postid", postId);
+
+      if (error) {
+        console.error("Error fetching comment data:", error);
+        return;
+      }
+      setCommentData(data || []);
+    };
+
+    if (postInfo?.postid) {
+      fetchPostDataById(postInfo.postid);
+      fetchCommentDataById(postInfo.postid);
+    }
+  }, [postInfo]);
 
   if (!postData) {
     return <div>Loading...</div>;
@@ -164,13 +198,17 @@ const DetailPost = ({}) => {
     }
   };
 
+  if (!postData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <Header title={"Studies"} />
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
-        <div className={styles.studiesStatus}>{communityData?.name}</div>
+        <div className={styles.studiesStatus}>{postData.name}</div>
         <div className={styles.studiesTitle}>{postData.title}</div>
         <div
           style={{
@@ -182,10 +220,10 @@ const DetailPost = ({}) => {
         >
           <img
             className={styles.postWriterProfile}
-            src={profile1}
+            src={postInfo.userimg}
             alt="profile1"
           />
-          <div className={styles.postWriterNickname}>페이커</div>
+          <div className={styles.postWriterNickname}>{postInfo.usernickname}</div>
           <div className={styles.postWriteDate}>
             {new Date(postData.createdat).toLocaleDateString()}
           </div>
@@ -215,7 +253,7 @@ const DetailPost = ({}) => {
             <div className={styles.studiesDetailIndex}>준비기간</div>
             <div className={styles.studiesDetail}>
               {new Date(postData.startdate).toLocaleDateString()} ~{" "}
-              {new Date(postData.enddate).toLocaleDateString()}
+              {new Date(postData.enddate).toLocaleDateString()} ({postInfo.day}일)
             </div>
           </div>
           <div className={styles.studiesDetails}>
@@ -245,7 +283,7 @@ const DetailPost = ({}) => {
                   cursor: "pointer",
                   // padding: "10px",
                 }}
-                onClick={() => downloadFile(file.url, file.filename)}
+                onClick={() => downloadFile(postData.url, postData.filename)}
               >
                 <div className={styles.postDetailFile}>
                   <img
@@ -288,16 +326,26 @@ const DetailPost = ({}) => {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "40px" }}
             >
-              <Comment
-                userid={3}
-                content={commentData[1].content}
-                commentData={commentData[1]}
-              />
-              <Comment
-                userid={5}
-                content={commentData[0].content}
-                commentData={commentData[0]}
-              />
+              {commentData.length > 0 ? (
+                <>
+                  {commentData[0] && (
+                    <Comment
+                      userid={commentData[0].userid}
+                      content={commentData[0].content}
+                      commentData={commentData[0]}
+                    />
+                  )}
+                  {commentData[1] && (
+                    <Comment
+                      userid={commentData[1].userid}
+                      content={commentData[1].content}
+                      commentData={commentData[1]}
+                    />
+                  )}
+                </>
+              ) : (
+                <div>No comments available</div>
+              )}
             </div>
 
             <div
@@ -309,7 +357,7 @@ const DetailPost = ({}) => {
             >
               <img
                 className={styles.commentWriterProfile}
-                src={profile3}
+                src={postInfo.userimg}
                 alt="profile3"
               />
               <div
