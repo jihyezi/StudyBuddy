@@ -6,7 +6,7 @@ import leftArrow from 'assets/icons/left_arrow.png';
 import rightArrow from 'assets/icons/right_arrow.png';
 import noimage from 'assets/images/Profile/nobackground.png';
 
-const JoinCommunity = ({ onEventSelect, communityInfo }) => {
+const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityData, userData, commentData }) => {
   const [scrollState, setScrollState] = useState('start');
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
@@ -22,12 +22,16 @@ const JoinCommunity = ({ onEventSelect, communityInfo }) => {
     onEventSelect(item);
     navigate(`/communitydetail`, {
       state: {
-        id: `${item.id}`,
+        id: `${item.communityid}`,
         img: imageUrl,
         community: `${item.name}`,
         description: `${item.description}`,
         rules: item.rules,
-      },
+        userData: userData,
+        commentData: commentData,
+        postData: postData,
+        communityData: communityData
+      }
     });
   };
 
@@ -65,7 +69,7 @@ const JoinCommunity = ({ onEventSelect, communityInfo }) => {
   return (
     <div className={styles.stackTagsArea}>
       <div className={styles.classContainer} ref={containerRef} onScroll={handleScroll}>
-        {communityInfo.map((item, index) => {
+        {joinCommunityData.map((item, index) => {
           const imageUrl = item.image
             ? `${item.image}`
             : 'https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png';

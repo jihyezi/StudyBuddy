@@ -13,6 +13,7 @@ const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState('');
   const [user, setUser] = useState([]);
   const [community, setCommunity] = useState([]);
+  const [joinCommunity, setJoinCommunity] = useState([]);
   const [post, setPost] = useState([]);
   const [comment, setComment] = useState([]);
   const { user: sessionUser } = useAuth();
@@ -36,13 +37,27 @@ const Communities = () => {
       if (sessionUser) {
         const { data, error } = await supabase
           .from("Community")
-          .select("*")
-          .eq("createdby", sessionUser.id);
+          .select("*");
 
         if (error) {
           console.error("Error", error);
         } else {
           setCommunity(data);
+        }
+      }
+    };
+
+    const fetchJoinCommunityData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase
+          .from("Joincommunity")
+          .select("*")
+          .eq("userid", sessionUser.id);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setJoinCommunity(data);
         }
       }
     };
@@ -62,7 +77,7 @@ const Communities = () => {
     };
 
     const fetchCommentData = async () => {
-      if (sessionUser) {
+      if (sessionUser && post.postid) {  // post.postid가 정의된 경우에만 실행
         const { data, error } = await supabase
           .from("Comment")
           .select("*")
@@ -73,11 +88,14 @@ const Communities = () => {
         } else {
           setComment(data);
         }
+      } else {
+        console.warn("postid가 정의되지 않았습니다.");
       }
     };
 
     fetchUserData();
     fetchCommunityData();
+    fetchJoinCommunityData();
     fetchPostData();
     fetchCommentData();
   }, [sessionUser]);
@@ -86,14 +104,17 @@ const Communities = () => {
     setSelectEvent(event);
   };
 
+  const filterCommunity = community.filter((c) =>
+    joinCommunity.some((jc) => jc.communityid === c.communityid)
+  );
 
   return (
     <div className={styles.community}>
       <Header headerName={'Communities'} />
-      {community.length > 0 ? (
+      {joinCommunity.length > 0 ? (
         <>
           <div className={styles.classification}>
-            <JoinCommunity onEventSelect={handleEventSelect} communityInfo={community} />
+            <JoinCommunity onEventSelect={handleEventSelect} communityData={community} joinCommunityData={filterCommunity} postData={post} userData={user} />
           </div>
           <JoinPostList postData={post} communityData={community} userData={user} commentData={comment} />
         </>
@@ -102,7 +123,7 @@ const Communities = () => {
           <div className={styles.classification}>
             <Classification onEventSelect={handleEventSelect} />
           </div>
-          <PostList postData={dummyPostData} selectedEvent={selectedEvent} />
+          <JoinPostList postData={post} communityData={community} userData={user} commentData={comment} />
         </>
       )}
     </div>

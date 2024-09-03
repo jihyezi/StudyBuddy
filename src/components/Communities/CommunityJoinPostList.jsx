@@ -1,8 +1,9 @@
 import React from 'react';
 import Post from './Post';
-import { dummyPostData } from '../Dummydata'
 
 const CommunityPostList = ({ postData, communityData, userData, commentData }) => {
+
+    console.log('postlist', postData)
 
     return (
         <div>

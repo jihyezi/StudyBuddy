@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "contexts/AuthContext";
+import supabase from "components/supabaseClient";
 
 import styles from './CommunityDetailsPage.module.css';
 import TabList from "components/Communities/TabList";
@@ -10,13 +12,14 @@ import Header from "components/Header";
 
 const CommunityDetailsPage = () => {
     const location = useLocation();
-    const communityInfo = { ...location.state };
-
+    const { userData, commentData, postData, communityData, ...communityInfo } = location.state;
     const [isJoined, setIsJoined] = useState(false);
 
     const handleJoinClick = () => {
         setIsJoined(!isJoined);
     };
+
+    const filteredPosts = postData.filter((post) => Number(post.communityid) === Number(communityInfo.id));
 
     return (
         <div className={styles.container}>
@@ -45,9 +48,10 @@ const CommunityDetailsPage = () => {
                 </div>
                 <div className={styles.description}>{communityInfo.description}</div>
             </div>
-            <TabList communityInfo={communityInfo} />
+            <TabList communityInfo={communityInfo} communityData={communityData} postData={filteredPosts} userData={userData} commentData={commentData} />
         </div>
-    )
-}
+    );
+};
+
 
 export default CommunityDetailsPage;
