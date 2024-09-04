@@ -6,14 +6,14 @@ import { dummyPostData } from "components/Dummydata";
 import RulePage from 'pages/Communities/RulePage';
 import MemberPage from 'pages/Communities/MemberPage';
 
-export const TabList = ({ communityInfo }) => {
+export const TabList = ({ communityInfo, postData, userData, commentData, communityData, allJoinCommunityData }) => {
     const [currentTab, clickTab] = useState(0);
 
     const menuArr = [
-        { name: '인기', content: <JoinPostList postData={dummyPostData} /> },
-        { name: '최근', content: <JoinPostList postData={dummyPostData} /> },
+        { name: '인기', content: <JoinPostList postData={postData} communityData={communityData} joinCommunoityData={communityInfo} userData={userData} commentData={commentData} /> },
+        { name: '최근', content: <JoinPostList postData={postData} communityData={communityData} userData={userData} commentData={commentData} /> },
         { name: '규칙', content: <RulePage communityInfo={communityInfo} /> },
-        { name: '멤버', content: <MemberPage /> }
+        { name: '멤버', content: <MemberPage communityData={communityData} joinCommunityData={communityInfo} userData={userData} allJoinCommunityData={allJoinCommunityData} /> }
     ];
 
     const selectMenuHandler = (index) => {

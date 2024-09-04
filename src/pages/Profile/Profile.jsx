@@ -37,20 +37,6 @@ const Profile = () => {
           } else {
             console.log("Fetched user data:", data); // 유저 데이터 로그 출력
             setUser(data);
-
-            if (data.profileimage) {
-              const { data: imageUrlData } = supabase.storage
-                .from('Images')
-                .getPublicUrl(`profile/${data.profileimage}`);
-              setImageUrl(imageUrlData.publicUrl);
-            }
-
-            if (data.backgroundimage) {
-              const { data: backgroundUrlData } = supabase.storage
-                .from('Images')
-                .getPublicUrl(`profile/${data.backgroundimage}`);
-              setBackgroundUrl(backgroundUrlData.publicUrl);
-            }
           }
         } catch (err) {
           console.error("Unexpected error:", err);
@@ -83,9 +69,16 @@ const Profile = () => {
       <Header headerName={user.nickname} />
       <div className={styles.info}>
         <div className={styles.imageWrapper}>
-          <img src={backgroundUrl} alt="profile background" className={styles.image} />
+          {user.backgroundimage ?
+            <img src={user.backgroundimage} alt="profile background" className={styles.image} />
+            : <img src={nobackground} alt="profile background" className={styles.image} />
+          }
           <div className={styles.profileImgContainer}>
-            <img src={imageUrl} alt="profile" className={styles.profileImg} />
+            {user.profileimage ?
+              <img src={user.profileimage} alt="profile" className={styles.profileImg} />
+              : <img src={noprofile} alt="profile" className={styles.profileImg} />
+            }
+
           </div>
         </div>
 

@@ -16,6 +16,7 @@ import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
 import DetailPost from "pages/Post/DetailPost";
+import DetailPost2 from "pages/Post/DetailPost2";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
@@ -84,6 +85,7 @@ const MainContent = () => {
           <Route path="/create-study" element={<StudyPost />} />
           <Route path="/communitydetail" element={<CommunityDetailsPage />} />
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
+          <Route path="/detailpost" element={<DetailPost />} />
         </Routes>
       </Content>
 

@@ -2,11 +2,11 @@ import React, { useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
 import { useNavigate } from "react-router-dom";
 import useIsOverflow from 'components/useIsOverflow';
-import leftArrow from '../../assets/icons/left_arrow.png';
-import rightArrow from '../../assets/icons/right_arrow.png';
+import leftArrow from 'assets/icons/left_arrow.png';
+import rightArrow from 'assets/icons/right_arrow.png';
 import noimage from 'assets/images/Profile/nobackground.png';
 
-const JoinCommunity = ({ onEventSelect, communityInfo }) => {
+const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityData, userData, commentData, allJoinCommunityData }) => {
   const [scrollState, setScrollState] = useState('start');
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
@@ -15,21 +15,29 @@ const JoinCommunity = ({ onEventSelect, communityInfo }) => {
 
   const handleClick = (item) => {
     const imageUrl = item.image
-      ? `https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/${item.image}`
-      : noimage;
+      ? `${item.image}`
+      : 'https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png';
 
     setSelectedItem(item);
     onEventSelect(item);
     navigate(`/communitydetail`, {
       state: {
-        id: `${item.id}`,
-        img: imageUrl, // Ensure this is set correctly
+        id: `${item.communityid}`,
+        img: imageUrl,
         community: `${item.name}`,
         description: `${item.description}`,
+        createdby: `${item.createdby}`,
         rules: item.rules,
-      },
+        userData: userData,
+        commentData: commentData,
+        postData: postData,
+        communityData: communityData,
+        allJoinCommunityData: allJoinCommunityData
+      }
     });
   };
+
+  console.log(allJoinCommunityData)
 
   const handleScroll = () => {
     const { current } = containerRef;
@@ -65,10 +73,10 @@ const JoinCommunity = ({ onEventSelect, communityInfo }) => {
   return (
     <div className={styles.stackTagsArea}>
       <div className={styles.classContainer} ref={containerRef} onScroll={handleScroll}>
-        {communityInfo.map((item, index) => {
+        {joinCommunityData.map((item, index) => {
           const imageUrl = item.image
-            ? `https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/${item.image}`
-            : noimage;
+            ? `${item.image}`
+            : 'https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png';
 
           return (
             <div
