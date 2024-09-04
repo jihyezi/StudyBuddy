@@ -3,8 +3,6 @@ import Post from './Post';
 
 const CommunityPostList = ({ postData, communityData, userData, commentData }) => {
 
-    console.log('postlist', postData)
-
     return (
         <div>
             {postData.map((post) => (

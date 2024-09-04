@@ -6,7 +6,7 @@ import leftArrow from 'assets/icons/left_arrow.png';
 import rightArrow from 'assets/icons/right_arrow.png';
 import noimage from 'assets/images/Profile/nobackground.png';
 
-const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityData, userData, commentData }) => {
+const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityData, userData, commentData, allJoinCommunityData }) => {
   const [scrollState, setScrollState] = useState('start');
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
@@ -26,14 +26,18 @@ const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityDa
         img: imageUrl,
         community: `${item.name}`,
         description: `${item.description}`,
+        createdby: `${item.createdby}`,
         rules: item.rules,
         userData: userData,
         commentData: commentData,
         postData: postData,
-        communityData: communityData
+        communityData: communityData,
+        allJoinCommunityData: allJoinCommunityData
       }
     });
   };
+
+  console.log(allJoinCommunityData)
 
   const handleScroll = () => {
     const { current } = containerRef;

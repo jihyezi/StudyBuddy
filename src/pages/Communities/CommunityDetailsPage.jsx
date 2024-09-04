@@ -12,7 +12,7 @@ import Header from "components/Header";
 
 const CommunityDetailsPage = () => {
     const location = useLocation();
-    const { userData, commentData, postData, communityData, ...communityInfo } = location.state;
+    const { userData, commentData, postData, communityData, allJoinCommunityData, ...communityInfo } = location.state;
     const [isJoined, setIsJoined] = useState(false);
 
     const handleJoinClick = () => {
@@ -48,7 +48,7 @@ const CommunityDetailsPage = () => {
                 </div>
                 <div className={styles.description}>{communityInfo.description}</div>
             </div>
-            <TabList communityInfo={communityInfo} communityData={communityData} postData={filteredPosts} userData={userData} commentData={commentData} />
+            <TabList communityInfo={communityInfo} communityData={communityData} postData={filteredPosts} userData={userData} commentData={commentData} allJoinCommunityData={allJoinCommunityData} />
         </div>
     );
 };

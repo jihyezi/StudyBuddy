@@ -13,6 +13,7 @@ const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState('');
   const [user, setUser] = useState([]);
   const [community, setCommunity] = useState([]);
+  const [allJoinCommunity, setAllJoinCommunity] = useState([]);
   const [joinCommunity, setJoinCommunity] = useState([]);
   const [post, setPost] = useState([]);
   const [comment, setComment] = useState([]);
@@ -47,10 +48,24 @@ const Communities = () => {
       }
     };
 
+    const fetchAllJoinCommunityData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase
+          .from("JoinCommunity")
+          .select("*");
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setAllJoinCommunity(data);
+        }
+      }
+    };
+
     const fetchJoinCommunityData = async () => {
       if (sessionUser) {
         const { data, error } = await supabase
-          .from("Joincommunity")
+          .from("JoinCommunity")
           .select("*")
           .eq("userid", sessionUser.id);
 
@@ -96,6 +111,7 @@ const Communities = () => {
     fetchUserData();
     fetchCommunityData();
     fetchJoinCommunityData();
+    fetchAllJoinCommunityData();
     fetchPostData();
     fetchCommentData();
   }, [sessionUser]);
@@ -108,15 +124,23 @@ const Communities = () => {
     joinCommunity.some((jc) => jc.communityid === c.communityid)
   );
 
+  const filteredPosts = post.filter((p) =>
+    filterCommunity.some((fc) => Number(fc.communityid) === Number(p.communityid))
+  );
+
+  console.log(joinCommunity)
+  console.log(filterCommunity)
+  console.log(allJoinCommunity)
+
   return (
     <div className={styles.community}>
       <Header headerName={'Communities'} />
       {joinCommunity.length > 0 ? (
         <>
           <div className={styles.classification}>
-            <JoinCommunity onEventSelect={handleEventSelect} communityData={community} joinCommunityData={filterCommunity} postData={post} userData={user} />
+            <JoinCommunity onEventSelect={handleEventSelect} communityData={community} allJoinCommunityData={allJoinCommunity} joinCommunityData={filterCommunity} postData={post} userData={user} />
           </div>
-          <JoinPostList postData={post} communityData={community} userData={user} commentData={comment} />
+          <JoinPostList postData={filteredPosts} communityData={community} userData={user} commentData={comment} />
         </>
       ) : (
         <>
