@@ -19,7 +19,6 @@
   flex-grow: 1;
   height: 40px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   z-index: 1;
   padding-left: 16px;
@@ -29,6 +28,7 @@
   border-style: solid;
   border-color: #b6b6b6;
   cursor: pointer;
+  position: relative;
 }
 
 .inputPlaceholder {
@@ -37,11 +37,37 @@
   font-size: 14px;
 }
 
-.fileSelected {
+.fileSelectedContainer {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 116, 116, 0.2);
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.fileName {
   color: #ff7474;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+  margin-right: 10px;
 }
 
 .inputIcon {
   width: 16px;
   height: 16px;
+  cursor: pointer;
+}
+
+.addIconContainer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b6b6b6;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.addIcon {
+  width: 32px;
+  height: 32px;
 }

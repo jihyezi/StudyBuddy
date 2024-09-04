@@ -14,14 +14,15 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const customStyles = {
   content: {
-    width: "520px",
-    height: "830px",
+    width: "400px",
+    height: '80%',
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     borderRadius: "30px",
     borderColor: "#fff",
     opacity: "1",
+    overflow: "hidden",
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.40)",
@@ -53,20 +54,23 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
     }
 
     // Supabase Auth를 사용하여 회원가입
-    const { user, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: email,
+      password: password,
     });
 
     if (signUpError) {
       console.error("회원가입 오류:", signUpError.message);
       setError("회원가입 실패: " + signUpError.message);
       return;
+    } else {
+      console.log("회원가입 완료 : ", data.user.id);
     }
 
     // 회원가입 후 추가 정보 저장
     const { error: dbError } = await supabase.from("User").insert([
       {
+        userid: data.user.id,
         email: email,
         nickname: nickname,
         username: username,
@@ -81,7 +85,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
       return;
     }
 
-    console.log("회원가입 성공:", user);
+    console.log("회원가입 성공:", data);
     closeModal(); // 모달 닫기
   };
 
@@ -113,7 +117,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
     >
       <div className={styles.modalHeader}>
         <button onClick={closeModal} className={styles.closeButton}>
-          <img src={close} alt="close" />
+          <img src={close} alt="close" className={styles.btn} />
         </button>
       </div>
       <div className={styles.modalBody}>
@@ -182,16 +186,16 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
                 checked={allChecked}
                 onChange={handleAllChecked}
               />
-              <label>모두 동의합니다</label>
+              <label className={styles.labeltext}>모두 동의합니다</label>
             </div>
-            <div style={{ width: 345, border: "1px solid #DDD" }} />
+            <div style={{ width: 300, border: "1px solid #DDD" }} />
             <div className={styles.checkboxItem}>
               <input
                 type="checkbox"
                 checked={over14Checked}
                 onChange={handleCheckboxChange(setOver14Checked)}
               />
-              <label>만 14세 이상입니다</label>
+              <label className={styles.labeltext}>만 14세 이상입니다</label>
             </div>
             <div className={styles.checkboxItem}>
               <input
@@ -199,7 +203,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
                 checked={termsChecked}
                 onChange={handleCheckboxChange(setTermsChecked)}
               />
-              <label>[필수] 이용약관 동의</label>
+              <label className={styles.labeltext}>[필수] 이용약관 동의</label>
               <img src={rightarrow} alt="Right arrow" className={styles.icon} />
             </div>
             <div className={styles.checkboxItem}>
@@ -208,7 +212,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
                 checked={privacyChecked}
                 onChange={handleCheckboxChange(setPrivacyChecked)}
               />
-              <label>[필수] 개인정보 수집 및 이용 동의</label>
+              <label className={styles.labeltext}>[필수] 개인정보 수집 및 이용 동의</label>
               <img src={rightarrow} alt="Right arrow" className={styles.icon} />
             </div>
           </div>

@@ -1,22 +1,18 @@
 import React from "react";
 import styles from "./RulePage.module.css";
 
-const dummydata = [
-    "정보보안기사 합격을 위한 커뮤니티입니다!",
-    "자료 다운 시 좋아요 눌러주세요!",
-    "악플 및 비방 글 작성 시 강제 퇴장❗❗",
-    "광고 글은 삼가해주세요❗❗"
-];
+const RulePage = ({ communityInfo }) => {
 
-const RulePage = () => {
+    const rules = Array.isArray(communityInfo.rules) ? communityInfo.rules : [];
+
     return (
         <div className={styles.container}>
             <div className={styles.title}>Rule</div>
             <div className={styles.ruleList}>
-                {dummydata.map((rule, index) => (
+                {rules.map((rule, index) => (
                     <div key={index} className={styles.ruleItem}>
                         <div className={styles.circle}>{index + 1}</div>
-                        <div className={styles.ruleText}>{rule}</div>
+                        <div className={styles.ruleText}>{rule.text}</div>
                     </div>
                 ))}
             </div>

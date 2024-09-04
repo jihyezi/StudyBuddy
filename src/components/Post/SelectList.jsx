@@ -1,3 +1,5 @@
+import supabase from "components/supabaseClient";
+
 export const selectList = {
   classifications: [
     { name: "사업관리" },
@@ -50,10 +52,5 @@ export const selectList = {
     { name: "5개월" },
     { name: "6개월 이상" },
     { name: "1년 이상" },
-  ],
-  studtyfilter: [
-    { name: "전체" },
-    { name: "모집중" },
-    { name: "모집 완료" },
   ],
 };

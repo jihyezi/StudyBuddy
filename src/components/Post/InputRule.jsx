@@ -11,6 +11,10 @@ const InputRule = (props) => {
     { id: 1, text: "존중하고 서로 배려하며 예의를 지켜요", isEditing: false },
   ]);
 
+  const updateRules = () => {
+    props.onRulesChange(rules);
+  };
+
   const handleAddRule = () => {
     const newRule = {
       id: rules.length + 1,
@@ -18,11 +22,13 @@ const InputRule = (props) => {
       isEditing: false,
     };
     setRules([...rules, newRule]);
+    updateRules();
   };
 
   const handleDeleteRule = (id) => {
     if (id !== 1) {
       setRules(rules.filter((rule) => rule.id !== id));
+      updateRules();
     }
   };
 
@@ -32,12 +38,14 @@ const InputRule = (props) => {
         rule.id === id ? { ...rule, isEditing: !rule.isEditing } : rule
       )
     );
+    updateRules();
   };
 
   const handleChangeRuleText = (id, newText) => {
     setRules(
       rules.map((rule) => (rule.id === id ? { ...rule, text: newText } : rule))
     );
+    updateRules();
   };
 
   const handleKeyPress = (e, id) => {

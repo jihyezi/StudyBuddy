@@ -18,6 +18,7 @@
 
 .inputClick {
   flex-grow: 1;
+  width: 350px;
   height: 40px;
   display: flex;
   justify-content: space-between;
@@ -35,7 +36,7 @@
 }
 
 .inputPlaceholder {
-  color: #b6b6b6;
+  color: #808080;
   font-family: "NotoSans-Regular";
   font-size: 14px;
 }
@@ -45,13 +46,79 @@
   height: 20px;
 }
 
+.arrowIcon {
+  width: 24px;
+  height: 24px;
+}
+
 .datePickerContainer {
   position: absolute;
-  top: 23%;
-  left: 31%;
+  top: 27%;
   z-index: 1000;
 }
 
-.datePicker {
-  margin-top: 5px;
+.customHeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  margin-top: 8px;
+  padding: 0 12px 0 24px;
+
+  .month {
+    width: 100px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 800;
+    font-family: "NotoSans-SemiBold";
+    color: black;
+    padding-right: 10px;
+  }
+
+  .year {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding-right: 5px;
+    cursor: pointer;
+    font-family: "NotoSans-SemiBold";
+  }
+
+  .monthButton {
+    width: 34px;
+    height: 34px;
+    padding: 5px;
+    /* border-radius: 50%; */
+    border: none;
+    background-color: white;
+
+    + .monthButton {
+      margin-left: 24px;
+    }
+
+    &:hover {
+      border-radius: 50%;
+      /* background-color: rgba(255, 116, 116, 0.2); */
+      cursor: pointer;
+    }
+
+    &:disabled {
+      cursor: default;
+      background-color: white;
+
+      svg {
+        fill: white;
+      }
+    }
+  }
+}
+
+.calenderWrapper {
+  background-color: white;
+  color: WHITE;
 }

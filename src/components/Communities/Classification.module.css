@@ -7,7 +7,7 @@
 .classContainer {
   display: flex;
   overflow-x: auto;
-  max-width: 750px;
+  max-width: 850px;
   margin-left: 32px;
   margin-right: 32px;
   gap: 10px;

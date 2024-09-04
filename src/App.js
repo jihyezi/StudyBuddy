@@ -15,12 +15,16 @@ import CommunityDetailsPage from "pages/Communities/CommunityDetailsPage";
 import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
+import DetailPost from "pages/Post/DetailPost";
+import DetailPost2 from "pages/Post/DetailPost2";
+import DetailStudyPost from "pages/Studies/DetailStudyPost";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import supabase from "components/supabaseClient";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const Center = styled.div`
   margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
@@ -71,7 +75,7 @@ const MainContent = () => {
             }
           />
           <Route path="/communities" element={<Communities />} />
-          <Route path="/studies" element={<Studies />} />
+          <Route path="/studies" element={<DetailPost />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
@@ -81,6 +85,7 @@ const MainContent = () => {
           <Route path="/create-study" element={<StudyPost />} />
           <Route path="/communitydetail" element={<CommunityDetailsPage />} />
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
+          <Route path="/detailpost" element={<DetailPost />} />
         </Routes>
       </Content>
 
