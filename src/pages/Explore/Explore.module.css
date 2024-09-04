@@ -64,10 +64,11 @@
 
 .SearchHistoryContainer {
   position: absolute;
-  /* top: 100%;
-  left: 12%; */
+  top: 102%;
+  left: 21%;
   width: 840px;
-  top: 60px;
+  /* 위치 조정 필요 */
+  /* top: 60px; */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;

@@ -129,7 +129,6 @@ const App = () => {
     fetchUsers();
   }, []);
 
-
   // 상태 전환 함수
   const toggleNotifications = () => {
     setShowNotifications((prevShowNotifications) => !prevShowNotifications);
