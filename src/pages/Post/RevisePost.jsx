@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./Post.module.css";
+import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import styles from "./RevisePost.module.css";
 import supabase from "components/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,13 +11,14 @@ import InputText from "components/Post/InputText";
 import InputModal from "components/Post/InputModal";
 import InputDate from "components/Post/InputDate";
 import InputSelect from "components/Post/InputSelect";
-import CreateModal from "components/Post/CreateModal";
 
 //icon
 import album from "assets/icons/Post/album.png";
 
-const Post = () => {
-  const navigate = useNavigate();
+const RevisePost = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const postData = JSON.parse(decodeURIComponent(query.get("postData")));
   const [community, setCommunity] = useState("");
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -28,7 +29,49 @@ const Post = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [files, setFiles] = useState(null);
   const editorRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (postData) {
+      console.log(postData);
+      setTitle(postData.title);
+      setStartDate(postData.startdate);
+      setEndDate(postData.enddate);
+      setBook(postData.book);
+      setResult(postData.result);
+      // setStudyMethod(postData.content);
+      // editorRef.current.innerHTML = postData.content;
+
+      const content = postData.content;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, "text/html");
+
+      const descriptionParts = [];
+      const collectedFiles = [];
+
+      const extractNodes = (node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent.trim();
+          if (text) {
+            descriptionParts.push(text);
+          }
+        } else if (node.nodeName === "IMG") {
+          const imgTag = `<img src="${node.src}" alt="${node.getAttribute(
+            "data-filename"
+          )}" />`;
+          descriptionParts.push(imgTag);
+        } else if (node.nodeName === "BR") {
+          descriptionParts.push("\n");
+        } else {
+          node.childNodes.forEach((child) => extractNodes(child));
+        }
+      };
+
+      doc.body.childNodes.forEach((node) => extractNodes(node));
+
+      setStudyMethod(descriptionParts.join("\n"));
+      editorRef.current.innerHTML = content;
+    }
+  }, []);
 
   const handleAlbumClick = () => {
     const input = document.createElement("input");
@@ -92,15 +135,7 @@ const Post = () => {
     return decodeURIComponent(escape(atob(str)));
   };
 
-  const handlePostClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCreateClick = async () => {
+  const handlePostClick = async () => {
     let userId = "";
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log(session.user.id);
@@ -169,30 +204,26 @@ const Post = () => {
       }
     }
 
-    const { data: postData, error: postError } = await supabase
-      .from("Post")
-      .insert([
-        {
-          userid: userId,
-          communityid: community,
-          title: title,
-          startdate: startDate,
-          enddate: endDate,
-          book: book,
-          result: result,
-          content: finalDescription,
-          references: downloadUrls,
-          createdat: new Date(),
-          updatedat: new Date(),
-        },
-      ])
-      .select();
+    const { error } = await supabase.from("Post").insert([
+      {
+        userid: userId,
+        communityid: community,
+        title: title,
+        startdate: startDate,
+        enddate: endDate,
+        book: book,
+        result: result,
+        content: finalDescription,
+        references: downloadUrls,
+        createdat: new Date(),
+        updatedat: new Date(),
+      },
+    ]);
 
-    if (postError) {
-      console.error("Error inserting data:", postError);
+    if (error) {
+      console.error("Error inserting data:", error);
     } else {
-      console.log("Data inserted successfully!", postData[0].postid);
-      navigate(`/detail-post/${postData[0].postid}`);
+      console.log("Data inserted successfully!");
     }
   };
 
@@ -205,9 +236,6 @@ const Post = () => {
   return (
     <div>
       <Header title={"Post"} onPost={handlePostClick} />
-      {isModalOpen && (
-        <CreateModal onCreate={handleCreateClick} onCancel={handleModalClose} />
-      )}
       <div className={styles.postContainer}>
         <InputSelect
           title={"커뮤니티"}
@@ -219,29 +247,34 @@ const Post = () => {
           title={"제목"}
           placeholder={"제목을 입력해 주세요."}
           onChange={(e) => setTitle(e.target.value)}
+          value={title}
         />
         <div style={{ display: "flex", flexDirection: "row" }}>
           <InputDate
             title={"시작날짜"}
             placeholder={"시작날짜를 선택해 주세요."}
             onDateChange={setStartDate}
+            selectedDate={postData.startdate}
           />
           <InputDate
             title={"종료날짜"}
             placeholder={"종료날짜를 선택해 주세요."}
             onDateChange={setEndDate}
             minDate={startDate}
+            selectedDate={postData.enddate}
           />
         </div>
         <InputModal
           title={"책"}
           placeholder={"책을 입력해 주세요."}
           onSelect={setBook}
+          initialValue={book}
         />
         <InputModal
           title={"결과"}
           placeholder={"결과를 입력해 주세요."}
           onSelect={setResult}
+          initialValue={result}
         />
         <div className={styles.inputContainer}>
           <div className={styles.inputTitle}>공부 방법</div>
@@ -268,4 +301,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default RevisePost;

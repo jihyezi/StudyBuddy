@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
 
-
 // icon & image
 import more from "assets/icons/Communities/more.png";
 import profile from "assets/icons/Communities/profile.png";
@@ -79,14 +78,16 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
         userid: post.createdby,
         username: userName,
         usernickname: userNickname,
-        day: days
+        day: days,
       },
     });
   };
 
   return (
     <div className={styles.post} onClick={handleClick}>
-      <div style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}>
+      <div
+        style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
+      >
         <span className={styles.communityName}>{communityName}</span>
         <img className={styles.moreIcon} src={more} alt="more" />
       </div>
@@ -104,13 +105,19 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
           </div>
           <div className={styles.postContent}>
             <p className={styles.postTitle}>[{post.title}]</p>
-            <p className={styles.postPeriod}>1. 준비기간 : {new Date(post.startdate).toLocaleDateString()} ~{" "}
-              {new Date(post.enddate).toLocaleDateString()} ({days}일)</p>
+            <p className={styles.postPeriod}>
+              1. 준비기간 : {new Date(post.startdate).toLocaleDateString()} ~{" "}
+              {new Date(post.enddate).toLocaleDateString()} ({days}일)
+            </p>
             <p className={styles.postResult}>2. 결과 : {post.result}</p>
           </div>
           <div className={styles.postETC}>
             <div className={styles.postComment}>
-              <img className={styles.commentIcon} src={commentOff} alt="commentOff" />
+              <img
+                className={styles.commentIcon}
+                src={commentOff}
+                alt="commentOff"
+              />
               <span className={styles.commentNumber}>{commentCount}</span>
             </div>
             <div className={styles.postLike}>
@@ -122,7 +129,11 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
               <span className={styles.viewNumber}>{post.viewNumber}</span>
             </div>
             <div>
-              <img className={styles.bookmarkIcon} src={bookmarkOn} alt="bookmarkOn" />
+              <img
+                className={styles.bookmarkIcon}
+                src={bookmarkOn}
+                alt="bookmarkOn"
+              />
             </div>
             <div>
               <img className={styles.shareIcon} src={share} alt="share" />

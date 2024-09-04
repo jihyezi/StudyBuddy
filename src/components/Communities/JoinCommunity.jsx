@@ -1,13 +1,21 @@
 import React, { useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
 import { useNavigate } from "react-router-dom";
-import useIsOverflow from 'components/useIsOverflow';
-import leftArrow from 'assets/icons/left_arrow.png';
-import rightArrow from 'assets/icons/right_arrow.png';
-import noimage from 'assets/images/Profile/nobackground.png';
+import useIsOverflow from "components/useIsOverflow";
+import leftArrow from "assets/icons/left_arrow.png";
+import rightArrow from "assets/icons/right_arrow.png";
+import noimage from "assets/images/Profile/nobackground.png";
 
-const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityData, userData, commentData, allJoinCommunityData }) => {
-  const [scrollState, setScrollState] = useState('start');
+const JoinCommunity = ({
+  onEventSelect,
+  postData,
+  communityData,
+  joinCommunityData,
+  userData,
+  commentData,
+  allJoinCommunityData,
+}) => {
+  const [scrollState, setScrollState] = useState("start");
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
   const containerRef = useRef(null);
@@ -16,7 +24,7 @@ const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityDa
   const handleClick = (item) => {
     const imageUrl = item.image
       ? `${item.image}`
-      : 'https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png';
+      : "https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png";
 
     setSelectedItem(item);
     onEventSelect(item);
@@ -32,24 +40,25 @@ const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityDa
         commentData: commentData,
         postData: postData,
         communityData: communityData,
-        allJoinCommunityData: allJoinCommunityData
-      }
+        allJoinCommunityData: allJoinCommunityData,
+      },
     });
   };
 
-  console.log(allJoinCommunityData)
+  console.log(allJoinCommunityData);
 
   const handleScroll = () => {
     const { current } = containerRef;
     if (current) {
       const isAtStart = current.scrollLeft === 0;
-      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth;
+      const isAtEnd =
+        current.scrollLeft + current.clientWidth >= current.scrollWidth;
       if (isAtStart) {
-        setScrollState('start');
+        setScrollState("start");
       } else if (isAtEnd) {
-        setScrollState('end');
+        setScrollState("end");
       } else {
-        setScrollState('middle');
+        setScrollState("middle");
       }
     }
   };
@@ -72,11 +81,15 @@ const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityDa
 
   return (
     <div className={styles.stackTagsArea}>
-      <div className={styles.classContainer} ref={containerRef} onScroll={handleScroll}>
+      <div
+        className={styles.classContainer}
+        ref={containerRef}
+        onScroll={handleScroll}
+      >
         {joinCommunityData.map((item, index) => {
           const imageUrl = item.image
             ? `${item.image}`
-            : 'https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png';
+            : "https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png";
 
           return (
             <div
@@ -98,17 +111,25 @@ const JoinCommunity = ({ onEventSelect, postData, communityData, joinCommunityDa
           );
         })}
       </div>
-      {isOverflow && (scrollState === 'middle' || scrollState === 'end') && (
+      {isOverflow && (scrollState === "middle" || scrollState === "end") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxLeft}`}>
           <button className={styles.scrollButton} onClick={moveLeft}>
-            <img src={leftArrow} style={{ width: 30, height: 30 }} alt="Left Arrow" />
+            <img
+              src={leftArrow}
+              style={{ width: 30, height: 30 }}
+              alt="Left Arrow"
+            />
           </button>
         </div>
       )}
-      {isOverflow && (scrollState === 'middle' || scrollState === 'start') && (
+      {isOverflow && (scrollState === "middle" || scrollState === "start") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxRight}`}>
           <button className={styles.scrollButton} onClick={moveRight}>
-            <img src={rightArrow} style={{ width: 30, height: 30 }} alt="Right Arrow" />
+            <img
+              src={rightArrow}
+              style={{ width: 30, height: 30 }}
+              alt="Right Arrow"
+            />
           </button>
         </div>
       )}

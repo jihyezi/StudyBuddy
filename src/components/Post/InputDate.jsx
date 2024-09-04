@@ -118,7 +118,12 @@ const DatepickerWrapper = styled.div`
 `;
 
 const InputDate = (props) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const initialDate =
+    typeof props.selectedDate === "string"
+      ? new Date(props.selectedDate)
+      : props.selectedDate || new Date();
+
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = () => {
@@ -126,7 +131,6 @@ const InputDate = (props) => {
   };
 
   const handleDateChange = (date) => {
-    console.log("selectedDate", selectedDate);
     setSelectedDate(date);
     setIsOpen(false);
     props.onDateChange(date);

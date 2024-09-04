@@ -37,8 +37,9 @@ const InputSelect = (props) => {
     if (option.communityId) {
       // console.log(option.communityId);
       props.onSelect(option);
+    } else {
+      props.onSelect(option.name);
     }
-    props.onSelect(option.name);
   };
 
   const handleOutsideClick = (event) => {
@@ -62,8 +63,9 @@ const InputSelect = (props) => {
     <div className={styles.inputContainer} ref={inputRef}>
       <div className={styles.inputTitle}>{props.title}</div>
       <div
-        className={`${styles.inputClick} ${isOpen ? styles.inputClickIsOpen : ""
-          }`}
+        className={`${styles.inputClick} ${
+          isOpen ? styles.inputClickIsOpen : ""
+        }`}
         onClick={handleClick}
       >
         <span className={styles.inputPlaceholder} style={placeholderStyle}>

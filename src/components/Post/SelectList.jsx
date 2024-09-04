@@ -53,4 +53,53 @@ export const selectList = {
     { name: "6개월 이상" },
     { name: "1년 이상" },
   ],
+  joinCommunity: [],
 };
+
+export const fetchCommunityData = async (communityIds) => {
+  const { data, error } = await supabase
+    .from("Community")
+    .select("name, communityid");
+
+  if (error) {
+    console.error("Error fetching community data:", error);
+    return;
+  }
+
+  selectList.joinCommunity =
+    data
+      .filter((item) => communityIds.includes(item.communityid))
+      .map((item) => ({
+        name: item.name,
+        communityId: item.communityid,
+      })) || [];
+};
+
+export const fetchJoinCommunityData = async () => {
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error("Error getting session:", sessionError);
+    return;
+  }
+
+  const userId = session.user.id;
+
+  const { data, error } = await supabase
+    .from("JoinCommunity")
+    .select("communityid")
+    .eq("userid", userId);
+
+  if (error) {
+    console.error("Error fetching community data:", error);
+    return;
+  }
+
+  const communityIds = data.map((item) => item.communityid);
+  await fetchCommunityData(communityIds);
+};
+
+fetchJoinCommunityData();

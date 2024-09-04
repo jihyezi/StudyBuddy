@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./InputModal.module.css";
 import "fonts/Font.css";
 import SearchBookModal from "./SearchBookModal";
@@ -10,6 +10,14 @@ const InputModal = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTextColorChanged, setIsTextColorChanged] = useState(false);
 
+  useEffect(() => {
+    if (props.initialValue) {
+      console.log("initialValue", props.initialValue);
+      setSelectedModal(props.initialValue);
+      setIsTextColorChanged(true);
+    }
+  }, [props.initialValue, selectedModal]);
+
   const handleClick = () => {
     setIsModalOpen(true);
   };
@@ -19,6 +27,7 @@ const InputModal = (props) => {
   };
 
   const updateSelectedModal = (value) => {
+    console.log("Selected modal value:", value);
     setSelectedModal(value);
     setIsTextColorChanged(true);
     props.onSelect(value);
@@ -44,12 +53,14 @@ const InputModal = (props) => {
             <SearchBookModal
               closeModal={closeModal}
               updateSelectedModal={updateSelectedModal}
+              initialValue={props.initialValue}
             />
           )}
           {props.title === "결과" && (
             <SearchResultModal
               closeModal={closeModal}
               updateSelectedModal={updateSelectedModal}
+              initialValue={props.initialValue}
             />
           )}
           {props.title === "장소" && (
