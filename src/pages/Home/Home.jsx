@@ -21,11 +21,10 @@ import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-const Home = ({ }) => {
+const Home = ({}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const [selectedEvent, setSelectEvent] = useState('');
-
+  const [selectedEvent, setSelectEvent] = useState("");
 
   const handleEventSelect = (event) => {
     setSelectEvent(event);
@@ -41,17 +40,19 @@ const Home = ({ }) => {
     appendDots: (dots) => (
       <div
         style={{
-          display: 'flex',
+          display: "flex",
           position: "absolute",
           width: "80px",
           height: "32px",
-          top: 240,
-          left: 80,
+          // top: 240,
+          // left: 80,
+          top: "95%", // 위치 수정
+          left: "7%", // 위치 수정
           borderRadius: "8px",
           opacity: "0px",
           backgroundColor: "#FFF",
-          alignItems: 'center',
-          justifyContent: 'center'
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <ul
@@ -60,18 +61,27 @@ const Home = ({ }) => {
             padding: 0,
             margin: 0,
             gap: "3px",
-            alignItems: 'center',
-            justifyContent: 'center',
-            listStyleType: "none" // 기본 리스트 스타일 제거
+            alignItems: "center",
+            justifyContent: "center",
+            listStyleType: "none", // 기본 리스트 스타일 제거
           }}
         >
           {dots.map((dot, index) => (
-            <li key={index} style={{ display: 'flex', margin: "0 3px", width: "6px", height: "6px", justifyContent: 'center' }}>
+            <li
+              key={index}
+              style={{
+                display: "flex",
+                margin: "0 3px",
+                width: "6px",
+                height: "6px",
+                justifyContent: "center",
+              }}
+            >
               {dot}
             </li>
           ))}
         </ul>
-      </div >
+      </div>
     ),
     customPaging: (i) => (
       <div
@@ -88,20 +98,17 @@ const Home = ({ }) => {
 
   return (
     <div className={styles.home}>
-      <Slider
-        {...settings}
-        style={{ display: "grid" }}
-      >
+      <Slider {...settings} style={{ display: "grid" }}>
         <img src={onboardingimg} />
         <img src={onboardingimg} />
         <img src={onboardingimg} />
         <img src={onboardingimg} />
       </Slider>
-      <div style={{ borderBottom: "1px solid #ddd", padding: '30px 0px' }}>
+      <div style={{ borderBottom: "1px solid #ddd", padding: "30px 0px" }}>
         <div
           style={{
             position: "relative",
-            paddingLeft: 40
+            paddingLeft: 40,
           }}
         >
           <div
@@ -110,7 +117,7 @@ const Home = ({ }) => {
               fontSize: 20,
               position: "relative",
               marginBottom: 28,
-              fontFamily: 'Manrope-Bold'
+              fontFamily: "Manrope-Bold",
             }}
           >
             🔥 HOT 커뮤니티
@@ -134,14 +141,14 @@ const Home = ({ }) => {
       <div
         style={{
           borderBottom: "1px solid #ddd",
-          padding: '30px 0px'
+          padding: "30px 0px",
           // position: "fixed",
         }}
       >
         <div
           style={{
             position: "relative",
-            paddingLeft: 40
+            paddingLeft: 40,
           }}
         >
           <div
@@ -150,7 +157,7 @@ const Home = ({ }) => {
               fontSize: 20,
               position: "relative",
               marginBottom: 28,
-              fontFamily: 'Manrope-Bold'
+              fontFamily: "Manrope-Bold",
             }}
           >
             ⭐️ 인기글
@@ -159,7 +166,7 @@ const Home = ({ }) => {
             className={styles.scrollContainer}
             style={{
               position: "relative",
-              width: '100%',
+              width: "100%",
             }}
           >
             <div className={styles.hotCommunityItem}>
@@ -171,11 +178,11 @@ const Home = ({ }) => {
         </div>
       </div>
       {/*  */}
-      <div style={{ borderBottom: "1px solid #ddd", padding: '30px 0px' }}>
+      <div style={{ borderBottom: "1px solid #ddd", padding: "30px 0px" }}>
         <div
           style={{
             position: "relative",
-            paddingLeft: 40
+            paddingLeft: 40,
           }}
         >
           <div
@@ -184,7 +191,7 @@ const Home = ({ }) => {
               fontSize: 20,
               position: "relative",
               marginBottom: 28,
-              fontFamily: 'Manrope-Bold'
+              fontFamily: "Manrope-Bold",
             }}
           >
             최근 방문한 커뮤니티
@@ -193,7 +200,7 @@ const Home = ({ }) => {
             className={styles.scrollContainer}
             style={{
               position: "relative",
-              width: '100%',
+              width: "100%",
             }}
           >
             <div className={styles.newSearch}>
@@ -206,11 +213,11 @@ const Home = ({ }) => {
         </div>
       </div>
       {/*  react slick 캐러셀  만들기*/}
-      <div style={{ padding: '30px 0px' }}>
+      <div style={{ padding: "30px 0px" }}>
         <div
           style={{
             position: "relative",
-            padding: '0px 40px'
+            padding: "0px 40px",
           }}
         >
           <div
@@ -219,7 +226,7 @@ const Home = ({ }) => {
               fontSize: 20,
               position: "relative",
               marginBottom: 28,
-              fontFamily: 'Manrope-Bold'
+              fontFamily: "Manrope-Bold",
             }}
           >
             태그별 인기 스터디 🤗
@@ -228,11 +235,10 @@ const Home = ({ }) => {
           <div
             style={{
               position: "relative",
-              width: '100%',
-              alignItems: 'center',
+              width: "100%",
+              alignItems: "center",
             }}
           >
-
             <Tag onEventSelect={handleEventSelect} />
             <div className={styles.popularStudy}>
               <PopularStudy />
