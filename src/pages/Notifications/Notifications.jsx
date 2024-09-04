@@ -20,23 +20,31 @@ const Notifications = ({ showNotifications }) => {
         return acc;
       }, {});
       setUserMap(userMapping); // 상태에 저장
-
-      // 현재 로그인한 유저의 Public 스키마 정보 설정
-      const { data: currentUserData, error: currentUserError } = await supabase
-        .from("User")
-        .select("userid")
-        .eq("email", user.email)
-        .single();
-
-      if (currentUserError) {
-        console.error("Error fetching current user:", currentUserError.message);
-      } else {
-        setPublicUser(currentUserData); // Public 유저 정보 설정
-      }
     }
   };
 
   useEffect(() => {
+    const fetchPublicUser = async () => {
+      try {
+        if (user) {  // 로그인 여부 확인
+          // 현재 로그인한 유저의 Public 스키마 정보 설정
+          const { data: currentUserData, error: currentUserError } = await supabase
+            .from("User")
+            .select("userid")
+            .eq("email", user.email)
+            .single();
+
+          if (currentUserError) {
+            console.error("Error fetching current user:", currentUserError.message);
+          } else {
+            setPublicUser(currentUserData); // Public 유저 정보 설정
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching public user data:", error.message);
+      }
+    };
+
     const fetchNotifications = async () => {
       try {
         if (publicUser) {
@@ -50,9 +58,6 @@ const Notifications = ({ showNotifications }) => {
           if (error) {
             console.error("Error fetching notifications:", error.message);
           } else {
-            // 유저 정보를 먼저 불러오고 나서 알림 데이터를 처리
-            await fetchUsers();
-
             // 알림 데이터를 날짜별로 그룹화 및 포맷
             const groupedNotifications = notificationsData.reduce((acc, notification) => {
               const notificationDate = new Date(notification.createdat);
@@ -100,25 +105,32 @@ const Notifications = ({ showNotifications }) => {
       }
     };
 
-    fetchUsers(); // 유저 정보 가져오기
-    fetchNotifications(); // 알림 가져오기
+    if (user) {  // 로그인한 경우에만 실행
+      fetchUsers(); // 유저 정보 가져오기
+      fetchPublicUser(); // 현재 유저의 Public 스키마 정보 가져오기
+      fetchNotifications(); // 알림 가져오기
 
-    // 실시간으로 Notification을 수신하기 위한 리스너 설정
-    const channel = supabase
-      .channel('notification_channel')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'Notification' },
-        (payload) => {
-          fetchNotifications(); // 새로운 알림이 도착하면 알림을 업데이트합니다.
-        }
-      )
-      .subscribe();
+      // 실시간으로 Notification을 수신하기 위한 리스너 설정
+      const channel = supabase
+        .channel('notification_channel')
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'Notification' },
+          (payload) => {
+            fetchNotifications(); // 새로운 알림이 도착하면 알림을 업데이트합니다.
+          }
+        )
+        .subscribe();
 
-    return () => {
-      channel.unsubscribe(); // 구독 취소
-    };
-  }, [publicUser]);
+      return () => {
+        channel.unsubscribe(); // 구독 취소
+      };
+    }
+  }, [user, publicUser]);
+
+  if (!user) {
+    return null;  // 로그인이 안되어 있으면 아무것도 렌더링하지 않음
+  }
 
   return (
     <div
