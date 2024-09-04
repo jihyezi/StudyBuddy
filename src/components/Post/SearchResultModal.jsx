@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./SearchBookModal.module.css";
 import "fonts/Font.css";
 import close from "assets/icons/Messages/close.png";
@@ -16,8 +16,12 @@ const results = [
   "최종 불합격",
 ];
 
-const SearchResultModal = ({ closeModal, updateSelectedModal }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const SearchResultModal = ({
+  closeModal,
+  updateSelectedModal,
+  initialValue,
+}) => {
+  const [searchTerm, setSearchTerm] = useState(initialValue || "");
   const [filteredResults, setFilteredResults] = useState([]);
 
   const handleSearch = () => {
@@ -41,6 +45,12 @@ const SearchResultModal = ({ closeModal, updateSelectedModal }) => {
       handleSearch();
     }
   };
+
+  useEffect(() => {
+    if (searchTerm) {
+      handleSearch();
+    }
+  }, [searchTerm]);
 
   return (
     <div className={styles.searchBookModal}>

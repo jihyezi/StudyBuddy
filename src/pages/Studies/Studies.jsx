@@ -5,16 +5,15 @@ import styles from "./Studies.module.css";
 import Toptab from "components/Studies/Toptab";
 import Header from "components/Header";
 
-const Studies = ({ }) => {
-
+const Studies = ({}) => {
   return (
     <div className={styles.studycontainer}>
-      <Header headerName={'Studies'} />
+      <Header headerName={"Studies"} />
       <div className={styles.tabstyle}>
         <Toptab />
       </div>
     </div>
   );
-}
+};
 
 export default Studies;

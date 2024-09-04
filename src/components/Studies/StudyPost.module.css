@@ -1,106 +1,107 @@
 .StudyPostContainer {
-    display: flex;
-    border-bottom: 1px solid #DDD;
-    padding: 20px 10px;
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 10px;
+  cursor: pointer;
 }
 
 .StudyPostWrapper {
-    width: 100%;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .StudyPostTitleContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .StudyPostState {
-    background: #FF7474;
-    border-radius: 25px;
-    padding: 4px 8px;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
+  background: #ff7474;
+  border-radius: 25px;
+  padding: 4px 8px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .StudyPostState2 {
-    background: #9A9A9A;
-    border-radius: 25px;
-    padding: 4px 8px;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
+  background: #9a9a9a;
+  border-radius: 25px;
+  padding: 4px 8px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .StudyPostTitle {
-    color: #333333;
-    font-size: 18px;
-    font-family: 'NotoSans-SemiBold';
-    font-weight: 600;
+  color: #333333;
+  font-size: 18px;
+  font-family: "NotoSans-SemiBold";
+  font-weight: 600;
 }
 
 .StudyPostDescription {
-    margin-left: 4px;
-    margin-bottom: 20px;
-    color: #333333;
-    font-family: "NotoSans-Regular";
-    font-size: 16px;
+  margin-left: 4px;
+  margin-bottom: 20px;
+  color: #333333;
+  font-family: "NotoSans-Regular";
+  font-size: 16px;
 }
 
 .StudyPostTags {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    margin-left: 4px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-left: 4px;
+  margin-bottom: 20px;
 }
 
 .StudyPostTag {
-    border: 1px solid #DDD;
-    border-radius: 25px;
-    padding: 4px 8px;
-    font-size: 14px;
-    font-family: "NotoSans-Regular";
-    color: #656565;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-family: "NotoSans-Regular";
+  color: #656565;
 }
 
 .StudyPostFooter {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .StudyPostIconGroup {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 
 .StudyPostIcon {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .StudyPostIcon img {
-    width: 22px;
-    height: 22px;
-    margin-right: 4px;
+  width: 22px;
+  height: 22px;
+  margin-right: 4px;
 }
 
 .StudyPostIcon span {
-    color: #9C9C9C;
-    font-size: 14px;
-    font-family: "NotoSans-Regular";
+  color: #9c9c9c;
+  font-size: 14px;
+  font-family: "NotoSans-Regular";
 }

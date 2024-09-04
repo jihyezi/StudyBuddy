@@ -10,21 +10,30 @@ import InputImage from "components/Post/InputImage";
 import InputText from "components/Post/InputText";
 import InputSelect from "components/Post/InputSelect";
 import InputRule from "components/Post/InputRule";
+import CreateModal from "components/Post/CreateModal";
 
 const CommunityPost = (props) => {
-  const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [field, setField] = useState("");
   const [rules, setRules] = useState([]);
   const [file, setFile] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handlePostClick = async () => {
-    // supabase.auth.getSession().then(({ data: { session } }) => {
-    //   console.log(session.user.id);
-    //   setUserId(session.user.id);
-    // });
+  const handlePostClick = () => {
+    setIsModalOpen(true);
+  };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCreateClick = async () => {
+    let userId = "";
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log(session.user.id);
+      userId = session.user.id;
+    });
     if (!file) return;
 
     const uniqueFileName = `${uuidv4()}-${file.name}`;
@@ -52,21 +61,42 @@ const CommunityPost = (props) => {
           updatedat: new Date(),
           field: field,
           rules: rules,
-          createdby: "a4d3154f-8bc6-42e6-9172-a7c6ab094b13", //de25587a-369d-45f5-b5ea-e6abc43d0ab5
+          createdby: userId,
           image: url,
         },
-      ]);
+      ])
+      .select();
 
     if (postError) {
       console.error("데이터 삽입 에러:", postError);
     } else {
-      console.log("파일 업로드 및 데이터 삽입 성공:", postData);
+      console.log("파일 업로드 및 데이터 삽입 성공:", postData[0].communityid);
+    }
+
+    const { data: joinData, error: joinError } = await supabase
+      .from("JoinCommunity")
+      .insert([
+        {
+          userid: userId,
+          communityid: postData[0].communityid,
+          joinedat: new Date(),
+          role: "admin",
+        },
+      ]);
+
+    if (joinError) {
+      console.error("데이터 삽입 에러:", joinError);
+    } else {
+      console.log("데이터 삽입 성공:", joinData);
     }
   };
 
   return (
     <div>
       <Header title={"Communities"} onPost={handlePostClick} />
+      {isModalOpen && (
+        <CreateModal onCreate={handleCreateClick} onCancel={handleModalClose} />
+      )}
       <div className={styles.postContainer}>
         <InputImage
           title={"대표 이미지"}

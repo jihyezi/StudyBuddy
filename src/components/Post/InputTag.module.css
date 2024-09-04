@@ -1,0 +1,101 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.inputText {
+  text-align: right;
+  color: #808080;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+}
+
+.inputClick {
+  flex-grow: 1;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #b6b6b6;
+  cursor: pointer;
+  position: relative;
+}
+
+.inputPlaceholder {
+  color: #b6b6b6;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.fileSelectedContainer {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 116, 116, 0.2);
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.fileName {
+  color: #ff7474;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.tagInputContainer {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  border: 1px solid #b6b6b6;
+  border-radius: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.tagInput {
+  border: none;
+  outline: none;
+  color: #b6b6b6;
+  font-family: "NotoSans-SemiBold";
+  max-width: 55px;
+}
+
+.inputIcon {
+  margin-left: 5px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.addIconContainer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b6b6b6;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+}
+
+.addIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.tagText {
+  flex-grow: 1;
+  color: #b6b6b6;
+  font-family: "NotoSans-SemiBold";
+  text-align: center;
+}

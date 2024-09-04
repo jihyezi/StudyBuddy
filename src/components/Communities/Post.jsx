@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./Post.module.css";
+import supabase from "components/supabaseClient";
 import "fonts/Font.css";
 
 // icon & image
@@ -15,12 +17,54 @@ import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
 
 const Post = ({ post }) => {
+  const { communityId } = useParams();
+  const navigate = useNavigate();
+  const [community, setCommunity] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetchCommunityDataById(communityId);
+  }, [communityId]);
+
+  const fetchCommunityDataById = async (communityId) => {
+    const { data, error } = await supabase
+      .from("Community")
+      .select("*")
+      .eq("communityid", communityId);
+
+    if (error) {
+      console.error("Error fetching data:", error);
+    } else {
+      setCommunity(data);
+      fetchUserDataById(post.userid);
+    }
+  };
+
+  const fetchUserDataById = async (userId) => {
+    const { data, error } = await supabase
+      .from("User")
+      .select("*")
+      .eq("userid", userId);
+
+    if (error) {
+      console.error("Error fetching data:", error);
+    } else {
+      setUser(data);
+    }
+  };
+
+  const handlePostClick = () => {
+    navigate(`/detail-post/${post.postid}`);
+  };
+
   return (
-    <div className={styles.post}>
+    <div className={styles.post} onClick={handlePostClick}>
       <div
         style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
       >
-        <span className={styles.communityName}>{post.community}</span>
+        <span className={styles.communityName}>
+          {community ? community[0].name : "로딩 중..."}
+        </span>
         <img className={styles.moreIcon} src={more} alt="more" />
       </div>
 
@@ -31,7 +75,9 @@ const Post = ({ post }) => {
 
         <div className={styles.postWriterContent}>
           <div className={styles.postWriter}>
-            <span className={styles.postWriterNickName}>{post.writerNickname}</span>
+            <span className={styles.postWriterNickName}>
+              {post.writerNickname}
+            </span>
             <span className={styles.postWriterID}>{post.writerId}</span>
             <span className={styles.postWriteDate}>{post.createdAt}</span>
           </div>
@@ -42,7 +88,11 @@ const Post = ({ post }) => {
           </div>
           <div className={styles.postETC}>
             <div className={styles.postComment}>
-              <img className={styles.commentIcon} src={commentOff} alt="commentOff" />
+              <img
+                className={styles.commentIcon}
+                src={commentOff}
+                alt="commentOff"
+              />
               <span className={styles.commentNumber}>{post.commentCount}</span>
             </div>
             <div className={styles.postLike}>
@@ -54,7 +104,11 @@ const Post = ({ post }) => {
               <span className={styles.viewNumber}>{post.viewNumber}</span>
             </div>
             <div>
-              <img className={styles.bookmarkIcon} src={bookmarkOn} alt="bookmarkOn" />
+              <img
+                className={styles.bookmarkIcon}
+                src={bookmarkOn}
+                alt="bookmarkOn"
+              />
             </div>
             <div>
               <img className={styles.shareIcon} src={share} alt="share" />

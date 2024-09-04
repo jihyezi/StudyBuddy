@@ -43,6 +43,7 @@
 .delete {
   color: #606060;
   font-family: "NotoSans-Medium";
+  cursor: pointer;
 }
 
 .studiesDetails {
@@ -91,6 +92,7 @@
 .shareIcon {
   width: 30px;
   height: 30px;
+  cursor: pointer;
 }
 
 .studiesContent {
@@ -130,31 +132,22 @@
 
 .inputField {
   flex-grow: 1;
-  margin-left: 15px;
   height: 100px;
-  padding-left: 16px;
-  border-radius: 30px;
-  border-width: 2px;
-  border-style: solid;
-  border-color: #dddddd;
-  outline-color: #ff7474;
+  padding-left: 15px;
+  border: none;
+  outline: none;
 }
 
 .inputField::placeholder {
   color: #dddddd;
   font-family: "NotoSans-Regular";
   font-size: 14px;
-  vertical-align: top;
 }
 
 .register {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  display: inline-block;
-  padding: 5px 20px 5px 20px;
-  border-radius: 10px;
-  color: #ffffff;
-  background-color: #ff7474;
+  color: #ff7474;
   font-family: "NotoSans-Medium";
+  align-self: flex-end;
+  padding: 5px 20px;
+  cursor: pointer;
 }

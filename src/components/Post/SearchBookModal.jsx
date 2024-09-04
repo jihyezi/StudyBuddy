@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./SearchBookModal.module.css";
 import "fonts/Font.css";
 import close from "assets/icons/Messages/close.png";
 import axios from "axios";
 
-const SearchBookModal = ({ closeModal, updateSelectedModal }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
+  const [searchTerm, setSearchTerm] = useState(initialValue || "");
   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {
@@ -42,6 +42,12 @@ const SearchBookModal = ({ closeModal, updateSelectedModal }) => {
     updateSelectedModal(title);
     closeModal();
   };
+
+  useEffect(() => {
+    if (searchTerm) {
+      handleSearch();
+    }
+  }, [searchTerm]);
 
   return (
     <div className={styles.searchBookModal}>

@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./StudyPost.module.css";
 import supabase from "components/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
@@ -8,12 +9,15 @@ import Header from "components/Post/Header";
 import InputText from "components/Post/InputText";
 import InputSelect from "components/Post/InputSelect";
 import InputModal from "components/Post/InputModal";
+import CreateModal from "components/Post/CreateModal";
+import InputTag from "components/Post/InputTag";
 
 //icon
 import album from "assets/icons/Post/album.png";
 
 const StudyPost = () => {
-  const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [proceed, setProceed] = useState("");
   const [people, setPeople] = useState("");
@@ -22,7 +26,9 @@ const StudyPost = () => {
   const [location, setLocation] = useState("");
   const [studyDescription, setStudyDescription] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [tags, setTags] = useState([]);
   const editorRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAlbumClick = () => {
     const input = document.createElement("input");
@@ -79,7 +85,27 @@ const StudyPost = () => {
     }
   };
 
-  const handlePostClick = async () => {
+  const handlePostClick = () => {
+    console.log("입력한 태그:", tags);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCreateClick = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
     const currentContent = editorRef.current.innerHTML;
     const descriptionParts = [];
     const parser = new DOMParser();
@@ -113,31 +139,39 @@ const StudyPost = () => {
     const finalDescription = descriptionParts.join("\n");
     console.log(finalDescription);
 
-    const { error } = await supabase.from("Study").insert([
-      {
-        userid: 1, //5,7,1,2
-        title: name,
-        proceed: proceed,
-        maxmembers: people,
-        duration: period,
-        schedule: schedule,
-        location: location,
-        description: finalDescription,
-        createdat: new Date(),
-        updatedat: new Date(),
-      },
-    ]);
+    const { data: studyData, error: studyError } = await supabase
+      .from("Study")
+      .insert([
+        {
+          userid: userId,
+          title: name,
+          proceed: proceed,
+          maxmembers: people,
+          duration: period,
+          schedule: schedule,
+          location: location,
+          description: finalDescription,
+          tag: tags,
+          createdat: new Date(),
+          updatedat: new Date(),
+        },
+      ])
+      .select();
 
-    if (error) {
-      console.error("Error inserting data:", error);
+    if (studyError) {
+      console.error("Error inserting data:", studyError);
     } else {
-      console.log("Data inserted successfully!");
+      console.log("Data inserted successfully!", studyData[0].studyid);
+      navigate(`/detail-study/${studyData[0].studyid}`);
     }
   };
 
   return (
     <div>
       <Header title={"Studies"} onPost={handlePostClick} />
+      {isModalOpen && (
+        <CreateModal onCreate={handleCreateClick} onCancel={handleModalClose} />
+      )}
       <div className={styles.postContainer}>
         <InputText
           title={"제목"}
@@ -188,6 +222,7 @@ const StudyPost = () => {
             </div>
           </div>
         </div>
+        <InputTag onChange={setTags} />
       </div>
     </div>
   );

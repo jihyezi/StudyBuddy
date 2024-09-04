@@ -17,6 +17,7 @@ import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
 import DetailPost from "pages/Post/DetailPost";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
+import RevisePost from "pages/Post/RevisePost";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
@@ -72,15 +73,21 @@ const MainContent = () => {
             }
           />
           <Route path="/communities" element={<Communities />} />
-          <Route path="/studies" element={<DetailPost />} />
+          <Route path="/studies" element={<Studies />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-post" element={<Post />} />
+          <Route path="/detail-post/:postId" element={<DetailPost />} />
           <Route path="/create-community" element={<CommunityPost />} />
           <Route path="/create-study" element={<StudyPost />} />
-          <Route path="/communitydetail" element={<CommunityDetailsPage />} />
+          <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
+          <Route path="/revisepost" element={<RevisePost />} />
+          <Route
+            path="/detail-community/:communityId"
+            element={<CommunityDetailsPage />}
+          />
           <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
         </Routes>
       </Content>

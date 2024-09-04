@@ -1,6 +1,7 @@
 .post {
   border-bottom: 1px solid #dddddd;
   width: 100%;
+  cursor: pointer;
 }
 
 .communityName {

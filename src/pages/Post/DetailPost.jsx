@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./DetailPost.module.css";
 import supabase from "components/supabaseClient";
 
 // component
-import Header from "components/Post/Header";
+import Header from "components/Post/DetailHeader";
 import DeleteModal from "components/Messages/DeleteModal";
 import Comment from "components/Post/Comment";
 
@@ -24,10 +25,22 @@ import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
 const DetailPost = ({}) => {
+  const { postId } = useParams();
+  const [inputValue, setInputValue] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [postData, setPostData] = useState(null);
   const [communityData, setCommunityData] = useState(null);
   const [commentData, setCommentData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
+  const navigate = useNavigate();
+
+  const handleReviseClick = () => {
+    navigate(
+      `/revisepost?postData=${encodeURIComponent(JSON.stringify(postData))}`
+    );
+  };
 
   const fetchPostDataById = async (postId) => {
     const { data, error } = await supabase
@@ -68,36 +81,64 @@ const DetailPost = ({}) => {
     return data;
   };
 
-  const fetchUserDataById = async () => {
-    const { data, error } = await supabase.from("User").select("*");
+  const fetchUserDataById = async (userid) => {
+    const { data, error } = await supabase
+      .from("User")
+      .select("profileimage, nickname")
+      .eq("userid", userid);
 
     if (error) {
       console.error("Error fetching user data:", error);
       return null;
     }
-    return data;
+    return data[0];
   };
 
   useEffect(() => {
     const getPostData = async () => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        console.log("user", session.user);
-        console.log(fetchUserDataById());
-        // setUserId(session.user.id);
-      });
+      const data = await fetchPostDataById(postId);
+      setPostData(data);
 
-      // const data = await fetchPostDataById(9);
-      // setPostData(data);
+      const communityData = await fetchCommunityDataById(data.communityid);
+      setCommunityData(communityData);
 
-      // const communityData = await fetchCommunityDataById(data.communityid);
-      // setCommunityData(communityData);
+      const commentData = await fetchCommentDataById(data.postid);
+      setCommentData(commentData);
 
-      // const commentData = await fetchCommentDataById(data.postid);
-      // setCommentData(commentData);
+      const userData = await fetchUserDataById(data.userid);
+      setUserData(userData);
+    };
+
+    const checkLikeAndBookmark = async () => {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Error getting session:", sessionError);
+        return;
+      }
+
+      const userId = session.user.id;
+
+      const { data: likeData } = await supabase
+        .from("PostLike")
+        .select("*")
+        .eq("postid", postId)
+        .eq("userid", userId);
+      setLiked(likeData.length > 0);
+
+      const { data: bookmarkData } = await supabase
+        .from("Bookmark")
+        .select("*")
+        .eq("postid", postId)
+        .eq("userid", userId);
+      setBookmarked(bookmarkData.length > 0);
     };
 
     getPostData();
-  }, []);
+    checkLikeAndBookmark();
+  }, [postId]);
 
   if (!postData) {
     return <div>Loading...</div>;
@@ -144,14 +185,95 @@ const DetailPost = ({}) => {
     }
   };
 
+  const toggleLike = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+
+    if (liked) {
+      await supabase.from("PostLike").delete().eq("postid", postId);
+      setLiked(false);
+    } else {
+      await supabase.from("PostLike").insert([
+        {
+          postid: postId,
+          createdat: new Date(),
+          userid: userId,
+        },
+      ]);
+      setLiked(true);
+    }
+  };
+
+  const toggleBookmark = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+
+    if (bookmarked) {
+      await supabase.from("Bookmark").delete().eq("postid", postId);
+      setBookmarked(false);
+    } else {
+      await supabase.from("Bookmark").insert([
+        {
+          postid: postId,
+          createdat: new Date(),
+          userid: userId,
+          communityid: communityData.communityid,
+        },
+      ]);
+      setBookmarked(true);
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "공유할 제목",
+          url: "your_post_url",
+        })
+        .then(() => console.log("공유 성공"))
+        .catch((error) => console.log("공유 실패", error));
+    } else {
+      alert("공유 기능을 지원하지 않는 브라우저입니다.");
+    }
+  };
+
   const registerClick = async (event) => {
-    const inputValue = document.querySelector(`.${styles.inputField}`).value;
+    if (!inputValue.trim()) return;
+
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+    const inputValues = document.querySelector(`.${styles.inputField}`).value;
 
     const { data, error } = await supabase.from("Comment").insert([
       {
         postid: postData.postid,
-        userid: 7,
-        content: inputValue,
+        userid: userId,
+        content: inputValues,
         createdat: new Date(),
         updatedat: new Date(),
       },
@@ -161,12 +283,19 @@ const DetailPost = ({}) => {
       console.error("Error inserting comment:", error);
     } else {
       console.log("Comment inserted:", data);
+
+      const commentData = await fetchCommentDataById(postData.postid);
+      if (commentData) {
+        setCommentData(commentData);
+      }
+
+      setInputValue("");
     }
   };
 
   return (
     <div>
-      <Header title={"Studies"} />
+      <Header title={"Post"} />
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
@@ -182,10 +311,10 @@ const DetailPost = ({}) => {
         >
           <img
             className={styles.postWriterProfile}
-            src={profile1}
+            src={userData?.profileimage || profile1}
             alt="profile1"
           />
-          <div className={styles.postWriterNickname}>페이커</div>
+          <div className={styles.postWriterNickname}>{userData?.nickname}</div>
           <div className={styles.postWriteDate}>
             {new Date(postData.createdat).toLocaleDateString()}
           </div>
@@ -200,7 +329,9 @@ const DetailPost = ({}) => {
             borderBottom: "3px solid #dddddd",
           }}
         >
-          <div className={styles.revise}>수정</div>
+          <div className={styles.revise} onClick={handleReviseClick}>
+            수정
+          </div>
           <div className={styles.delete}>삭제</div>
         </div>
         <div
@@ -267,20 +398,33 @@ const DetailPost = ({}) => {
 
         <div style={{ marginTop: "70px" }}>
           <div className={styles.studiesComments}>
-            <div className={styles.studiesComment}>댓글 3개</div>
+            <div className={styles.studiesComment}>
+              댓글 {commentData.length}개
+            </div>
             <div
               style={{
                 display: "flex",
                 gap: "10px",
               }}
             >
-              <img className={styles.likeIcon} src={likeOn} alt="like" />
+              <img
+                className={styles.likeIcon}
+                src={liked ? likeOn : likeOff}
+                alt="like"
+                onClick={toggleLike}
+              />
               <img
                 className={styles.bookmarkIcon}
-                src={bookmarkOn}
+                src={bookmarked ? bookmarkOn : bookmarkOff}
                 alt="bookmark"
+                onClick={toggleBookmark}
               />
-              <img className={styles.shareIcon} src={share} alt="share" />
+              <img
+                className={styles.shareIcon}
+                src={share}
+                alt="share"
+                onClick={handleShare}
+              />
             </div>
           </div>
 
@@ -288,16 +432,16 @@ const DetailPost = ({}) => {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "40px" }}
             >
-              <Comment
-                userid={3}
-                content={commentData[1].content}
-                commentData={commentData[1]}
-              />
-              <Comment
-                userid={5}
-                content={commentData[0].content}
-                commentData={commentData[0]}
-              />
+              {commentData &&
+                commentData.length > 0 &&
+                commentData.map((comment, index) => (
+                  <Comment
+                    key={index}
+                    userid={comment.userid}
+                    content={comment.content}
+                    commentData={comment}
+                  />
+                ))}
             </div>
 
             <div
@@ -327,6 +471,8 @@ const DetailPost = ({}) => {
                   className={styles.inputField}
                   type="text"
                   placeholder="댓글을 입력하세요."
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
                 />
                 <div className={styles.register} onClick={registerClick}>
                   등록
