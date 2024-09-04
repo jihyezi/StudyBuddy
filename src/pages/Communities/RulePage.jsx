@@ -11,37 +11,16 @@ const dummydata = [
 ];
 
 const RulePage = () => {
-  const { communityId } = useParams();
-  const [community, setCommunity] = useState(null);
-
-  useEffect(() => {
-    fetchCommunityDataById(communityId);
-  }, [communityId]);
-
-  const fetchCommunityDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("Community")
-      .select("*")
-      .eq("communityid", communityId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setCommunity(data);
-    }
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.title}>Rule</div>
       <div className={styles.ruleList}>
-        {community &&
-          community[0].rules.map((rule) => (
-            <div key={rule.id} className={styles.ruleItem}>
-              <div className={styles.circle}>{rule.id}</div>
-              <div className={styles.ruleText}>{rule.text}</div>
-            </div>
-          ))}
+        {dummydata.map((rule, index) => (
+          <div key={index} className={styles.ruleItem}>
+            <div className={styles.circle}>{index + 1}</div>
+            <div className={styles.ruleText}>{rule}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

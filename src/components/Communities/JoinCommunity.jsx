@@ -1,92 +1,51 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
-import supabase from "components/supabaseClient";
+import leftArrow from "assets/icons/left_arrow.png";
+import rightArrow from "assets/icons/right_arrow.png";
+import noimage from "assets/images/Profile/nobackground.png";
 
-// image
-import cat from "assets/images/Communities/1.jpg";
-import leftArrow from "../../assets/icons/left_arrow.png";
-import rightArrow from "../../assets/icons/right_arrow.png";
-import profile from "../../assets/icons/Communities/communityprofile.jpeg";
-
-const JoinCommunity = ({ onEventSelect }) => {
-  const [joinCommunities, setJoinCommunities] = useState([]);
-  const [communities, setCommunities] = useState([]);
+const JoinCommunity = ({
+  onEventSelect,
+  postData,
+  communityData,
+  joinCommunityData,
+  userData,
+  commentData,
+  allJoinCommunityData,
+}) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
-  const dummyData = [
-    {
-      id: 1,
-      img: cat,
-      community: "정보보안기사",
-    },
-    {
-      id: 2,
-      img: cat,
-      community: "정보보안기사",
-    },
-    {
-      id: 3,
-      img: cat,
-      community: "정보보안기사",
-    },
-    {
-      id: 4,
-      img: cat,
-      community: "정보보안기사",
-    },
-    {
-      id: 5,
-      img: cat,
-      community: "정보보안기사",
-    },
-    {
-      id: 6,
-      img: cat,
-      community: "정보보안기사",
-    },
-    {
-      id: 7,
-      img: profile,
-      community: "정보보안기사",
-    },
-    {
-      id: 8,
-      img: profile,
-      community: "정보보안기사",
-    },
-    {
-      id: 9,
-      img: profile,
-      community: "정보보안기사",
-    },
-    {
-      id: 10,
-      img: profile,
-      community: "정보보안기사",
-    },
-  ];
-
-  useEffect(() => {
-    fetchJoinCommunityDataAll();
-  }, []);
-
   const handleClick = (item) => {
+    const imageUrl = item.image
+      ? `${item.image}`
+      : "https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png";
+
     setSelectedItem(item);
     onEventSelect(item);
-    navigate(`/detail-community/${item.communityid}`, {
+    navigate(`/communitydetail`, {
       state: {
-        id: `${item.id}`,
-        img: `${item.img}`,
-        community: `${item.community}`,
+        id: `${item.communityid}`,
+        img: imageUrl,
+        community: `${item.name}`,
+        description: `${item.description}`,
+        createdby: `${item.createdby}`,
+        rules: item.rules,
+        userData: userData,
+        commentData: commentData,
+        postData: postData,
+        communityData: communityData,
+        allJoinCommunityData: allJoinCommunityData,
       },
     });
   };
+
+  console.log(allJoinCommunityData);
 
   const handleScroll = () => {
     const { current } = containerRef;
@@ -107,7 +66,7 @@ const JoinCommunity = ({ onEventSelect }) => {
   const moveRight = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft += current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
+      current.scrollLeft += current.clientWidth - 20;
       handleScroll();
     }
   };
@@ -115,53 +74,8 @@ const JoinCommunity = ({ onEventSelect }) => {
   const moveLeft = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft -= current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
+      current.scrollLeft -= current.clientWidth - 20;
       handleScroll();
-    }
-  };
-
-  const fetchJoinCommunityDataAll = async () => {
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
-    if (sessionError) {
-      console.error("Error getting session:", sessionError);
-      return;
-    }
-
-    const userId = session.user.id;
-
-    const { data, error } = await supabase
-      .from("JoinCommunity")
-      .select("*")
-      .eq("userid", userId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setJoinCommunities(data);
-      const communityPromises = data.map((joinCommunity) =>
-        fetchCommunityDataAll(joinCommunity.communityid)
-      );
-
-      const communitiesData = await Promise.all(communityPromises);
-      setCommunities(communitiesData.flat());
-      console.log("communities", communitiesData[0]);
-    }
-  };
-
-  const fetchCommunityDataAll = async (communityId) => {
-    const { data, error } = await supabase
-      .from("Community")
-      .select("*")
-      .eq("communityid", communityId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-      return [];
-    } else {
-      return data;
     }
   };
 
@@ -172,24 +86,30 @@ const JoinCommunity = ({ onEventSelect }) => {
         ref={containerRef}
         onScroll={handleScroll}
       >
-        {communities.map((item, index) => (
-          <div
-            key={index}
-            className={styles.classification}
-            onClick={() => handleClick(item)}
-          >
-            <div className={styles.joinCommunity}>
-              <div className={styles.communityImageContainer}>
-                <img
-                  className={styles.communityImage}
-                  src={item.image}
-                  alt="cat"
-                />
+        {joinCommunityData.map((item, index) => {
+          const imageUrl = item.image
+            ? `${item.image}`
+            : "https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png";
+
+          return (
+            <div
+              key={index}
+              className={styles.classification}
+              onClick={() => handleClick(item)}
+            >
+              <div className={styles.joinCommunity}>
+                <div className={styles.communityImageContainer}>
+                  <img
+                    className={styles.communityImage}
+                    src={imageUrl}
+                    alt={item.name || "Default Image"}
+                  />
+                </div>
+                <div className={styles.communityName}>{item.name}</div>
               </div>
-              <div className={styles.communityName}>{item.name}</div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       {isOverflow && (scrollState === "middle" || scrollState === "end") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxLeft}`}>

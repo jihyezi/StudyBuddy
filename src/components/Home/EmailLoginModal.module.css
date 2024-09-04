@@ -1,11 +1,15 @@
 .closeButton {
   position: absolute;
   top: 30px;
-  right: 25px;
+  right: 30px;
   background: none;
   border: none;
   cursor: pointer;
   background-color: #fff;
+}
+.btn{
+  width: 20px;
+  height: 20px;
 }
 .modalImageContainer {
   flex: 1;
@@ -18,6 +22,7 @@
 .ModalImg {
   top: "50%";
   left: "50%";
+  width: 120px;
 }
 
 .formContainer {
@@ -28,16 +33,16 @@
 }
 
 .inputField {
-  width: 340px;
-  height: 42px;
-  padding: 10px;
+  width: 280px;
+  height: 32px;
+  padding: 10px 20px;
   border: 1px solid #ddd;
   border-radius: 18px;
   font-size: 17px;
 }
 .inputField::placeholder {
   color: #ddd; /* 플레이스홀더 텍스트 색상 */
-  font-size: 17px; /* 플레이스홀더 텍스트 크기 */
+  font-size: 16px; /* 플레이스홀더 텍스트 크기 */
   font-weight: 600;
   padding-left: 10px;
 }
@@ -50,15 +55,15 @@
   border: 1px solid #ff7474;
 }
 .loginButton {
-  width: 365px;
+  width: 330px;
   height: 52px;
   padding: 10px;
   border: none;
   border-radius: 52px;
   background-color: #ff7474;
   color: white;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-family: "NotoSans-Bold";
   cursor: pointer;
 }
 
@@ -67,10 +72,11 @@
 }
 
 .linkText {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-family: "NotoSans-Medium";
   color: #7c7c7c;
 }
+
 .linkText:hover {
   color: #494949;
 }
@@ -84,14 +90,14 @@
   display: flex;
   justify-content: end;
   align-items: center;
-  gap: 5px;
-  width: 65%;
-  margin-top: 5px;
+  gap: 6px;
+  width: 70%;
+  margin-top: 8px;
 }
 
 .SignUptext {
   font-size: 12px;
-  font-weight: 600;
+  font-family: "NotoSans-Medium";
   color: #7c7c7c;
 }
 

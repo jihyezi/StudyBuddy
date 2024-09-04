@@ -10,8 +10,8 @@ import supabase from "../supabaseClient"; // supabase 클라이언트 가져오�
 // 로그인
 const customStyles = {
   content: {
-    width: "520px",
-    height: "580px",
+    width: "400px",
+    height: "540px",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -93,7 +93,7 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
       >
         <div className={styles.modalHeader}>
           <button onClick={closeModal} className={styles.closeButton}>
-            <img src={close} alt="close" />
+            <img src={close} alt="close" className={styles.btn} />
           </button>
         </div>
         <div className={styles.modalBody}>

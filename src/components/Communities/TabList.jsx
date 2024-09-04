@@ -1,46 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import styles from "./TabList.module.css";
-import supabase from "components/supabaseClient";
-
 import JoinPostList from "./CommunityJoinPostList";
 import Post from "./Post";
 import { dummyPostData } from "components/Dummydata";
 import RulePage from "pages/Communities/RulePage";
 import MemberPage from "pages/Communities/MemberPage";
 
-export const TabList = () => {
+export const TabList = ({
+  communityInfo,
+  postData,
+  userData,
+  commentData,
+  communityData,
+  allJoinCommunityData,
+}) => {
   const [currentTab, clickTab] = useState(0);
-  const { communityId } = useParams();
-  const [posts, setPosts] = useState([]);
 
   const menuArr = [
-    { name: "인기", content: <JoinPostList postData={posts} /> },
-    { name: "최근", content: <JoinPostList postData={dummyPostData} /> },
-    { name: "규칙", content: <RulePage /> },
-    { name: "멤버", content: <MemberPage /> },
+    {
+      name: "인기",
+      content: (
+        <JoinPostList
+          postData={postData}
+          communityData={communityData}
+          joinCommunoityData={communityInfo}
+          userData={userData}
+          commentData={commentData}
+        />
+      ),
+    },
+    {
+      name: "최근",
+      content: (
+        <JoinPostList
+          postData={postData}
+          communityData={communityData}
+          userData={userData}
+          commentData={commentData}
+        />
+      ),
+    },
+    { name: "규칙", content: <RulePage communityInfo={communityInfo} /> },
+    {
+      name: "멤버",
+      content: (
+        <MemberPage
+          communityData={communityData}
+          joinCommunityData={communityInfo}
+          userData={userData}
+          allJoinCommunityData={allJoinCommunityData}
+        />
+      ),
+    },
   ];
 
   const selectMenuHandler = (index) => {
     clickTab(index);
-  };
-
-  useEffect(() => {
-    fetchPostDataById(communityId);
-  }, [communityId]);
-
-  const fetchPostDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("Post")
-      .select("*")
-      .eq("communityid", communityId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      console.log(data);
-      setPosts(data);
-    }
   };
 
   return (

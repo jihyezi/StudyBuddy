@@ -29,6 +29,8 @@
 .userProfile {
   width: 50px;
   height: 50px;
+  border-radius: 50px;
+  object-fit: cover;
   margin-left: 25px;
 }
 
@@ -50,6 +52,7 @@
 }
 
 .postWriterID {
+  font-size: 14px;
   color: #606060;
   font-family: "NotoSans-Regular";
 }

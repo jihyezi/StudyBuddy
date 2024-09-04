@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import styles from "./Post.module.css";
-import supabase from "components/supabaseClient";
-import "fonts/Font.css";
+import { useNavigate } from "react-router-dom";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
@@ -16,75 +14,102 @@ import bookmarkOff from "assets/icons/Communities/bookmark_off.png";
 import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
 
-const Post = ({ post }) => {
-  const { communityId } = useParams();
+const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
   const navigate = useNavigate();
-  const [community, setCommunity] = useState(null);
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    fetchCommunityDataById(communityId);
-  }, [communityId]);
-
-  const fetchCommunityDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("Community")
-      .select("*")
-      .eq("communityid", communityId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setCommunity(data);
-      fetchUserDataById(post.userid);
+  function formatDate(date) {
+    try {
+      const validDate = new Date(date);
+      return validDate.toISOString();
+    } catch (error) {
+      console.error("formatDate에 전달된 잘못된 날짜:", date);
+      return "잘못된 날짜";
     }
+  }
+
+  const startdate = formatDate(post.startdate);
+  const enddate = formatDate(post.enddate);
+
+  const calculateDaysBetween = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const timeDiff = end - start;
+    const dayDiff = timeDiff / (1000 * 3600 * 24);
+    return Math.ceil(dayDiff);
   };
 
-  const fetchUserDataById = async (userId) => {
-    const { data, error } = await supabase
-      .from("User")
-      .select("*")
-      .eq("userid", userId);
+  const days = calculateDaysBetween(startdate, enddate);
 
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setUser(data);
-    }
-  };
+  const communityName = Array.isArray(community)
+    ? community.find((comm) => comm.communityid === post.communityid)?.name
+    : "Unknown Community";
 
-  const handlePostClick = () => {
-    navigate(`/detail-post/${post.postid}`);
+  const userimg = Array.isArray(user)
+    ? user.find((u) => u.userid === post.userid)?.profileimage
+    : "Unknown User";
+
+  const userNickname = Array.isArray(user)
+    ? user.find((u) => u.userid === post.userid)?.nickname
+    : "Unknown User";
+
+  const userName = Array.isArray(user)
+    ? user.find((u) => u.userid === post.userid)?.username
+    : "Unknown User";
+
+  const commentCount = Array.isArray(comment)
+    ? comment.filter((c) => c.postid === post.postid).length
+    : 0;
+
+  const handleClick = () => {
+    navigate(`/detailpost`, {
+      state: {
+        postid: post.postid,
+        communityid: post.communityid,
+        title: post.title,
+        content: post.content,
+        createdat: post.createdat,
+        updatedat: post.updatedat,
+        startdate: post.startdate,
+        enddate: post.enddate,
+        book: post.book,
+        result: post.result,
+        references: post.references,
+        userimg: userimg,
+        userid: post.createdby,
+        username: userName,
+        usernickname: userNickname,
+        day: days,
+      },
+    });
   };
 
   return (
-    <div className={styles.post} onClick={handlePostClick}>
+    <div className={styles.post} onClick={handleClick}>
       <div
         style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
       >
-        <span className={styles.communityName}>
-          {community ? community[0].name : "로딩 중..."}
-        </span>
+        <span className={styles.communityName}>{communityName}</span>
         <img className={styles.moreIcon} src={more} alt="more" />
       </div>
 
       <div className={styles.postDetail}>
         <div>
-          <img className={styles.userProfile} src={profile} alt="profile" />
+          <img className={styles.userProfile} src={userimg} alt="profile" />
         </div>
 
         <div className={styles.postWriterContent}>
           <div className={styles.postWriter}>
-            <span className={styles.postWriterNickName}>
-              {post.writerNickname}
-            </span>
-            <span className={styles.postWriterID}>{post.writerId}</span>
+            <span className={styles.postWriterNickName}>{userNickname}</span>
+            <span className={styles.postWriterID}>@{userName}</span>
             <span className={styles.postWriteDate}>{post.createdAt}</span>
           </div>
           <div className={styles.postContent}>
-            <p className={styles.postTitle}>{post.title}</p>
-            <p className={styles.postPeriod}>1. 준비기간 : {post.postPeriod}</p>
-            <p className={styles.postResult}>2. 결과 : {post.postResult}</p>
+            <p className={styles.postTitle}>[{post.title}]</p>
+            <p className={styles.postPeriod}>
+              1. 준비기간 : {new Date(post.startdate).toLocaleDateString()} ~{" "}
+              {new Date(post.enddate).toLocaleDateString()} ({days}일)
+            </p>
+            <p className={styles.postResult}>2. 결과 : {post.result}</p>
           </div>
           <div className={styles.postETC}>
             <div className={styles.postComment}>
@@ -93,7 +118,7 @@ const Post = ({ post }) => {
                 src={commentOff}
                 alt="commentOff"
               />
-              <span className={styles.commentNumber}>{post.commentCount}</span>
+              <span className={styles.commentNumber}>{commentCount}</span>
             </div>
             <div className={styles.postLike}>
               <img className={styles.likeIcon} src={likeOn} alt="likeOn" />

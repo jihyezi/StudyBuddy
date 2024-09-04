@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import SidebarItem from "components/Sidebar/SidebarItem";
 import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
@@ -24,11 +24,10 @@ import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
 
 // Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
-const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
   const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
-  const location = useLocation();
 
   const menus = [
     { name: "Home", path: "/", text: "home" },
@@ -123,6 +122,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
                   {({ isActive }) => (
                     <>
                       <img
+                        className={menu.text === "profile" ? styles.profileImg : ""}
                         style={{
                           width: 24,
                           height: 24,

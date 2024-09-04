@@ -1,90 +1,95 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import styles from "./MemberPage.module.css";
 import profile from "assets/images/profile1.png";
-import supabase from "components/supabaseClient";
 
-const MemberPage = () => {
-  const { communityId } = useParams();
-  const [joinCommunity, setJoinCommunity] = useState([]);
-  const [adminUsers, setAdminUsers] = useState([]);
-  const [memberUsers, setMemberUsers] = useState([]);
+const dummydata = [
+  {
+    nickname: "제우스",
+    id: "@godthunderzeus",
+    profile: profile,
+    role: "admin",
+  },
+  {
+    nickname: "오너",
+    id: "@t1_oner",
+    profile: profile,
+    role: "member",
+  },
+  {
+    nickname: "페이커",
+    id: "@Faker",
+    profile: profile,
+    role: "member",
+  },
+  {
+    nickname: "구마유시",
+    id: "@t1_gumayusi",
+    profile: profile,
+    role: "member",
+  },
+  {
+    nickname: "케리아",
+    id: "@keria_minseok",
+    profile: profile,
+    role: "member",
+  },
+];
 
-  useEffect(() => {
-    fetchJoinCommunityDataById(communityId);
-  }, [communityId]);
+const MemberPage = ({
+  communityData,
+  joinCommunityData,
+  userData,
+  allJoinCommunityData,
+}) => {
+  const admin = Array.isArray(userData)
+    ? userData.find((u) => u.userid === joinCommunityData.createdby)
+    : {
+        nickname: "Unknown nickname",
+        username: "Unknown",
+        profileimage: profile,
+      };
 
-  const fetchJoinCommunityDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("JoinCommunity")
-      .select("*")
-      .eq("communityid", communityId);
+  const adminName = admin?.nickname;
+  const adminId = admin?.username;
+  const adminProfile = admin?.profileimage;
 
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setJoinCommunity(data);
-      fetchJoinUsersData(data);
-    }
-  };
+  console.log(allJoinCommunityData);
 
-  const fetchJoinUsersData = async (joinCommunityData) => {
-    const userIds = joinCommunityData.map((user) => user.userid);
-    const usersDataPromises = userIds.map(async (userId) => {
-      const { data, error } = await supabase
-        .from("User")
-        .select("*")
-        .eq("userid", userId);
-      return data[0];
+  const members = allJoinCommunityData
+    .filter((join) => join.communityid === joinCommunityData.id) // 해당 커뮤니티에 가입한 모든 유저의 communityid와 비교
+    .map((join) => {
+      // 각 member의 userid로 userData에서 해당 유저 정보 가져오기
+      const member = userData.find((u) => u.userid === join.userid);
+      return {
+        nickname: member?.nickname || "Unknown nickname",
+        username: member?.username || "Unknown username",
+        profileimage: member?.profileimage || profile,
+      };
     });
-
-    const usersData = await Promise.all(usersDataPromises);
-    const filteredUsers = usersData.filter(Boolean);
-
-    // 역할에 따라 분리
-    const admins = joinCommunityData
-      .filter((item) => item.role === "admin")
-      .map((item) => {
-        const user = filteredUsers.find((user) => user.userid === item.userid);
-        return { ...user, role: item.role };
-      });
-
-    const members = joinCommunityData
-      .filter((item) => item.role === "member")
-      .map((item) => {
-        const user = filteredUsers.find((user) => user.userid === item.userid);
-        return { ...user, role: item.role };
-      });
-
-    setAdminUsers(admins);
-    setMemberUsers(members);
-  };
 
   return (
     <div className={styles.container}>
       <div className={styles.section}>
         <div className={styles.title}>Admin</div>
-        {adminUsers.map((user, index) => (
-          <div key={index} className={styles.userItem}>
-            <img
-              src={user.profile || profile}
-              className={styles.profileImage}
-              alt="profile"
-            />
-            <div className={styles.userInfo}>
-              <span className={styles.nickname}>{user.nickname}</span>
-              <span className={styles.userId}>{user.id}</span>
-            </div>
+        <div className={styles.userItem}>
+          <img
+            src={adminProfile}
+            className={styles.profileImage}
+            alt="profile"
+          />
+          <div className={styles.userInfo}>
+            <span className={styles.nickname}>{adminName}</span>
+            <span className={styles.userId}>@{adminId}</span>
           </div>
-        ))}
+        </div>
       </div>
       <div className={styles.section}>
         <div className={styles.title}>Members</div>
         <div className={styles.userList}>
-          {memberUsers.map((user, index) => (
+          {members.map((user, index) => (
             <div key={index} className={styles.userItem}>
               <img
-                src={user.profile || profile}
+                src={user.profile}
                 className={styles.profileImage}
                 alt="profile"
               />
