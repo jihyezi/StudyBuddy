@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./Post.module.css";
-import { useNavigate } from "react-router-dom";
+import supabase from "components/supabaseClient";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
@@ -15,7 +16,11 @@ import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
 
 const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
+  const { communityId } = useParams();
   const navigate = useNavigate();
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   function formatDate(date) {
     try {
@@ -60,36 +65,143 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     ? comment.filter((c) => c.postid === post.postid).length
     : 0;
 
-  const handleClick = () => {
-    navigate(`/detailpost`, {
+  useEffect(() => {
+    const checkLikeAndBookmark = async () => {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Error getting session:", sessionError);
+        return;
+      }
+
+      const userId = session.user.id;
+
+      const { data: likeData } = await supabase
+        .from("PostLike")
+        .select("*")
+        .eq("postid", post.postid)
+        .eq("userid", userId);
+      setLiked(likeData.length > 0);
+
+      const { data: bookmarkData } = await supabase
+        .from("Bookmark")
+        .select("*")
+        .eq("postid", post.postid)
+        .eq("userid", userId);
+      setBookmarked(bookmarkData.length > 0);
+    };
+
+    checkLikeAndBookmark();
+  }, []);
+
+  useEffect(() => {
+    fetchLikeCount();
+  }, [post.postid]);
+
+  const fetchLikeCount = async () => {
+    const { count } = await supabase
+      .from("PostLike")
+      .select("*", { count: "exact" })
+      .eq("postid", post.postid);
+
+    setLikeCount(count);
+  };
+
+  const handlePostClick = () => {
+    navigate(`/detail-post/${post.postid}`, {
       state: {
-        postid: post.postid,
-        communityid: post.communityid,
-        title: post.title,
-        content: post.content,
-        createdat: post.createdat,
-        updatedat: post.updatedat,
-        startdate: post.startdate,
-        enddate: post.enddate,
-        book: post.book,
-        result: post.result,
-        references: post.references,
-        userimg: userimg,
-        userid: post.createdby,
-        username: userName,
-        usernickname: userNickname,
-        day: days,
+        userData: user,
+        communityData: community,
+        postData: post,
+        // commentData: comment,
       },
     });
   };
 
+  const toggleLike = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+
+    if (liked) {
+      await supabase.from("PostLike").delete().eq("postid", post.postid);
+      setLiked(false);
+    } else {
+      await supabase.from("PostLike").insert([
+        {
+          postid: post.postid,
+          createdat: new Date(),
+          userid: userId,
+        },
+      ]);
+      setLiked(true);
+    }
+  };
+
+  const toggleBookmark = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+
+    if (bookmarked) {
+      await supabase.from("Bookmark").delete().eq("postid", post.postid);
+      setBookmarked(false);
+    } else {
+      await supabase.from("Bookmark").insert([
+        {
+          postid: post.postid,
+          createdat: new Date(),
+          userid: userId,
+          communityid: post.communityid,
+        },
+      ]);
+      setBookmarked(true);
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "공유할 제목",
+          url: "your_post_url",
+        })
+        .then(() => console.log("공유 성공"))
+        .catch((error) => console.log("공유 실패", error));
+    } else {
+      alert("공유 기능을 지원하지 않는 브라우저입니다.");
+    }
+  };
+
+  if (!community || !user) {
+    return <div>로딩 중...</div>;
+  }
+
   return (
-    <div className={styles.post} onClick={handleClick}>
+    <div className={styles.post} onClick={handlePostClick}>
       <div
         style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
       >
         <span className={styles.communityName}>{communityName}</span>
-        <img className={styles.moreIcon} src={more} alt="more" />
+        {user.userid === post.userid && (
+          <img className={styles.moreIcon} src={more} alt="more" />
+        )}
       </div>
 
       <div className={styles.postDetail}>
@@ -101,7 +213,9 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
           <div className={styles.postWriter}>
             <span className={styles.postWriterNickName}>{userNickname}</span>
             <span className={styles.postWriterID}>@{userName}</span>
-            <span className={styles.postWriteDate}>{post.createdAt}</span>
+            <span className={styles.postWriteDate}>
+              {new Date(post.createdat).toLocaleDateString()}
+            </span>
           </div>
           <div className={styles.postContent}>
             <p className={styles.postTitle}>[{post.title}]</p>
@@ -118,11 +232,16 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
                 src={commentOff}
                 alt="commentOff"
               />
-              <span className={styles.commentNumber}>{commentCount}</span>
+              <span className={styles.commentNumber}>{post.commentCount}</span>
             </div>
             <div className={styles.postLike}>
-              <img className={styles.likeIcon} src={likeOn} alt="likeOn" />
-              <span className={styles.likeNumber}>{post.likeCount}</span>
+              <img
+                className={styles.likeIcon}
+                src={liked ? likeOn : likeOff}
+                alt="likeOn"
+                onClick={toggleLike}
+              />
+              <span className={styles.likeNumber}>{likeCount}</span>
             </div>
             <div>
               <img className={styles.viewIcon} src={view} alt="view" />
@@ -131,12 +250,18 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
             <div>
               <img
                 className={styles.bookmarkIcon}
-                src={bookmarkOn}
-                alt="bookmarkOn"
+                src={bookmarked ? bookmarkOn : bookmarkOff}
+                alt="bookmark"
+                onClick={toggleBookmark}
               />
             </div>
             <div>
-              <img className={styles.shareIcon} src={share} alt="share" />
+              <img
+                className={styles.shareIcon}
+                src={share}
+                alt="share"
+                onClick={handleShare}
+              />
             </div>
           </div>
         </div>

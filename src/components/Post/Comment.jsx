@@ -11,12 +11,13 @@ import profile4 from "assets/images/Profile/profile4.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const Comment = ({ userid, content, commentData }) => {
+const Comment = ({ userid, content, commentData, onDelete }) => {
   const [userId, setUserId] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(content);
+  const [comments, setComments] = useState([commentData]);
   const [editedText, setEditedText] = useState(commentData.content);
 
   const moreClick = (event) => {
@@ -80,13 +81,9 @@ const Comment = ({ userid, content, commentData }) => {
       console.error("댓글 삭제 실패:", error);
     } else {
       console.log("댓글 삭제 성공:", data);
+      setCommentText("");
+      onDelete(commentData.commentid);
     }
-
-    setCommentText((prevComments) =>
-      prevComments.filter(
-        (comment) => comment.commentid !== commentData.commentid
-      )
-    );
 
     setShowOptions(false);
   };
