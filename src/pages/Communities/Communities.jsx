@@ -128,9 +128,7 @@ const Communities = () => {
     filterCommunity.some((fc) => Number(fc.communityid) === Number(p.communityid))
   );
 
-  console.log(joinCommunity)
-  console.log(filterCommunity)
-  console.log(allJoinCommunity)
+  console.log(filteredPosts)
 
   return (
     <div className={styles.community}>

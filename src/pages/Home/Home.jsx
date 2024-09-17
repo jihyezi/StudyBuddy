@@ -14,14 +14,12 @@ import HomeImage from "assets/images/Home/OnBoardingImage1.png";
 import leftarrow from "assets/icons/Home/leftarrow.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
 import downarrow from "assets/icons/Home/downarrow.png";
-
 import LoginModal from "components/Home/LoginModal"; // 모달
-
 import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const [selectedEvent, setSelectEvent] = useState("");
@@ -46,7 +44,7 @@ const Home = ({}) => {
           height: "32px",
           // top: 240,
           // left: 80,
-          top: "95%", // 위치 수정
+          bottom: "-14px",
           left: "7%", // 위치 수정
           borderRadius: "8px",
           opacity: "0px",
@@ -98,17 +96,43 @@ const Home = ({}) => {
 
   return (
     <div className={styles.home}>
-      <Slider {...settings} style={{ display: "grid" }}>
-        <img src={onboardingimg} />
-        <img src={onboardingimg} />
-        <img src={onboardingimg} />
-        <img src={onboardingimg} />
+      <Slider {...settings} style={{ display: "grid", height: "260px" }}>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 1"
+            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+          />
+        </div>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 2"
+            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+          />
+        </div>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 3"
+            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+          />
+        </div>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 4"
+            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+          />
+        </div>
       </Slider>
-      <div style={{ borderBottom: "1px solid #ddd", padding: "30px 0px" }}>
+
+      <div style={{
+        display: 'flex', borderBottom: "1px solid #ddd", padding: "30px 0px", justifyContent: 'center', alignItems: 'center'
+      }}>
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div
@@ -140,15 +164,17 @@ const Home = ({}) => {
       {/*  */}
       <div
         style={{
+          display: 'flex',
           borderBottom: "1px solid #ddd",
           padding: "30px 0px",
           // position: "fixed",
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
       >
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div
@@ -178,11 +204,10 @@ const Home = ({}) => {
         </div>
       </div>
       {/*  */}
-      <div style={{ borderBottom: "1px solid #ddd", padding: "30px 0px" }}>
+      <div style={{ display: 'flex', borderBottom: "1px solid #ddd", padding: "30px 0px", justifyContent: 'center', alignItems: 'center' }}>
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div
@@ -213,7 +238,7 @@ const Home = ({}) => {
         </div>
       </div>
       {/*  react slick 캐러셀  만들기*/}
-      <div style={{ padding: "30px 0px" }}>
+      <div style={{ padding: "30px 0px", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div
           style={{
             position: "relative",

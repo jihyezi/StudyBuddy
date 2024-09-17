@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import supabase from "components/supabaseClient";
 import styled from "styled-components";
+
+// pages
 import Sidebar from "components/Sidebar/Sidebar";
 import Home from "pages/Home/Home";
 import Explore from "pages/Explore/Explore";
@@ -16,27 +20,26 @@ import Recommended from "pages/Recommended/Recommended";
 import CommunityPost from "pages/Post/CommunityPost";
 import StudyPost from "pages/Post/StudyPost";
 import DetailPost from "pages/Post/DetailPost";
-import DetailPost2 from "pages/Post/DetailPost2";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
 import RevisePost from "pages/Post/RevisePost";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import supabase from "components/supabaseClient";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
-import noprofile from "assets/images/Profile/noprofile.png";
 
-const Center = styled.div`
-  margin-left: 250px; /* 사이드바의 너비만큼 마진을 추가하여 겹치지 않도록 함 */
-  width: calc(100% - 250px);
+const Content = styled.div`
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: row;
 `;
 
-const Content = styled.div`
-  flex: 1; /* 차지할 수 있는 모든 공간을 차지하도록 설정 */
+const Center = styled.div`
+  margin-left: 320px;
+  width: calc(100% - 320px);
+  display: flex;
+  flex-direction: row;
+  flex: 1;
 `;
 
 const MainContent = () => {
@@ -56,46 +59,43 @@ const MainContent = () => {
 
   return (
     <>
-      <Content>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/explore"
-            element={
-              <CommonLayout>
-                <Explore />
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/search"
-            element={
-              <CommonLayout>
-                <SearchResults />
-              </CommonLayout>
-            }
-          />
-          <Route path="/communities" element={<Communities />} />
-          <Route path="/studies" element={<Studies />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/bookmarks" element={<Bookmarks />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/create-post" element={<Post />} />
-          <Route path="/detail-post/:postId" element={<DetailPost />} />
-          <Route path="/create-community" element={<CommunityPost />} />
-          <Route path="/create-study" element={<StudyPost />} />
-          <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
-          <Route path="/revisepost" element={<RevisePost />} />
-          <Route
-            path="/detail-community/:communityId"
-            element={<CommunityDetailsPage />}
-          />
-          <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
-          <Route path="/detailpost" element={<DetailPost />} />
-        </Routes>
-      </Content>
-
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/explore"
+          element={
+            <CommonLayout>
+              <Explore />
+            </CommonLayout>
+          }
+        />
+        <Route
+          path="/search"
+          element={
+            <CommonLayout>
+              <SearchResults />
+            </CommonLayout>
+          }
+        />
+        <Route path="/communities" element={<Communities />} />
+        <Route path="/studies" element={<Studies />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/bookmarks" element={<Bookmarks />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/create-post" element={<Post />} />
+        <Route path="/detail-post/:postId" element={<DetailPost />} />
+        <Route path="/create-community" element={<CommunityPost />} />
+        <Route path="/create-study" element={<StudyPost />} />
+        <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
+        <Route path="/revisepost" element={<RevisePost />} />
+        <Route
+          path="/detail-community/:communityId"
+          element={<CommunityDetailsPage />}
+        />
+        <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
+        <Route path="/detailpost" element={<DetailPost />} />
+      </Routes>
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage" ||
@@ -137,15 +137,18 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Sidebar toggleNotifications={toggleNotifications} />
-        <Center>
-          <MainContent />
-          <Notifications
-            showNotifications={showNotifications}
-            setShowNotifications={setShowNotifications}
-            toggleNotifications={toggleNotifications}
-          />
-        </Center>
+        <Content>
+          <Sidebar toggleNotifications={toggleNotifications} />
+          <Center>
+            <MainContent />
+            <Notifications
+              showNotifications={showNotifications}
+              setShowNotifications={setShowNotifications}
+              toggleNotifications={toggleNotifications}
+            />
+          </Center>
+        </Content>
+
       </BrowserRouter>
     </AuthProvider>
   );

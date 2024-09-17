@@ -1,8 +1,8 @@
 .container {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
-
 
 .info {
     position: relative;
@@ -46,7 +46,7 @@
 
 .details {
     padding-left: 40px;
-    padding-right: 27px;
+    padding-right: 40px;
     padding-top: 70px;
     margin-bottom: 16px;
 }
