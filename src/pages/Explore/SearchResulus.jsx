@@ -4,6 +4,8 @@ import styles from "./SearchResulus.module.css";
 
 import JoinPostList from "components/Communities/CommunityJoinPostList";
 import { dummyPostData } from "components/Dummydata";
+import CommunityPostSmall from "components/Communities/CommunityPostSmall";
+import CommunityPostList from "components/Communities/CommunityJoinPostList";
 
 const SearchResults = () => {
   const location = useLocation();
