@@ -28,7 +28,7 @@ const JoinCommunity = ({
 
     setSelectedItem(item);
     onEventSelect(item);
-    navigate(`/communitydetail`, {
+    navigate(`/detail-community/:communityId`, {
       state: {
         id: `${item.communityid}`,
         img: imageUrl,
