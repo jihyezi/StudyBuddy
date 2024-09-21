@@ -1,28 +1,102 @@
-/* .Explore {
- }  */
+/* Explore */
+.Explore {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+} 
+
+.PopularTagContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 30px 0px;
+}
+
+.CategoryText {
+  position: relative;
+  font-weight: 700;
+  font-size: 20px;
+  color: #333;
+  padding: 0px 40px;
+  margin-bottom: 30px;
+}
+
+.CategoryTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.HotCommunitiesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0px;
+  border-bottom: 1px solid #ddd;
+}
+
+.HotCommunity{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.HotCommunityContainer {
+  position: relative;
+  width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 342px);
+  gap: 20px;
+}
+
+.PopularStudyContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0px;
+}
+
+.StudyPostContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* CommonLayout */
+.CommonLayout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
 
 .SearchContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   margin-top: 40px;
   margin-bottom: 40px;
-  position: relative; /* Add position relative */
+  position: relative; 
+}
+
+.InputContainer {
+  display: flex;
 }
 
 .InputWrapper {
   position: relative;
   display: flex;
   align-items: center;
-}
-
-.SearchIcon {
-  position: absolute;
-  left: 10px;
-  width: 24px; /* 아이콘 크기 조정 */
-  height: 24px; /* 아이콘 크기 조정 */
-  opacity: 1; /* 아이콘을 보이게 설정 */
 }
 
 .SearchInput {
@@ -42,6 +116,15 @@
   font-size: 15px; /* placeholder 텍스트 크기 */
   font-weight: 700;
 }
+
+.SearchIcon {
+  position: absolute;
+  left: 10px;
+  width: 24px; /* 아이콘 크기 조정 */
+  height: 24px; /* 아이콘 크기 조정 */
+  opacity: 1; /* 아이콘을 보이게 설정 */
+}
+
 .SearchButton {
   width: 78px;
   height: 48px;
@@ -63,10 +146,9 @@
 }
 
 .SearchHistoryContainer {
-  position: absolute;
-  top: 102%;
-  left: 21%;
+  position: relative;
   width: 840px;
+  left: -52px;
   /* 위치 조정 필요 */
   /* top: 60px; */
   background-color: #fff;
@@ -76,12 +158,6 @@
   z-index: 10;
 }
 
-.SearchText {
-  padding-bottom: 10px;
-  font-family: "Manrope-SemiBold";
-  color: #333;
-}
-
 .SearchHistoryList {
   font-size: 16px;
   font-family: "Manrope-SemiBold";
@@ -89,6 +165,12 @@
   color: #333;
   list-style-type: none;
   padding-top: 10px;
+}
+
+.SearchText {
+  padding-bottom: 10px;
+  font-family: "Manrope-SemiBold";
+  color: #333;
 }
 
 .SearchHistoryItem {
@@ -107,11 +189,13 @@
   align-items: center;
   gap: 10px;
 }
+
 .buttonContainer {
   gap: 10px;
   display: flex;
   align-items: center;
 }
+
 .deletebutton {
   background-color: white;
   border: none; /* 테두리를 제거 */
@@ -120,22 +204,14 @@
   padding: 0; /* 기본 패딩 제거 */
   margin-right: 50px;
 }
+
 .deletebutton:hover {
   background: #ececec;
 }
-.PopularTagContainer {
-  width: 100%;
-  border-bottom: 1px solid #ddd;
-  padding: 30px 0px;
-}
 
-.CategoryText {
-  font-weight: 700;
-  font-size: 20px;
-  color: #333;
-  padding: 0px 40px;
-  margin-bottom: 30px;
-}
+
+
+
 
 .tagContainer {
   display: flex;
@@ -164,41 +240,12 @@
   color: #656565;
 }
 
-.HotCommunitiesContainer {
-  padding: 30px 0px;
-  border-bottom: 1px solid #ddd;
-}
-
-.HotCommunityContainer {
-  position: relative;
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 0px 40px;
-}
-.scrollContainer {
-  display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  white-space: nowrap; /* Prevent wrapping of child elements */
-  -ms-overflow-style: none; /* for Internet Explorer and Edge */
-}
-
 .hotCommunityItem {
-  margin-right: 25px; /* Example margin, adjust as necessary */
+  margin-right: 25px; 
 }
 
-.PopularStudyContainer {
-  padding: 30px 0px;
-  /* border-bottom: 1px solid #ddd; */
-}
 
-.StudyPostContainer {
-  position: relative;
-  padding: 0px 40px;
-  display: flex;
-  flex-direction: column; /* Add this line to change the direction to column */
-}
 
-.InputContainer {
-  display: flex;
-}
+
+
+
