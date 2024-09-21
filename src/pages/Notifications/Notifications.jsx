@@ -76,10 +76,28 @@ const Notifications = ({ showNotifications }) => {
                 dateLabel = "이번 주";
               }
 
-              // 알림 내용 포맷
-              const content = notification.content.startsWith("You have received a new message from")
-                ? `${userMap[notification.content.split("from ")[1]] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`
-                : notification.content;
+              // 알림 내용 포맷 처리
+              let content = notification.content;
+
+              // 메시지 수신 알림 처리
+              if (notification.content.startsWith("You have received a new message from")) {
+                const senderId = notification.content.split("from ")[1];
+                content = `${userMap[senderId] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`;
+              }
+              // 커뮤니티에 새 글 알림 처리
+              else if (notification.content.startsWith("A new post has been created in your community")) {
+                content = notification.content;  // 커뮤니티 포스트 알림 그대로 사용
+              }
+              // 내가 쓴 글에 좋아요를 눌렀을 때
+              else if (notification.content.startsWith("Your post has been liked by")) {
+                const likerId = notification.content.split("by ")[1];
+                content = `${userMap[likerId] || "알 수 없는 유저"}님이 회원님의 게시물을 좋아합니다.`;
+              }
+              // 내가 쓴 글에 댓글을 남겼을 때
+              else if (notification.content.startsWith("A comment has been added to your post by")) {
+                const commenterId = notification.content.split("by ")[1];
+                content = `${userMap[commenterId] || "알 수 없는 유저"}님이 댓글을 남겼습니다.`;
+              }
 
               if (!acc[dateLabel]) {
                 acc[dateLabel] = [];
