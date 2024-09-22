@@ -12,6 +12,7 @@ import supabase from "components/supabaseClient";
 const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState("");
   const [user, setUser] = useState([]);
+  const [allUser, setAllUser] = useState([]);
   const [community, setCommunity] = useState([]);
   const [allJoinCommunity, setAllJoinCommunity] = useState([]);
   const [joinCommunity, setJoinCommunity] = useState([]);
@@ -22,13 +23,37 @@ const Communities = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (sessionUser) {
-        const { data, error } = await supabase.from("User").select("*");
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          return;
+        }
+
+        const userId = session.user.id;
+
+        const { data, error } = await supabase
+          .from("User")
+          .select("*")
+          .eq("userid", userId);
 
         if (error) {
           console.error("Error", error);
         } else {
           setUser(data);
         }
+      }
+    };
+
+    const fetchAllUserData = async () => {
+      const { data, error } = await supabase.from("User").select("*");
+
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setAllUser(data);
       }
     };
 
@@ -104,6 +129,7 @@ const Communities = () => {
     };
 
     fetchUserData();
+    fetchAllUserData();
     fetchCommunityData();
     fetchJoinCommunityData();
     fetchAllJoinCommunityData();
@@ -138,12 +164,14 @@ const Communities = () => {
               joinCommunityData={filterCommunity}
               postData={post}
               userData={user}
+              allUserData={allUser}
             />
           </div>
           <JoinPostList
             postData={filteredPosts}
             communityData={community}
             userData={user}
+            allUserData={allUser}
             commentData={comment}
           />
         </>
@@ -156,6 +184,7 @@ const Communities = () => {
             postData={post}
             communityData={community}
             userData={user}
+            allUserData={allUser}
             commentData={comment}
           />
         </>

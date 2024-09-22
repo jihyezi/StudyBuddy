@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "./DetailStudyPost.module.css";
 import supabase from "components/supabaseClient";
 
 // component
 import Header from "components/Post/DetailHeader";
 import Comment from "components/Post/Comment";
+import DeleteModal from "components/Post/DeleteModal";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
@@ -22,9 +23,14 @@ const DetailStudyPost = ({}) => {
   const { studyId } = useParams();
   const [inputValue, setInputValue] = useState("");
   const [userData, setUserData] = useState(null);
-  const [studyData, setStudyData] = useState(null);
+  // const [studyData, setStudyData] = useState(null);
   const [commentData, setCommentData] = useState([]);
   const [liked, setLiked] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { studyData, userDataa } = location.state;
 
   const fetchUserDataById = async (userid) => {
     const { data, error } = await supabase
@@ -69,7 +75,7 @@ const DetailStudyPost = ({}) => {
   useEffect(() => {
     const getStudyData = async () => {
       const data = await fetchStudyDataById(studyId);
-      setStudyData(data);
+      // setStudyData(data);
 
       const commentData = await fetchCommentDataById(data.studyid);
       setCommentData(commentData);
@@ -79,6 +85,27 @@ const DetailStudyPost = ({}) => {
     };
 
     getStudyData();
+
+    const checkLike = async () => {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Error getting session:", sessionError);
+        return;
+      }
+
+      const userId = session.user.id;
+
+      const { data: likeData } = await supabase
+        .from("StudyLike")
+        .select("*")
+        .eq("studyid", studyData.studyid)
+        .eq("userid", userId);
+      setLiked(likeData.length > 0);
+    };
+    checkLike();
   }, [studyId]);
 
   if (!studyData) {
@@ -146,11 +173,31 @@ const DetailStudyPost = ({}) => {
   };
 
   const toggleLike = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+
     if (liked) {
-      await supabase.from("PostLike").delete().eq("postId", "your_post_id");
+      await supabase
+        .from("StudyLike")
+        .delete()
+        .eq("studyid", studyData.studyid);
       setLiked(false);
     } else {
-      await supabase.from("PostLike").insert([{ postId: "your_post_id" }]);
+      await supabase.from("StudyLike").insert([
+        {
+          studyid: studyData.studyid,
+          createdat: new Date(),
+          userid: userId,
+        },
+      ]);
       setLiked(true);
     }
   };
@@ -169,13 +216,45 @@ const DetailStudyPost = ({}) => {
     }
   };
 
+  const handleRemoveClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteClick = async () => {
+    const { data, error } = await supabase
+      .from("Study")
+      .delete()
+      .eq("studyid", studyData.studyid);
+
+    if (error) {
+      console.log("삭제 실패 : ", error);
+    } else {
+      console.log("삭제 성공 ");
+      navigate(-1);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <div>
       <Header title={"Studies"} />
+      {isDeleteModalOpen && (
+        <DeleteModal
+          onDelete={handleDeleteClick}
+          onCancel={handleCancelClick}
+        />
+      )}
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
-        <div className={styles.studiesStatus}>{studyData.completion}</div>
+        {studyData.completion === "모집 중" ? (
+          <div className={styles.studiesStatus}>{studyData.completion}</div>
+        ) : (
+          <div className={styles.studiesStatus2}>{studyData.completion}</div>
+        )}
         <div className={styles.studiesTitle}>{studyData.title}</div>
         <div
           style={{
@@ -205,8 +284,15 @@ const DetailStudyPost = ({}) => {
             borderBottom: "3px solid #dddddd",
           }}
         >
-          <div className={styles.revise}>수정</div>
-          <div className={styles.delete}>삭제</div>
+          {userData?.userid === studyData.userid && (
+            <div className={styles.revise}>수정</div>
+          )}
+
+          {userData?.userid === studyData.userid && (
+            <div className={styles.delete} onClick={handleRemoveClick}>
+              삭제
+            </div>
+          )}
         </div>
         <div
           style={{
@@ -295,6 +381,7 @@ const DetailStudyPost = ({}) => {
                     userid={comment.userid}
                     content={comment.content}
                     commentData={comment}
+                    userDataa={userDataa}
                   />
                 ))}
             </div>

@@ -11,7 +11,7 @@ import profile4 from "assets/images/Profile/profile4.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const Comment = ({ userid, content, commentData, onDelete }) => {
+const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
   const [userId, setUserId] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -32,7 +32,7 @@ const Comment = ({ userid, content, commentData, onDelete }) => {
   };
 
   useEffect(() => {
-    console.log("commentData", commentData);
+    console.log("Comment_userData", userDataa);
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUserId(session.user.id);
     });
@@ -184,8 +184,8 @@ const Comment = ({ userid, content, commentData, onDelete }) => {
       <div>
         <img
           className={styles.commentWriterProfile}
-          src={userProfile?.profileimage || profile4}
-          alt="profile4"
+          src={userDataa ? userDataa.profileimage : profile1}
+          alt="profile1"
         />
       </div>
       <div
@@ -201,7 +201,7 @@ const Comment = ({ userid, content, commentData, onDelete }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className={styles.commentWriter}>
             <span className={styles.commentWriterNickname}>
-              {userProfile?.nickname || "닉네임"}
+              {userDataa ? userDataa.nickname : "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
               {userProfile?.updatedat

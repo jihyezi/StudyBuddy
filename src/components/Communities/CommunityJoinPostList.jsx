@@ -5,7 +5,9 @@ const CommunityPostList = ({
   postData,
   communityData,
   userData,
+  allUserData,
   commentData,
+  onBookmarkToggle,
 }) => {
   return (
     <div>
@@ -15,7 +17,9 @@ const CommunityPostList = ({
           post={post}
           community={communityData}
           user={userData}
+          allUser={allUserData}
           comment={commentData}
+          onBookmarkToggle={onBookmarkToggle}
         />
       ))}
     </div>

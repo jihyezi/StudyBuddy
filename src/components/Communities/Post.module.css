@@ -117,3 +117,44 @@
   flex-wrap: wrap;
   gap: 5px;
 }
+
+.moreClick {
+  position: absolute;
+  /* top: 10%; */
+  right: 122px;
+  z-index: 10;
+}
+
+.moreClickEdit,
+.moreClickDelete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+  padding: 8px;
+  background-color: #c8c8c8;
+  cursor: pointer;
+}
+
+.moreClickEdit {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom: 1px solid #ffffff;
+}
+
+.moreClickDelete {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.moreClickEditText,
+.moreClickDeleteText {
+  color: white;
+}
+
+.moreClickEditIcon,
+.moreClickDeleteIcon {
+  width: 20px;
+  height: 20px;
+}

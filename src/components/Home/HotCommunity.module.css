@@ -5,6 +5,7 @@
   border-radius: 8px;
   max-width: 300px;
   width: 300px;
+  cursor: pointer;
 }
 
 .classificationIcon {
@@ -58,8 +59,9 @@
 /* Small 사이즈 */
 .smallCommunity {
   position: relative;
-  max-width: 300px; 
+  max-width: 300px;
   width: 220px;
+  cursor: pointer;
 }
 
 .smallclassificationIcon {
@@ -72,11 +74,10 @@
 }
 
 .smallCommunityName {
-  font-size: 15px; 
+  font-size: 15px;
 }
 
 .smallCommunityDetailTitle,
 .smallCommunityDetailContent {
-  font-size: 13px; 
+  font-size: 13px;
 }
-

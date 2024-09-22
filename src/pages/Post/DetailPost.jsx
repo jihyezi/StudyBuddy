@@ -5,7 +5,7 @@ import supabase from "components/supabaseClient";
 
 // component
 import Header from "components/Post/DetailHeader";
-import DeleteModal from "components/Messages/DeleteModal";
+import DeleteModal from "components/Post/DeleteModal";
 import Comment from "components/Post/Comment";
 
 // icon & image
@@ -29,15 +29,26 @@ const DetailPost = ({}) => {
   const [inputValue, setInputValue] = useState("");
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData, communityData, postData } = location.state;
+  const { userData, allUserData, communityData, postData } = location.state;
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === postData.communityid)
         ?.name
     : "Unknown Community";
+
+  const userimg =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === postData.userid)?.profileimage
+      : "Unknown User";
+
+  const userNickname =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === postData.userid)?.nickname
+      : "Unknown User";
 
   const handleReviseClick = () => {
     navigate(
@@ -45,7 +56,33 @@ const DetailPost = ({}) => {
     );
   };
 
+  const handleRemoveClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteClick = async () => {
+    const { data, error } = await supabase
+      .from("Post")
+      .delete()
+      .eq("postud", postData.postid);
+
+    if (error) {
+      console.log("삭제 실패 : ", error);
+    } else {
+      console.log("삭제 성공 ");
+      navigate(-1);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   useEffect(() => {
+    console.log("userDatas", userData);
+    console.log("allUserDatas", allUserData);
+    console.log("communityData", communityData);
+    console.log("postData", postData.userid);
     const getCommentData = async () => {
       const commentData = await fetchCommentDataById(postData.postid);
       setCommentData(commentData);
@@ -254,6 +291,12 @@ const DetailPost = ({}) => {
   return (
     <div>
       <Header title={"Post"} />
+      {isDeleteModalOpen && (
+        <DeleteModal
+          onDelete={handleDeleteClick}
+          onCancel={handleCancelClick}
+        />
+      )}
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
@@ -269,14 +312,15 @@ const DetailPost = ({}) => {
         >
           <img
             className={styles.postWriterProfile}
-            src={userData?.profileimage || profile1}
+            src={userimg || profile1}
             alt="profile1"
           />
-          <div className={styles.postWriterNickname}>{userData.nickname}</div>
+          <div className={styles.postWriterNickname}>{userNickname}</div>
           <div className={styles.postWriteDate}>
             {new Date(postData.createdat).toLocaleDateString()}
           </div>
         </div>
+
         <div
           style={{
             display: "flex",
@@ -287,11 +331,18 @@ const DetailPost = ({}) => {
             borderBottom: "3px solid #dddddd",
           }}
         >
-          <div className={styles.revise} onClick={handleReviseClick}>
-            수정
-          </div>
-          <div className={styles.delete}>삭제</div>
+          {userData[0].userid === postData.userid && (
+            <div className={styles.revise} onClick={handleReviseClick}>
+              수정
+            </div>
+          )}
+          {userData[0].userid === postData.userid && (
+            <div className={styles.delete} onClick={handleRemoveClick}>
+              삭제
+            </div>
+          )}
         </div>
+
         <div
           style={{
             marginTop: "30px",
@@ -399,6 +450,7 @@ const DetailPost = ({}) => {
                     content={comment.content}
                     commentData={comment}
                     onDelete={deleteComment}
+                    userData={userData}
                   />
                 ))}
             </div>
@@ -412,8 +464,8 @@ const DetailPost = ({}) => {
             >
               <img
                 className={styles.commentWriterProfile}
-                src={profile3}
-                alt="profile3"
+                src={userData[0].profileimage || profile1}
+                alt="profile1"
               />
               <div
                 style={{
@@ -421,7 +473,9 @@ const DetailPost = ({}) => {
                   flexDirection: "column",
                   border: "2px solid #dddddd",
                   borderRadius: "12px",
-                  padding: "10px",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  paddingBottom: "10px",
                   flex: 1,
                   marginLeft: "15px",
                 }}

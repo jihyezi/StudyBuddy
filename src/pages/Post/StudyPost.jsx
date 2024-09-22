@@ -154,6 +154,7 @@ const StudyPost = () => {
           tag: tags,
           createdat: new Date(),
           updatedat: new Date(),
+          completion: "모집 중",
         },
       ])
       .select();

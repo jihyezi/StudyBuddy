@@ -14,13 +14,23 @@ import view from "assets/icons/Communities/view.png";
 import bookmarkOff from "assets/icons/Communities/bookmark_off.png";
 import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
+import editIcon from "assets/icons/Post/edit.png";
+import deleteIcon from "assets/icons/Post/delete.png";
 
-const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
+const Post = ({
+  post = {},
+  community = [],
+  user = [],
+  allUser = [],
+  comment = [],
+  onBookmarkToggle,
+}) => {
   const { communityId } = useParams();
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [showOptions, setShowOptions] = useState(false);
 
   function formatDate(date) {
     try {
@@ -45,21 +55,25 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
 
   const days = calculateDaysBetween(startdate, enddate);
 
-  const communityName = Array.isArray(community)
-    ? community.find((comm) => comm.communityid === post.communityid)?.name
-    : "Unknown Community";
+  const communityName =
+    Array.isArray(community) && community.length > 0
+      ? community.find((comm) => comm.communityid === post.communityid)?.name
+      : "Unknown Communityy";
 
-  const userimg = Array.isArray(user)
-    ? user.find((u) => u.userid === post.userid)?.profileimage
-    : "Unknown User";
+  const userimg =
+    Array.isArray(allUser) && allUser.length > 0
+      ? allUser.find((u) => u.userid === post.userid)?.profileimage
+      : "Unknown User";
 
-  const userNickname = Array.isArray(user)
-    ? user.find((u) => u.userid === post.userid)?.nickname
-    : "Unknown User";
+  const userNickname =
+    Array.isArray(allUser) && allUser.length > 0
+      ? allUser.find((u) => u.userid === post.userid)?.nickname
+      : "Unknown User";
 
-  const userName = Array.isArray(user)
-    ? user.find((u) => u.userid === post.userid)?.username
-    : "Unknown User";
+  const userName =
+    Array.isArray(allUser) && allUser.length > 0
+      ? allUser.find((u) => u.userid === post.userid)?.username
+      : "Unknown User";
 
   const commentCount = Array.isArray(comment)
     ? comment.filter((c) => c.postid === post.postid).length
@@ -83,6 +97,7 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
         .select("*")
         .eq("postid", post.postid)
         .eq("userid", userId);
+
       setLiked(likeData.length > 0);
 
       const { data: bookmarkData } = await supabase
@@ -94,9 +109,6 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     };
 
     checkLikeAndBookmark();
-  }, []);
-
-  useEffect(() => {
     fetchLikeCount();
   }, [post.postid]);
 
@@ -113,6 +125,7 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     navigate(`/detail-post/${post.postid}`, {
       state: {
         userData: user,
+        allUserData: allUser,
         communityData: community,
         postData: post,
         // commentData: comment,
@@ -120,7 +133,9 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     });
   };
 
-  const toggleLike = async () => {
+  const toggleLike = async (event) => {
+    event.stopPropagation();
+
     const {
       data: { session },
       error: sessionError,
@@ -129,12 +144,12 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
       console.error("Error getting session:", sessionError);
       return;
     }
-
     const userId = session.user.id;
 
     if (liked) {
       await supabase.from("PostLike").delete().eq("postid", post.postid);
       setLiked(false);
+      setLikeCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
     } else {
       await supabase.from("PostLike").insert([
         {
@@ -144,10 +159,13 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
         },
       ]);
       setLiked(true);
+      setLikeCount((prevCount) => prevCount + 1);
     }
   };
 
-  const toggleBookmark = async () => {
+  const toggleBookmark = async (event) => {
+    event.stopPropagation();
+
     const {
       data: { session },
       error: sessionError,
@@ -162,6 +180,7 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     if (bookmarked) {
       await supabase.from("Bookmark").delete().eq("postid", post.postid);
       setBookmarked(false);
+      onBookmarkToggle(post.postid);
     } else {
       await supabase.from("Bookmark").insert([
         {
@@ -175,7 +194,9 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = (event) => {
+    event.stopPropagation();
+
     if (navigator.share) {
       navigator
         .share({
@@ -189,9 +210,31 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     }
   };
 
-  if (!community || !user) {
-    return <div>로딩 중...</div>;
-  }
+  const moreClick = (event) => {
+    event.stopPropagation();
+    setShowOptions(!showOptions);
+  };
+
+  const handleEditClick = (event) => {
+    event.stopPropagation();
+    setShowOptions(false);
+  };
+
+  const handleDeleteClick = async (event) => {
+    event.stopPropagation();
+    const { data, error } = await supabase
+      .from("Post")
+      .delete()
+      .eq("postid", post.postid);
+
+    if (error) {
+      console.error("게시글 삭제 실패:", error);
+    } else {
+      console.log("게시글 삭제 성공:", data);
+    }
+
+    setShowOptions(false);
+  };
 
   return (
     <div className={styles.post} onClick={handlePostClick}>
@@ -199,8 +242,33 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
         style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
       >
         <span className={styles.communityName}>{communityName}</span>
-        {user.userid === post.userid && (
-          <img className={styles.moreIcon} src={more} alt="more" />
+        {user[0]?.userid === post.userid && (
+          <img
+            className={styles.moreIcon}
+            src={more}
+            alt="more"
+            onClick={moreClick}
+          />
+        )}
+        {showOptions && (
+          <div className={styles.moreClick}>
+            <div className={styles.moreClickEdit} onClick={handleEditClick}>
+              <div className={styles.moreClickEditText}>수정하기</div>
+              <img
+                className={styles.moreClickEditIcon}
+                src={editIcon}
+                alt="edit"
+              />
+            </div>
+            <div className={styles.moreClickDelete} onClick={handleDeleteClick}>
+              <div className={styles.moreClickDeleteText}>삭제하기</div>
+              <img
+                className={styles.moreClickDeleteIcon}
+                src={deleteIcon}
+                alt="delete"
+              />
+            </div>
+          </div>
         )}
       </div>
 
@@ -241,7 +309,12 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
                 alt="likeOn"
                 onClick={toggleLike}
               />
-              <span className={styles.likeNumber}>{likeCount}</span>
+              <span
+                className={styles.likeNumber}
+                style={{ color: liked ? "#ff7474" : "#9c9c9c" }}
+              >
+                {likeCount}
+              </span>
             </div>
             <div>
               <img className={styles.viewIcon} src={view} alt="view" />

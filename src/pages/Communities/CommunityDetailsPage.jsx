@@ -12,15 +12,46 @@ import supabase from "components/supabaseClient";
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
   const location = useLocation();
-  const communityInfo = { ...location.state };
-
+  const {
+    communityData,
+    allJoinCommunityData,
+    joinCommunityData,
+    postData,
+    userData,
+  } = location.state;
   const [isJoined, setIsJoined] = useState(false);
   const [joinCommunity, setJoinCommunity] = useState(null);
   const [community, setCommunity] = useState(null);
   const [posts, setPosts] = useState([]);
 
-  const handleJoinClick = () => {
-    setIsJoined(!isJoined);
+  const handleJoinClick = async () => {
+    const userId = userData[0].userid;
+
+    if (isJoined) {
+      const { error } = await supabase
+        .from("JoinCommunity")
+        .delete()
+        .eq("userid", userId)
+        .eq("communityid", communityId);
+
+      if (error) {
+        console.error("Error leaving community:", error);
+      } else {
+        setIsJoined(false);
+        console.log("Successfully left the community");
+      }
+    } else {
+      const { error } = await supabase
+        .from("JoinCommunity")
+        .insert([{ userid: userId, communityid: communityId }]);
+
+      if (error) {
+        console.error("Error joining community:", error);
+      } else {
+        setIsJoined(true);
+        console.log("Successfully joined the community");
+      }
+    }
   };
 
   const fetchCommunityDataById = async (communityId) => {
@@ -81,6 +112,8 @@ const CommunityDetailsPage = () => {
     fetchCommunityDataById(communityId);
     fetchJoinCommunityDataById();
     fetchPostDataById(communityId);
+    console.log("communityId", communityId);
+    console.log("communityData", communityData);
   }, [communityId]);
 
   if (!community || !posts) {
