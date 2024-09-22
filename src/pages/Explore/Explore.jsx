@@ -20,38 +20,48 @@ const Explore = () => {
   return (
     <div className={styles.Explore}>
       <div className={styles.PopularTagContainer}>
-        <div className={styles.CategoryText}>인기 태그 🏷️</div>
-        <Tag />
-      </div>
-      <div className={styles.HotCommunitiesContainer}>
-        <div className={styles.CategoryText}>🔥 HOT 커뮤니티 </div>
-        <div className={styles.scrollContainer}>
-          <div className={styles.HotCommunityContainer}>
-            <HotCommunity />
-            <HotCommunity />
-            <HotCommunity />
+        <div style={{ position: 'relative' }}>
+          <div className={styles.CategoryText}>인기 태그 🏷️</div>
+          <div className={styles.CategoryTag}>
+            <Tag />
           </div>
         </div>
+
+      </div>
+      <div className={styles.HotCommunitiesContainer}>
+        <div style={{ position: 'relative' }}>
+          <div className={styles.CategoryText}>🔥 HOT 커뮤니티 </div>
+          <div className={styles.HotCommunity}>
+            <div className={styles.HotCommunityContainer}>
+              <HotCommunity />
+              <HotCommunity />
+              <HotCommunity />
+            </div>
+          </div>
+        </div>
+
       </div>
       <div className={styles.PopularStudyContainer}>
-        <div className={styles.CategoryText}>⭐️ 인기 스터디</div>
-        <div className={styles.StudyPostContainer}>
-          <StudyPost
-            state={postProps.state}
-            title={postProps.title}
-            content={postProps.content}
-            tag={postProps.tag}
-            person={postProps.person}
-            type={postProps.type}
-          />
-          <StudyPost
-            state={postProps.state}
-            title={postProps.title}
-            content={postProps.content}
-            tag={postProps.tag}
-            person={postProps.person}
-            type={postProps.type}
-          />
+        <div style={{ position: 'relative', width: '1080px' }}>
+          <div className={styles.CategoryText}>⭐️ 인기 스터디</div>
+          <div className={styles.StudyPostContainer}>
+            <StudyPost
+              state={postProps.state}
+              title={postProps.title}
+              content={postProps.content}
+              tag={postProps.tag}
+              person={postProps.person}
+              type={postProps.type}
+            />
+            <StudyPost
+              state={postProps.state}
+              title={postProps.title}
+              content={postProps.content}
+              tag={postProps.tag}
+              person={postProps.person}
+              type={postProps.type}
+            />
+          </div>
         </div>
       </div>
     </div>

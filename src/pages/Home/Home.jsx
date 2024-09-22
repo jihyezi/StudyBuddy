@@ -347,7 +347,7 @@ const Home = ({}) => {
           height: "32px",
           // top: 240,
           // left: 80,
-          top: "95%", // 위치 수정
+          bottom: "-14px",
           left: "7%", // 위치 수정
           borderRadius: "8px",
           opacity: "0px",
@@ -400,12 +400,44 @@ const Home = ({}) => {
   return (
     <div className={styles.home}>
       <Slider {...settings} style={{ display: "grid" }}>
-        <img src={onboardingimg} />
-        <img src={onboardingimg} />
-        <img src={onboardingimg} />
-        <img src={onboardingimg} />
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 1"
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+          />
+        </div>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 2"
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+          />
+        </div>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 3"
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+          />
+        </div>
+        <div style={{ height: "100%", width: "100%" }}>
+          <img
+            src={onboardingimg}
+            alt="Slide 4"
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+          />
+        </div>
       </Slider>
-      <div style={{ borderBottom: "1px solid #ddd", padding: "30px 0px" }}>
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #ddd",
+          padding: "30px 0px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
             position: "relative",
@@ -445,15 +477,17 @@ const Home = ({}) => {
       {/*  */}
       <div
         style={{
+          display: "flex",
           borderBottom: "1px solid #ddd",
           padding: "30px 0px",
           // position: "fixed",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div
@@ -491,11 +525,18 @@ const Home = ({}) => {
         </div>
       </div>
       {/*  */}
-      <div style={{ borderBottom: "1px solid #ddd", padding: "30px 0px" }}>
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #ddd",
+          padding: "30px 0px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div

@@ -1,3 +1,9 @@
+.hotCommunityList {
+  display: flex; /* Flexbox를 사용하여 가로 배열 */
+  gap: 225px; /* 컴포넌트 간의 간격 */
+  overflow-x: auto; /* 필요시 수평 스크롤 가능 */
+}
+
 .community {
   position: relative;
   padding: 16px 20px;

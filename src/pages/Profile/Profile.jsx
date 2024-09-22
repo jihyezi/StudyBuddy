@@ -67,35 +67,40 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <Header headerName={user.nickname} />
-      <div className={styles.info}>
-        <div className={styles.imageWrapper}>
-          {user.backgroundimage ?
-            <img src={user.backgroundimage} alt="profile background" className={styles.image} />
-            : <img src={nobackground} alt="profile background" className={styles.image} />
-          }
-          <div className={styles.profileImgContainer}>
-            {user.profileimage ?
-              <img src={user.profileimage} alt="profile" className={styles.profileImg} />
-              : <img src={noprofile} alt="profile" className={styles.profileImg} />
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div className={styles.info}>
+          <div className={styles.imageWrapper}>
+            {user.backgroundimage ?
+              <img src={user.backgroundimage} alt="profile background" className={styles.image} />
+              : <img src={nobackground} alt="profile background" className={styles.image} />
             }
+            <div className={styles.profileImgContainer}>
+              {user.profileimage ?
+                <img src={user.profileimage} alt="profile" className={styles.profileImg} />
+                : <img src={noprofile} alt="profile" className={styles.profileImg} />
+              }
 
+            </div>
           </div>
+
+          <div className={styles.details}>
+            <div className={styles.edit}>
+              <div className={styles.communityName}>{communityInfo.community}</div>
+              <button className={styles.joinButton}>Edit</button>
+            </div>
+            <div className={styles.infoList}>
+              <span className={styles.description1}>{user.nickname}</span>
+              <span className={styles.description2}>@{user.username}</span>
+              <span className={styles.description3}>{user.bio}</span>
+            </div>
+          </div>
+          <ProfileTablist />
         </div>
 
-        <div className={styles.details}>
-          <div className={styles.edit}>
-            <div className={styles.communityName}>{communityInfo.community}</div>
-            <button className={styles.joinButton}>Edit</button>
-          </div>
-          <div className={styles.infoList}>
-            <span className={styles.description1}>{user.nickname}</span>
-            <span className={styles.description2}>@{user.username}</span>
-            <span className={styles.description3}>{user.bio}</span>
-          </div>
-        </div>
       </div>
 
-      <ProfileTablist />
+
+
     </div>
   );
 };
