@@ -48,6 +48,8 @@ const Post = ({ post = {}, community = [], user = [], comment = [] }) => {
     ? user.find((u) => u.userid === post.userid)?.profileimage
     : "Unknown User";
 
+  console.log(userimg)
+
   const userNickname = Array.isArray(user)
     ? user.find((u) => u.userid === post.userid)?.nickname
     : "Unknown User";

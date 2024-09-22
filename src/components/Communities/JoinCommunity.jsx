@@ -45,8 +45,6 @@ const JoinCommunity = ({
     });
   };
 
-  console.log(allJoinCommunityData);
-
   const handleScroll = () => {
     const { current } = containerRef;
     if (current) {
