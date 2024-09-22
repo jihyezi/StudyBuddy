@@ -39,6 +39,7 @@ const Center = styled.div`
   width: calc(100% - 320px);
   display: flex;
   flex-direction: row;
+  justify-content: center; /* 가운데 정렬 */
   flex: 1;
 `;
 
