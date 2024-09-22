@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styles from "./Home.module.css";
 
 // sclick
@@ -6,7 +6,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // component
-import HotCommunity from "components/Home/HotCommunity";
+import HotCommunity from "components/Home/HotCommunity_test";
 import PopularPost from "components/Home/PopularPost";
 import RecentCommunity from "components/Home/RecentCommunity";
 import PopularStudy from "components/Home/PopularStudy";
@@ -19,9 +19,11 @@ import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
+import supabase from "../../components/supabaseClient"; // Supabase 클라이언트 가져오기
+
 const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
+  const [hotCommunityData, setHotCommunityData] = useState([]);
   const [selectedEvent, setSelectEvent] = useState("");
 
   const handleEventSelect = (event) => {
@@ -94,6 +96,30 @@ const Home = ({ }) => {
     ),
   };
 
+  useEffect(() => {
+    const fetchHotCommunities = async () => {
+      const { data, error } = await supabase
+        .from("hot_communities_view")
+        .select("*");
+
+      if (error) {
+        console.error("Error fetching hot communities:", error);
+      } else {
+        setHotCommunityData(data);
+      }
+    };
+
+    fetchHotCommunities();
+  }, []);
+
+  const displayedHotCommunities = hotCommunityData
+    .filter(
+      (community, index, self) =>
+        index ===
+        self.findIndex((c) => c.community_name === community.community_name)
+    )
+    .sort((a, b) => b.member_count - a.member_count)
+    .slice(0, 3);
   return (
     <div className={styles.home}>
       <Slider {...settings} style={{ display: "grid", height: "260px" }}>
@@ -153,11 +179,8 @@ const Home = ({ }) => {
             }}
           >
             <div className={styles.hotCommunityItem}>
-              <HotCommunity />
-              <HotCommunity />
-              <HotCommunity />
+              <HotCommunity communities={displayedHotCommunities} />
             </div>
-            {/* 필요한 만큼 HotCommunity 컴포넌트 추가 */}
           </div>
         </div>
       </div>
@@ -197,8 +220,8 @@ const Home = ({ }) => {
           >
             <div className={styles.hotCommunityItem}>
               <PopularPost />
-              <PopularPost />
-              <PopularPost />
+              {/* <PopularPost />
+              <PopularPost /> */}
             </div>
           </div>
         </div>
