@@ -1,46 +1,48 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
-import leftArrow from "assets/icons/left_arrow.png";
-import rightArrow from "assets/icons/right_arrow.png";
-import noimage from "assets/images/Profile/nobackground.png";
+import supabase from "components/supabaseClient";
+
+// image
+import cat from "assets/images/Communities/1.jpg";
+import leftArrow from "../../assets/icons/left_arrow.png";
+import rightArrow from "../../assets/icons/right_arrow.png";
+import profile from "../../assets/icons/Communities/communityprofile.jpeg";
 
 const JoinCommunity = ({
   onEventSelect,
-  postData,
-  communityData,
-  joinCommunityData,
-  userData,
-  commentData,
-  allJoinCommunityData,
+  communityData = {},
+  allJoinCommunityData = {},
+  joinCommunityData = {},
+  postData = {},
+  userData = {},
 }) => {
+  const [joinCommunities, setJoinCommunities] = useState([]);
+  const [communities, setCommunities] = useState([]);
   const [scrollState, setScrollState] = useState("start");
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
-  const handleClick = (item) => {
-    const imageUrl = item.image
-      ? `${item.image}`
-      : "https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png";
+  // useEffect(() => {
+  //   fetchJoinCommunityDataAll();
+  // }, []);
 
+  const handleClick = (item) => {
     setSelectedItem(item);
     onEventSelect(item);
-    navigate(`/detail-community/:communityId`, {
+    navigate(`/detail-community/${item.communityid}`, {
       state: {
-        id: `${item.communityid}`,
-        img: imageUrl,
-        community: `${item.name}`,
-        description: `${item.description}`,
-        createdby: `${item.createdby}`,
-        rules: item.rules,
-        userData: userData,
-        commentData: commentData,
-        postData: postData,
+        // id: `${item.id}`,
+        // img: `${item.img}`,
+        // community: `${item.community}`,
         communityData: communityData,
         allJoinCommunityData: allJoinCommunityData,
+        joinCommunityData: joinCommunityData,
+        postData: postData,
+        userData: userData,
       },
     });
   };
@@ -64,7 +66,7 @@ const JoinCommunity = ({
   const moveRight = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft += current.clientWidth - 20;
+      current.scrollLeft += current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
       handleScroll();
     }
   };
@@ -72,10 +74,54 @@ const JoinCommunity = ({
   const moveLeft = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft -= current.clientWidth - 20;
+      current.scrollLeft -= current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
       handleScroll();
     }
   };
+
+  // const fetchJoinCommunityDataAll = async () => {
+  //   const {
+  //     data: { session },
+  //     error: sessionError,
+  //   } = await supabase.auth.getSession();
+  //   if (sessionError) {
+  //     console.error("Error getting session:", sessionError);
+  //     return;
+  //   }
+
+  //   const userId = session.user.id;
+
+  //   const { data, error } = await supabase
+  //     .from("JoinCommunity")
+  //     .select("*")
+  //     .eq("userid", userId);
+
+  //   if (error) {
+  //     console.error("Error fetching data:", error);
+  //   } else {
+  //     setJoinCommunities(data);
+  //     const communityPromises = data.map((joinCommunity) =>
+  //       fetchCommunityDataAll(joinCommunity.communityid)
+  //     );
+
+  //     const communitiesData = await Promise.all(communityPromises);
+  //     setCommunities(communitiesData.flat());
+  //   }
+  // };
+
+  // const fetchCommunityDataAll = async (communityId) => {
+  //   const { data, error } = await supabase
+  //     .from("Community")
+  //     .select("*")
+  //     .eq("communityid", communityId);
+
+  //   if (error) {
+  //     console.error("Error fetching data:", error);
+  //     return [];
+  //   } else {
+  //     return data;
+  //   }
+  // };
 
   return (
     <div className={styles.stackTagsArea}>
@@ -84,30 +130,24 @@ const JoinCommunity = ({
         ref={containerRef}
         onScroll={handleScroll}
       >
-        {joinCommunityData.map((item, index) => {
-          const imageUrl = item.image
-            ? `${item.image}`
-            : "https://vrpwhfbfzqwmqlhwhbtu.supabase.co/storage/v1/object/public/Images/community/nobackground.png";
-
-          return (
-            <div
-              key={index}
-              className={styles.classification}
-              onClick={() => handleClick(item)}
-            >
-              <div className={styles.joinCommunity}>
-                <div className={styles.communityImageContainer}>
-                  <img
-                    className={styles.communityImage}
-                    src={imageUrl}
-                    alt={item.name || "Default Image"}
-                  />
-                </div>
-                <div className={styles.communityName}>{item.name}</div>
+        {joinCommunityData.map((item, index) => (
+          <div
+            key={index}
+            className={styles.classification}
+            onClick={() => handleClick(item)}
+          >
+            <div className={styles.joinCommunity}>
+              <div className={styles.communityImageContainer}>
+                <img
+                  className={styles.communityImage}
+                  src={item.image}
+                  alt="cat"
+                />
               </div>
+              <div className={styles.communityName}>{item.name}</div>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
       {isOverflow && (scrollState === "middle" || scrollState === "end") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxLeft}`}>

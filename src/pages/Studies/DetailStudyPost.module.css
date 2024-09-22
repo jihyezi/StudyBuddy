@@ -10,6 +10,18 @@
   font-family: "NotoSans-SemiBold";
 }
 
+.studiesStatus2 {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: inline-block;
+  padding: 5px 20px 5px 20px;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #9c9c9c;
+  font-family: "NotoSans-SemiBold";
+}
+
 .studiesTitle {
   margin-top: 30px;
   color: #333333;

@@ -12,7 +12,7 @@ const InputModal = (props) => {
 
   useEffect(() => {
     if (props.initialValue) {
-      console.log("initialValue", props.initialValue);
+      // console.log("initialValue", props.initialValue);
       setSelectedModal(props.initialValue);
       setIsTextColorChanged(true);
     }
@@ -27,7 +27,7 @@ const InputModal = (props) => {
   };
 
   const updateSelectedModal = (value) => {
-    console.log("Selected modal value:", value);
+    // console.log("Selected modal value:", value);
     setSelectedModal(value);
     setIsTextColorChanged(true);
     props.onSelect(value);

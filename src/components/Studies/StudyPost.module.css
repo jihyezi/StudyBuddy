@@ -2,7 +2,6 @@
   display: flex;
   border-bottom: 1px solid #ddd;
   padding: 20px 10px;
-  cursor: pointer;
 }
 
 .StudyPostWrapper {
@@ -12,6 +11,10 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+}
+
+.StudyPostWrapperr {
+  cursor: pointer;
 }
 
 .StudyPostTitleContainer {
@@ -104,4 +107,9 @@
   color: #9c9c9c;
   font-size: 14px;
   font-family: "NotoSans-Regular";
+}
+
+.heartIcon,
+.shareIcon {
+  cursor: pointer;
 }

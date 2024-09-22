@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "./DeleteModal.module.css";
 
-const DeleteModal = ({ onClose }) => {
+const DeleteModal = ({ onDelete, onCancel }) => {
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay}>
       <div className={styles.deleteModal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalQuestion}>Delete Conversation?</div>
-        <div className={styles.modalConfirm} onClick={onClose}>
+        <div className={styles.modalConfirm} onClick={onDelete}>
           Delete
         </div>
-        <div className={styles.modalCancel} onClick={onClose}>
+        <div className={styles.modalCancel} onClick={onCancel}>
           Cancel
         </div>
       </div>

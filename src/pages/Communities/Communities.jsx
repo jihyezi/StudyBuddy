@@ -10,8 +10,9 @@ import { useAuth } from "contexts/AuthContext";
 import supabase from "components/supabaseClient";
 
 const Communities = () => {
-  const [selectedEvent, setSelectEvent] = useState('');
+  const [selectedEvent, setSelectEvent] = useState("");
   const [user, setUser] = useState([]);
+  const [allUser, setAllUser] = useState([]);
   const [community, setCommunity] = useState([]);
   const [allJoinCommunity, setAllJoinCommunity] = useState([]);
   const [joinCommunity, setJoinCommunity] = useState([]);
@@ -22,9 +23,21 @@ const Communities = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (sessionUser) {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          return;
+        }
+
+        const userId = session.user.id;
+
         const { data, error } = await supabase
           .from("User")
-          .select("*");
+          .select("*")
+          .eq("userid", userId);
 
         if (error) {
           console.error("Error", error);
@@ -34,11 +47,19 @@ const Communities = () => {
       }
     };
 
+    const fetchAllUserData = async () => {
+      const { data, error } = await supabase.from("User").select("*");
+
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setAllUser(data);
+      }
+    };
+
     const fetchCommunityData = async () => {
       if (sessionUser) {
-        const { data, error } = await supabase
-          .from("Community")
-          .select("*");
+        const { data, error } = await supabase.from("Community").select("*");
 
         if (error) {
           console.error("Error", error);
@@ -79,9 +100,7 @@ const Communities = () => {
 
     const fetchPostData = async () => {
       if (sessionUser) {
-        const { data, error } = await supabase
-          .from("Post")
-          .select("*");
+        const { data, error } = await supabase.from("Post").select("*");
 
         if (error) {
           console.error("Error", error);
@@ -92,7 +111,7 @@ const Communities = () => {
     };
 
     const fetchCommentData = async () => {
-      if (sessionUser && post.postid) {  // post.postid가 정의된 경우에만 실행
+      if (sessionUser && post.postid) {
         const { data, error } = await supabase
           .from("Comment")
           .select("*")
@@ -101,6 +120,7 @@ const Communities = () => {
         if (error) {
           console.error("Error", error);
         } else {
+          console.log("data", data);
           setComment(data);
         }
       } else {
@@ -109,6 +129,7 @@ const Communities = () => {
     };
 
     fetchUserData();
+    fetchAllUserData();
     fetchCommunityData();
     fetchJoinCommunityData();
     fetchAllJoinCommunityData();
@@ -125,27 +146,47 @@ const Communities = () => {
   );
 
   const filteredPosts = post.filter((p) =>
-    filterCommunity.some((fc) => Number(fc.communityid) === Number(p.communityid))
+    filterCommunity.some(
+      (fc) => Number(fc.communityid) === Number(p.communityid)
+    )
   );
-
-  console.log(filteredPosts)
 
   return (
     <div className={styles.community}>
-      <Header headerName={'Communities'} />
+      <Header headerName={"Communities"} />
       {joinCommunity.length > 0 ? (
         <>
           <div className={styles.classification}>
-            <JoinCommunity onEventSelect={handleEventSelect} communityData={community} allJoinCommunityData={allJoinCommunity} joinCommunityData={filterCommunity} postData={post} userData={user} />
+            <JoinCommunity
+              onEventSelect={handleEventSelect}
+              communityData={community}
+              allJoinCommunityData={allJoinCommunity}
+              joinCommunityData={filterCommunity}
+              postData={post}
+              userData={user}
+              allUserData={allUser}
+            />
           </div>
-          <JoinPostList postData={filteredPosts} communityData={community} userData={user} commentData={comment} />
+          <JoinPostList
+            postData={filteredPosts}
+            communityData={community}
+            userData={user}
+            allUserData={allUser}
+            commentData={comment}
+          />
         </>
       ) : (
         <>
           <div className={styles.classification}>
             <Classification onEventSelect={handleEventSelect} />
           </div>
-          <JoinPostList postData={post} communityData={community} userData={user} commentData={comment} />
+          <JoinPostList
+            postData={post}
+            communityData={community}
+            userData={user}
+            allUserData={allUser}
+            commentData={comment}
+          />
         </>
       )}
     </div>
