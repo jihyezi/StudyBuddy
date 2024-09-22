@@ -480,7 +480,9 @@ const Home = ({}) => {
                   postData={postData[index]}
                   postLike={postLike}
                   comment={comment}
-                  communityName={communityName[index]}
+                  communityName={
+                    communityName ? communityName[index] : "커뮤니티"
+                  }
                   onClick={() => handlePostClick(post)}
                 />
               ))}
