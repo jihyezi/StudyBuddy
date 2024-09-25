@@ -23,11 +23,11 @@
   -ms-overflow-style: none; /* for Internet Explorer and Edge */
 }
 
-/* .hotCommunityItem {
+.hotCommunityItem {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-} */
+}
 
 .newSearch {
   width: 100%;

@@ -6,7 +6,7 @@ import supabase from "components/supabaseClient";
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
 
-const Tag = ({ onEventSelect }) => {
+const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedButton, setSelectedButton] = useState("🔥");
   const [tags, setTags] = useState([]);
@@ -31,7 +31,14 @@ const Tag = ({ onEventSelect }) => {
 
   const handleClick = (tag) => {
     setSelectedButton(tag);
-    onEventSelect("click", tag);
+
+    if (onTagSelect) {
+      onTagSelect(tag); // 태그 선택 시 onTagSelect 호출
+      console.log("Selected Tag:", tag); // 태그 선택 로그 확인
+    }
+    if (onEventSelect) {
+      onEventSelect("click", tag); // 이벤트 선택 시 onEventSelect 호출
+    }
   };
 
   const handleScroll = () => {
