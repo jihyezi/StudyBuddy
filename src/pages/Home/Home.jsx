@@ -1,12 +1,15 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Home.module.css";
+import supabase from "components/supabaseClient";
+import { useAuth } from "contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 // sclick
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // component
-import HotCommunity from "components/Home/HotCommunity_test";
+import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
 import RecentCommunity from "components/Home/RecentCommunity";
 import PopularStudy from "components/Home/PopularStudy";
@@ -14,20 +17,318 @@ import HomeImage from "assets/images/Home/OnBoardingImage1.png";
 import leftarrow from "assets/icons/Home/leftarrow.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
 import downarrow from "assets/icons/Home/downarrow.png";
-import LoginModal from "components/Home/LoginModal"; // 모달
+
+import LoginModal from "components/Home/LoginModal";
+
 import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-import supabase from "../../components/supabaseClient"; // Supabase 클라이언트 가져오기
-
-const Home = ({ }) => {
+const Home = ({}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [hotCommunityData, setHotCommunityData] = useState([]);
+  const [hotCommunities, setHotCommunities] = useState([]);
+  const [popularPosts, setPopularPosts] = useState([]);
+  const [communityData, setCommunityData] = useState({});
+  const [postData, setPostData] = useState([]);
+  const [postLike, setPostLike] = useState(null);
+  const [comment, setComment] = useState(null);
+  const [communityName, setCommunityName] = useState(null);
+  const [selectedTag, setSelectedTag] = useState("🔥");
   const [selectedEvent, setSelectEvent] = useState("");
+  const [popularStudies, setPopularStudies] = useState([]);
 
-  const handleEventSelect = (event) => {
+  const { user: sessionUser } = useAuth();
+  const [user, setUser] = useState([]);
+  const [allUser, setAllUser] = useState([]);
+  const [communityy, setCommunityy] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchInitialPopularStudies = async () => {
+      await fetchPopularStudies(selectedTag);
+    };
+    fetchInitialPopularStudies();
+  }, []);
+
+  const handleEventSelect = async (event, tag) => {
     setSelectEvent(event);
+    setSelectedTag(tag);
+    await fetchPopularStudies(tag);
+  };
+
+  const fetchPopularStudies = async (tag) => {
+    if (tag === "🔥") {
+      const { data, error } = await supabase
+        .from("all_popular_studies")
+        .select("studyid, like_count")
+        .limit(3);
+
+      if (error) {
+        console.error("Error fetching popular studies:", error);
+      } else {
+        const studyIds = data.map((item) => item.studyid);
+        const { data: studies, error: studyError } = await supabase
+          .from("Study")
+          .select("*")
+          .in("studyid", studyIds);
+
+        if (studyError) {
+          console.error("Error fetching study details:", studyError);
+        } else {
+          setPopularStudies(studies);
+        }
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("popular_studiess")
+        .select("*")
+        .contains("tag", JSON.stringify([tag]))
+        .limit(3);
+
+      if (error) {
+        console.error("Error fetching popular studies:", error);
+      } else {
+        setPopularStudies(data);
+      }
+    }
+  };
+
+  const fetchHotCommunities = async () => {
+    const { data, error } = await supabase
+      .from("hot_communities")
+      .select("*")
+      .order("member_count", { ascending: false })
+      .limit(3);
+
+    if (error) {
+      console.error("Error fetching hot communities:", error);
+    } else {
+      setHotCommunities(data);
+      const fetchedCommunityData = await Promise.all(
+        data.map(async (community) => {
+          const { data: communityInfo, error: communityError } = await supabase
+            .from("Community")
+            .select("*")
+            .eq("communityid", community.communityid)
+            .single();
+
+          if (communityError) {
+            console.error("Error fetching community data:", communityError);
+            return null;
+          }
+
+          const { count: postCount, error: postCountError } = await supabase
+            .from("Post")
+            .select("postid", { count: "exact" })
+            .eq("communityid", community.communityid);
+
+          if (postCountError) {
+            console.error("Error fetching post count:", postCountError);
+            return null;
+          }
+
+          return { communityInfo, postCount };
+        })
+      );
+
+      const combinedData = fetchedCommunityData.filter(Boolean).map((data) => ({
+        ...data.communityInfo,
+        postCount: data.postCount,
+      }));
+
+      setCommunityData(combinedData);
+    }
+  };
+
+  const fetchPopularPosts = async () => {
+    const { data: popularPostsData, error: popularPostsError } = await supabase
+      .from("popular_posts")
+      .select("*")
+      .order("member_count", { ascending: false })
+      .limit(3);
+
+    if (popularPostsError) {
+      console.error("Error fetching popular posts:", popularPostsError);
+    } else {
+      setPopularPosts(popularPostsData);
+
+      const fetchedPostData = await Promise.all(
+        popularPostsData.map(async (post) => {
+          const { data: postData, error: postError } = await supabase
+            .from("Post")
+            .select("*")
+            .eq("postid", post.postid)
+            .single();
+
+          if (postError) {
+            console.error("Error fetching post data:", postError);
+            return null;
+          }
+          return postData;
+        })
+      );
+      const validPostData = fetchedPostData.filter(Boolean);
+      setPostData(validPostData);
+
+      const fetchedPostLikeCounts = await Promise.all(
+        popularPostsData.map(async (post) => {
+          const { count, error: likeError } = await supabase
+            .from("PostLike")
+            .select("userid", { count: "exact" })
+            .eq("postid", post.postid);
+
+          if (likeError) {
+            console.error("Error fetching post like count:", likeError);
+            return null;
+          }
+          return count;
+        })
+      );
+      const validPostLikeCounts = fetchedPostLikeCounts.filter(Boolean);
+      setPostLike(validPostLikeCounts);
+
+      const fetchedCommentCounts = await Promise.all(
+        popularPostsData.map(async (post) => {
+          const { count, error: commentError } = await supabase
+            .from("Comment")
+            .select("userid", { count: "exact" })
+            .eq("postid", post.postid);
+
+          if (commentError) {
+            console.error("Error fetching comment count:", commentError);
+            return null;
+          }
+          return count;
+        })
+      );
+      const validCommentCounts = fetchedCommentCounts.filter(Boolean);
+      setComment(validCommentCounts);
+
+      const fetchedCommunityName = await Promise.all(
+        popularPostsData.map(async (post) => {
+          const { data: postData, error: postError } = await supabase
+            .from("Post")
+            .select("communityid")
+            .eq("postid", post.postid)
+            .single();
+
+          if (postError) {
+            console.error("Error fetching post data:", postError);
+            return null;
+          }
+
+          const communityId = postData.communityid;
+
+          const { data: communityData, error: nameError } = await supabase
+            .from("Community")
+            .select("name")
+            .eq("communityid", communityId)
+            .single();
+
+          if (nameError) {
+            console.error("Error fetching community name:", nameError);
+            return null;
+          }
+
+          return communityData.name;
+        })
+      );
+      const validCommunityName = fetchedCommunityName.filter(Boolean);
+      setCommunityName(validCommunityName);
+    }
+  };
+
+  useEffect(() => {
+    fetchHotCommunities();
+    fetchPopularPosts();
+
+    const fetchUserData = async () => {
+      if (sessionUser) {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          return;
+        }
+
+        const userId = session.user.id;
+
+        const { data, error } = await supabase
+          .from("User")
+          .select("*")
+          .eq("userid", userId);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setUser(data);
+        }
+      }
+    };
+
+    const fetchAllUserData = async () => {
+      const { data, error } = await supabase.from("User").select("*");
+
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setAllUser(data);
+      }
+    };
+
+    const fetchCommunityData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase.from("Community").select("*");
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setCommunityy(data);
+        }
+      }
+    };
+
+    fetchUserData();
+    fetchAllUserData();
+    fetchCommunityData();
+  }, []);
+
+  const handleCommuntiyClick = (community) => {
+    navigate(`/detail-community/${community.communityid}`, {
+      state: {
+        // id: `${item.id}`,
+        // img: `${item.img}`,
+        // community: `${item.community}`,
+        communityData: communityy,
+        // allJoinCommunityData: allJoinCommunityData,
+        // joinCommunityData: joinCommunityData,
+        // postData: postData,
+        userData: user,
+      },
+    });
+  };
+
+  const handlePostClick = (post) => {
+    navigate(`/detail-post/${post.postid}`, {
+      state: {
+        communityData: communityy,
+        userData: user,
+        allUserData: allUser,
+        postData: postData[0],
+      },
+    });
+  };
+
+  const handleStudyClick = (study) => {
+    navigate(`/detail-study/${study.studyid}`, {
+      state: {
+        communityData: communityy,
+        userData: user,
+        postData: postData[0],
+      },
+    });
   };
 
   const settings = {
@@ -96,69 +397,51 @@ const Home = ({ }) => {
     ),
   };
 
-  useEffect(() => {
-    const fetchHotCommunities = async () => {
-      const { data, error } = await supabase
-        .from("hot_communities_view")
-        .select("*");
-
-      if (error) {
-        console.error("Error fetching hot communities:", error);
-      } else {
-        setHotCommunityData(data);
-      }
-    };
-
-    fetchHotCommunities();
-  }, []);
-
-  const displayedHotCommunities = hotCommunityData
-    .filter(
-      (community, index, self) =>
-        index ===
-        self.findIndex((c) => c.community_name === community.community_name)
-    )
-    .sort((a, b) => b.member_count - a.member_count)
-    .slice(0, 3);
   return (
     <div className={styles.home}>
-      <Slider {...settings} style={{ display: "grid", height: "260px" }}>
+      <Slider {...settings} style={{ display: "grid" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <img
             src={onboardingimg}
             alt="Slide 1"
-            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
             src={onboardingimg}
             alt="Slide 2"
-            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
             src={onboardingimg}
             alt="Slide 3"
-            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
             src={onboardingimg}
             alt="Slide 4"
-            style={{ height: "260px", width: "100%", objectFit: 'contain' }}
+            style={{ height: "260px", width: "100%", objectFit: "contain" }}
           />
         </div>
       </Slider>
-
-      <div style={{
-        display: 'flex', borderBottom: "1px solid #ddd", padding: "30px 0px", justifyContent: 'center', alignItems: 'center'
-      }}>
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #ddd",
+          padding: "30px 0px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
             position: "relative",
+            paddingLeft: 40,
           }}
         >
           <div
@@ -179,20 +462,27 @@ const Home = ({ }) => {
             }}
           >
             <div className={styles.hotCommunityItem}>
-              <HotCommunity communities={displayedHotCommunities} />
+              {hotCommunities.map((community, index) => (
+                <HotCommunity
+                  community={community}
+                  communityData={communityData[index]}
+                  onClick={() => handleCommuntiyClick(community)}
+                />
+              ))}
             </div>
+            {/* 필요한 만큼 HotCommunity 컴포넌트 추가 */}
           </div>
         </div>
       </div>
       {/*  */}
       <div
         style={{
-          display: 'flex',
+          display: "flex",
           borderBottom: "1px solid #ddd",
           padding: "30px 0px",
           // position: "fixed",
-          justifyContent: 'center',
-          alignItems: 'center'
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div
@@ -219,15 +509,31 @@ const Home = ({ }) => {
             }}
           >
             <div className={styles.hotCommunityItem}>
-              <PopularPost />
-              {/* <PopularPost />
-              <PopularPost /> */}
+              {popularPosts.map((post, index) => (
+                <PopularPost
+                  postData={postData[index]}
+                  postLike={postLike}
+                  comment={comment}
+                  communityName={
+                    communityName ? communityName[index] : "커뮤니티"
+                  }
+                  onClick={() => handlePostClick(post)}
+                />
+              ))}
             </div>
           </div>
         </div>
       </div>
       {/*  */}
-      <div style={{ display: 'flex', borderBottom: "1px solid #ddd", padding: "30px 0px", justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #ddd",
+          padding: "30px 0px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
             position: "relative",
@@ -261,7 +567,7 @@ const Home = ({ }) => {
         </div>
       </div>
       {/*  react slick 캐러셀  만들기*/}
-      <div style={{ padding: "30px 0px", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ padding: "30px 0px" }}>
         <div
           style={{
             position: "relative",
@@ -289,9 +595,13 @@ const Home = ({ }) => {
           >
             <Tag onEventSelect={handleEventSelect} />
             <div className={styles.popularStudy}>
-              <PopularStudy />
-              <PopularStudy />
-              <PopularStudy />
+              {popularStudies.map((study) => (
+                <PopularStudy
+                  key={study.id}
+                  study={study}
+                  onClick={() => handleStudyClick(study)}
+                />
+              ))}
             </div>
             {/* <div
               style={{

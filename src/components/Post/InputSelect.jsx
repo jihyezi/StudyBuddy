@@ -34,12 +34,12 @@ const InputSelect = (props) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option.name);
     setIsOpen(false);
-    if (option.communityId) {
-      // console.log(option.communityId);
-      props.onSelect(option);
-    } else {
-      props.onSelect(option.name);
-    }
+    props.onSelect(option);
+    // if (option.communityId) {
+    //   props.onSelect(option);
+    // } else {
+    //   props.onSelect(option.name);
+    // }
   };
 
   const handleOutsideClick = (event) => {
@@ -54,6 +54,17 @@ const InputSelect = (props) => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+
+  useEffect(() => {
+    if (props.defaultValue) {
+      const foundOption = selectOptions.find(
+        (option) => option.communityId === props.defaultValue
+      );
+      if (foundOption) {
+        setSelectedOption(foundOption.name);
+      }
+    }
+  }, [props.defaultValue, selectOptions]);
 
   const placeholderStyle = {
     color: selectedOption === props.placeholder ? "#b6b6b6" : "#808080",

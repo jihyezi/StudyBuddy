@@ -96,17 +96,17 @@ const Post = () => {
     setIsModalOpen(true);
   };
 
-  const handleModalClose = () => {
+  const handleCancelClick = () => {
     setIsModalOpen(false);
   };
 
   const handleCreateClick = async () => {
-    let userId = "";
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session.user.id);
-      // setUserId(session.user.id);
-      userId = session.user.id;
-    });
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    const userId = session.user.id;
 
     const currentContent = editorRef.current.innerHTML;
     const descriptionParts = [];
@@ -206,7 +206,10 @@ const Post = () => {
     <div>
       <Header title={"Post"} onPost={handlePostClick} />
       {isModalOpen && (
-        <CreateModal onCreate={handleCreateClick} onCancel={handleModalClose} />
+        <CreateModal
+          onCreate={handleCreateClick}
+          onCancel={handleCancelClick}
+        />
       )}
       <div className={styles.postContainer}>
         <InputSelect

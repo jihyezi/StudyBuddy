@@ -11,6 +11,7 @@
   border-radius: 8px;
   max-width: 300px;
   width: 300px;
+  cursor: pointer;
 }
 
 .classificationIcon {
@@ -66,6 +67,7 @@
   position: relative;
   max-width: 300px;
   width: 220px;
+  cursor: pointer;
 }
 
 .smallclassificationIcon {

@@ -32,14 +32,12 @@ const RevisePost = () => {
 
   useEffect(() => {
     if (postData) {
-      console.log(postData);
+      setCommunity(postData.communityid);
       setTitle(postData.title);
       setStartDate(postData.startdate);
       setEndDate(postData.enddate);
       setBook(postData.book);
       setResult(postData.result);
-      // setStudyMethod(postData.content);
-      // editorRef.current.innerHTML = postData.content;
 
       const content = postData.content;
       const parser = new DOMParser();
@@ -136,12 +134,24 @@ const RevisePost = () => {
   };
 
   const handlePostClick = async () => {
-    let userId = "";
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session.user.id);
-      // setUserId(session.user.id);
-      userId = session.user.id;
-    });
+    console.log("title", title);
+    console.log("startDate", startDate);
+    console.log("endDate", endDate);
+    console.log("result", result);
+    console.log("book", book);
+    console.log("studyMethod", studyMethod);
+    console.log("references", postData.references);
+    console.log("createdat", postData.createdat);
+    console.log("community", community);
+  };
+
+  const handlePostClicks = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    const userId = session.user.id;
 
     const currentContent = editorRef.current.innerHTML;
     const descriptionParts = [];
@@ -204,7 +214,7 @@ const RevisePost = () => {
       }
     }
 
-    const { error } = await supabase.from("Post").insert([
+    const { error } = await supabase.from("Post").update([
       {
         userid: userId,
         communityid: community,
@@ -215,10 +225,11 @@ const RevisePost = () => {
         result: result,
         content: finalDescription,
         references: downloadUrls,
-        createdat: new Date(),
+        createdat: postData.createdat,
         updatedat: new Date(),
       },
     ]);
+    console.log("references", postData.references);
 
     if (error) {
       console.error("Error inserting data:", error);
@@ -233,6 +244,11 @@ const RevisePost = () => {
     setCommunity(selectedOption.communityId);
   };
 
+  const handleTitleChange = (e) => {
+    console.log("Input value:", e.target.value); // 입력값 로그
+    setTitle(e.target.value);
+  };
+
   return (
     <div>
       <Header title={"Post"} onPost={handlePostClick} />
@@ -240,13 +256,14 @@ const RevisePost = () => {
         <InputSelect
           title={"커뮤니티"}
           placeholder={"커뮤니티를 선택해주세요"}
+          defaultValue={community}
           onSelect={handleCommunity}
-          // onSelect={setCommunity}
         />
         <InputText
           title={"제목"}
           placeholder={"제목을 입력해 주세요."}
-          onChange={(e) => setTitle(e.target.value)}
+          // onChange={(e) => setTitle(e.target.value)}
+          onChange={handleTitleChange}
           value={title}
         />
         <div style={{ display: "flex", flexDirection: "row" }}>

@@ -6,6 +6,7 @@ import axios from "axios";
 
 const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
   const [searchTerm, setSearchTerm] = useState(initialValue || "");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {

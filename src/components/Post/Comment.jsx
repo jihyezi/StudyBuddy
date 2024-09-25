@@ -11,12 +11,13 @@ import profile4 from "assets/images/Profile/profile4.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const Comment = ({ userid, content, commentData }) => {
+const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
   const [userId, setUserId] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(content);
+  const [comments, setComments] = useState([commentData]);
   const [editedText, setEditedText] = useState(commentData.content);
 
   const moreClick = (event) => {
@@ -31,7 +32,7 @@ const Comment = ({ userid, content, commentData }) => {
   };
 
   useEffect(() => {
-    console.log("commentData", commentData);
+    console.log("Comment_userData", userDataa);
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUserId(session.user.id);
     });
@@ -80,13 +81,9 @@ const Comment = ({ userid, content, commentData }) => {
       console.error("댓글 삭제 실패:", error);
     } else {
       console.log("댓글 삭제 성공:", data);
+      setCommentText("");
+      onDelete(commentData.commentid);
     }
-
-    setCommentText((prevComments) =>
-      prevComments.filter(
-        (comment) => comment.commentid !== commentData.commentid
-      )
-    );
 
     setShowOptions(false);
   };
@@ -187,8 +184,8 @@ const Comment = ({ userid, content, commentData }) => {
       <div>
         <img
           className={styles.commentWriterProfile}
-          src={userProfile?.profileimage || profile4}
-          alt="profile4"
+          src={userDataa ? userDataa.profileimage : profile1}
+          alt="profile1"
         />
       </div>
       <div
@@ -204,7 +201,7 @@ const Comment = ({ userid, content, commentData }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className={styles.commentWriter}>
             <span className={styles.commentWriterNickname}>
-              {userProfile?.nickname || "닉네임"}
+              {userDataa ? userDataa.nickname : "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
               {userProfile?.updatedat

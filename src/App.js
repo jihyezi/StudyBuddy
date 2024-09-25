@@ -149,7 +149,6 @@ const App = () => {
             />
           </Center>
         </Content>
-
       </BrowserRouter>
     </AuthProvider>
   );

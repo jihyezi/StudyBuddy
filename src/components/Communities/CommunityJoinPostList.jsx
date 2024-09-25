@@ -1,12 +1,13 @@
 import React from "react";
 import Post from "./Post";
-import { dummyPostData } from "../Dummydata";
 
 const CommunityPostList = ({
   postData,
   communityData,
   userData,
+  allUserData,
   commentData,
+  onBookmarkToggle,
 }) => {
   return (
     <div>
@@ -16,7 +17,9 @@ const CommunityPostList = ({
           post={post}
           community={communityData}
           user={userData}
+          allUser={allUserData}
           comment={commentData}
+          onBookmarkToggle={onBookmarkToggle}
         />
       ))}
     </div>
