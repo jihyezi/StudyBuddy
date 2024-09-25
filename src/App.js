@@ -27,8 +27,19 @@ import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 
+const Body = styled.div`
+  width: 100%;
+  max-width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+`;
+
 const Content = styled.div`
   width: 100%;
+  max-width: 1600px;
   height: 100vh;
   display: flex;
   flex-direction: row;
@@ -39,7 +50,6 @@ const Center = styled.div`
   width: calc(100% - 320px);
   display: flex;
   flex-direction: row;
-  justify-content: center; /* 가운데 정렬 */
   flex: 1;
 `;
 
@@ -138,17 +148,20 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Content>
-          <Sidebar toggleNotifications={toggleNotifications} />
-          <Center>
-            <MainContent />
-            <Notifications
-              showNotifications={showNotifications}
-              setShowNotifications={setShowNotifications}
-              toggleNotifications={toggleNotifications}
-            />
-          </Center>
-        </Content>
+        <Body>
+          <Content>
+            <Sidebar toggleNotifications={toggleNotifications} />
+            <Center>
+              <MainContent />
+              <Notifications
+                showNotifications={showNotifications}
+                setShowNotifications={setShowNotifications}
+                toggleNotifications={toggleNotifications}
+              />
+            </Center>
+          </Content>
+        </Body>
+
       </BrowserRouter>
     </AuthProvider>
   );

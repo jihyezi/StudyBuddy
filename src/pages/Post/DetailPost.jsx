@@ -24,7 +24,7 @@ import download from "assets/icons/Post/file_download.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const DetailPost = ({}) => {
+const DetailPost = ({ }) => {
   const [commentData, setCommentData] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [liked, setLiked] = useState(false);
@@ -37,7 +37,7 @@ const DetailPost = ({}) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === postData.communityid)
-        ?.name
+      ?.name
     : "Unknown Community";
 
   const userimg =
@@ -289,7 +289,7 @@ const DetailPost = ({}) => {
   };
 
   return (
-    <div>
+    <div style={{ width: '100%', maxWidth: '1200px', margin: '0' }}>
       <Header title={"Post"} />
       {isDeleteModalOpen && (
         <DeleteModal
