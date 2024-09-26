@@ -24,6 +24,7 @@
 .postDetail {
   display: flex;
   flex-direction: row;
+  position: relative;
 }
 
 .userProfile {
@@ -120,9 +121,9 @@
 
 .moreClick {
   position: absolute;
-  /* top: 10%; */
-  right: 122px;
   z-index: 10;
+  top: -20px;
+  right: 10px;
 }
 
 .moreClickEdit,
@@ -151,6 +152,7 @@
 .moreClickEditText,
 .moreClickDeleteText {
   color: white;
+  font-size: 14px;
 }
 
 .moreClickEditIcon,

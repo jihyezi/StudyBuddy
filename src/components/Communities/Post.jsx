@@ -250,26 +250,6 @@ const Post = ({
             onClick={moreClick}
           />
         )}
-        {showOptions && (
-          <div className={styles.moreClick}>
-            <div className={styles.moreClickEdit} onClick={handleEditClick}>
-              <div className={styles.moreClickEditText}>수정하기</div>
-              <img
-                className={styles.moreClickEditIcon}
-                src={editIcon}
-                alt="edit"
-              />
-            </div>
-            <div className={styles.moreClickDelete} onClick={handleDeleteClick}>
-              <div className={styles.moreClickDeleteText}>삭제하기</div>
-              <img
-                className={styles.moreClickDeleteIcon}
-                src={deleteIcon}
-                alt="delete"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       <div className={styles.postDetail}>
@@ -338,6 +318,26 @@ const Post = ({
             </div>
           </div>
         </div>
+        {showOptions && (
+          <div className={styles.moreClick}>
+            <div className={styles.moreClickEdit} onClick={handleEditClick}>
+              <div className={styles.moreClickEditText}>수정하기</div>
+              <img
+                className={styles.moreClickEditIcon}
+                src={editIcon}
+                alt="edit"
+              />
+            </div>
+            <div className={styles.moreClickDelete} onClick={handleDeleteClick}>
+              <div className={styles.moreClickDeleteText}>삭제하기</div>
+              <img
+                className={styles.moreClickDeleteIcon}
+                src={deleteIcon}
+                alt="delete"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
