@@ -11,7 +11,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #ddd;
   padding: 30px 0px;
 }
 
@@ -20,7 +19,6 @@
   font-weight: 700;
   font-size: 20px;
   color: #333;
-  padding: 0px 40px;
   margin-bottom: 30px;
 }
 
@@ -28,6 +26,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 1084px;
+  max-width: 1200px;
 }
 
 .HotCommunitiesContainer {
@@ -36,7 +36,6 @@
   justify-content: center;
   align-items: center;
   padding: 30px 0px;
-  border-bottom: 1px solid #ddd;
 }
 
 .HotCommunity{
@@ -49,8 +48,8 @@
   position: relative;
   width: 100%;
 	display: grid;
-	grid-template-columns: repeat(3, 342px);
-  gap: 20px;
+	grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
 }
 
 .PopularStudyContainer {
@@ -64,7 +63,7 @@
 
 .StudyPostContainer {
   position: relative;
-  width: 100%;
+  width: 1084px;
   display: flex;
   flex-direction: column;
 }
@@ -109,6 +108,11 @@
   font-weight: 700;
   color: "black";
   margin-right: 30px;
+  outline: none;
+}
+
+.SearchInput:focus {
+  border-color: #ff7474;
 }
 
 .SearchInput::placeholder {
