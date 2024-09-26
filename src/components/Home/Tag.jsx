@@ -46,10 +46,8 @@ const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
 
     if (current) {
       const isAtStart = current.scrollLeft === 0;
-      const isAtEnd =
-        current.scrollLeft + current.clientWidth >= current.scrollWidth;
+      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth - 8;
 
-      console.log("isAtStart:", isAtStart, "isAtEnd:", isAtEnd);
       if (isAtStart) {
         setScrollState("start");
       } else if (isAtEnd) {
@@ -110,7 +108,7 @@ const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
           </button>
         ))}
       </div>
-      {isOverflow && (scrollState === "middle" || scrollState === "start") && (
+      {(scrollState === "middle" || scrollState === "start") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxRight}`}>
           <button className={styles.scrollButton} onClick={moveRight}>
             <img
@@ -121,7 +119,7 @@ const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
           </button>
         </div>
       )}
-      {isOverflow && (scrollState === "middle" || scrollState === "end") && (
+      {(scrollState === "middle" || scrollState === "end") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxLeft}`}>
           <button className={styles.scrollButton} onClick={moveLeft}>
             <img
