@@ -470,7 +470,6 @@ const Home = ({}) => {
                 />
               ))}
             </div>
-            {/* 필요한 만큼 HotCommunity 컴포넌트 추가 */}
           </div>
         </div>
       </div>
