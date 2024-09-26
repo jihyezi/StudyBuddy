@@ -16,6 +16,7 @@ import share from "assets/icons/Communities/share.png";
 import profile1 from "assets/images/Profile/profile1.png";
 import folder from "assets/icons/Post/folder.png";
 import download from "assets/icons/Post/file_download.png";
+import loadinggif from "assets/images/loading.gif"
 
 
 const DetailPost2 = () => {

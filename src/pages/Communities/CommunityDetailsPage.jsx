@@ -8,6 +8,7 @@ import imgbackground from "assets/images/bookmarkbackground.png";
 import commmunityicon from "assets/icons/palette.png";
 import Header from "components/Header";
 import supabase from "components/supabaseClient";
+import loadinggif from "assets/images/loading.gif"
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();

@@ -18,6 +18,7 @@ import profile2 from "assets/images/Profile/profile2.png";
 import profile3 from "assets/images/Profile/profile3.png";
 import profile4 from "assets/images/Profile/profile4.png";
 import image from "assets/images/Studies/studyIntroduce.png";
+import loadinggif from "assets/images/loading.gif"
 
 const DetailStudyPost = ({ }) => {
   const { studyId } = useParams();
