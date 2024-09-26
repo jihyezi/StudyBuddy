@@ -19,7 +19,7 @@ import profile3 from "assets/images/Profile/profile3.png";
 import profile4 from "assets/images/Profile/profile4.png";
 import image from "assets/images/Studies/studyIntroduce.png";
 
-const DetailStudyPost = ({}) => {
+const DetailStudyPost = ({ }) => {
   const { studyId } = useParams();
   const [inputValue, setInputValue] = useState("");
   const [userData, setUserData] = useState(null);
@@ -109,7 +109,7 @@ const DetailStudyPost = ({}) => {
   }, [studyId]);
 
   if (!studyData) {
-    return <div>Loading...</div>;
+    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
   }
 
   const formatDescription = (description) => {

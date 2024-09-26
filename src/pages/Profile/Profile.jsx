@@ -6,6 +6,8 @@ import ProfileTablist from "components/Profile/ProfileTablist";
 import supabase from "components/supabaseClient";
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
+import logo from "assets/icons/Sidebar/studybuddyLogo.png"
+import loadinggif from "assets/images/loading.gif"
 import { useAuth } from "contexts/AuthContext";
 
 const Profile = () => {
@@ -53,11 +55,11 @@ const Profile = () => {
   }, [sessionUser]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
   }
 
   if (!sessionUser) {
-    return <div>Please log in to view this page.</div>;
+    return <div> </div>;
   }
 
   if (!user) {

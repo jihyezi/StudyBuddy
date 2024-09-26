@@ -120,7 +120,7 @@ const DetailPost2 = () => {
     };
 
     if (!postData) {
-        return <div>Loading...</div>;
+        return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
     }
 
     return (

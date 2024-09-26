@@ -13,6 +13,8 @@ import PostList from "components/Communities/CommunityPostList";
 import JoinPostList from "components/Communities/CommunityJoinPostList";
 import Recommended from "pages/Recommended/Recommended";
 import BookmarkJoin from "components/Bookmark/BookmarkJoin";
+import logo from "assets/icons/Sidebar/studybuddyLogo.png";
+import loadinggif from "assets/images/loading.gif"
 
 const Bookmarks = () => {
   const [postData, setPostData] = useState([]);
@@ -222,7 +224,7 @@ const Bookmarks = () => {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>
       ) : (
         <JoinPostList
           communityData={community}
