@@ -6,7 +6,7 @@ import supabase from "components/supabaseClient";
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
 
-const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
+const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedButton, setSelectedButton] = useState("🔥");
   const [tags, setTags] = useState([]);
@@ -43,10 +43,11 @@ const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
 
   const handleScroll = () => {
     const { current } = containerRef;
+
     if (current) {
       const isAtStart = current.scrollLeft === 0;
-      const isAtEnd =
-        current.scrollLeft + current.clientWidth >= current.scrollWidth;
+      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth - 8;
+
       if (isAtStart) {
         setScrollState("start");
       } else if (isAtEnd) {
@@ -107,7 +108,7 @@ const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
           </button>
         ))}
       </div>
-      {isOverflow && (scrollState === "middle" || scrollState === "start") && (
+      {(scrollState === "middle" || scrollState === "start") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxRight}`}>
           <button className={styles.scrollButton} onClick={moveRight}>
             <img
@@ -118,7 +119,7 @@ const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
           </button>
         </div>
       )}
-      {isOverflow && (scrollState === "middle" || scrollState === "end") && (
+      {(scrollState === "middle" || scrollState === "end") && (
         <div className={`${styles.overflowBox} ${styles.overflowBoxLeft}`}>
           <button className={styles.scrollButton} onClick={moveLeft}>
             <img

@@ -16,6 +16,7 @@ import share from "assets/icons/Communities/share.png";
 import profile1 from "assets/images/Profile/profile1.png";
 import folder from "assets/icons/Post/folder.png";
 import download from "assets/icons/Post/file_download.png";
+import loadinggif from "assets/images/loading.gif"
 
 
 const DetailPost2 = () => {
@@ -120,7 +121,7 @@ const DetailPost2 = () => {
     };
 
     if (!postData) {
-        return <div>Loading...</div>;
+        return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
     }
 
     return (

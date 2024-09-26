@@ -50,7 +50,7 @@ const Classification = ({ onEventSelect }) => {
     const { current } = containerRef;
     if (current) {
       const isAtStart = current.scrollLeft === 0;
-      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth;
+      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth - 8;
       if (isAtStart) {
         setScrollState('start');
       } else if (isAtEnd) {

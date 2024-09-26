@@ -10,11 +10,10 @@
 .classification {
   display: flex;
   flex-direction: row;
-  gap: 15px;
   margin-top: 12px;
   margin-bottom: 15px;
+  justify-content: center;
   align-items: center;
-  justify-content: start; 
   width: 100%; 
 }
 
