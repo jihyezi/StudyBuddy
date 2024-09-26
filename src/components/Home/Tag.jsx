@@ -6,7 +6,7 @@ import supabase from "components/supabaseClient";
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
 
-const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
+const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedButton, setSelectedButton] = useState("🔥");
   const [tags, setTags] = useState([]);
@@ -43,10 +43,13 @@ const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
 
   const handleScroll = () => {
     const { current } = containerRef;
+
     if (current) {
       const isAtStart = current.scrollLeft === 0;
       const isAtEnd =
         current.scrollLeft + current.clientWidth >= current.scrollWidth;
+
+      console.log("isAtStart:", isAtStart, "isAtEnd:", isAtEnd);
       if (isAtStart) {
         setScrollState("start");
       } else if (isAtEnd) {

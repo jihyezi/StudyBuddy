@@ -1,5 +1,7 @@
 .stackTagsArea {
   position: relative;
+  width: 100%;
+  max-width: 1200px;
   margin-left: -16px;
   margin-right: -16px;
 }

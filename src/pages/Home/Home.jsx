@@ -24,7 +24,7 @@ import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
@@ -345,10 +345,8 @@ const Home = ({}) => {
           position: "absolute",
           width: "80px",
           height: "32px",
-          // top: 240,
-          // left: 80,
           bottom: "-14px",
-          left: "7%", // 위치 수정
+          left: "7%",
           borderRadius: "8px",
           opacity: "0px",
           backgroundColor: "#FFF",
@@ -432,8 +430,7 @@ const Home = ({}) => {
       <div
         style={{
           display: "flex",
-          borderBottom: "1px solid #ddd",
-          padding: "30px 0px",
+          padding: "70px 0px 30px 0px",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -441,7 +438,6 @@ const Home = ({}) => {
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div
@@ -473,13 +469,10 @@ const Home = ({}) => {
           </div>
         </div>
       </div>
-      {/*  */}
       <div
         style={{
           display: "flex",
-          borderBottom: "1px solid #ddd",
           padding: "30px 0px",
-          // position: "fixed",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -523,54 +516,17 @@ const Home = ({}) => {
           </div>
         </div>
       </div>
-      {/*  */}
+      {/*  react slick 캐러셀  만들기*/}
       <div
         style={{
           display: "flex",
-          borderBottom: "1px solid #ddd",
           padding: "30px 0px",
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
+        }}>
         <div
           style={{
             position: "relative",
-          }}
-        >
-          <div
-            style={{
-              fontWeight: 700,
-              fontSize: 20,
-              position: "relative",
-              marginBottom: 28,
-              fontFamily: "Manrope-Bold",
-            }}
-          >
-            최근 방문한 커뮤니티
-          </div>
-          <div
-            className={styles.scrollContainer}
-            style={{
-              position: "relative",
-              width: "100%",
-            }}
-          >
-            <div className={styles.newSearch}>
-              <RecentCommunity />
-              <RecentCommunity />
-              <RecentCommunity />
-              <RecentCommunity />
-            </div>
-          </div>
-        </div>
-      </div>
-      {/*  react slick 캐러셀  만들기*/}
-      <div style={{ padding: "30px 0px" }}>
-        <div
-          style={{
-            position: "relative",
-            padding: "0px 40px",
           }}
         >
           <div
@@ -589,6 +545,7 @@ const Home = ({}) => {
             style={{
               position: "relative",
               width: "100%",
+              justifyContent: 'center',
               alignItems: "center",
             }}
           >
