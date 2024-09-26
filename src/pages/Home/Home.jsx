@@ -20,6 +20,11 @@ import downarrow from "assets/icons/Home/downarrow.png";
 
 import LoginModal from "components/Home/LoginModal";
 
+import onboarding1 from "assets/images/Onboarding/onboarding1.png"
+import onboarding2 from "assets/images/Onboarding/onboarding2.png"
+import onboarding3 from "assets/images/Onboarding/onboarding3.png"
+import onboarding4 from "assets/images/Onboarding/onboarding4.png"
+
 import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
@@ -400,30 +405,30 @@ const Home = ({ }) => {
       <Slider {...settings} style={{ display: "grid" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding1}
             alt="Slide 1"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding2}
             alt="Slide 2"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding3}
             alt="Slide 3"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding4}
             alt="Slide 4"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
       </Slider>
