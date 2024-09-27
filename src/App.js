@@ -57,7 +57,6 @@ const MainContent = () => {
   const location = useLocation();
   const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
-
   useEffect(() => {
     if (!user && location.pathname === "/profile") {
       setLoginModalIsOpen(true);
@@ -161,7 +160,6 @@ const App = () => {
             </Center>
           </Content>
         </Body>
-
       </BrowserRouter>
     </AuthProvider>
   );

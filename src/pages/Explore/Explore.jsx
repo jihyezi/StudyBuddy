@@ -4,19 +4,18 @@ import HotCommunity from "components/Home/HotCommunity";
 import StudyPost from "components/Explore/ExploreStudyPost";
 import supabase from "components/supabaseClient";
 import Tag from "components/Home/Tag";
-
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Explore = () => {
   const [hotCommunities, setHotCommunities] = useState([]);
   const [communityData, setCommunityData] = useState({});
-  // const [popularStudies, setPopularStudies] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]); // 선택한 태그 상태
+  // const [selectedTags, setSelectedTags] = useState([]);
   const { user: sessionUser } = useAuth();
   const [user, setUser] = useState([]);
   const [allUser, setAllUser] = useState([]);
   const [communityy, setCommunityy] = useState([]);
+  const [popularStudies, setPopularStudies] = useState([]);
   const navigate = useNavigate();
 
   const fetchHotCommunities = async () => {
@@ -66,8 +65,46 @@ const Explore = () => {
     }
   };
 
+  const fetchPopularStudies = async () => {
+    const { data: studies, error: studiesError } = await supabase
+      .from("Study")
+      .select("*");
+
+    if (studiesError) {
+      console.error("Error fetching studies:", studiesError);
+      return;
+    }
+
+    const studiesWithLikes = await Promise.all(
+      studies.map(async (study) => {
+        const { count: likesCount, error: likesError } = await supabase
+          .from("StudyLike")
+          .select("studyid", { count: "exact" })
+          .eq("studyid", study.studyid);
+
+        if (likesError) {
+          console.error("Error fetching likes count:", likesError);
+          return null;
+        }
+
+        const totalLikes = likesCount || 0;
+
+        return { ...study, likesCount: totalLikes };
+      })
+    );
+
+    const validStudies = studiesWithLikes.filter(Boolean);
+    const topStudies = validStudies
+      .sort((a, b) => b.likesCount - a.likesCount)
+      .slice(0, 2); // 몇 개로 할건지?
+
+    console.log("Top studies:", topStudies);
+    setPopularStudies(topStudies);
+  };
+
   useEffect(() => {
     fetchHotCommunities();
+    fetchPopularStudies();
 
     const fetchUserData = async () => {
       if (sessionUser) {
@@ -118,16 +155,6 @@ const Explore = () => {
     });
   };
 
-  const postProps = {
-    state: "1",
-    title: "정보처리기사 온라인 스터디 ",
-    content:
-      "정보처리기사 온라인 스터디 모집합니다! 디코에서 주 3회 스터디 진행할 예정입니다!!",
-    tag: ["정보처리기사", "온라인 스터디", "자격증"],
-    person: 5,
-    type: "온라인",
-  };
-
   return (
     <div className={styles.Explore}>
       <div className={styles.PopularTagContainer}>
@@ -159,8 +186,17 @@ const Explore = () => {
         <div style={{ position: "relative", width: "1080px" }}>
           <div className={styles.CategoryText}>⭐️ 인기 스터디</div>
           <div className={styles.StudyPostContainer}>
-            <StudyPost {...postProps} />
-            <StudyPost {...postProps} />
+            {popularStudies.map((post, index) => (
+              <StudyPost
+                key={index}
+                studyId={post.studyid}
+                completion={post.completion}
+                title={post.title}
+                description={post.description.split("\n")[0]}
+                tag={post.tag}
+                studyPost={post}
+              />
+            ))}
           </div>
         </div>
       </div>
