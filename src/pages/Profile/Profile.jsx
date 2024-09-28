@@ -15,43 +15,133 @@ const Profile = () => {
   const communityInfo = { ...location.state };
   const { user: sessionUser } = useAuth(); // 현재 로그인된 유저 정보 가져오기
   const [user, setUser] = useState(null);
-  const [imageUrl, setImageUrl] = useState(noprofile);
-  const [backgroundUrl, setBackgroundUrl] = useState(nobackground);
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [allUser, setAllUser] = useState([]);
+  const [community, setCommunity] = useState([]);
+  const [post, setPost] = useState([]);
+  const [userPost, setUserPost] = useState([]);
+  const [comment, setComment] = useState([]);
+  const [userComment, setUserComment] = useState([]);
+  const [userLike, setUserLike] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (sessionUser) {
-        try {
-          setLoading(true); // 로딩 시작
-          console.log("sessionUser:", sessionUser); // sessionUser 정보 로그 출력
+        const { data, error } = await supabase
+          .from("User")
+          .select("*")
+          .eq("userid", sessionUser.id);
 
-          const { data, error } = await supabase
-            .from("User")
-            .select("bio, birthdate, email, nickname, profileimage, username, backgroundimage")
-            .eq("userid", sessionUser.id)
-            .maybeSingle(); // 단일 결과를 가져오도록 수정
+        if (error) {
+          console.error("Error fetching user data:", error);
+        } else {
+          setUser(data);
+          setUserInfo(data[0]);
+        }
+      }
+    };
 
-          if (error) {
-            console.error("Error fetching user data:", error);
-          } else if (!data) {
-            console.error("User data not found."); // 유저 데이터를 찾지 못한 경우 처리
-          } else {
-            console.log("Fetched user data:", data); // 유저 데이터 로그 출력
-            setUser(data);
-          }
-        } catch (err) {
-          console.error("Unexpected error:", err);
-        } finally {
-          setLoading(false); // 로딩 종료
+    const fetchAllUserData = async () => {
+      const { data, error } = await supabase.from("User").select("*");
+
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setAllUser(data);
+      }
+    };
+
+    const fetchCommunityData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase.from("Community").select("*");
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setCommunity(data);
+        }
+      }
+    };
+
+    const fetchPostData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase.from("Post").select("*");
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setPost(data);
+        }
+      }
+    };
+
+    const fetchUserPostData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase.from("Post").select("*").eq('userid', sessionUser.id);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setUserPost(data);
+        }
+      }
+    };
+
+    const fetchCommentData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase
+          .from("Comment")
+          .select("*");
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setComment(data);
         }
       } else {
-        console.log("No sessionUser found."); // sessionUser가 없는 경우 로그 출력
-        setLoading(false); // sessionUser가 없을 때 로딩 종료
+        console.warn("postid가 정의되지 않았습니다.");
+      }
+    };
+
+    const fetchUserCommentData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase
+          .from("Comment")
+          .select("*")
+          .eq("userid", sessionUser.id);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setUserComment(data);
+        }
+      } else {
+        console.warn("postid가 정의되지 않았습니다.");
+      }
+    };
+
+    const fetchUserLikeData = async () => {
+      if (sessionUser) {
+        const { data, error } = await supabase.from("PostLike").select("postid").eq('userid', sessionUser.id);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setUserLike(data);
+        }
       }
     };
 
     fetchUserData();
+    fetchAllUserData();
+    fetchCommunityData();
+    fetchPostData();
+    fetchUserPostData();
+    fetchCommentData();
+    fetchUserCommentData();
+    fetchUserLikeData();
   }, [sessionUser]);
 
   if (loading) {
@@ -66,19 +156,27 @@ const Profile = () => {
     return <div>User data not found.</div>;
   }
 
+  const filterLikePost = post.filter((postItem) =>
+    userLike.some((likeItem) => likeItem.postid === postItem.postid)
+  );
+
+  const filterCommentPost = post.filter((postItem) =>
+    userComment.some((likeItem) => likeItem.postid === postItem.postid)
+  );
+
   return (
     <div className={styles.container}>
       <Header headerName={user.nickname} />
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className={styles.info}>
           <div className={styles.imageWrapper}>
-            {user.backgroundimage ?
-              <img src={user.backgroundimage} alt="profile background" className={styles.image} />
+            {userInfo.backgroundimage ?
+              <img src={userInfo.backgroundimage} alt="profile background" className={styles.image} />
               : <img src={nobackground} alt="profile background" className={styles.image} />
             }
             <div className={styles.profileImgContainer}>
-              {user.profileimage ?
-                <img src={user.profileimage} alt="profile" className={styles.profileImg} />
+              {userInfo.profileimage ?
+                <img src={userInfo.profileimage} alt="profile" className={styles.profileImg} />
                 : <img src={noprofile} alt="profile" className={styles.profileImg} />
               }
 
@@ -91,12 +189,20 @@ const Profile = () => {
               <button className={styles.joinButton}>Edit</button>
             </div>
             <div className={styles.infoList}>
-              <span className={styles.description1}>{user.nickname}</span>
-              <span className={styles.description2}>@{user.username}</span>
-              <span className={styles.description3}>{user.bio}</span>
+              <span className={styles.description1}>{userInfo.nickname}</span>
+              <span className={styles.description2}>@{userInfo.username}</span>
+              <span className={styles.description3}>{userInfo.bio}</span>
             </div>
           </div>
-          <ProfileTablist />
+          <ProfileTablist
+            post={post}
+            community={community}
+            user={user}
+            allUser={allUser}
+            comment={comment}
+            userPost={userPost}
+            userLike={filterLikePost}
+            userComment={filterCommentPost} />
         </div>
 
       </div>
