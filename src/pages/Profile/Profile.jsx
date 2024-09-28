@@ -9,6 +9,7 @@ import noprofile from "assets/images/Profile/noprofile.png";
 import logo from "assets/icons/Sidebar/studybuddyLogo.png"
 import loadinggif from "assets/images/loading.gif"
 import { useAuth } from "contexts/AuthContext";
+import ProfileEditModal from "components/Profile/ProfileEditModal";
 
 const Profile = () => {
   const location = useLocation();
@@ -25,6 +26,16 @@ const Profile = () => {
   const [comment, setComment] = useState([]);
   const [userComment, setUserComment] = useState([]);
   const [userLike, setUserLike] = useState([]);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -166,7 +177,7 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      <Header headerName={user.nickname} />
+      <Header headerName={user[0].nickname} />
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className={styles.info}>
           <div className={styles.imageWrapper}>
@@ -186,7 +197,17 @@ const Profile = () => {
           <div className={styles.details}>
             <div className={styles.edit}>
               <div className={styles.communityName}>{communityInfo.community}</div>
-              <button className={styles.joinButton}>Edit</button>
+              <button className={styles.joinButton} onClick={openModal}>
+                Edit
+              </button>
+              <ProfileEditModal
+                modalIsOpen={modalIsOpen}
+                closeModal={closeModal}
+                profileImg={userInfo.profileimage}
+                backgroundimage={userInfo.backgroundimage}
+                userData={userInfo}
+                userNickname={userInfo.nickname}
+              />
             </div>
             <div className={styles.infoList}>
               <span className={styles.description1}>{userInfo.nickname}</span>
