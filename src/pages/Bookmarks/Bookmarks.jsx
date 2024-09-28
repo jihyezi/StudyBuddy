@@ -224,7 +224,10 @@ const Bookmarks = () => {
       </div>
 
       {loading ? (
-        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>
+        <div
+          style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={loadinggif} style={{ width: '80px' }} />
+        </div>
       ) : (
         <JoinPostList
           communityData={community}

@@ -3,14 +3,43 @@ import styles from './ProfileTablist.module.css';
 import JoinPostList from 'components/Communities/CommunityJoinPostList';
 import { dummyPostData } from 'components/Dummydata';
 
-export const ProfileTablist = () => {
+export const ProfileTablist = ({ post, community, user, allUser, comment, userPost, userLike, userComment }) => {
     const [currentTab, clickTab] = useState(0);
 
     const menuArr = [
-        { name: '게시물', content: <JoinPostList postData={dummyPostData} /> },
-        { name: '스터디', content: <JoinPostList postData={dummyPostData} /> },
-        { name: '좋아요', content: <JoinPostList postData={dummyPostData} /> },
-        { name: '댓글', content: <JoinPostList postData={dummyPostData} /> }
+        {
+            name: '게시물',
+            content:
+                <JoinPostList
+                    postData={userPost}
+                    communityData={community}
+                    userData={user}
+                    allUserData={allUser}
+                    commentData={comment}
+                />
+        },
+        {
+            name: '좋아요',
+            content:
+                <JoinPostList
+                    postData={userLike}
+                    communityData={community}
+                    userData={user}
+                    allUserData={allUser}
+                    commentData={comment}
+                />
+        },
+        {
+            name: '댓글',
+            content:
+                <JoinPostList
+                    postData={userComment}
+                    communityData={community}
+                    userData={user}
+                    allUserData={allUser}
+                    commentData={comment}
+                />
+        }
     ];
 
     const selectMenuHandler = (index) => {
