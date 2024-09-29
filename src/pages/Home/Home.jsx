@@ -20,11 +20,16 @@ import downarrow from "assets/icons/Home/downarrow.png";
 
 import LoginModal from "components/Home/LoginModal";
 
+import onboarding1 from "assets/images/Onboarding/onboarding1.png"
+import onboarding2 from "assets/images/Onboarding/onboarding2.png"
+import onboarding3 from "assets/images/Onboarding/onboarding3.png"
+import onboarding4 from "assets/images/Onboarding/onboarding4.png"
+
 import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
@@ -345,10 +350,8 @@ const Home = ({}) => {
           position: "absolute",
           width: "80px",
           height: "32px",
-          // top: 240,
-          // left: 80,
           bottom: "-14px",
-          left: "7%", // 위치 수정
+          left: "7%",
           borderRadius: "8px",
           opacity: "0px",
           backgroundColor: "#FFF",
@@ -402,38 +405,37 @@ const Home = ({}) => {
       <Slider {...settings} style={{ display: "grid" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding1}
             alt="Slide 1"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding2}
             alt="Slide 2"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding3}
             alt="Slide 3"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <img
-            src={onboardingimg}
+            src={onboarding4}
             alt="Slide 4"
-            style={{ height: "260px", width: "100%", objectFit: "contain" }}
+            style={{ height: "260px", width: "100%", objectFit: "cover" }}
           />
         </div>
       </Slider>
       <div
         style={{
           display: "flex",
-          borderBottom: "1px solid #ddd",
-          padding: "30px 0px",
+          padding: "70px 0px 30px 0px",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -441,7 +443,6 @@ const Home = ({}) => {
         <div
           style={{
             position: "relative",
-            paddingLeft: 40,
           }}
         >
           <div
@@ -470,17 +471,13 @@ const Home = ({}) => {
                 />
               ))}
             </div>
-            {/* 필요한 만큼 HotCommunity 컴포넌트 추가 */}
           </div>
         </div>
       </div>
-      {/*  */}
       <div
         style={{
           display: "flex",
-          borderBottom: "1px solid #ddd",
           padding: "30px 0px",
-          // position: "fixed",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -524,54 +521,17 @@ const Home = ({}) => {
           </div>
         </div>
       </div>
-      {/*  */}
+      {/*  react slick 캐러셀  만들기*/}
       <div
         style={{
           display: "flex",
-          borderBottom: "1px solid #ddd",
           padding: "30px 0px",
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
+        }}>
         <div
           style={{
             position: "relative",
-          }}
-        >
-          <div
-            style={{
-              fontWeight: 700,
-              fontSize: 20,
-              position: "relative",
-              marginBottom: 28,
-              fontFamily: "Manrope-Bold",
-            }}
-          >
-            최근 방문한 커뮤니티
-          </div>
-          <div
-            className={styles.scrollContainer}
-            style={{
-              position: "relative",
-              width: "100%",
-            }}
-          >
-            <div className={styles.newSearch}>
-              <RecentCommunity />
-              <RecentCommunity />
-              <RecentCommunity />
-              <RecentCommunity />
-            </div>
-          </div>
-        </div>
-      </div>
-      {/*  react slick 캐러셀  만들기*/}
-      <div style={{ padding: "30px 0px" }}>
-        <div
-          style={{
-            position: "relative",
-            padding: "0px 40px",
           }}
         >
           <div
@@ -590,6 +550,7 @@ const Home = ({}) => {
             style={{
               position: "relative",
               width: "100%",
+              justifyContent: 'center',
               alignItems: "center",
             }}
           >

@@ -8,6 +8,7 @@ import imgbackground from "assets/images/bookmarkbackground.png";
 import commmunityicon from "assets/icons/palette.png";
 import Header from "components/Header";
 import supabase from "components/supabaseClient";
+import loadinggif from "assets/images/loading.gif"
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
@@ -117,7 +118,7 @@ const CommunityDetailsPage = () => {
   }, [communityId]);
 
   if (!community || !posts) {
-    return <div>Loading...</div>;
+    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
   }
 
   const userRole =

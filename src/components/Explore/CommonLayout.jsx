@@ -87,41 +87,43 @@ const CommonLayout = ({ children }) => {
               placeholder="제목, 커뮤니티, 스터디를 검색해보세요."
             />
             <img src={Search} alt="Search" className={styles.SearchIcon} />
+            {isFocused && (
+              <div className={styles.SearchHistoryContainer}>
+                <ul className={styles.SearchHistoryList}>
+                  <div className={styles.SearchText}>최근 검색어</div>
+                  {searchHistory.map((historyItem, index) => (
+                    <li
+                      key={index}
+                      className={styles.SearchHistoryItem}
+                      onClick={() => handleRecentSearchClick(historyItem.query)}
+                    >
+                      <div className={styles.HistoryTextContainer}>
+                        <div className={styles.buttonContainer}>
+                          <img src={Exploresearch} alt="Search Icon" />
+                          {historyItem.query}
+                        </div>
+                        <button
+                          className={styles.deletebutton}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 버튼 클릭 시 부모 요소로 이벤트 전파 막기
+                            handleDelete(historyItem.searchid);
+                          }}
+                        >
+                          ❌
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <button onClick={handleSearch} className={styles.SearchButton}>
             Search
           </button>
+
         </div>
-        {isFocused && (
-          <div className={styles.SearchHistoryContainer}>
-            <ul className={styles.SearchHistoryList}>
-              <div className={styles.SearchText}>최근 검색어</div>
-              {searchHistory.map((historyItem, index) => (
-                <li
-                  key={index}
-                  className={styles.SearchHistoryItem}
-                  onClick={() => handleRecentSearchClick(historyItem.query)}
-                >
-                  <div className={styles.HistoryTextContainer}>
-                    <div className={styles.buttonContainer}>
-                      <img src={Exploresearch} alt="Search Icon" />
-                      {historyItem.query}
-                    </div>
-                    <button
-                      className={styles.deletebutton}
-                      onClick={(e) => {
-                        e.stopPropagation(); // 버튼 클릭 시 부모 요소로 이벤트 전파 막기
-                        handleDelete(historyItem.searchid);
-                      }}
-                    >
-                      ❌
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+
       </div>
       <div className={styles.Content}>{children}</div>
     </div>

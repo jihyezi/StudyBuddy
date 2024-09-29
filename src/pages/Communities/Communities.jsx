@@ -156,7 +156,7 @@ const Communities = () => {
       <Header headerName={"Communities"} />
       {joinCommunity.length > 0 ? (
         <>
-          <div className={styles.classification}>
+          <div className={styles.classification1}>
             <JoinCommunity
               onEventSelect={handleEventSelect}
               communityData={community}
@@ -177,7 +177,7 @@ const Communities = () => {
         </>
       ) : (
         <>
-          <div className={styles.classification}>
+          <div className={styles.classification2}>
             <Classification onEventSelect={handleEventSelect} />
           </div>
           <JoinPostList
