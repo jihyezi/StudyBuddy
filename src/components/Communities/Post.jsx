@@ -121,7 +121,12 @@ const Post = ({
     setLikeCount(count);
   };
 
-  const handlePostClick = () => {
+  const handlePostClick = async () => {
+    await supabase
+      .from("Post")
+      .update({ viewnumber: post.viewnumber + 1 })
+      .eq("postid", post.postid);
+
     navigate(`/detail-post/${post.postid}`, {
       state: {
         userData: user,
@@ -298,7 +303,7 @@ const Post = ({
             </div>
             <div>
               <img className={styles.viewIcon} src={view} alt="view" />
-              <span className={styles.viewNumber}>{post.viewNumber}</span>
+              <span className={styles.viewNumber}>{post.viewnumber}</span>
             </div>
             <div>
               <img

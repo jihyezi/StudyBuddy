@@ -32,12 +32,14 @@ const RevisePost = () => {
 
   useEffect(() => {
     if (postData) {
+      console.log("postData", postData.references[0].filename);
       setCommunity(postData.communityid);
       setTitle(postData.title);
       setStartDate(postData.startdate);
       setEndDate(postData.enddate);
       setBook(postData.book);
       setResult(postData.result);
+      setSelectedFiles(postData.references || []);
 
       const content = postData.content;
       const parser = new DOMParser();
@@ -140,7 +142,7 @@ const RevisePost = () => {
     console.log("result", result);
     console.log("book", book);
     console.log("studyMethod", studyMethod);
-    console.log("references", postData.references);
+    console.log("references", selectedFiles);
     console.log("createdat", postData.createdat);
     console.log("community", community);
   };
@@ -302,6 +304,9 @@ const RevisePost = () => {
               contentEditable
               placeholder="공부 방법을 입력하세요."
               onInput={(e) => setStudyMethod(e.currentTarget.textContent)}
+              dangerouslySetInnerHTML={{
+                __html: studyMethod.replace(/\n/g, "<br />"),
+              }}
             />
             <div className={styles.albumIconWrapper} onClick={handleAlbumClick}>
               <img className={styles.albumIcon} src={album} alt="albumIcon" />
@@ -312,6 +317,7 @@ const RevisePost = () => {
           title={"자료"}
           placeholder={"파일을 첨부해 주세요."}
           onFileSelect={(file) => setFiles(file)}
+          initialFiles={selectedFiles}
         />
       </div>
     </div>
