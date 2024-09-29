@@ -97,7 +97,7 @@ const Notifications = ({ showNotifications }) => {
               }
               // 내가 쓴 글에 댓글을 남겼을 때
               else if (notification.content.startsWith("Your post received a new comment from")) {
-                const commenterId = notification.content.split("by ")[1];
+                const commenterId = notification.content.split("from ")[1];
                 content = `${userMap[commenterId] || "알 수 없는 유저"}님이 댓글을 남겼습니다.`;
               }
 
