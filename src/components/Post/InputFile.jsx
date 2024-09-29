@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./InputFile.module.css";
 import "fonts/Font.css";
 
@@ -7,23 +7,29 @@ import file from "assets/icons/Post/file.png";
 import cancel from "assets/icons/Post/close.png";
 import add from "assets/icons/Post/add_grey.png";
 
-const InputFile = (props) => {
+const InputFile = ({ title, onFileSelect, initialFiles = [] }) => {
   const fileInputRef = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState(initialFiles || []);
+
+  useEffect(() => {
+    if (initialFiles) {
+      setSelectedFiles(initialFiles);
+    }
+  }, [initialFiles]);
 
   const handleChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const files = Array.from(event.target.files);
       const newFiles = [...selectedFiles, ...files];
       setSelectedFiles(newFiles);
-      props.onFileSelect(newFiles);
+      onFileSelect(newFiles);
     }
   };
 
   const handleCancel = (index) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
-    props.onFileSelect(updatedFiles);
+    onFileSelect(updatedFiles);
     fileInputRef.current.value = null;
   };
 
@@ -33,7 +39,7 @@ const InputFile = (props) => {
 
   return (
     <div className={styles.inputContainer}>
-      <div className={styles.inputText}>{props.title}</div>
+      <div className={styles.inputText}>{title}</div>
       <input
         style={{ display: "none" }}
         type="file"
@@ -43,7 +49,7 @@ const InputFile = (props) => {
       />
       {selectedFiles.map((file, index) => (
         <div key={index} className={styles.fileSelectedContainer}>
-          <span className={styles.fileName}>{file.name}</span>
+          <span className={styles.fileName}>{file.name || file.filename}</span>
           <img
             className={styles.inputIcon}
             src={cancel}
