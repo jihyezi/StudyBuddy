@@ -13,7 +13,7 @@ const CommunityPostList = ({
     <div>
       {postData.map((post) => (
         <Post
-          key={post.id}
+          key={post.postid} // post.id -> post.postid 로 수정
           post={post}
           community={communityData}
           user={userData}
