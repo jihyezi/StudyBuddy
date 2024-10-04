@@ -1,7 +1,15 @@
 import React from "react";
+import styles from './Offline.module.css'
+
+// images
+import commingsoon from "assets/images/coming-soon.gif"
 
 const Offline = () => {
-  return <div>오프라인</div>;
+  return (
+    <div className={styles.OfflineContainer}>
+      <img src={commingsoon} className={styles.commingsoonicon} />
+    </div>
+  );
 };
 
 export default Offline;
