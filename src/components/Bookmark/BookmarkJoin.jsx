@@ -8,6 +8,7 @@ import cat from "assets/images/Communities/1.jpg";
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
 import profile from "assets/icons/Communities/communityprofile.jpeg";
+import noCommunityimg from 'assets/images/Communities/whitelogo.png';
 
 const BookmarkJoin = ({
   onEventSelect,
@@ -87,11 +88,18 @@ const BookmarkJoin = ({
           >
             <div className={styles.joinCommunity}>
               <div className={styles.communityImageContainer}>
-                <img
-                  className={styles.communityImage}
-                  src={item.image}
-                  alt="cat"
-                />
+                {item.image ?
+                  <img
+                    className={styles.communityImage}
+                    src={item.image}
+                    alt="cat"
+                  />
+                  : <img
+                    className={styles.communityImage}
+                    src={noCommunityimg}
+                    alt="cat"
+                  />
+                }
               </div>
               <div className={styles.communityName}>{item.name}</div>
             </div>
