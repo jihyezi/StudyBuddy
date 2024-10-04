@@ -172,9 +172,6 @@ const Communities = () => {
       fieldCommunity.some((fp) => Number(fp.communityid) === Number(p.communityid))
     );
 
-  console.log(JSON.stringify(filterfieldPosts))
-
-
   return (
     <div className={styles.community}>
       <Header headerName={"Communities"} />
