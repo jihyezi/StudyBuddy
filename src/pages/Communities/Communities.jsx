@@ -18,6 +18,7 @@ const Communities = () => {
   const [joinCommunity, setJoinCommunity] = useState([]);
   const [post, setPost] = useState([]);
   const [comment, setComment] = useState([]);
+  const [fieldCommunity, setFieldCommunity] = useState([]);
   const { user: sessionUser } = useAuth();
 
   useEffect(() => {
@@ -58,14 +59,12 @@ const Communities = () => {
     };
 
     const fetchCommunityData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase.from("Community").select("*");
+      const { data, error } = await supabase.from("Community").select("*");
 
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setCommunity(data);
-        }
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setCommunity(data);
       }
     };
 
@@ -99,14 +98,12 @@ const Communities = () => {
     };
 
     const fetchPostData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase.from("Post").select("*");
+      const { data, error } = await supabase.from("Post").select("*");
 
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setPost(data);
-        }
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setPost(data);
       }
     };
 
@@ -128,6 +125,23 @@ const Communities = () => {
       }
     };
 
+
+    const fetchfieldData = async () => {
+      if (selectedEvent) {  // selectedEvent가 비어 있지 않은지 확인
+        const { data, error } = await supabase
+          .from('Community')
+          .select('*')
+          .eq('field', selectedEvent);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          console.log('data', data);
+          setFieldCommunity(data);
+        }
+      }
+    };
+
     fetchUserData();
     fetchAllUserData();
     fetchCommunityData();
@@ -135,7 +149,8 @@ const Communities = () => {
     fetchAllJoinCommunityData();
     fetchPostData();
     fetchCommentData();
-  }, [sessionUser]);
+    fetchfieldData();
+  }, [sessionUser, selectedEvent]);
 
   const handleEventSelect = (event) => {
     setSelectEvent(event);
@@ -150,6 +165,15 @@ const Communities = () => {
       (fc) => Number(fc.communityid) === Number(p.communityid)
     )
   );
+
+  const filterfieldPosts = selectedEvent === "🔥"
+    ? post
+    : post.filter((p) =>
+      fieldCommunity.some((fp) => Number(fp.communityid) === Number(p.communityid))
+    );
+
+  console.log(JSON.stringify(filterfieldPosts))
+
 
   return (
     <div className={styles.community}>
@@ -178,15 +202,23 @@ const Communities = () => {
       ) : (
         <>
           <div className={styles.classification2}>
-            <Classification onEventSelect={handleEventSelect} />
+            <Classification
+              onEventSelect={handleEventSelect}
+            />
           </div>
-          <JoinPostList
-            postData={post}
-            communityData={community}
-            userData={user}
-            allUserData={allUser}
-            commentData={comment}
-          />
+          {filterfieldPosts.length > 0 ?
+            <JoinPostList
+              postData={filterfieldPosts}
+              communityData={community}
+              userData={user}
+              allUserData={allUser}
+              commentData={comment}
+            /> :
+            <div className={styles.nopostcontainer}>
+              <div className={styles.nopost}>No Posts Yet</div>
+            </div>
+          }
+
         </>
       )}
     </div>

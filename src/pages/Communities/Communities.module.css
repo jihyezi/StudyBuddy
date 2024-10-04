@@ -33,3 +33,17 @@
   padding: 20px 20px 20px 20px;
   border-bottom: 1px solid #dddddd;
 }
+
+.nopostcontainer {
+  display: flex;
+  width: 100%;
+  margin-top: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.nopost {
+  font-size: 24px;
+  font-family: "BalooTammudu2-SemiBold";
+  color: #7b7b7b;
+}
