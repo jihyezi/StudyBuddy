@@ -1,7 +1,6 @@
 .community {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #dddddd;
   width: 100%;
   max-width: 1200px;
   margin: 0 0 auto 0; 
