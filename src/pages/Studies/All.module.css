@@ -1,8 +1,18 @@
-.filter {
+.allContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchContainer {
     display: flex;
     flex-direction: row;
+    width: 100%;
     gap: 32px;
     margin-bottom: 20px;
+}
+
+.filter {
+    width: 140px;
 }
 
 .searchinputfiled {

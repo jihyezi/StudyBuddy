@@ -9,6 +9,11 @@ const All = () => {
   const [posts, setPosts] = useState([]);
   const [likesCount, setLikesCount] = useState({});
   const [commentsCount, setCommentsCount] = useState({});
+  const [selectOption, setSelectOption] = useState('전체');
+
+  const handleSelectOption = (option) => {
+    setSelectOption(option);
+  }
 
   const fetchStudyDataAll = async () => {
     const { data, error } = await supabase.from("Study").select("*");
@@ -55,12 +60,18 @@ const All = () => {
 
   useEffect(() => {
     fetchStudyDataAll();
-  }, []);
+  }, [selectOption]);
+
+  const filterPosts = posts.filter((p) =>
+    selectOption === '전체' ? true : p.completion === selectOption
+  );
 
   return (
-    <div>
-      <div className={styles.filter}>
-        <Filter placeholder={"전체"} />
+    <div className={styles.allContainer}>
+      <div className={styles.searchContainer}>
+        <div className={styles.filter}>
+          <Filter placeholder={"전체"} onOptionSelect={handleSelectOption} />
+        </div>
         <div className={styles.searchinputfiled}>
           <div className={styles.InputWrapper}>
             <input
@@ -73,7 +84,7 @@ const All = () => {
           <button className={styles.SearchButton}>Search</button>
         </div>
       </div>
-      {posts.map((post, index) => (
+      {filterPosts.map((post, index) => (
         <StudyPost
           key={index}
           studyId={post.studyid}
