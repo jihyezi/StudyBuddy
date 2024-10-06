@@ -1,4 +1,5 @@
 .home {
+  width: 100%;
   display: block;
   flex-direction: column;
   overflow-y: auto;
