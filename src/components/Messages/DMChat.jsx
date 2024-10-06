@@ -6,7 +6,7 @@ import OtherMessage from "./OtherMessage";
 import DeleteIcon from "assets/icons/Messages/Delete.png";
 import DeleteModal from "./DeleteModal";
 import supabase from "components/supabaseClient";
-
+import defaultprofile from "assets/icons/Messages/Profile.jpg"
 function DMChat({ selectedUser, publicUser }) {
   const [chatData, setChatData] = useState([]);  // 실제 메시지 데이터
   const [message, setMessage] = useState("");  // 전송할 메시지
@@ -33,7 +33,6 @@ function DMChat({ selectedUser, publicUser }) {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchChatData();
   }, [publicUser, selectedUser]);
@@ -44,14 +43,12 @@ function DMChat({ selectedUser, publicUser }) {
 
     const { error } = await supabase
       .from("DirectMessage")
-      .insert([
-        {
-          content: message,
-          new_senderid: publicUser.userid,  // 보낸 사람 ID
-          new_receiverid: selectedUser.userid,  // 받는 사람 ID
-          createdat: new Date().toISOString(),  // 생성 시간
-        },
-      ]);
+      .insert([{
+        content: message,
+        new_senderid: publicUser.userid,  // 보낸 사람 ID
+        new_receiverid: selectedUser.userid,  // 받는 사람 ID
+        createdat: new Date().toISOString(),  // 생성 시간
+      }]);
 
     if (error) {
       console.error("Error sending message:", error.message);
@@ -86,7 +83,11 @@ function DMChat({ selectedUser, publicUser }) {
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
-        <img src={selectedUser.profileimage} className={styles.profileImage} alt="Profile" />
+        <img
+          src={selectedUser.profileimage || defaultprofile}  // 프로필 이미지가 없으면 기본 이미지 사용
+          className={styles.profileImage}
+          alt="Profile"
+        />
         <div className={styles.headerText}>
           {selectedUser ? `${selectedUser.username} / @${selectedUser.userid}` : "No user selected"}
         </div>
@@ -113,7 +114,13 @@ function DMChat({ selectedUser, publicUser }) {
                 {showDateDivider && (
                   <div className={styles.dateDivider}>{chat.createdat.split("T")[0]}</div>
                 )}
-                {showProfileImage && <img src={selectedUser.profileimage} className={styles.profileImage} alt="Profile" />}
+                {showProfileImage && (
+                  <img
+                    src={selectedUser.profileimage || defaultprofile}  // 프로필 이미지가 없으면 기본 이미지 사용
+                    className={styles.profileImage}
+                    alt="Profile"
+                  />
+                )}
                 {chat.new_senderid === publicUser.userid ? (
                   lastMessage ? (
                     <MyMessage key={index} message={chat.content} last={true} />

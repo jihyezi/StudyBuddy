@@ -58,7 +58,7 @@ const CommonLayout = ({ children }) => {
   const handleBlur = () => {
     setTimeout(() => {
       setIsFocused(false);
-    }, 200);
+    }, 100);
   };
 
   const handleDelete = async (searchId) => {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "contexts/AuthContext";  // AuthContext에서 인증된 유저 정보 가져오기
+import { useNavigate } from "react-router-dom";  // useNavigate 훅 사용
 import supabase from "components/supabaseClient";
 import styles from "./DMList.module.css";
 import DMChat from "./DMChat";
 import DMSend from "./DMSend";
-import SendMessageIcon from "assets/icons/Messages/SendMessage.png";
+import defaultprofile from "assets/icons/Messages/Profile.jpg";
 
 function DMList() {
   const { user } = useAuth();  // 현재 로그인한 유저 정보 가져오기
@@ -12,8 +13,15 @@ function DMList() {
   const [isSending, setIsSending] = useState(false);
   const [userData, setUserData] = useState([]);  // 다른 유저들의 데이터
   const [publicUser, setPublicUser] = useState(null);  // 현재 로그인한 유저의 Public 스키마 정보
+  const navigate = useNavigate();  // 리다이렉트를 위한 useNavigate 훅 사용
 
   useEffect(() => {
+    // 유저가 로그인되지 않은 경우 로그인 페이지로 이동
+    if (!user) {
+      navigate("/profile");  // 로그인 페이지로 리다이렉트
+      return;  // 리다이렉트 후 더 이상의 코드 실행을 막기 위해 return
+    }
+
     const fetchUsers = async () => {
       if (user) {
         try {
@@ -48,7 +56,7 @@ function DMList() {
     };
 
     fetchUsers();
-  }, [user]);
+  }, [user, navigate]); // user 또는 navigate가 변경될 때마다 실행
 
   const handleUserClick = (user) => {
     if (selectedUser && selectedUser.userid === user.userid) {
@@ -85,7 +93,7 @@ function DMList() {
               key={index}
               onClick={() => handleUserClick(user)}
             >
-              <img src={user.profileimage || SendMessageIcon} className={styles.profileImage} alt="Profile" />
+              <img src={user.profileimage || defaultprofile} className={styles.profileImage} alt="Profile" />
               <div className={styles.messageContent}>
                 <div className={styles.messageHeader}>
                   <span className={styles.username}>{user.username}</span>
@@ -102,7 +110,7 @@ function DMList() {
       ) : (
         <div className={styles.noChat} onClick={handleNewMessageClick}>
           <img
-            src={SendMessageIcon}
+            src={defaultprofile}
             alt="New Message"
             className={styles.newMessageIcon}
           />
