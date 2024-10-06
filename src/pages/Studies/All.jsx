@@ -10,9 +10,14 @@ const All = () => {
   const [likesCount, setLikesCount] = useState({});
   const [commentsCount, setCommentsCount] = useState({});
   const [selectOption, setSelectOption] = useState('전체');
+  const [searchText, setSearchText] = useState('');
 
   const handleSelectOption = (option) => {
     setSelectOption(option);
+  }
+
+  const handleSearchTextChange = (e) => {
+    setSearchText(e.target.value);
   }
 
   const fetchStudyDataAll = async () => {
@@ -66,6 +71,10 @@ const All = () => {
     selectOption === '전체' ? true : p.completion === selectOption
   );
 
+  const searchPosts = filterPosts.filter((p) =>
+    p.title.includes(searchText) || p.description.includes(searchText) || p.tag.includes(searchText)
+  );
+
   return (
     <div className={styles.allContainer}>
       <div className={styles.searchContainer}>
@@ -78,13 +87,14 @@ const All = () => {
               type="text"
               className={styles.SearchInput}
               placeholder="스터디를 검색해보세요."
+              onChange={handleSearchTextChange}
+              value={searchText}
             />
             <img src={Search} alt="Search" className={styles.SearchIcon} />
           </div>
-          <button className={styles.SearchButton}>Search</button>
         </div>
       </div>
-      {filterPosts.map((post, index) => (
+      {searchPosts.map((post, index) => (
         <StudyPost
           key={index}
           studyId={post.studyid}
