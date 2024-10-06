@@ -6,7 +6,7 @@ import { selectList } from "../Post/SelectList";
 // icon
 import down from "assets/icons/Post/down.png";
 
-const Filter = ({ placeholder }) => {
+const Filter = ({ placeholder, onOptionSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(placeholder);
     const inputRef = useRef(null);
@@ -21,6 +21,7 @@ const Filter = ({ placeholder }) => {
     const handleOptionClick = (option) => {
         setSelectedOption(option);
         setIsOpen(false);
+        onOptionSelect(option);
     };
 
     const handleOutsideClick = (event) => {

@@ -37,11 +37,13 @@
 .menuOn {
   font-family: "BalooTammudu";
   font-size: 20px;
+  text-decoration: none;
 }
 
 .menuOff {
   font-family: "BalooTammudu2-Regular";
   font-size: 20px;
+  text-decoration: none;
 }
 
 .post {
@@ -88,4 +90,13 @@
   height: 24px; 
   border-radius: 50%;
   object-fit: cover;
+}
+
+.profileText {
+  margin-left: 20px; 
+  text-decoration: none; 
+  text-decoration-line: none;
+  font-family: "BalooTammudu2-Regular"; 
+  font-size: 20px; 
+  color: #333333; 
 }

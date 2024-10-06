@@ -22,9 +22,10 @@ import bookmarks_off from "assets/icons/Sidebar/bookmarks_off.png";
 import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
+import nopforile from 'assets/images/Profile/noprofile.png';
 
 // Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
-const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginUser }) => {
   const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
@@ -37,7 +38,6 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
     { name: "Notifications", path: "#", text: "notifications" },
     { name: "Messages", path: "/messages", text: "messages" },
     { name: "Bookmarks", path: "/bookmarks", text: "bookmarks" },
-    { name: "Profile", path: "/profile", text: "profile" },
   ];
 
   const iconMapping = {
@@ -48,7 +48,6 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
     notifications: { off: notifications_off, on: notifications_on },
     messages: { off: messages_off, on: messages_on },
     bookmarks: { off: bookmarks_off, on: bookmarks_on },
-    profile: { off: profile_off, on: profile_on },
   };
 
   const handlePostClick = () => {
@@ -139,6 +138,49 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile }) => {
             </div>
           );
         })}
+
+        <div className={styles.menu}>
+          <NavLink
+            to={"/profile"}
+            className={({ isActive }) => (isActive ? styles.menuOn : styles.menuOff)}
+          >
+            {({ isActive }) => (
+              <div
+                className={styles.menuItem}
+                style={{
+                  color: "#333333",
+                  textDecoration: "none",
+                  verticalAlign: "middle",
+                  cursor: "pointer",
+                  fontFamily: "BalooTammudu2-Regular",
+                  fontSize: 20,
+                }}
+              >
+                <img
+                  style={{
+                    width: 24,
+                    height: 24,
+                    verticalAlign: "middle",
+                    borderRadius: '50%',
+                  }}
+                  src={
+                    loginUser // 로그인한 경우
+                      ? loginUser.profileimage // 프로필 이미지가 있으면 프로필 이미지
+                        ? loginUser.profileimage
+                        : nopforile // 프로필 이미지가 없으면 nopforile
+                      : profile_off // 로그인하지 않은 경우 profile_off
+                  }
+                  alt="icon"
+                />
+                <span className={isActive ? styles.menuOn : styles.menuOff} style={{ marginLeft: 20 }}>
+                  Profile
+                </span>
+              </div>
+            )}
+          </NavLink>
+        </div>
+
+
 
         <div
           className={styles.post}

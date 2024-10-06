@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "contexts/AuthContext";
 import styles from './Profile.module.css';
+import supabase from "components/supabaseClient";
+
+// Components
 import Header from "components/Header";
 import ProfileTablist from "components/Profile/ProfileTablist";
-import supabase from "components/supabaseClient";
+import ProfileEditModal from "components/Profile/ProfileEditModal";
+
+// Images
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
-import logo from "assets/icons/Sidebar/studybuddyLogo.png"
 import loadinggif from "assets/images/loading.gif"
-import { useAuth } from "contexts/AuthContext";
-import ProfileEditModal from "components/Profile/ProfileEditModal";
 
 const Profile = () => {
   const location = useLocation();

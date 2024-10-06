@@ -9,6 +9,16 @@ const All = () => {
   const [posts, setPosts] = useState([]);
   const [likesCount, setLikesCount] = useState({});
   const [commentsCount, setCommentsCount] = useState({});
+  const [selectOption, setSelectOption] = useState('전체');
+  const [searchText, setSearchText] = useState('');
+
+  const handleSelectOption = (option) => {
+    setSelectOption(option);
+  }
+
+  const handleSearchTextChange = (e) => {
+    setSearchText(e.target.value);
+  }
 
   const fetchStudyDataAll = async () => {
     const { data, error } = await supabase.from("Study").select("*");
@@ -55,25 +65,36 @@ const All = () => {
 
   useEffect(() => {
     fetchStudyDataAll();
-  }, []);
+  }, [selectOption]);
+
+  const filterPosts = posts.filter((p) =>
+    selectOption === '전체' ? true : p.completion === selectOption
+  );
+
+  const searchPosts = filterPosts.filter((p) =>
+    p.title.includes(searchText) || p.description.includes(searchText) || p.tag.includes(searchText)
+  );
 
   return (
-    <div>
-      <div className={styles.filter}>
-        <Filter placeholder={"전체"} />
+    <div className={styles.allContainer}>
+      <div className={styles.searchContainer}>
+        <div className={styles.filter}>
+          <Filter placeholder={"전체"} onOptionSelect={handleSelectOption} />
+        </div>
         <div className={styles.searchinputfiled}>
           <div className={styles.InputWrapper}>
             <input
               type="text"
               className={styles.SearchInput}
               placeholder="스터디를 검색해보세요."
+              onChange={handleSearchTextChange}
+              value={searchText}
             />
             <img src={Search} alt="Search" className={styles.SearchIcon} />
           </div>
-          <button className={styles.SearchButton}>Search</button>
         </div>
       </div>
-      {posts.map((post, index) => (
+      {searchPosts.map((post, index) => (
         <StudyPost
           key={index}
           studyId={post.studyid}

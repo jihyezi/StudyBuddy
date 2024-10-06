@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "contexts/AuthContext";
 import supabase from "components/supabaseClient";
 import styled from "styled-components";
 
@@ -117,8 +117,10 @@ const MainContent = () => {
 };
 
 const App = () => {
+  const [loginUser, setLoginUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const { user: sessionUser } = useAuth();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -136,8 +138,35 @@ const App = () => {
       }
     };
 
+    const fetchUserData = async () => {
+      if (sessionUser) {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          return;
+        }
+
+        const userId = session.user.id;
+
+        const { data, error } = await supabase
+          .from("User")
+          .select("*")
+          .eq("userid", userId);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setLoginUser(data[0]);
+        }
+      }
+    };
+
     fetchUsers();
-  }, []);
+    fetchUserData();
+  }, [sessionUser]);
 
   // 상태 전환 함수
   const toggleNotifications = () => {
@@ -149,7 +178,7 @@ const App = () => {
       <BrowserRouter>
         <Body>
           <Content>
-            <Sidebar toggleNotifications={toggleNotifications} />
+            <Sidebar toggleNotifications={toggleNotifications} loginUser={loginUser} />
             <Center>
               <MainContent />
               <Notifications

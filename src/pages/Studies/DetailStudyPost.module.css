@@ -163,3 +163,8 @@
   padding: 5px 20px;
   cursor: pointer;
 }
+
+.image {
+  max-width: 800px;
+  object-fit: contain;
+}
