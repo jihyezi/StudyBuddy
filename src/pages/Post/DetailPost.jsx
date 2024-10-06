@@ -374,7 +374,7 @@ const DetailPost = ({ }) => {
               {formatDescription(postData.content)}
             </div>
 
-            {postData.references.map((file, index) => (
+            {postData.references && postData.references.map((file, index) => (
               <div
                 key={index}
                 style={{
