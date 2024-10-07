@@ -4,6 +4,8 @@ import styles from './Classification.module.css';
 
 import leftArrow from '../../assets/icons/left_arrow.png';
 import rightArrow from '../../assets/icons/right_arrow.png';
+import JoinPostList from "components/Communities/CommunityJoinPostList";
+import CommunityPostList from './CommunityPostList';
 
 const Classification = ({ onEventSelect }) => {
   const [scrollState, setScrollState] = useState('start');

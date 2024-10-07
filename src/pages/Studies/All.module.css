@@ -1,8 +1,20 @@
-.filter {
+.allContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchContainer {
     display: flex;
     flex-direction: row;
-    gap: 32px;
+    align-items: center;
+    padding-left: 20px;
+    gap: 26px;
+    width: 100%;
     margin-bottom: 20px;
+}
+
+.filter {
+    width: 140px;
 }
 
 .searchinputfiled {
@@ -25,25 +37,31 @@
 }
 
 .SearchInput {
-    width: 500px;
-    height: 40px;
+    width: 400px;
+    height: 42px;
     border-radius: 8px;
     border: 1px solid #b6b6b6;
     padding: 0px 0px 0px 40px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 600;
+    color: #333;
     margin-right: 20px;
+    outline: none;
 }
 
 .SearchInput::placeholder {
     color: #b6b6b6; 
-    font-size: 15px; 
-    font-weight: 700;
+    font-size: 14px; 
+    font-weight: 600;
+}
+
+.SearchInput:focus{
+    border: 1.2px solid #ff7474;
 }
 
 .SearchButton {
     width: 78px;
-    height: 40px;
+    height: 42px;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #ff7474;

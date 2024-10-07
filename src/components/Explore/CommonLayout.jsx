@@ -15,7 +15,6 @@ const CommonLayout = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
-
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
@@ -46,7 +45,12 @@ const CommonLayout = ({ children }) => {
       console.error("Error: searchQuery is empty or userId is undefined");
     }
   };
-
+  // 검색창에서 엔터를 눌렀을 때도 검색이 실행되도록 설정
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -54,7 +58,7 @@ const CommonLayout = ({ children }) => {
   const handleBlur = () => {
     setTimeout(() => {
       setIsFocused(false);
-    }, 200);
+    }, 100);
   };
 
   const handleDelete = async (searchId) => {
@@ -81,6 +85,7 @@ const CommonLayout = ({ children }) => {
               type="text"
               value={searchQuery}
               onChange={handleInputChange}
+              onKeyPress={handleKeyPress} // 엔터 키를 누르면 검색 실행
               onFocus={handleFocus}
               onBlur={handleBlur}
               className={styles.SearchInput}
@@ -121,9 +126,7 @@ const CommonLayout = ({ children }) => {
           <button onClick={handleSearch} className={styles.SearchButton}>
             Search
           </button>
-
         </div>
-
       </div>
       <div className={styles.Content}>{children}</div>
     </div>

@@ -3,8 +3,12 @@ import { useLocation } from "react-router-dom";
 import styles from "./SearchResulus.module.css";
 
 import JoinPostList from "components/Communities/CommunityJoinPostList";
-import { dummyPostData } from "components/Dummydata";
 import CommunityPostSmall from "components/Communities/CommunityPostSmall";
+import StudyPost from "components/Studies/StudyPost";
+
+import useCommunities from "../../components/Explore/hooks/useCommunities";
+import usePostsAndUsers from "../../components/Explore/hooks/usePostsAndUsers";
+import useStudies from "../../components/Explore/hooks/useStudies";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -12,21 +16,61 @@ const SearchResults = () => {
 
   const [currentTab, clickTab] = useState(0);
 
+  const communities = useCommunities(query);
+  const { posts, users, communityInfo, commentData } = usePostsAndUsers(query);
+  const { studies, likesCount, commentsCount } = useStudies(query);
+
   const menuArr = [
     {
       name: "커뮤니티",
-      content: <JoinPostList postData={dummyPostData} />,
-      data: dummyPostData, // 데이터를 추가하여 비어있는지 확인 가능
+      content: communities.map((community) => (
+        <CommunityPostSmall
+          key={community.communityid}
+          communityimg={community.image}
+          communityname={community.name}
+          person={community.membercount}
+          post={community.postcount}
+          date={new Date(community.createdat).toLocaleDateString()}
+          communityicon="icon_url_here"
+        />
+      )),
+      data: communities,
     },
     {
       name: "전체글",
-      content: <JoinPostList postData={dummyPostData} />,
-      data: dummyPostData,
+      content: (
+        <JoinPostList
+          postData={posts}
+          communityData={communityInfo}
+          userData={users}
+          comment={commentData}
+        />
+      ),
+      data: posts,
     },
     {
       name: "스터디",
-      content: <JoinPostList postData={dummyPostData} />,
-      data: dummyPostData,
+      content:
+        studies.length > 0 ? (
+          studies.map((study) => (
+            <StudyPost
+              key={study.studyid}
+              studyId={study.studyid}
+              completion={study.completion}
+              title={study.title}
+              description={study.description.split("\n")[0]} // 첫 줄만 표시
+              tag={study.tag}
+              maxmembers={study.maxmembers}
+              proceed={study.proceed}
+              studyPost={study}
+              likesCount={likesCount[study.studyid] || 0}
+              commentsCount={commentsCount[study.studyid] || 0}
+            />
+          ))
+        ) : (
+          <div className={styles.Nosearchresults}>검색 결과가 없습니다.</div>
+        ),
+      data: studies,
     },
   ];
 
@@ -58,13 +102,9 @@ const SearchResults = () => {
           </div>
         ))}
       </div>
-
-      {/* 선택된 탭의 데이터가 존재하는지 확인하고 없으면 "검색 결과가 없습니다." 표시 */}
-      {menuArr[currentTab].data && menuArr[currentTab].data.length > 0 ? (
-        <div className={styles.desc}>{menuArr[currentTab].content}</div>
-      ) : (
-        <div className={styles.Nosearchresults}>검색 결과가 없습니다.</div>
-      )}
+      <div className={styles.communityPostSmallWrap}>
+        {menuArr[currentTab].content}
+      </div>
     </div>
   );
 };

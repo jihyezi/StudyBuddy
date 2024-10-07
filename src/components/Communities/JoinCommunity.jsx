@@ -5,10 +5,9 @@ import useIsOverflow from "components/useIsOverflow";
 import supabase from "components/supabaseClient";
 
 // image
-import cat from "assets/images/Communities/1.jpg";
-import leftArrow from "../../assets/icons/left_arrow.png";
-import rightArrow from "../../assets/icons/right_arrow.png";
-import profile from "../../assets/icons/Communities/communityprofile.jpeg";
+import leftArrow from "assets/icons/left_arrow.png";
+import rightArrow from "assets/icons/right_arrow.png";
+import noCommunityimg from 'assets/images/Communities/whitelogo.png';
 
 const JoinCommunity = ({
   onEventSelect,
@@ -18,17 +17,11 @@ const JoinCommunity = ({
   postData = {},
   userData = {},
 }) => {
-  const [joinCommunities, setJoinCommunities] = useState([]);
-  const [communities, setCommunities] = useState([]);
   const [scrollState, setScrollState] = useState("start");
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
-
-  // useEffect(() => {
-  //   fetchJoinCommunityDataAll();
-  // }, []);
 
   const handleClick = (item) => {
     setSelectedItem(item);
@@ -79,50 +72,6 @@ const JoinCommunity = ({
     }
   };
 
-  // const fetchJoinCommunityDataAll = async () => {
-  //   const {
-  //     data: { session },
-  //     error: sessionError,
-  //   } = await supabase.auth.getSession();
-  //   if (sessionError) {
-  //     console.error("Error getting session:", sessionError);
-  //     return;
-  //   }
-
-  //   const userId = session.user.id;
-
-  //   const { data, error } = await supabase
-  //     .from("JoinCommunity")
-  //     .select("*")
-  //     .eq("userid", userId);
-
-  //   if (error) {
-  //     console.error("Error fetching data:", error);
-  //   } else {
-  //     setJoinCommunities(data);
-  //     const communityPromises = data.map((joinCommunity) =>
-  //       fetchCommunityDataAll(joinCommunity.communityid)
-  //     );
-
-  //     const communitiesData = await Promise.all(communityPromises);
-  //     setCommunities(communitiesData.flat());
-  //   }
-  // };
-
-  // const fetchCommunityDataAll = async (communityId) => {
-  //   const { data, error } = await supabase
-  //     .from("Community")
-  //     .select("*")
-  //     .eq("communityid", communityId);
-
-  //   if (error) {
-  //     console.error("Error fetching data:", error);
-  //     return [];
-  //   } else {
-  //     return data;
-  //   }
-  // };
-
   return (
     <div className={styles.stackTagsArea}>
       <div
@@ -138,11 +87,19 @@ const JoinCommunity = ({
           >
             <div className={styles.joinCommunity}>
               <div className={styles.communityImageContainer}>
-                <img
-                  className={styles.communityImage}
-                  src={item.image}
-                  alt="cat"
-                />
+                {item.image ?
+                  <img
+                    className={styles.communityImage}
+                    src={item.image}
+                    alt="cat"
+                  />
+                  : <img
+                    className={styles.communityImage}
+                    src={noCommunityimg}
+                    alt="cat"
+                  />
+                }
+
               </div>
               <div className={styles.communityName}>{item.name}</div>
             </div>

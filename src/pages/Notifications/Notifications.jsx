@@ -84,18 +84,20 @@ const Notifications = ({ showNotifications }) => {
                 const senderId = notification.content.split("from ")[1];
                 content = `${userMap[senderId] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`;
               }
-              // 커뮤니티에 새 글 알림 처리
-              else if (notification.content.startsWith("A new post has been created in your community")) {
-                content = notification.content;  // 커뮤니티 포스트 알림 그대로 사용
+              // 커뮤니티에 새 글 알림 처리 (작성자의 닉네임을 표시)
+              else if (notification.content.startsWith("A new post has been created in the community")) {
+                const parts = notification.content.split("by ");
+                const postAuthorId = parts[1];
+                content = `${userMap[postAuthorId] || "알 수 없는 유저"}님이 커뮤니티에 새 글을 작성하였습니다.`;
               }
               // 내가 쓴 글에 좋아요를 눌렀을 때
-              else if (notification.content.startsWith("Your post has been liked by")) {
+              else if (notification.content.startsWith("Your post was liked by")) {
                 const likerId = notification.content.split("by ")[1];
                 content = `${userMap[likerId] || "알 수 없는 유저"}님이 회원님의 게시물을 좋아합니다.`;
               }
               // 내가 쓴 글에 댓글을 남겼을 때
-              else if (notification.content.startsWith("A comment has been added to your post by")) {
-                const commenterId = notification.content.split("by ")[1];
+              else if (notification.content.startsWith("Your post received a new comment from")) {
+                const commenterId = notification.content.split("from ")[1];
                 content = `${userMap[commenterId] || "알 수 없는 유저"}님이 댓글을 남겼습니다.`;
               }
 

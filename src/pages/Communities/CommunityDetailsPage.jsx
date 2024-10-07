@@ -9,6 +9,7 @@ import commmunityicon from "assets/icons/palette.png";
 import Header from "components/Header";
 import supabase from "components/supabaseClient";
 import loadinggif from "assets/images/loading.gif"
+import nobackground from "assets/images/Profile/nobackground.png";
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
@@ -129,11 +130,19 @@ const CommunityDetailsPage = () => {
       <Header headerName={community[0].name} />
       <div className={styles.imageWrapper}>
         <div className={styles.imageContainer}>
-          <img
-            src={community[0].image}
-            alt="profile"
-            className={styles.image}
-          />
+          {community[0].image ?
+            <img
+              src={community[0].image}
+              alt="profile"
+              className={styles.image}
+            />
+            : <img
+              src={nobackground}
+              alt="profile"
+              className={styles.image}
+            />
+          }
+
         </div>
         <div className={styles.iconWrapper}>
           <div className={styles.communityPostIconWrapper}>

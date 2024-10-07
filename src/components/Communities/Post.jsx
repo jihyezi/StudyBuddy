@@ -16,6 +16,7 @@ import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const Post = ({
   post = {},
@@ -259,7 +260,11 @@ const Post = ({
 
       <div className={styles.postDetail}>
         <div>
-          <img className={styles.userProfile} src={userimg} alt="profile" />
+          {userimg ?
+            <img className={styles.userProfile} src={userimg} alt="profile" />
+            : <img className={styles.userProfile} src={noprofile} alt="profile" />
+          }
+
         </div>
 
         <div className={styles.postWriterContent}>
