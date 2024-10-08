@@ -178,7 +178,10 @@ const App = () => {
       <BrowserRouter>
         <Body>
           <Content>
-            <Sidebar toggleNotifications={toggleNotifications} loginUser={loginUser} />
+            <Sidebar
+              toggleNotifications={toggleNotifications}
+              loginUser={loginUser}
+            />
             <Center>
               <MainContent />
               <Notifications

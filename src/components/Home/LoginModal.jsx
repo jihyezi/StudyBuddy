@@ -59,7 +59,6 @@ const LoginModal = ({ modalIsOpen, closeModal, openEmailLoginModal }) => {
           </button>
         </div>
         <div className={styles.buttonContainer}>
-          {/* <GoogleLoginButton /> */}
           <button className={styles.emailButton} onClick={openEmailModal}>
             <img src={emailimg} style={{ paddingRight: 20 }} alt="email" />
             Email 로그인

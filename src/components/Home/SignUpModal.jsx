@@ -8,14 +8,16 @@ import passwordicon from "assets/icons/Home/password.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// const supabaseUrl = "https://vrpwhfbfzqwmqlhwhbtu.supabase.co";
+// const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
+
+import supabase from "components/supabaseClient";
 
 const customStyles = {
   content: {
     width: "400px",
-    height: '80%',
+    height: "80%",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -213,7 +215,9 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
                 checked={privacyChecked}
                 onChange={handleCheckboxChange(setPrivacyChecked)}
               />
-              <label className={styles.labeltext}>[필수] 개인정보 수집 및 이용 동의</label>
+              <label className={styles.labeltext}>
+                [필수] 개인정보 수집 및 이용 동의
+              </label>
               <img src={rightarrow} alt="Right arrow" className={styles.icon} />
             </div>
           </div>
