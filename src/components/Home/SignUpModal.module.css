@@ -7,7 +7,7 @@
   cursor: pointer;
   background-color: #fff;
 }
-.btn{
+.btn {
   width: 20px;
   height: 20px;
 }
@@ -128,15 +128,15 @@
 .labeltext {
   font-size: 14px;
   font-family: "NotoSans-Light";
-  color: #7C7C7C;
+  color: #7c7c7c;
 }
 
 /* SignUpModal.module.css */
 
 .modalBody {
-  overflow-y: auto; 
-  max-height: calc(100vh - 160px); 
-  border-radius: 30px; 
+  overflow-y: auto;
+  max-height: calc(100vh - 160px);
+  border-radius: 30px;
 }
 
 .modalBody::-webkit-scrollbar {
@@ -148,12 +148,23 @@
 }
 
 .modalBody::-webkit-scrollbar-thumb {
-  background: #DDD; /* 핸들 색상 */
+  background: #ddd; /* 핸들 색상 */
   border-radius: 10px;
 }
 
 .modalBody::-webkit-scrollbar-thumb:hover {
-  background: #DDD; /* 핸들 호버 색상 */
+  background: #ddd; /* 핸들 호버 색상 */
 }
 
+.errorContainer {
+  display: flex;
+  gap: 5px;
+}
 
+.nicknameMessage {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #ff7474;
+}
