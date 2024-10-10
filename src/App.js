@@ -58,7 +58,7 @@ const MainContent = () => {
   const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   useEffect(() => {
-    if (!user && location.pathname === "/profile") {
+    if (!user && (location.pathname === "/profile" || location.pathname === "/bookmarks")) {
       setLoginModalIsOpen(true);
     } else {
       setLoginModalIsOpen(false);

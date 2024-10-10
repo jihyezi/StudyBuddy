@@ -91,6 +91,11 @@ export const fetchJoinCommunityData = async () => {
     return;
   }
 
+  if (!session) {
+    console.error("No session found. User might not be logged in.");
+    return;
+  }
+
   const userId = session.user.id;
 
   const { data, error } = await supabase

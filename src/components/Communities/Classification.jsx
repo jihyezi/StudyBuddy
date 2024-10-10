@@ -48,6 +48,10 @@ const Classification = ({ onEventSelect }) => {
     onEventSelect(event);
   };
 
+  useEffect(() => {
+    onEventSelect('🔥');
+  }, []);
+
   const handleScroll = () => {
     const { current } = containerRef;
     if (current) {
