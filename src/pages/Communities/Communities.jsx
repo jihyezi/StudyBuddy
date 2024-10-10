@@ -45,6 +45,8 @@ const Communities = () => {
         } else {
           setUser(data);
         }
+      } else {
+        setUser([]);
       }
     };
 
@@ -79,6 +81,8 @@ const Communities = () => {
         } else {
           setAllJoinCommunity(data);
         }
+      } else {
+        setAllJoinCommunity([]);
       }
     };
 
@@ -94,6 +98,8 @@ const Communities = () => {
         } else {
           setJoinCommunity(data);
         }
+      } else {
+        setJoinCommunity([]);
       }
     };
 
@@ -108,7 +114,7 @@ const Communities = () => {
     };
 
     const fetchCommentData = async () => {
-      if (sessionUser && post.postid) {
+      if (post.postid) {
         const { data, error } = await supabase
           .from("Comment")
           .select("*")
@@ -117,7 +123,6 @@ const Communities = () => {
         if (error) {
           console.error("Error", error);
         } else {
-          console.log("data", data);
           setComment(data);
         }
       } else {
@@ -142,14 +147,19 @@ const Communities = () => {
       }
     };
 
-    fetchUserData();
-    fetchAllUserData();
+    // sessionUser가 없을 경우에도 기본 데이터를 로드
     fetchCommunityData();
-    fetchJoinCommunityData();
-    fetchAllJoinCommunityData();
+    fetchAllUserData();
     fetchPostData();
     fetchCommentData();
     fetchfieldData();
+
+    if (sessionUser) {
+      fetchUserData();
+      fetchJoinCommunityData();
+      fetchAllJoinCommunityData();
+    }
+
   }, [sessionUser, selectedEvent]);
 
   const handleEventSelect = (event) => {

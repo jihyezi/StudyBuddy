@@ -16,13 +16,11 @@ import bookmarkOff from "assets/icons/Communities/bookmark_off.png";
 import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
 import profile1 from "assets/images/Profile/profile1.png";
-import profile2 from "assets/images/Profile/profile2.png";
-import profile3 from "assets/images/Profile/profile3.png";
-import profile4 from "assets/images/Profile/profile4.png";
 import folder from "assets/icons/Post/folder.png";
 import download from "assets/icons/Post/file_download.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const DetailPost = ({ }) => {
   const [commentData, setCommentData] = useState([]);
@@ -79,10 +77,6 @@ const DetailPost = ({ }) => {
   };
 
   useEffect(() => {
-    console.log("userDatas", userData);
-    console.log("allUserDatas", allUserData);
-    console.log("communityData", communityData);
-    console.log("postData", postData.userid);
     const getCommentData = async () => {
       const commentData = await fetchCommentDataById(postData.postid);
       setCommentData(commentData);
@@ -96,13 +90,20 @@ const DetailPost = ({ }) => {
         data: { session },
         error: sessionError,
       } = await supabase.auth.getSession();
+
       if (sessionError) {
         console.error("Error getting session:", sessionError);
         return;
       }
 
+      if (!session) {
+        console.error("No session found. User might not be logged in.");
+        return;
+      }
+
       const userId = session.user.id;
 
+      // 좋아요 유무
       const { data: likeData } = await supabase
         .from("PostLike")
         .select("*")
@@ -110,6 +111,7 @@ const DetailPost = ({ }) => {
         .eq("userid", userId);
       setLiked(likeData.length > 0);
 
+      // 북마크 유무
       const { data: bookmarkData } = await supabase
         .from("Bookmark")
         .select("*")
@@ -179,8 +181,14 @@ const DetailPost = ({ }) => {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
+
     if (sessionError) {
       console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
       return;
     }
 
@@ -206,8 +214,14 @@ const DetailPost = ({ }) => {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
+
     if (sessionError) {
       console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
       return;
     }
 
@@ -250,8 +264,14 @@ const DetailPost = ({ }) => {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
+
     if (sessionError) {
       console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      console.error("No session found. User might not be logged in.");
       return;
     }
 
@@ -331,15 +351,24 @@ const DetailPost = ({ }) => {
             borderBottom: "3px solid #dddddd",
           }}
         >
-          {userData[0].userid === postData.userid && (
-            <div className={styles.revise} onClick={handleReviseClick}>
-              수정
-            </div>
-          )}
-          {userData[0].userid === postData.userid && (
-            <div className={styles.delete} onClick={handleRemoveClick}>
-              삭제
-            </div>
+          {userData && userData.length > 0 && userData[0].userid === postData.userid ? (
+            <>
+              <div className={styles.revise} onClick={handleReviseClick}>
+                수정
+              </div>
+              <div className={styles.delete} onClick={handleRemoveClick}>
+                삭제
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={`${styles.revise} ${styles.disabled}`} title="로그인이 필요합니다">
+                수정
+              </div>
+              <div className={`${styles.delete} ${styles.disabled}`} title="로그인이 필요합니다">
+                삭제
+              </div>
+            </>
           )}
         </div>
 
@@ -464,7 +493,7 @@ const DetailPost = ({ }) => {
             >
               <img
                 className={styles.commentWriterProfile}
-                src={userData[0].profileimage || profile1}
+                src={userData && userData.length > 0 ? userData[0].profileimage : noprofile}
                 alt="profile1"
               />
               <div

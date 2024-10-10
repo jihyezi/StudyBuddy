@@ -35,10 +35,17 @@ const Bookmarks = () => {
         data: { session },
         error: sessionError,
       } = await supabase.auth.getSession();
+
       if (sessionError) {
         console.error("Error getting session:", sessionError);
         return;
       }
+
+      if (!session) {
+        console.error("No session found. User might not be logged in.");
+        return;
+      }
+
 
       const userId = session.user.id;
 

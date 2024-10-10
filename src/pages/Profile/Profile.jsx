@@ -229,11 +229,7 @@ const Profile = () => {
             userLike={filterLikePost}
             userComment={filterCommentPost} />
         </div>
-
       </div>
-
-
-
     </div>
   );
 };

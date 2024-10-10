@@ -51,7 +51,11 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
   };
 
   const handlePostClick = () => {
-    setDropdownVisible(!dropdownVisible);
+    if (logout) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+    } else {
+      setDropdownVisible(!dropdownVisible);
+    }
   };
 
   const handleClickOutside = (event) => {
