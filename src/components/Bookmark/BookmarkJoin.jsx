@@ -24,6 +24,8 @@ const BookmarkJoin = ({
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
+
+
   const handleClick = (item) => {
     setSelectedItem(item);
     onEventSelect(item);
@@ -60,7 +62,7 @@ const BookmarkJoin = ({
   const moveRight = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft += current.clientWidth - 20;
+      current.scrollLeft += current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
       handleScroll();
     }
   };
@@ -68,10 +70,16 @@ const BookmarkJoin = ({
   const moveLeft = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft -= current.clientWidth - 20;
+      current.scrollLeft -= current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
       handleScroll();
     }
   };
+
+  useEffect(() => {
+    if (containerRef.current) {
+      handleScroll(); // 데이터가 로딩된 후 스크롤 상태를 재계산
+    }
+  }, [joinCommunityData]);
 
   return (
     <div className={styles.stackTagsArea}>
@@ -100,6 +108,7 @@ const BookmarkJoin = ({
                     alt="cat"
                   />
                 }
+
               </div>
               <div className={styles.communityName}>{item.name}</div>
             </div>
