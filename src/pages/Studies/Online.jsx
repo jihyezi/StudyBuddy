@@ -9,6 +9,16 @@ const Online = () => {
   const [posts, setPosts] = useState([]);
   const [likesCount, setLikesCount] = useState({});
   const [commentsCount, setCommentsCount] = useState({});
+  const [searchText, setSearchText] = useState('');
+  const [selectOption, setSelectOption] = useState('전체');
+
+  const handleSelectOption = (option) => {
+    setSelectOption(option);
+  }
+
+  const handleSearchTextChange = (e) => {
+    setSearchText(e.target.value);
+  }
 
   const fetchStudyDataAll = async () => {
     const { data, error } = await supabase
@@ -61,19 +71,22 @@ const Online = () => {
   }, []);
 
   return (
-    <div>
-      <div className={styles.filter}>
-        <Filter placeholder={"전체"} />
+    <div className={styles.allContainer}>
+      <div className={styles.searchContainer}>
+        <div className={styles.filter}>
+          <Filter placeholder={"전체"} onOptionSelect={handleSelectOption} />
+        </div>
         <div className={styles.searchinputfiled}>
           <div className={styles.InputWrapper}>
             <input
               type="text"
               className={styles.SearchInput}
               placeholder="스터디를 검색해보세요."
+              onChange={handleSearchTextChange}
+              value={searchText}
             />
             <img src={Search} alt="Search" className={styles.SearchIcon} />
           </div>
-          <button className={styles.SearchButton}>Search</button>
         </div>
       </div>
       {posts.map((post, index) => (
