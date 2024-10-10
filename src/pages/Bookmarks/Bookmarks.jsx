@@ -200,7 +200,7 @@ const Bookmarks = () => {
     fetchAllJoinCommunityData();
     fetchPostData();
     fetchCommentData();
-  }, [sessionUser]);
+  }, [sessionUser, selectedEvent]);
 
   const handleEventSelect = (event) => {
     setSelectEvent(event);
@@ -227,6 +227,7 @@ const Bookmarks = () => {
           joinCommunityData={filterCommunity}
           postData={post}
           userData={user}
+          allUserData={allUser}
         />
       </div>
 
