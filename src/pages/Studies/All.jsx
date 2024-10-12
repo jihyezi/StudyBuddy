@@ -4,6 +4,7 @@ import Filter from "components/Studies/Filter";
 import Search from "assets/icons/Explore/search.png";
 import StudyPost from "components/Studies/StudyPost";
 import supabase from "components/supabaseClient";
+import loadinggif from "assets/images/loading.gif"
 
 const All = () => {
   const [posts, setPosts] = useState([]);
@@ -11,6 +12,7 @@ const All = () => {
   const [commentsCount, setCommentsCount] = useState({});
   const [selectOption, setSelectOption] = useState('전체');
   const [searchText, setSearchText] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const handleSelectOption = (option) => {
     setSelectOption(option);
@@ -21,6 +23,7 @@ const All = () => {
   }
 
   const fetchStudyDataAll = async () => {
+    setLoading(true);
     const { data, error } = await supabase.from("Study").select("*");
 
     if (error) {
@@ -30,6 +33,7 @@ const All = () => {
       await fetchCommentsCount();
       setPosts(data);
     }
+    setLoading(false);
   };
 
   const fetchLikesCount = async () => {
@@ -94,21 +98,27 @@ const All = () => {
           </div>
         </div>
       </div>
-      {searchPosts.map((post, index) => (
-        <StudyPost
-          key={index}
-          studyId={post.studyid}
-          completion={post.completion}
-          title={post.title}
-          description={post.description.split("\n")[0]}
-          tag={post.tag}
-          maxmembers={post.maxmembers}
-          proceed={post.proceed}
-          studyPost={post}
-          likesCount={likesCount[post.studyid] || 0}
-          commentsCount={commentsCount[post.studyid] || 0}
-        />
-      ))}
+      {loading ? (
+        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
+        </div>
+      ) : (
+        searchPosts.map((post, index) => (
+          <StudyPost
+            key={index}
+            studyId={post.studyid}
+            completion={post.completion}
+            title={post.title}
+            description={post.description.split("\n")[0]}
+            tag={post.tag}
+            maxmembers={post.maxmembers}
+            proceed={post.proceed}
+            studyPost={post}
+            likesCount={likesCount[post.studyid] || 0}
+            commentsCount={commentsCount[post.studyid] || 0}
+          />
+        ))
+      )}
     </div>
   );
 };
