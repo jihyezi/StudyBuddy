@@ -46,7 +46,7 @@ const Bookmarks = () => {
         return;
       }
 
-
+      console.log(postData)
       const userId = session.user.id;
 
       if (userId) {
@@ -210,10 +210,10 @@ const Bookmarks = () => {
     joinCommunity.some((jc) => jc.communityid === c.communityid)
   );
 
-  const filteredPosts = post.filter((p) =>
-    filterCommunity.some(
-      (fc) => Number(fc.communityid) === Number(p.communityid)
-    )
+  const filterBookmarkCommunity = community.filter((p) =>
+    postData.some((fc) => {
+      return Number(fc.communityid) === Number(p.communityid);
+    })
   );
 
   return (
@@ -222,12 +222,13 @@ const Bookmarks = () => {
       <div className={styles.classification}>
         <BookmarkJoin
           onEventSelect={handleEventSelect}
-          communityData={community}
+          communityData={filterBookmarkCommunity}
           allJoinCommunityData={allJoinCommunity}
-          joinCommunityData={filterCommunity}
-          postData={post}
+          joinCommunityData={filterBookmarkCommunity}
+          postData={postData}
           userData={user}
           allUserData={allUser}
+          onBookmarkToggle={handleBookmarkToggle}
         />
       </div>
 

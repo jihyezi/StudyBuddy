@@ -103,14 +103,15 @@ const MainContent = () => {
           path="/detail-community/:communityId"
           element={<CommunityDetailsPage />}
         />
-        <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
+        <Route path="/bookmarkdetail/:communityid" element={<BookmarkDetail />} />
         <Route path="/detailpost" element={<DetailPost />} />
       </Routes>
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
-        location.pathname === "/studies") && <Recommended />}
+        location.pathname === "/studies" ||
+        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
