@@ -4,13 +4,26 @@ import Filter from "components/Studies/Filter";
 import Search from "assets/icons/Explore/search.png";
 import StudyPost from "components/Studies/StudyPost";
 import supabase from "components/supabaseClient";
+import loadinggif from "assets/images/loading.gif"
 
 const Online = () => {
   const [posts, setPosts] = useState([]);
   const [likesCount, setLikesCount] = useState({});
   const [commentsCount, setCommentsCount] = useState({});
+  const [searchText, setSearchText] = useState('');
+  const [selectOption, setSelectOption] = useState('전체');
+  const [loading, setLoading] = useState(true);
+
+  const handleSelectOption = (option) => {
+    setSelectOption(option);
+  }
+
+  const handleSearchTextChange = (e) => {
+    setSearchText(e.target.value);
+  }
 
   const fetchStudyDataAll = async () => {
+    setLoading(true);
     const { data, error } = await supabase
       .from("Study")
       .select("*")
@@ -23,6 +36,7 @@ const Online = () => {
       await fetchCommentsCount();
       setPosts(data);
     }
+    setLoading(false);
   };
 
   const fetchLikesCount = async () => {
@@ -61,36 +75,46 @@ const Online = () => {
   }, []);
 
   return (
-    <div>
-      <div className={styles.filter}>
-        <Filter placeholder={"전체"} />
+    <div className={styles.allContainer}>
+      <div className={styles.searchContainer}>
+        <div className={styles.filter}>
+          <Filter placeholder={"전체"} onOptionSelect={handleSelectOption} />
+        </div>
         <div className={styles.searchinputfiled}>
           <div className={styles.InputWrapper}>
             <input
               type="text"
               className={styles.SearchInput}
               placeholder="스터디를 검색해보세요."
+              onChange={handleSearchTextChange}
+              value={searchText}
             />
             <img src={Search} alt="Search" className={styles.SearchIcon} />
           </div>
-          <button className={styles.SearchButton}>Search</button>
         </div>
       </div>
-      {posts.map((post, index) => (
-        <StudyPost
-          key={index}
-          studyId={post.studyid}
-          completion={post.completion}
-          title={post.title}
-          description={post.description.split("\n")[0]}
-          tag={post.tag}
-          maxmembers={post.maxmembers}
-          proceed={post.proceed}
-          studyPost={post}
-          likesCount={likesCount[post.studyid] || 0}
-          commentsCount={commentsCount[post.studyid] || 0}
-        />
-      ))}
+      {loading ? (
+        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
+        </div>
+      ) : (
+        posts.map((post, index) => (
+          <StudyPost
+            key={index}
+            studyId={post.studyid}
+            completion={post.completion}
+            title={post.title}
+            description={post.description.split("\n")[0]}
+            tag={post.tag}
+            maxmembers={post.maxmembers}
+            proceed={post.proceed}
+            studyPost={post}
+            likesCount={likesCount[post.studyid] || 0}
+            commentsCount={commentsCount[post.studyid] || 0}
+          />
+        ))
+      )}
+
     </div>
   );
 };

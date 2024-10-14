@@ -3,7 +3,7 @@ import styles from "./Explore.module.css";
 import HotCommunity from "components/Home/HotCommunity";
 import StudyPost from "components/Explore/ExploreStudyPost";
 import supabase from "components/supabaseClient";
-import Tag from "components/Home/Tag";
+import Tag from "components/Explore/Explore_Tag";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -159,6 +159,7 @@ const Explore = () => {
     <div className={styles.Explore}>
       <div className={styles.PopularTagContainer}>
         <div style={{ position: "relative" }}>
+          {/* 인기 태그 검색 으로 수정? */}
           <div className={styles.CategoryText}>인기 태그 🏷️</div>
           <div className={styles.CategoryTag}>
             <Tag />

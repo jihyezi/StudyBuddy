@@ -1,7 +1,6 @@
 .stackTagsArea {
   position: relative;
   width: 100%;
-  max-width: 860px;
   align-items: center;
   justify-content: center;
   margin-left: -16px;
@@ -11,7 +10,6 @@
 .classContainer {
   display: flex;
   overflow-x: auto;
-  max-width: 860px;
   margin-left: 32px;
   margin-right: 32px;
   gap: 10px;

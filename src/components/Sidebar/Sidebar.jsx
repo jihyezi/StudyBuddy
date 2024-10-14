@@ -22,13 +22,29 @@ import bookmarks_off from "assets/icons/Sidebar/bookmarks_off.png";
 import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import profile_on from "assets/icons/Sidebar/profile_on.png";
-import nopforile from 'assets/images/Profile/noprofile.png';
+import nopforile from "assets/images/Profile/noprofile.png";
+import LoginModal from "components/Home/LoginModal";
 
 // Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
-const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginUser }) => {
+const Sidebar = ({
+  toggleNotifications,
+  isNotificationsOpen,
+  userProfile,
+  loginUser,
+  showLoginModal,
+}) => {
   const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false); // 모달 상태 관리
   const dropdownRef = useRef(null);
+
+  const openLoginModal = () => {
+    setLoginModalOpen(true); // 모달 열기
+  };
+
+  const closeLoginModal = () => {
+    setLoginModalOpen(false); // 모달 닫기
+  };
 
   const menus = [
     { name: "Home", path: "/", text: "home" },
@@ -51,7 +67,11 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
   };
 
   const handlePostClick = () => {
-    setDropdownVisible(!dropdownVisible);
+    if (!user) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+    } else {
+      setDropdownVisible(!dropdownVisible);
+    }
   };
 
   const handleClickOutside = (event) => {
@@ -70,9 +90,30 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
   return (
     <div className={styles.side}>
       <div className={styles.menus}>
-        <Link to={"/"}>
-          <img className={styles.logo} src={logo} alt="logo" />
-        </Link>
+        <div className={styles.logoAndLogout}>
+          <Link to={"/"}>
+            <img className={styles.logo} src={logo} alt="logo" />
+          </Link>
+
+          {/* 로그아웃 텍스트 추가 */}
+          {user ? (
+            <Link
+              to="#"
+              onClick={logout}
+              className={styles.logoutLink} // CSS 클래스 추가
+            >
+              로그아웃
+            </Link>
+          ) : (
+            <Link
+              to="#"
+              onClick={openLoginModal} // 로그인 모달을 여는 함수 호출
+              className={styles.logoutLink} // CSS 클래스 추가
+            >
+              로그인
+            </Link>
+          )}
+        </div>
 
         {menus.map((menu, index) => {
           const { off, on } = iconMapping[menu.text];
@@ -121,7 +162,9 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
                   {({ isActive }) => (
                     <>
                       <img
-                        className={menu.text === "profile" ? styles.profileImg : ""}
+                        className={
+                          menu.text === "profile" ? styles.profileImg : ""
+                        }
                         style={{
                           width: 24,
                           height: 24,
@@ -142,7 +185,9 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
         <div className={styles.menu}>
           <NavLink
             to={"/profile"}
-            className={({ isActive }) => (isActive ? styles.menuOn : styles.menuOff)}
+            className={({ isActive }) =>
+              isActive ? styles.menuOn : styles.menuOff
+            }
           >
             {({ isActive }) => (
               <div
@@ -161,7 +206,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
                     width: 24,
                     height: 24,
                     verticalAlign: "middle",
-                    borderRadius: '50%',
+                    borderRadius: "50%",
                   }}
                   src={
                     loginUser // 로그인한 경우
@@ -172,15 +217,16 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
                   }
                   alt="icon"
                 />
-                <span className={isActive ? styles.menuOn : styles.menuOff} style={{ marginLeft: 20 }}>
+                <span
+                  className={isActive ? styles.menuOn : styles.menuOff}
+                  style={{ marginLeft: 20 }}
+                >
                   Profile
                 </span>
               </div>
             )}
           </NavLink>
         </div>
-
-
 
         <div
           className={styles.post}
@@ -202,28 +248,13 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, userProfile, loginU
             </div>
           )}
         </div>
-        {user && (
-          <button
-            className={styles.logoutButton}
-            onClick={logout}
-            style={{
-              marginTop: "auto",
-              backgroundColor: "#f00",
-              color: "#fff",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              display: "block",
-              width: "100%",
-              textAlign: "center",
-            }}
-          >
-            로그아웃(임시)
-          </button>
-        )}
+        <LoginModal
+          modalIsOpen={isLoginModalOpen}
+          closeModal={closeLoginModal}
+        />
       </div>
     </div>
   );
 };
+
 export default Sidebar;

@@ -58,7 +58,7 @@ const MainContent = () => {
   const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   useEffect(() => {
-    if (!user && location.pathname === "/profile") {
+    if (!user && (location.pathname === "/profile" || location.pathname === "/bookmarks")) {
       setLoginModalIsOpen(true);
     } else {
       setLoginModalIsOpen(false);
@@ -103,14 +103,15 @@ const MainContent = () => {
           path="/detail-community/:communityId"
           element={<CommunityDetailsPage />}
         />
-        <Route path="/bookmarkdetail" element={<BookmarkDetail />} />
+        <Route path="/bookmarkdetail/:communityid" element={<BookmarkDetail />} />
         <Route path="/detailpost" element={<DetailPost />} />
       </Routes>
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
-        location.pathname === "/studies") && <Recommended />}
+        location.pathname === "/studies" ||
+        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -178,7 +179,10 @@ const App = () => {
       <BrowserRouter>
         <Body>
           <Content>
-            <Sidebar toggleNotifications={toggleNotifications} loginUser={loginUser} />
+            <Sidebar
+              toggleNotifications={toggleNotifications}
+              loginUser={loginUser}
+            />
             <Center>
               <MainContent />
               <Notifications

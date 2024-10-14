@@ -21,7 +21,23 @@
   display: flex;
   flex-direction: column;
 }
+.logoAndLogout {
+  display: flex; /* Flexbox를 사용하여 가로 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+.logoutLink {
+  color: #666666;
+  text-decoration: none;
+  font-size: 14px;
+  margin-left: 70px;
+  vertical-align: middle;
+  display: inline-block;
+  transition: color 0.3s ease; /* 색상 전환 애니메이션 */
+}
 
+.logoutLink:hover {
+  color: #000000; /* hover 시 색상 변경 (진해짐) */
+}
 .menu {
   display: flex;
   align-items: center;
@@ -86,17 +102,17 @@
 }
 
 .profileImg {
-  width: 24px; 
-  height: 24px; 
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .profileText {
-  margin-left: 20px; 
-  text-decoration: none; 
+  margin-left: 20px;
+  text-decoration: none;
   text-decoration-line: none;
-  font-family: "BalooTammudu2-Regular"; 
-  font-size: 20px; 
-  color: #333333; 
+  font-family: "BalooTammudu2-Regular";
+  font-size: 20px;
+  color: #333333;
 }

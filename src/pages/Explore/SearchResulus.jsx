@@ -23,29 +23,43 @@ const SearchResults = () => {
   const menuArr = [
     {
       name: "커뮤니티",
-      content: communities.map((community) => (
-        <CommunityPostSmall
-          key={community.communityid}
-          communityimg={community.image}
-          communityname={community.name}
-          person={community.membercount}
-          post={community.postcount}
-          date={new Date(community.createdat).toLocaleDateString()}
-          communityicon="icon_url_here"
-        />
-      )),
+      content:
+        communities.length > 0 ? (
+          communities.map((community) => (
+            <CommunityPostSmall
+              key={community.communityid}
+              communityimg={community.image}
+              communityname={community.name}
+              person={community.membercount}
+              post={community.postcount}
+              date={new Date(community.createdat).toLocaleDateString()}
+              communityicon="icon_url_here"
+            />
+          ))
+        ) : (
+          <div className={styles.Nosearchresults}>
+            {" "}
+            '{query}'에 대한 검색 결과가 없습니다.
+          </div>
+        ),
       data: communities,
     },
     {
       name: "전체글",
-      content: (
-        <JoinPostList
-          postData={posts}
-          communityData={communityInfo}
-          userData={users}
-          comment={commentData}
-        />
-      ),
+      content:
+        posts.length > 0 ? (
+          <JoinPostList
+            postData={posts}
+            communityData={communityInfo}
+            userData={users}
+            comment={commentData}
+          />
+        ) : (
+          <div className={styles.Nosearchresults}>
+            {" "}
+            '{query}'에 대한 검색 결과가 없습니다.
+          </div>
+        ),
       data: posts,
     },
     {
@@ -58,7 +72,7 @@ const SearchResults = () => {
               studyId={study.studyid}
               completion={study.completion}
               title={study.title}
-              description={study.description.split("\n")[0]} // 첫 줄만 표시
+              description={study.description.split("\n")[0]}
               tag={study.tag}
               maxmembers={study.maxmembers}
               proceed={study.proceed}
@@ -68,7 +82,10 @@ const SearchResults = () => {
             />
           ))
         ) : (
-          <div className={styles.Nosearchresults}>검색 결과가 없습니다.</div>
+          <div className={styles.Nosearchresults}>
+            {" "}
+            '{query}'에 대한 검색 결과가 없습니다.
+          </div>
         ),
       data: studies,
     },

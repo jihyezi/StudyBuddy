@@ -21,6 +21,8 @@ export const TabList = () => {
   const [user, setUser] = useState([]);
   const [allUser, setAllUser] = useState([]);
 
+  console.log(community)
+
   const menuArr = [
     {
       name: "인기",
@@ -68,14 +70,12 @@ export const TabList = () => {
   }, [sessionUser]);
 
   const fetchCommunityData = async () => {
-    if (sessionUser) {
-      const { data, error } = await supabase.from("Community").select("*");
+    const { data, error } = await supabase.from("Community").select("*");
 
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setCommunity(data);
-      }
+    if (error) {
+      console.error("Error", error);
+    } else {
+      setCommunity(data);
     }
   };
 
