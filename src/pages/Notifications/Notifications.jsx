@@ -7,6 +7,7 @@ const Notifications = ({ showNotifications }) => {
   const { user } = useAuth();  // 현재 로그인된 유저 정보 가져오기
   const [notifications, setNotifications] = useState([]);
   const [userMap, setUserMap] = useState({}); // UUID와 username 매핑
+  const [communityMap, setCommunityMap] = useState({}); // communityid와 community name 매핑
   const [publicUser, setPublicUser] = useState(null); // 현재 로그인된 유저의 Public 스키마 정보
 
   // 유저 정보를 불러와 UUID와 username 매핑
@@ -20,6 +21,20 @@ const Notifications = ({ showNotifications }) => {
         return acc;
       }, {});
       setUserMap(userMapping); // 상태에 저장
+    }
+  };
+
+  // 커뮤니티 정보를 불러와 communityid와 name 매핑
+  const fetchCommunities = async () => {
+    const { data: communities, error } = await supabase.from("Community").select("communityid, name");
+    if (error) {
+      console.error("Error fetching communities:", error.message);
+    } else {
+      const communityMapping = communities.reduce((acc, community) => {
+        acc[community.communityid] = community.name; // 커뮤니티 ID를 키로 하고, 커뮤니티 이름을 값으로 저장
+        return acc;
+      }, {});
+      setCommunityMap(communityMapping); // 상태에 저장
     }
   };
 
@@ -84,11 +99,13 @@ const Notifications = ({ showNotifications }) => {
                 const senderId = notification.content.split("from ")[1];
                 content = `${userMap[senderId] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`;
               }
-              // 커뮤니티에 새 글 알림 처리 (작성자의 닉네임을 표시)
-              else if (notification.content.startsWith("A new post has been created in the community")) {
-                const parts = notification.content.split("by ");
-                const postAuthorId = parts[1];
-                content = `${userMap[postAuthorId] || "알 수 없는 유저"}님이 커뮤니티에 새 글을 작성하였습니다.`;
+              // 커뮤니티에 새 글 알림 처리 (작성자의 닉네임을 표시, 커뮤니티 이름 표시)
+              else if (notification.content.startsWith("A new post was created in the community")) {
+                const parts = notification.content.split("community ")[1].split(" by ");
+                const communityId = parseInt(parts[0], 10); // 커뮤니티 ID 추출
+                const postAuthorId = parts[1]; // 작성자 UUID 추출
+                const communityName = communityMap[communityId] || "알 수 없는 커뮤니티"; // 커뮤니티 이름
+                content = `${userMap[postAuthorId] || "알 수 없는 유저"}님이 ${communityName} 커뮤니티에 새 글을 작성하였습니다.`;
               }
               // 내가 쓴 글에 좋아요를 눌렀을 때
               else if (notification.content.startsWith("Your post was liked by")) {
@@ -127,6 +144,7 @@ const Notifications = ({ showNotifications }) => {
 
     if (user) {  // 로그인한 경우에만 실행
       fetchUsers(); // 유저 정보 가져오기
+      fetchCommunities(); // 커뮤니티 정보 가져오기
       fetchPublicUser(); // 현재 유저의 Public 스키마 정보 가져오기
       fetchNotifications(); // 알림 가져오기
 
@@ -146,7 +164,7 @@ const Notifications = ({ showNotifications }) => {
         channel.unsubscribe(); // 구독 취소
       };
     }
-  }, [user, publicUser]);
+  }, [user, publicUser, communityMap]);
 
   if (!user) {
     return null;  // 로그인이 안되어 있으면 아무것도 렌더링하지 않음
