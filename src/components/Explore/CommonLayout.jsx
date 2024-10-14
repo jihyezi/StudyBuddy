@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import Header from "components/Explore/Header";
-import styles from "pages/Explore/Explore.module.css"; // 새 스타일 파일 생성
+import styles from "pages/Explore/Explore.module.css";
 import Search from "assets/icons/Explore/search.png";
 import Exploresearch from "assets/icons/Explore/Explore_search.png";
 import Header from "components/Header";
@@ -15,6 +14,7 @@ const CommonLayout = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
@@ -27,7 +27,6 @@ const CommonLayout = ({ children }) => {
         console.error("Error: userId is undefined");
       }
     };
-
     loadSearchHistory();
   }, [userId]);
 
@@ -35,30 +34,30 @@ const CommonLayout = ({ children }) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleSearch = async () => {
-    if (searchQuery.trim() && userId) {
-      await addSearchHistory(userId, searchQuery);
+  const handleSearch = async (query) => {
+    const searchTerm = query || searchQuery; // query가 주어지면 그 값을 사용
+    if (searchTerm.trim() && userId) {
+      await addSearchHistory(userId, searchTerm);
       const history = await fetchSearchHistory(userId);
       setSearchHistory(history);
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
     } else {
       console.error("Error: searchQuery is empty or userId is undefined");
     }
   };
-  // 검색창에서 엔터를 눌렀을 때도 검색이 실행되도록 설정
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSearch();
+      handleSearch(); // Enter 키를 눌렀을 때 검색
     }
   };
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
+
+  const handleFocus = () => setIsFocused(true);
 
   const handleBlur = () => {
-    setTimeout(() => {
-      setIsFocused(false);
-    }, 100);
+    if (!isDeleting) {
+      setTimeout(() => setIsFocused(false), 100);
+    }
   };
 
   const handleDelete = async (searchId) => {
@@ -71,8 +70,17 @@ const CommonLayout = ({ children }) => {
     }
   };
 
+  const handleDeleteClick = (e, searchId) => {
+    e.stopPropagation();
+    setIsDeleting(true);
+    handleDelete(searchId).then(() => {
+      setIsDeleting(false);
+    });
+  };
+
   const handleRecentSearchClick = (query) => {
     setSearchQuery(query);
+    handleSearch(query); // 클릭한 검색어로 검색 실행
   };
 
   return (
@@ -85,7 +93,7 @@ const CommonLayout = ({ children }) => {
               type="text"
               value={searchQuery}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress} // 엔터 키를 누르면 검색 실행
+              onKeyPress={handleKeyPress}
               onFocus={handleFocus}
               onBlur={handleBlur}
               className={styles.SearchInput}
@@ -100,7 +108,7 @@ const CommonLayout = ({ children }) => {
                     <li
                       key={index}
                       className={styles.SearchHistoryItem}
-                      onClick={() => handleRecentSearchClick(historyItem.query)}
+                      onClick={() => handleRecentSearchClick(historyItem.query)} // 최근 검색어 클릭 시 검색 실행
                     >
                       <div className={styles.HistoryTextContainer}>
                         <div className={styles.buttonContainer}>
@@ -109,10 +117,9 @@ const CommonLayout = ({ children }) => {
                         </div>
                         <button
                           className={styles.deletebutton}
-                          onClick={(e) => {
-                            e.stopPropagation(); // 버튼 클릭 시 부모 요소로 이벤트 전파 막기
-                            handleDelete(historyItem.searchid);
-                          }}
+                          onClick={(e) =>
+                            handleDeleteClick(e, historyItem.searchid)
+                          }
                         >
                           ❌
                         </button>
@@ -123,7 +130,10 @@ const CommonLayout = ({ children }) => {
               </div>
             )}
           </div>
-          <button onClick={handleSearch} className={styles.SearchButton}>
+          <button
+            onClick={() => handleSearch()}
+            className={styles.SearchButton}
+          >
             Search
           </button>
         </div>

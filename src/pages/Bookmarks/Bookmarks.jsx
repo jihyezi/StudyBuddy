@@ -35,11 +35,18 @@ const Bookmarks = () => {
         data: { session },
         error: sessionError,
       } = await supabase.auth.getSession();
+
       if (sessionError) {
         console.error("Error getting session:", sessionError);
         return;
       }
 
+      if (!session) {
+        console.error("No session found. User might not be logged in.");
+        return;
+      }
+
+      console.log(postData)
       const userId = session.user.id;
 
       if (userId) {
@@ -193,7 +200,7 @@ const Bookmarks = () => {
     fetchAllJoinCommunityData();
     fetchPostData();
     fetchCommentData();
-  }, [sessionUser]);
+  }, [sessionUser, selectedEvent]);
 
   const handleEventSelect = (event) => {
     setSelectEvent(event);
@@ -203,10 +210,10 @@ const Bookmarks = () => {
     joinCommunity.some((jc) => jc.communityid === c.communityid)
   );
 
-  const filteredPosts = post.filter((p) =>
-    filterCommunity.some(
-      (fc) => Number(fc.communityid) === Number(p.communityid)
-    )
+  const filterBookmarkCommunity = community.filter((p) =>
+    postData.some((fc) => {
+      return Number(fc.communityid) === Number(p.communityid);
+    })
   );
 
   return (
@@ -215,11 +222,13 @@ const Bookmarks = () => {
       <div className={styles.classification}>
         <BookmarkJoin
           onEventSelect={handleEventSelect}
-          communityData={community}
+          communityData={filterBookmarkCommunity}
           allJoinCommunityData={allJoinCommunity}
-          joinCommunityData={filterCommunity}
-          postData={post}
+          joinCommunityData={filterBookmarkCommunity}
+          postData={postData}
           userData={user}
+          allUserData={allUser}
+          onBookmarkToggle={handleBookmarkToggle}
         />
       </div>
 

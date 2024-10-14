@@ -27,6 +27,18 @@ const CommunityDetailsPage = () => {
   const [posts, setPosts] = useState([]);
 
   const handleJoinClick = async () => {
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+      return;
+    }
+
     const userId = userData[0].userid;
 
     if (isJoined) {
@@ -74,8 +86,14 @@ const CommunityDetailsPage = () => {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
+
     if (sessionError) {
       console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      console.error("No session found. User might not be logged in.");
       return;
     }
 

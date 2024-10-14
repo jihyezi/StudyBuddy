@@ -1,8 +1,9 @@
 .communityPostContainer {
     display: flex;
     flex-direction: row;
+    width: 100%;
     justify-content: space-between;
-    border: 1px solid #DDD;
+    border: 1.3px solid #DDD;
 }
 
 .communityPostLeft {

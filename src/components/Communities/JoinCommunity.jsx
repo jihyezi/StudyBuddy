@@ -72,6 +72,12 @@ const JoinCommunity = ({
     }
   };
 
+  useEffect(() => {
+    if (containerRef.current) {
+      handleScroll(); // 데이터가 로딩된 후 스크롤 상태를 재계산
+    }
+  }, [joinCommunityData]);
+
   return (
     <div className={styles.stackTagsArea}>
       <div

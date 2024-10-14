@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import styles from "./LoginModal.module.css"; // 스타일을 CSS 모듈로 가져오기
+import { useNavigate } from "react-router-dom";
 
 import EmailLoginModal from "./EmailLoginModal";
 import googleimg from "assets/icons/Home/googleimg.png";
@@ -32,6 +33,7 @@ Modal.setAppElement("#root"); // 접근성 향상을 위해 루트 엘리먼트�
 
 const LoginModal = ({ modalIsOpen, closeModal, openEmailLoginModal }) => {
   const [emailModalIsOpen, setEmailModalIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openEmailModal = () => {
     setEmailModalIsOpen(true);
@@ -41,6 +43,12 @@ const LoginModal = ({ modalIsOpen, closeModal, openEmailLoginModal }) => {
   const closeEmailModal = () => {
     setEmailModalIsOpen(false);
   };
+
+  const closeLoginModal = () => {
+    closeModal();
+    navigate('/');
+
+  }
 
   return (
     <div>
@@ -54,12 +62,11 @@ const LoginModal = ({ modalIsOpen, closeModal, openEmailLoginModal }) => {
           <img src={modalMain} alt="modal main" className={styles.modalImage} />
         </div>
         <div>
-          <button onClick={closeModal} className={styles.closeButton}>
+          <button onClick={closeLoginModal} className={styles.closeButton}>
             <img src={close} alt="close" className={styles.btn} />
           </button>
         </div>
         <div className={styles.buttonContainer}>
-          {/* <GoogleLoginButton /> */}
           <button className={styles.emailButton} onClick={openEmailModal}>
             <img src={emailimg} style={{ paddingRight: 20 }} alt="email" />
             Email 로그인

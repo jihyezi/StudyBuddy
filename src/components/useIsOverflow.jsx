@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useIsomorphicEffect from './useIsomorphicEffect';
 
 const useIsOverflow = (ref) => {
@@ -10,7 +10,7 @@ const useIsOverflow = (ref) => {
             const hasOverflow = current.scrollWidth > current.clientWidth;
             setIsOverflow(hasOverflow);
         }
-    }, [ref]);
+    }, [ref.current, ref.current?.scrollWidth, ref.current?.clientWidth]); // 추가적인 종속성
 
     return isOverflow;
 };

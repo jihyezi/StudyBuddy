@@ -106,6 +106,16 @@ const Post = () => {
       error: sessionError,
     } = await supabase.auth.getSession();
 
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      console.error("No session found. User might not be logged in.");
+      return;
+    }
+
     const userId = session.user.id;
 
     const currentContent = editorRef.current.innerHTML;
@@ -216,7 +226,7 @@ const Post = () => {
           title={"커뮤니티"}
           placeholder={"커뮤니티를 선택해주세요"}
           onSelect={handleCommunity}
-          // onSelect={setCommunity}
+        // onSelect={setCommunity}
         />
         <InputText
           title={"제목"}
