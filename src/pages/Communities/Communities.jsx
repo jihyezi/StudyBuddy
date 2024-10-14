@@ -8,6 +8,7 @@ import JoinPostList from "components/Communities/CommunityJoinPostList";
 import { dummyPostData } from "components/Dummydata";
 import { useAuth } from "contexts/AuthContext";
 import supabase from "components/supabaseClient";
+import loadinggif from "assets/images/loading.gif"
 
 const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState("");
@@ -19,6 +20,7 @@ const Communities = () => {
   const [post, setPost] = useState([]);
   const [comment, setComment] = useState([]);
   const [fieldCommunity, setFieldCommunity] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { user: sessionUser } = useAuth();
 
   useEffect(() => {
@@ -104,6 +106,7 @@ const Communities = () => {
     };
 
     const fetchPostData = async () => {
+      setLoading(true);
       const { data, error } = await supabase.from("Post").select("*");
 
       if (error) {
@@ -111,6 +114,7 @@ const Communities = () => {
       } else {
         setPost(data);
       }
+      setLoading(false);
     };
 
     const fetchCommentData = async () => {
@@ -185,49 +189,56 @@ const Communities = () => {
   return (
     <div className={styles.community}>
       <Header headerName={"Communities"} />
-      {joinCommunity.length > 0 ? (
-        <>
-          <div className={styles.classification1}>
-            <JoinCommunity
-              onEventSelect={handleEventSelect}
-              communityData={community}
-              allJoinCommunityData={allJoinCommunity}
-              joinCommunityData={filterCommunity}
-              postData={post}
-              userData={user}
-              allUserData={allUser}
-            />
-          </div>
-          <JoinPostList
-            postData={filteredPosts}
-            communityData={community}
-            userData={user}
-            allUserData={allUser}
-            commentData={comment}
-          />
-        </>
+      {loading ? (
+        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
+        </div>
       ) : (
-        <>
-          <div className={styles.classification2}>
-            <Classification
-              onEventSelect={handleEventSelect}
-            />
-          </div>
-          {filterfieldPosts.length > 0 ?
+        joinCommunity.length > 0 ? (
+          <>
+            <div className={styles.classification1}>
+              <JoinCommunity
+                onEventSelect={handleEventSelect}
+                communityData={community}
+                allJoinCommunityData={allJoinCommunity}
+                joinCommunityData={filterCommunity}
+                postData={post}
+                userData={user}
+                allUserData={allUser}
+              />
+            </div>
             <JoinPostList
-              postData={filterfieldPosts}
+              postData={filteredPosts}
               communityData={community}
               userData={user}
               allUserData={allUser}
               commentData={comment}
-            /> :
-            <div className={styles.nopostcontainer}>
-              <div className={styles.nopost}>No Posts Yet</div>
+            />
+          </>
+        ) : (
+          <>
+            <div className={styles.classification2}>
+              <Classification
+                onEventSelect={handleEventSelect}
+              />
             </div>
-          }
+            {filterfieldPosts.length > 0 ?
+              <JoinPostList
+                postData={filterfieldPosts}
+                communityData={community}
+                userData={user}
+                allUserData={allUser}
+                commentData={comment}
+              /> :
+              <div className={styles.nopostcontainer}>
+                <div className={styles.nopost}>No Posts Yet</div>
+              </div>
+            }
 
-        </>
+          </>
+        )
       )}
+
     </div>
   );
 };

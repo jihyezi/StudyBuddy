@@ -145,8 +145,11 @@ const Profile = () => {
         } else {
           setUserLike(data);
         }
+        setLoading(false);
       }
     };
+
+
 
     fetchUserData();
     fetchAllUserData();
@@ -181,55 +184,62 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <Header headerName={user[0].nickname} />
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <div className={styles.info}>
-          <div className={styles.imageWrapper}>
-            {userInfo.backgroundimage ?
-              <img src={userInfo.backgroundimage} alt="profile background" className={styles.image} />
-              : <img src={nobackground} alt="profile background" className={styles.image} />
-            }
-            <div className={styles.profileImgContainer}>
-              {userInfo.profileimage ?
-                <img src={userInfo.profileimage} alt="profile" className={styles.profileImg} />
-                : <img src={noprofile} alt="profile" className={styles.profileImg} />
-              }
-
-            </div>
-          </div>
-
-          <div className={styles.details}>
-            <div className={styles.edit}>
-              <div className={styles.communityName}>{communityInfo.community}</div>
-              <button className={styles.joinButton} onClick={openModal}>
-                Edit
-              </button>
-              <ProfileEditModal
-                modalIsOpen={modalIsOpen}
-                closeModal={closeModal}
-                profileImg={userInfo.profileimage}
-                backgroundimage={userInfo.backgroundimage}
-                userData={userInfo}
-                userNickname={userInfo.nickname}
-              />
-            </div>
-            <div className={styles.infoList}>
-              <span className={styles.description1}>{userInfo.nickname}</span>
-              <span className={styles.description2}>@{userInfo.username}</span>
-              <span className={styles.description3}>{userInfo.bio}</span>
-              <span className={styles.description4}>🎂 {userInfo.birthdate}</span>
-            </div>
-          </div>
-          <ProfileTablist
-            post={post}
-            community={community}
-            user={user}
-            allUser={allUser}
-            comment={comment}
-            userPost={userPost}
-            userLike={filterLikePost}
-            userComment={filterCommentPost} />
+      {loading ? (
+        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
         </div>
-      </div>
+      ) : (
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <div className={styles.info}>
+            <div className={styles.imageWrapper}>
+              {userInfo.backgroundimage ?
+                <img src={userInfo.backgroundimage} alt="profile background" className={styles.image} />
+                : <img src={nobackground} alt="profile background" className={styles.image} />
+              }
+              <div className={styles.profileImgContainer}>
+                {userInfo.profileimage ?
+                  <img src={userInfo.profileimage} alt="profile" className={styles.profileImg} />
+                  : <img src={noprofile} alt="profile" className={styles.profileImg} />
+                }
+
+              </div>
+            </div>
+
+            <div className={styles.details}>
+              <div className={styles.edit}>
+                <div className={styles.communityName}>{communityInfo.community}</div>
+                <button className={styles.joinButton} onClick={openModal}>
+                  Edit
+                </button>
+                <ProfileEditModal
+                  modalIsOpen={modalIsOpen}
+                  closeModal={closeModal}
+                  profileImg={userInfo.profileimage}
+                  backgroundimage={userInfo.backgroundimage}
+                  userData={userInfo}
+                  userNickname={userInfo.nickname}
+                />
+              </div>
+              <div className={styles.infoList}>
+                <span className={styles.description1}>{userInfo.nickname}</span>
+                <span className={styles.description2}>@{userInfo.username}</span>
+                <span className={styles.description3}>{userInfo.bio}</span>
+                <span className={styles.description4}>🎂 {userInfo.birthdate}</span>
+              </div>
+            </div>
+            <ProfileTablist
+              post={post}
+              community={community}
+              user={user}
+              allUser={allUser}
+              comment={comment}
+              userPost={userPost}
+              userLike={filterLikePost}
+              userComment={filterCommentPost} />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

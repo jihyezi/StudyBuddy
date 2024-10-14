@@ -17,6 +17,8 @@ const BookmarkJoin = ({
   joinCommunityData = {},
   postData = {},
   userData = {},
+  onBookmarkToggle = {},
+  allUserData = {},
 }) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -29,16 +31,17 @@ const BookmarkJoin = ({
   const handleClick = (item) => {
     setSelectedItem(item);
     onEventSelect(item);
-    navigate(`/detail-community/${item.communityid}`, {
+    navigate(`/bookmarkdetail/${item.communityid}`, {
       state: {
-        // id: `${item.id}`,
+        currentCommunityid: `${item.communityid}`,
         // img: `${item.img}`,
-        // community: `${item.community}`,
+        currentCommunity: `${item.name}`,
         communityData: communityData,
         allJoinCommunityData: allJoinCommunityData,
         joinCommunityData: joinCommunityData,
         postData: postData,
         userData: userData,
+        allUserData: allUserData
       },
     });
   };
