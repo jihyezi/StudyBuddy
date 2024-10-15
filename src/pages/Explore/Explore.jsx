@@ -160,7 +160,7 @@ const Explore = () => {
       <div className={styles.PopularTagContainer}>
         <div style={{ position: "relative" }}>
           {/* 인기 태그 검색 으로 수정? */}
-          <div className={styles.CategoryText}>인기 태그 🏷️</div>
+          <div className={styles.CategoryText}>인기 태그 검색🏷️</div>
           <div className={styles.CategoryTag}>
             <Tag />
           </div>

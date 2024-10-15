@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import useIsOverflow from "components/useIsOverflow";
 import styles from "../Home/Tag.module.css";
 import supabase from "components/supabaseClient";
-
+import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom"; // useNavigate 훅 임포트
 
 import leftArrow from "assets/icons/left_arrow.png";
@@ -12,6 +12,7 @@ const Explore_Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedButton, setSelectedButton] = useState("");
   const [tags, setTags] = useState([]);
+  const { user: sessionUser } = useAuth(); // AuthContext에서 유저 정보 가져오기
   const navigate = useNavigate(); // useNavigate 사용
 
   const containerRef = useRef(null);
@@ -31,9 +32,13 @@ const Explore_Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
   };
 
   const handleClick = (tag) => {
+    if (!sessionUser) {
+      alert("로그인을 해주세요."); // 로그인 안내 메시지
+      return; // 로그인되지 않은 경우 동작 중지
+    }
     setSelectedButton(tag);
-    onTagSelect(tag); // 태그 선택 이벤트 전달
-    navigate(`/search?query=${encodeURIComponent(tag)}`); // 쿼리 파라미터로 이동
+    onTagSelect(tag);
+    navigate(`/search?query=${encodeURIComponent(tag)}`);
   };
 
   const handleScroll = () => {
