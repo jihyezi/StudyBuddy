@@ -8,7 +8,7 @@ import imgbackground from "assets/images/bookmarkbackground.png";
 import commmunityicon from "assets/icons/palette.png";
 import Header from "components/Header";
 import supabase from "components/supabaseClient";
-import loadinggif from "assets/images/loading.gif"
+import loadinggif from "assets/images/loading.gif";
 import nobackground from "assets/images/Profile/nobackground.png";
 
 const CommunityDetailsPage = () => {
@@ -20,14 +20,17 @@ const CommunityDetailsPage = () => {
     joinCommunityData,
     postData,
     userData,
-  } = location.state;
+  } = location.state || {};
   const [isJoined, setIsJoined] = useState(false);
   const [joinCommunity, setJoinCommunity] = useState(null);
   const [community, setCommunity] = useState(null);
   const [posts, setPosts] = useState([]);
 
   const handleJoinClick = async () => {
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
 
     if (sessionError) {
       console.error("Error getting session:", sessionError);
@@ -137,7 +140,19 @@ const CommunityDetailsPage = () => {
   }, [communityId]);
 
   if (!community || !posts) {
-    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} />
+      </div>
+    );
   }
 
   const userRole =
@@ -148,19 +163,15 @@ const CommunityDetailsPage = () => {
       <Header headerName={community[0].name} />
       <div className={styles.imageWrapper}>
         <div className={styles.imageContainer}>
-          {community[0].image ?
+          {community[0].image ? (
             <img
               src={community[0].image}
               alt="profile"
               className={styles.image}
             />
-            : <img
-              src={nobackground}
-              alt="profile"
-              className={styles.image}
-            />
-          }
-
+          ) : (
+            <img src={nobackground} alt="profile" className={styles.image} />
+          )}
         </div>
         <div className={styles.iconWrapper}>
           <div className={styles.communityPostIconWrapper}>

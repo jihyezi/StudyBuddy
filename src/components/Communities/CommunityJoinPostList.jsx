@@ -9,6 +9,8 @@ const CommunityPostList = ({
   commentData,
   onBookmarkToggle,
 }) => {
+  console.log("allUserData:", allUserData);
+  console.log("postData:", postData);
   return (
     <div>
       {postData.map((post) => (
