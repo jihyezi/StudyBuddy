@@ -164,11 +164,13 @@ const Communities = () => {
       fetchAllJoinCommunityData();
     }
 
-  }, [sessionUser, selectedEvent]);
+  }, [sessionUser]);
 
   const handleEventSelect = (event) => {
     setSelectEvent(event);
   };
+
+  console.log('comm-select', selectedEvent)
 
   const filterCommunity = community.filter((c) =>
     joinCommunity.some((jc) => jc.communityid === c.communityid)
@@ -180,10 +182,14 @@ const Communities = () => {
     )
   );
 
+  const filteredCommunities = selectedEvent === "🔥"
+    ? community
+    : community.filter(c => c.field === selectedEvent);
+
   const filterfieldPosts = selectedEvent === "🔥"
     ? post
-    : post.filter((p) =>
-      fieldCommunity.some((fp) => Number(fp.communityid) === Number(p.communityid))
+    : post.filter(p =>
+      filteredCommunities.some(fc => Number(fc.communityid) === Number(p.communityid))
     );
 
   return (
