@@ -19,6 +19,7 @@ import profile3 from "assets/images/Profile/profile3.png";
 import profile4 from "assets/images/Profile/profile4.png";
 import image from "assets/images/Studies/studyIntroduce.png";
 import loadinggif from "assets/images/loading.gif"
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const DetailStudyPost = ({ }) => {
   const { studyId } = useParams();
@@ -273,7 +274,7 @@ const DetailStudyPost = ({ }) => {
         >
           <img
             className={styles.postWriterProfile}
-            src={userData?.profileimage || profile1}
+            src={userData?.profileimage || noprofile}
             alt="profile1"
           />
           <div className={styles.postWriterNickname}>{userData?.nickname}</div>
@@ -289,6 +290,7 @@ const DetailStudyPost = ({ }) => {
             gap: "14px",
             paddingBottom: "16px",
             borderBottom: "3px solid #dddddd",
+            width: '800px'
           }}
         >
           {userData?.userid === studyData.userid && (

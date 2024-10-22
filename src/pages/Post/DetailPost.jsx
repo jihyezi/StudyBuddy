@@ -373,7 +373,7 @@ const DetailPost = ({ }) => {
         >
           <img
             className={styles.postWriterProfile}
-            src={userimg || profile1}
+            src={userimg || noprofile}
             alt="profile1"
           />
           <div className={styles.postWriterNickname}>{userNickname}</div>
@@ -390,6 +390,7 @@ const DetailPost = ({ }) => {
             gap: "14px",
             paddingBottom: "16px",
             borderBottom: "3px solid #dddddd",
+            width: '800px'
           }}
         >
           {userData && userData.length > 0 && userData[0].userid === postData.userid ? (
