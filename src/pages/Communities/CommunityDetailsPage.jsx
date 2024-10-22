@@ -10,6 +10,7 @@ import Header from "components/Header";
 import supabase from "components/supabaseClient";
 import loadinggif from "assets/images/loading.gif";
 import nobackground from "assets/images/Profile/nobackground.png";
+import CommunityField from "components/Communities/CommunityField";
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
@@ -179,10 +180,7 @@ const CommunityDetailsPage = () => {
               src={imgbackground}
               className={styles.communityPostIconBackground}
             />
-            <img
-              src={commmunityicon}
-              className={styles.communityPostIconPalette}
-            />
+            <CommunityField field={community[0].field} />
           </div>
         </div>
       </div>
