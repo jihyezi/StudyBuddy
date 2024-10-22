@@ -1,6 +1,7 @@
 import React from "react";
 import styles from '../../pages/Communities/CommunityDetailsPage.module.css'
 
+// icons
 import business from 'assets/icons/Field/business.png';
 import finance from 'assets/icons/Field/finance.png';
 import education from 'assets/icons/Field/education.png';
@@ -26,6 +27,7 @@ import printing from 'assets/icons/Field/printing.png';
 import agriculture from 'assets/icons/Field/agriculture.png';
 import safety from 'assets/icons/Field/safety.png';
 import environment from 'assets/icons/Field/environment.png';
+import logo from 'assets/icons/Sidebar/studybuddyLogo.png';
 
 
 const CommunityField = ({ field }) => {
@@ -91,7 +93,7 @@ const CommunityField = ({ field }) => {
             {getFieldImage() ? (
                 <img src={getFieldImage()} alt={field} className={styles.communityPostIconPalette} />
             ) : (
-                <div className={styles.noFieldIcon}>해당 분야의 이미지가 없습니다</div>
+                <img src={logo} alt={field} className={styles.communityPostIconPalette} />
             )}
         </div>
     );

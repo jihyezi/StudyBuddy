@@ -224,7 +224,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
         <div className={styles.formContainer}>
           <input
             type="nickname"
-            placeholder="닉네임"
+            placeholder="사용자 이름"
             value={nickname}
             onChange={handleNicknameChange}
             className={styles.inputField}
@@ -270,7 +270,7 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
           )}
           <input
             type="text"
-            placeholder="사용자 이름"
+            placeholder="아이디"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className={styles.inputField}

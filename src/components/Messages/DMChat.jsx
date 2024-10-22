@@ -7,6 +7,7 @@ import DeleteIcon from "assets/icons/Messages/Delete.png";
 import DeleteModal from "./DeleteModal";
 import supabase from "components/supabaseClient";
 import defaultprofile from "assets/icons/Messages/Profile.jpg"
+import noprofile from "assets/images/Profile/noprofile.png"
 function DMChat({ selectedUser, publicUser }) {
   const [chatData, setChatData] = useState([]);  // 실제 메시지 데이터
   const [message, setMessage] = useState("");  // 전송할 메시지
@@ -84,12 +85,12 @@ function DMChat({ selectedUser, publicUser }) {
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
         <img
-          src={selectedUser.profileimage || defaultprofile}  // 프로필 이미지가 없으면 기본 이미지 사용
+          src={selectedUser.profileimage || noprofile}  // 프로필 이미지가 없으면 기본 이미지 사용
           className={styles.profileImage}
           alt="Profile"
         />
         <div className={styles.headerText}>
-          {selectedUser ? `${selectedUser.username} / @${selectedUser.userid}` : "No user selected"}
+          {selectedUser ? `${selectedUser.nickname}` : "No user selected"}
         </div>
         {selectedUser && (
           <img
@@ -114,13 +115,13 @@ function DMChat({ selectedUser, publicUser }) {
                 {showDateDivider && (
                   <div className={styles.dateDivider}>{chat.createdat.split("T")[0]}</div>
                 )}
-                {showProfileImage && (
+                {/* {showProfileImage && (
                   <img
-                    src={selectedUser.profileimage || defaultprofile}  // 프로필 이미지가 없으면 기본 이미지 사용
+                    src={selectedUser.profileimage || noprofile}  // 프로필 이미지가 없으면 기본 이미지 사용
                     className={styles.profileImage}
                     alt="Profile"
                   />
-                )}
+                )} */}
                 {chat.new_senderid === publicUser.userid ? (
                   lastMessage ? (
                     <MyMessage key={index} message={chat.content} last={true} />
@@ -128,7 +129,7 @@ function DMChat({ selectedUser, publicUser }) {
                     <MyMessage key={index} message={chat.content} />
                   )
                 ) : lastMessage ? (
-                  <OtherMessage key={index} message={chat.content} last={true} />
+                  <OtherMessage key={index} message={chat.content} last={true} profile={selectedUser?.profileimage || noprofile} />
                 ) : (
                   <OtherMessage key={index} message={chat.content} />
                 )}
@@ -136,7 +137,10 @@ function DMChat({ selectedUser, publicUser }) {
             );
           })
         ) : (
-          <div className={styles.noMessages}>No messages yet.</div>
+          <div className={styles.noMessagesContainer}>
+            <div className={styles.noMessages}>No messages yet.</div>
+          </div>
+
         )}
       </div>
       <div className={styles.InputContainer}>
