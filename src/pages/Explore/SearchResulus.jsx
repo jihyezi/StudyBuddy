@@ -119,7 +119,7 @@ const SearchResults = () => {
           </div>
         ))}
       </div>
-      <div className={styles.communityPostSmallWrap}>
+      <div className={menuArr.name === '커뮤니티' ? styles.communityPostSmallWrap : styles.communityPostSmallWrap2}>
         {menuArr[currentTab].content}
       </div>
     </div>

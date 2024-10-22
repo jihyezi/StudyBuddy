@@ -10,7 +10,7 @@ const CommunityPostList = ({
   onBookmarkToggle,
 }) => {
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {postData.map((post) => (
         <Post
           key={post.postid} // post.id -> post.postid 로 수정
