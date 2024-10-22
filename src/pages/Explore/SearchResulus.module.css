@@ -58,10 +58,19 @@
   text-align: center;
 }
 
-/* .communityPostSmallWrap {
+.communityPostSmallWrap {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0px 60px;
-} */
+}
+
+.communityPostSmallWrap2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 60px;
+  gap: 14px;
+}

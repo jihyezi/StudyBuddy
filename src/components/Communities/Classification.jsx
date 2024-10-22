@@ -52,6 +52,8 @@ const Classification = ({ onEventSelect }) => {
     onEventSelect('🔥');
   }, []);
 
+  console.log('clss-select', selectedButton);
+
   const handleScroll = () => {
     const { current } = containerRef;
     if (current) {
