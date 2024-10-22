@@ -224,10 +224,7 @@ const Profile = () => {
                 <span className={styles.description1}>{userInfo.nickname}</span>
                 <span className={styles.description2}>@{userInfo.username}</span>
                 <span className={styles.description3}>{userInfo.bio}</span>
-                {userInfo.birthdate ?
-                  <span className={styles.description4}>🎂 {userInfo.birthdate}</span> :
-                  <div></div>
-                }
+                <span className={styles.description4}>🎂 {userInfo.birthdate}</span>
               </div>
             </div>
             <ProfileTablist
