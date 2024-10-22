@@ -22,6 +22,7 @@ const usePostsAndUsers = (query) => {
 
         if (!postsData || postsData.length === 0) {
           setPosts([]);
+          setUsers([]); // 사용자 데이터도 초기화
           return;
         }
 
@@ -31,25 +32,40 @@ const usePostsAndUsers = (query) => {
           .select("*")
           .in("userid", userIds);
 
+        if (usersError) {
+          console.error("Error fetching users:", usersError);
+          return;
+        }
+
         const communityIds = postsData.map((post) => post.communityid);
         const { data: communityData, error: communityError } = await supabase
           .from("Community")
           .select("*")
           .in("communityid", communityIds);
 
+        if (communityError) {
+          console.error("Error fetching communities:", communityError);
+          return;
+        }
+
         const allComments = await Promise.all(
           postsData.map(async (post) => {
-            const { data: comments } = await supabase
+            const { data: comments, error: commentsError } = await supabase
               .from("Comment")
               .select("*")
               .eq("postid", post.postid);
+
+            if (commentsError) {
+              console.error("Error fetching comments:", commentsError);
+            }
+
             return comments || [];
           })
         );
 
         setPosts(postsData);
-        setUsers(usersData);
-        setCommunityInfo(communityData);
+        setUsers(usersData || []); // 사용자 데이터가 없으면 빈 배열로 설정
+        setCommunityInfo(communityData || []);
         setCommentData(allComments);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -59,7 +75,16 @@ const usePostsAndUsers = (query) => {
     fetchPostsUsersAndCommunities();
   }, [query]);
 
-  return { posts, users, communityInfo, commentData };
+  // 사용자 매핑
+  const userMap = Object.fromEntries(users.map((user) => [user.userid, user]));
+
+  return {
+    posts,
+    users: userMap,
+    allUserData: users,
+    communityInfo,
+    commentData,
+  }; // allUserData 추가
 };
 
 export default usePostsAndUsers;
