@@ -128,7 +128,7 @@ const DetailPost = ({}) => {
   }, [postData.postid]);
 
   const formatDescription = (description) => {
-    console.log("filteredPost", postData);
+    console.log("filteredPost", userData);
     const regex = /!\[Image\]\((.*?)\)/g;
     const parts = description.split("\n").flatMap((line, index) => {
       const imageParts = line.split(regex);
