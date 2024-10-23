@@ -199,9 +199,17 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
     }
   };
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규 표현식
+
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
+
+    if (!emailRegex.test(value)) {
+      setEmailMessage("유효한 이메일 형식이 아닙니다.");
+      setIsEmailAvailable(false);
+      return;
+    }
 
     checkEmailDuplicate(value); // 이메일 중복 확인
   };
@@ -256,13 +264,11 @@ const SignUpModal = ({ modalIsOpen, closeModal }) => {
             <div className={styles.errorContainer}>
               <img
                 src={isEmailAvailable ? blue_error : red_error}
-                alt={isEmailAvailable ? "이메일 사용 가능" : "이메일 중복"}
+                alt={isEmailAvailable ? "이메일 사용 가능" : "이메일 오류"}
               />
               <p
                 className={styles.nicknameMessage}
-                style={{
-                  color: isEmailAvailable ? "#74A3FF" : "#FF7474",
-                }}
+                style={{ color: isEmailAvailable ? "#74A3FF" : "#FF7474" }}
               >
                 {emailMessage}
               </p>
