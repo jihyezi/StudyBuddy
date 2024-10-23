@@ -70,11 +70,11 @@
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background-color: #ccc;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .notificationText {

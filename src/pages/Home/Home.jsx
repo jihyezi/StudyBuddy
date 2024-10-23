@@ -48,6 +48,10 @@ const Home = ({}) => {
   const [communityy, setCommunityy] = useState([]);
   const navigate = useNavigate();
 
+  console.log('communityy', communityy)
+  console.log('communityData', communityData)
+
+
   useEffect(() => {
     const fetchInitialPopularStudies = async () => {
       await fetchPopularStudies(selectedTag);
@@ -468,6 +472,7 @@ const Home = ({}) => {
                 <HotCommunity
                   community={community}
                   communityData={communityData[index]}
+                  allcommunity={communityy}
                   onClick={() => handleCommuntiyClick(community)}
                 />
               ))}

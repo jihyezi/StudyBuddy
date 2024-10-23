@@ -3,7 +3,7 @@ import styles from "./ProfileInputImage.module.css";
 import "fonts/Font.css";
 
 // icon
-import camera from "assets/icons/camera.png";
+import camera from "assets/icons/Profile/camera.png";
 
 const ProfileInputImage = (props) => {
     const fileInputRef = useRef(null);

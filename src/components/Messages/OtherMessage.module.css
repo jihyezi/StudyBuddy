@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 10px;
 }
 
 .messageRow {
@@ -11,11 +10,11 @@
 }
 
 .profileImage {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: #ccc;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .otherMessage {

@@ -31,12 +31,31 @@ const DetailPost = ({}) => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData, allUserData, communityData, postData } = location.state;
+  const { userData, allUserData, communityData, postData } = location.state || {};
+
+  console.log(location.state);
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === postData.communityid)
         ?.name
     : "Unknown Community";
+
+  const communityid = Array.isArray(communityData)
+    ? communityData.find((comm) => comm.communityid === postData.communityid)
+      ?.communityid
+    : "Unknown Community";
+
+  const userid =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === postData.userid)?.username
+      : "Unknown User";
+
+  const selectedUserData =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === postData.userid) // postData.userid에 해당하는 사용자 데이터 찾기
+      : null;
+
+
 
   const userimg =
     Array.isArray(allUserData) && allUserData.length > 0
@@ -314,6 +333,29 @@ const DetailPost = ({}) => {
     );
   };
 
+  const handleCommunityClick = (item) => {
+    navigate(`/detail-community/${item.communityid}`, {
+      state: {
+        // id: `${item.id}`,
+        // img: `${item.img}`,
+        // community: `${item.community}`,
+        communityData: communityData,
+        postData: postData,
+        userData: userData,
+      },
+    });
+  };
+
+  const handleProfileClick = (item) => {
+    navigate(`/other-profile/${item.userid}`, {
+      state: {
+        communityData: communityData,
+        postData: postData,
+        userData: selectedUserData,
+      },
+    });
+  };
+
   return (
     <div style={{ width: "100%", maxWidth: "1200px", margin: "0" }}>
       <Header title={"Post"} />
@@ -326,7 +368,7 @@ const DetailPost = ({}) => {
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
-        <div className={styles.studiesStatus}>{communityName}</div>
+        <div className={styles.studiesStatus} onClick={() => handleCommunityClick({ communityid })}>{communityName}</div>
         <div className={styles.studiesTitle}>{postData.title}</div>
         <div
           style={{
@@ -335,6 +377,7 @@ const DetailPost = ({}) => {
             gap: "14px",
             marginTop: "30px",
           }}
+          onClick={() => handleProfileClick({ userid })}
         >
           <img
             className={styles.postWriterProfile}
@@ -355,6 +398,7 @@ const DetailPost = ({}) => {
             gap: "14px",
             paddingBottom: "16px",
             borderBottom: "3px solid #dddddd",
+            width: '800px'
           }}
         >
           {userData &&

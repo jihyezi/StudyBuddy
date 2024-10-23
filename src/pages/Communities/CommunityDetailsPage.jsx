@@ -10,6 +10,7 @@ import Header from "components/Header";
 import supabase from "components/supabaseClient";
 import loadinggif from "assets/images/loading.gif";
 import nobackground from "assets/images/Profile/nobackground.png";
+import CommunityField from "components/Communities/CommunityField";
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
@@ -21,7 +22,7 @@ const CommunityDetailsPage = () => {
     // joinCommunityData,
     // postData,
     userData,
-  } = location.state;
+  } = location.state || {};
   const [isJoined, setIsJoined] = useState(false);
   const [joinCommunity, setJoinCommunity] = useState(null);
   const [community, setCommunity] = useState(null);
@@ -188,10 +189,7 @@ const CommunityDetailsPage = () => {
               src={imgbackground}
               className={styles.communityPostIconBackground}
             />
-            <img
-              src={commmunityicon}
-              className={styles.communityPostIconPalette}
-            />
+            <CommunityField field={community[0].field} />
           </div>
         </div>
       </div>

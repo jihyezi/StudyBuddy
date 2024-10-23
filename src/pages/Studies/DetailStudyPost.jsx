@@ -305,6 +305,7 @@ const DetailStudyPost = ({}) => {
             gap: "14px",
             paddingBottom: "16px",
             borderBottom: "3px solid #dddddd",
+            width: '800px'
           }}
         >
           {/* {userDataa &&
