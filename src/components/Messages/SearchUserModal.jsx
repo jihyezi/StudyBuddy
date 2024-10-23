@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./SearchUserModal.module.css";
 import closeIcon from "assets/icons/Messages/close.png";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 function SearchUserModal({
   setIsSending,
@@ -53,14 +54,13 @@ function SearchUserModal({
           filteredUsers.map((user) => (
             <div
               key={user.userid}
-              className={`${styles.userItem} ${
-                selectedUser && selectedUser.userid === user.userid
-                  ? styles.selected
-                  : ""
-              }`}
+              className={`${styles.userItem} ${selectedUser && selectedUser.userid === user.userid
+                ? styles.selected
+                : ""
+                }`}
               onClick={() => handleUserClick(user)}
             >
-              <img src={user.profileimage} alt="Profile" className={styles.profileImage} />
+              <img src={user.profileimage || noprofile} alt="Profile" className={styles.profileImage} />
               <div className={styles.userInfo}>
                 <span className={styles.username}>{user.username}</span>
               </div>

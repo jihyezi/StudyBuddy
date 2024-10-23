@@ -17,7 +17,6 @@ const Classification = ({ onEventSelect }) => {
   const dummyData = [
     '🔥',
     '경영/회계/사무',
-    '정보통신',
     '금융/보험',
     '교육/자연/과학/사회과학',
     '법률/경찰/소방/교도/국방',
@@ -32,6 +31,7 @@ const Classification = ({ onEventSelect }) => {
     '건설',
     '광업자원',
     '기계',
+    '정보통신',
     '재료',
     '화학',
     '섬유/의복',
