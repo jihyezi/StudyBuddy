@@ -35,6 +35,10 @@ const StudyPost = (props) => {
     });
   };
 
+  console.log(JSON.stringify([props.studyPost]))
+  console.log(JSON.stringify([userDataa]))
+
+
   const handleShare = (event) => {
     event.stopPropagation();
 

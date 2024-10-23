@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./SearchResulus.module.css";
 
@@ -14,12 +14,15 @@ const SearchResults = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
 
-  const [currentTab, clickTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(0);
 
   const communities = useCommunities(query);
-  const { posts, users, communityInfo, commentData } = usePostsAndUsers(query);
+  const { posts, users, communityInfo, allUserData, commentData } =
+    usePostsAndUsers(query);
   const { studies, likesCount, commentsCount } = useStudies(query);
-
+  useEffect(() => {
+    console.log("유저 데이터:", users);
+  }, [users]);
   const menuArr = [
     {
       name: "커뮤니티",
@@ -28,6 +31,7 @@ const SearchResults = () => {
           communities.map((community) => (
             <CommunityPostSmall
               key={community.communityid}
+              communityId={community.communityid}
               communityimg={community.image}
               communityname={community.name}
               person={community.membercount}
@@ -42,7 +46,6 @@ const SearchResults = () => {
             '{query}'에 대한 검색 결과가 없습니다.
           </div>
         ),
-      data: communities,
     },
     {
       name: "전체글",
@@ -52,6 +55,7 @@ const SearchResults = () => {
             postData={posts}
             communityData={communityInfo}
             userData={users}
+            allUserData={allUserData} // now you can pass allUserData
             comment={commentData}
           />
         ) : (
@@ -60,7 +64,6 @@ const SearchResults = () => {
             '{query}'에 대한 검색 결과가 없습니다.
           </div>
         ),
-      data: posts,
     },
     {
       name: "스터디",
@@ -87,13 +90,12 @@ const SearchResults = () => {
             '{query}'에 대한 검색 결과가 없습니다.
           </div>
         ),
-      data: studies,
     },
   ];
 
-  const selectMenuHandler = (index) => {
-    clickTab(index);
-  };
+  const selectMenuHandler = useCallback((index) => {
+    setCurrentTab(index);
+  }, []);
 
   return (
     <div className={styles.SearchResults}>
@@ -119,7 +121,7 @@ const SearchResults = () => {
           </div>
         ))}
       </div>
-      <div className={styles.communityPostSmallWrap}>
+      <div className={menuArr.name === '커뮤니티' ? styles.communityPostSmallWrap : styles.communityPostSmallWrap2}>
         {menuArr[currentTab].content}
       </div>
     </div>
