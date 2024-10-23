@@ -6,6 +6,7 @@ import styles from "./DMList.module.css";
 import DMChat from "./DMChat";
 import DMSend from "./DMSend";
 import defaultprofile from "assets/icons/Messages/Profile.jpg";
+import noprofile from "assets/images/Profile/noprofile.png"
 
 function DMList() {
   const { user } = useAuth();  // 현재 로그인한 유저 정보 가져오기
@@ -85,19 +86,18 @@ function DMList() {
         <div className={styles.messageList}>
           {userData.map((user, index) => (
             <div
-              className={`${styles.messageItem} ${
-                selectedUser && selectedUser.userid === user.userid
-                  ? styles.selected
-                  : ""
-              }`}
+              className={`${styles.messageItem} ${selectedUser && selectedUser.userid === user.userid
+                ? styles.selected
+                : ""
+                }`}
               key={index}
               onClick={() => handleUserClick(user)}
             >
-              <img src={user.profileimage || defaultprofile} className={styles.profileImage} alt="Profile" />
+              <img src={user.profileimage || noprofile} className={styles.profileImage} alt="Profile" />
               <div className={styles.messageContent}>
                 <div className={styles.messageHeader}>
-                  <span className={styles.username}>{user.username}</span>
-                  <span className={styles.nickname}>@{user.nickname || user.username}</span>
+                  <span className={styles.username}>{user.nickname}</span>
+                  <span className={styles.nickname}>@{user.username || user.username}</span>
                 </div>
                 <div className={styles.text}>Start chatting with {user.nickname || user.username}!</div>
               </div>
@@ -106,11 +106,11 @@ function DMList() {
         </div>
       </div>
       {selectedUser ? (
-        <DMChat selectedUser={selectedUser} publicUser={publicUser} />  
+        <DMChat selectedUser={selectedUser} publicUser={publicUser} />
       ) : (
         <div className={styles.noChat} onClick={handleNewMessageClick}>
           <img
-            src={defaultprofile}
+            src={noprofile}
             alt="New Message"
             className={styles.newMessageIcon}
           />

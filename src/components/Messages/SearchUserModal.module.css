@@ -123,6 +123,7 @@
   border-radius: 50%;
   background-color: #ccc;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .userInfo {
