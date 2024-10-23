@@ -121,7 +121,7 @@ const InputDate = (props) => {
   const initialDate =
     typeof props.selectedDate === "string"
       ? new Date(props.selectedDate)
-      : props.selectedDate || new Date();
+      : props.selectedDate || null;
 
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [isOpen, setIsOpen] = useState(false);

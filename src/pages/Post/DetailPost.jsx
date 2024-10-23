@@ -22,7 +22,7 @@ import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 
-const DetailPost = ({ }) => {
+const DetailPost = ({}) => {
   const [commentData, setCommentData] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [liked, setLiked] = useState(false);
@@ -37,7 +37,7 @@ const DetailPost = ({ }) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === postData.communityid)
-      ?.name
+        ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
@@ -96,6 +96,11 @@ const DetailPost = ({ }) => {
   };
 
   useEffect(() => {
+    console.log("userData", userData);
+    console.log("allUserData", allUserData);
+    console.log("communityData", communityData);
+    console.log("postData", postData);
+
     const getCommentData = async () => {
       const commentData = await fetchCommentDataById(postData.postid);
       setCommentData(commentData);
@@ -142,6 +147,7 @@ const DetailPost = ({ }) => {
   }, [postData.postid]);
 
   const formatDescription = (description) => {
+    console.log("filteredPost", postData);
     const regex = /!\[Image\]\((.*?)\)/g;
     const parts = description.split("\n").flatMap((line, index) => {
       const imageParts = line.split(regex);
@@ -351,7 +357,7 @@ const DetailPost = ({ }) => {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '1200px', margin: '0' }}>
+    <div style={{ width: "100%", maxWidth: "1200px", margin: "0" }}>
       <Header title={"Post"} />
       {isDeleteModalOpen && (
         <DeleteModal
@@ -376,7 +382,7 @@ const DetailPost = ({ }) => {
           <img
             className={styles.postWriterProfile}
             src={userimg || noprofile}
-            alt="profile1"
+            alt="noprofile"
           />
           <div className={styles.postWriterNickname}>{userNickname}</div>
           <div className={styles.postWriteDate}>
@@ -395,7 +401,9 @@ const DetailPost = ({ }) => {
             width: '800px'
           }}
         >
-          {userData && userData.length > 0 && userData[0].userid === postData.userid ? (
+          {userData &&
+          userData.length > 0 &&
+          userData[0].userid === postData.userid ? (
             <>
               <div className={styles.revise} onClick={handleReviseClick}>
                 수정
@@ -406,10 +414,16 @@ const DetailPost = ({ }) => {
             </>
           ) : (
             <>
-              <div className={`${styles.revise} ${styles.disabled}`} title="로그인이 필요합니다">
+              <div
+                className={`${styles.revise} ${styles.disabled}`}
+                title="로그인이 필요합니다"
+              >
                 수정
               </div>
-              <div className={`${styles.delete} ${styles.disabled}`} title="로그인이 필요합니다">
+              <div
+                className={`${styles.delete} ${styles.disabled}`}
+                title="로그인이 필요합니다"
+              >
                 삭제
               </div>
             </>
@@ -447,34 +461,35 @@ const DetailPost = ({ }) => {
               {formatDescription(postData.content)}
             </div>
 
-            {postData.references && postData.references.map((file, index) => (
-              <div
-                key={index}
-                style={{
-                  maxWidth: "400px",
-                  display: "block",
-                  border: "1px solid #dddddd",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  // padding: "10px",
-                }}
-                onClick={() => downloadFile(file.url, file.filename)}
-              >
-                <div className={styles.postDetailFile}>
-                  <img
-                    className={styles.folderIcon}
-                    src={folder}
-                    alt="folder"
-                  />
-                  <div className={styles.filename}>{file.filename}</div>
-                  <img
-                    className={styles.downloadIcon}
-                    src={download}
-                    alt="download"
-                  />
+            {postData.references &&
+              postData.references.map((file, index) => (
+                <div
+                  key={index}
+                  style={{
+                    maxWidth: "350px",
+                    display: "block",
+                    border: "1px solid #dddddd",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    // padding: "10px",
+                  }}
+                  onClick={() => downloadFile(file.url, file.filename)}
+                >
+                  <div className={styles.postDetailFile}>
+                    <img
+                      className={styles.folderIcon}
+                      src={folder}
+                      alt="folder"
+                    />
+                    <div className={styles.filename}>{file.filename}</div>
+                    <img
+                      className={styles.downloadIcon}
+                      src={download}
+                      alt="download"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
 
@@ -537,8 +552,13 @@ const DetailPost = ({ }) => {
             >
               <img
                 className={styles.commentWriterProfile}
-                src={userData && userData.length > 0 ? userData[0].profileimage : noprofile}
-                alt="profile1"
+                src={
+                  // userData && userData.length > 0
+                  //   ? userData[0].profileimage
+                  //   : noprofile
+                  userData[0].profileimage || noprofile
+                }
+                alt="noprofile"
               />
               <div
                 style={{

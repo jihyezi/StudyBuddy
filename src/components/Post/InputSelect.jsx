@@ -58,7 +58,9 @@ const InputSelect = (props) => {
   useEffect(() => {
     if (props.defaultValue) {
       const foundOption = selectOptions.find(
-        (option) => option.communityId === props.defaultValue
+        (option) =>
+          option.communityId === props.defaultValue ||
+          option.name === props.defaultValue
       );
       if (foundOption) {
         setSelectedOption(foundOption.name);

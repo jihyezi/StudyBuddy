@@ -20,16 +20,16 @@ import downarrow from "assets/icons/Home/downarrow.png";
 
 import LoginModal from "components/Home/LoginModal";
 
-import onboarding1 from "assets/images/Onboarding/onboarding1.png"
-import onboarding2 from "assets/images/Onboarding/onboarding2.png"
-import onboarding3 from "assets/images/Onboarding/onboarding3.png"
-import onboarding4 from "assets/images/Onboarding/onboarding4.png"
+import onboarding1 from "assets/images/Onboarding/onboarding1.png";
+import onboarding2 from "assets/images/Onboarding/onboarding2.png";
+import onboarding3 from "assets/images/Onboarding/onboarding3.png";
+import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-const Home = ({ }) => {
+const Home = ({}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
@@ -334,8 +334,9 @@ const Home = ({ }) => {
     navigate(`/detail-study/${study.studyid}`, {
       state: {
         communityData: communityy,
-        userData: user,
+        userDataa: user,
         postData: postData[0],
+        studyData: study,
       },
     });
   };
@@ -533,7 +534,8 @@ const Home = ({ }) => {
           padding: "30px 0px",
           justifyContent: "center",
           alignItems: "center",
-        }}>
+        }}
+      >
         <div
           style={{
             position: "relative",
@@ -555,7 +557,7 @@ const Home = ({ }) => {
             style={{
               position: "relative",
               width: "100%",
-              justifyContent: 'center',
+              justifyContent: "center",
               alignItems: "center",
             }}
           >

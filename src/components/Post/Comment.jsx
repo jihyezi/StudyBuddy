@@ -5,9 +5,7 @@ import supabase from "components/supabaseClient";
 // icon & image
 import more from "assets/icons/Communities/more.png";
 import profile1 from "assets/images/Profile/profile1.png";
-import profile2 from "assets/images/Profile/profile2.png";
-import profile3 from "assets/images/Profile/profile3.png";
-import profile4 from "assets/images/Profile/profile4.png";
+import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
@@ -41,7 +39,6 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
         setUserId(null);
       }
     });
-
 
     const fetchUserProfile = async () => {
       const { data, error } = await supabase
@@ -100,10 +97,13 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
   };
 
   const handleRegister = async () => {
-    const { data: { session }, error: sessionError, } = await supabase.auth.getSession();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
 
     if (sessionError) {
-      console.error("Error getting session:", sessionError)
+      console.error("Error getting session:", sessionError);
       return;
     }
 
@@ -202,8 +202,8 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
       <div>
         <img
           className={styles.commentWriterProfile}
-          src={userDataa ? userDataa.profileimage : profile1}
-          alt="profile1"
+          src={userProfile?.profileimage || noprofile}
+          alt="noprofile"
         />
       </div>
       <div
@@ -219,7 +219,7 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className={styles.commentWriter}>
             <span className={styles.commentWriterNickname}>
-              {userDataa ? userDataa.nickname : "닉네임"}
+              {userProfile?.nickname || "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
               {userProfile?.updatedat
@@ -258,7 +258,7 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
         </div>
 
         <div className={styles.comments}>{commentText}</div>
-        <div className={styles.reply}>답글달기</div>
+        {/* <div className={styles.reply}>답글달기</div> */}
       </div>
     </div>
   );

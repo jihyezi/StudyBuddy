@@ -18,10 +18,10 @@ import profile2 from "assets/images/Profile/profile2.png";
 import profile3 from "assets/images/Profile/profile3.png";
 import profile4 from "assets/images/Profile/profile4.png";
 import image from "assets/images/Studies/studyIntroduce.png";
-import loadinggif from "assets/images/loading.gif"
+import loadinggif from "assets/images/loading.gif";
 import noprofile from "assets/images/Profile/noprofile.png";
 
-const DetailStudyPost = ({ }) => {
+const DetailStudyPost = ({}) => {
   const { studyId } = useParams();
   const [inputValue, setInputValue] = useState("");
   const [userData, setUserData] = useState(null);
@@ -75,6 +75,9 @@ const DetailStudyPost = ({ }) => {
   };
 
   useEffect(() => {
+    console.log("userDataa", userDataa[0].userid);
+    console.log("studyData", studyData.userid);
+
     const getStudyData = async () => {
       const data = await fetchStudyDataById(studyId);
       // setStudyData(data);
@@ -117,7 +120,19 @@ const DetailStudyPost = ({ }) => {
   }, [studyId]);
 
   if (!studyData) {
-    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} />
+      </div>
+    );
   }
 
   const formatDescription = (description) => {
@@ -275,7 +290,7 @@ const DetailStudyPost = ({ }) => {
           <img
             className={styles.postWriterProfile}
             src={userData?.profileimage || noprofile}
-            alt="profile1"
+            alt="noprofile"
           />
           <div className={styles.postWriterNickname}>{userData?.nickname}</div>
           <div className={styles.postWriteDate}>
@@ -293,15 +308,51 @@ const DetailStudyPost = ({ }) => {
             width: '800px'
           }}
         >
-          {userData?.userid === studyData.userid && (
-            <div className={styles.revise}>수정</div>
-          )}
-
-          {userData?.userid === studyData.userid && (
-            <div className={styles.delete} onClick={handleRemoveClick}>
-              삭제
-            </div>
-          )}
+          {/* {userDataa &&
+          userDataa.length > 0 &&
+          userDataa[0].userid === studyData.userid ? (
+            <>
+              <div
+                className={styles.revise}
+                // onClick={handleReviseClick}
+              >
+                수정
+              </div>
+              <div className={styles.delete} onClick={handleRemoveClick}>
+                삭제
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                className={`${styles.revise} ${styles.disabled}`}
+                title="로그인이 필요합니다"
+              >
+                수정
+              </div>
+              <div
+                className={`${styles.delete} ${styles.disabled}`}
+                title="로그인이 필요합니다"
+              >
+                삭제
+              </div>
+            </>
+          )} */}
+          {userDataa &&
+            userDataa.length > 0 &&
+            userDataa[0].userid === studyData.userid && (
+              <>
+                <div
+                  className={styles.revise}
+                  // onClick={handleReviseClick}
+                >
+                  수정
+                </div>
+                <div className={styles.delete} onClick={handleRemoveClick}>
+                  삭제
+                </div>
+              </>
+            )}
         </div>
         <div
           style={{
@@ -404,8 +455,8 @@ const DetailStudyPost = ({ }) => {
             >
               <img
                 className={styles.commentWriterProfile}
-                src={profile1}
-                alt="profile3"
+                src={userDataa[0].profileimage || noprofile}
+                alt="noprofile"
               />
               <div
                 style={{
