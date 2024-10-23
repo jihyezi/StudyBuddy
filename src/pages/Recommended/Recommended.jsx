@@ -7,7 +7,7 @@ import "fonts/Font.css";
 import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
 
-const Recommended = ({}) => {
+const Recommended = ({ }) => {
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [communityName, setCommunityName] = useState([]);
@@ -176,7 +176,7 @@ const Recommended = ({}) => {
               small
               community={community}
               communityData={communityData[index]}
-              // onClick={() => handleCommuntiyClick(community)}
+            // onClick={() => handleCommuntiyClick(community)}
             />
           ))}
           {popularPosts.map((post, index) => (
@@ -186,7 +186,7 @@ const Recommended = ({}) => {
               postLike={postLike}
               comment={comment}
               communityName={communityName[index]}
-              // onClick={() => handlePostClick(post)}
+            // onClick={() => handlePostClick(post)}
             />
           ))}
         </div>
