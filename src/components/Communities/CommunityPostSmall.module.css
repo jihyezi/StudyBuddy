@@ -4,6 +4,7 @@
     width: 100%;
     justify-content: space-between;
     border: 1.3px solid #DDD;
+    border-radius: 8px;
 }
 
 .communityPostLeft {

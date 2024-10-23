@@ -21,7 +21,7 @@ const CommunityDetailsPage = () => {
     // joinCommunityData,
     // postData,
     userData,
-  } = location.state;
+  } = location.state || {};
   const [isJoined, setIsJoined] = useState(false);
   const [joinCommunity, setJoinCommunity] = useState(null);
   const [community, setCommunity] = useState(null);

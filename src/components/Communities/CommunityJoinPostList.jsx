@@ -9,8 +9,10 @@ const CommunityPostList = ({
   commentData,
   onBookmarkToggle,
 }) => {
+  console.log("allUserData:", allUserData);
+  console.log("postData:", postData);
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {postData.map((post) => (
         <Post
           key={post.postid} // post.id -> post.postid 로 수정
