@@ -12,10 +12,10 @@ const InputFile = ({ title, onFileSelect, initialFiles = [] }) => {
   const [selectedFiles, setSelectedFiles] = useState(initialFiles || []);
 
   useEffect(() => {
-    if (initialFiles) {
+    if (initialFiles.length > 0) {
       setSelectedFiles(initialFiles);
     }
-  }, [initialFiles]);
+  }, [initialFiles.length]);
 
   const handleChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {

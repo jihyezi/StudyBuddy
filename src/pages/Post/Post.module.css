@@ -1,8 +1,8 @@
 .postContainer {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  gap: 25px;
+  /* flex-wrap: wrap; */
+  gap: 10px;
   margin-top: 50px;
 }
 
@@ -74,4 +74,25 @@
   max-height: 300px;
   display: block;
   margin: 10px 0;
+}
+
+.cautionContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 225px;
+  padding-top: 5px;
+}
+
+.cautionIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.cautionText {
+  color: #ff7474;
+  font-family: "NotoSans-Regular";
+  font-size: 16px;
 }

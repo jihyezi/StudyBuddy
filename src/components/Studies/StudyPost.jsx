@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./StudyPost.module.css";
 import supabase from "components/supabaseClient";
+import { useAuth } from "contexts/AuthContext";
 
 import heart_off from "assets/icons/favorite_off.png";
 import heart_on from "assets/icons/favorite_on.png";
@@ -12,18 +13,32 @@ import person from "assets/icons/person.png";
 const StudyPost = (props) => {
   const navigate = useNavigate();
   const [userDataa, setUserDataa] = useState(null);
+  const { user: sessionUser } = useAuth();
 
-  const fetchUserDataById = async (userid) => {
-    const { data, error } = await supabase
-      .from("User")
-      .select("profileimage, nickname")
-      .eq("userid", userid);
+  const fetchUserData = async () => {
+    if (sessionUser) {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Error getting session:", sessionError);
+        return;
+      }
 
-    if (error) {
-      console.error("Error fetching user data:", error);
-      return null;
+      const userId = session.user.id;
+
+      const { data, error } = await supabase
+        .from("User")
+        .select("*")
+        .eq("userid", userId);
+
+      if (error) {
+        console.error("Error", error);
+      } else {
+        setUserDataa(data);
+      }
     }
-    return data[0];
   };
 
   const handlePostClick = () => {
@@ -52,12 +67,7 @@ const StudyPost = (props) => {
   };
 
   useEffect(() => {
-    const getStudyData = async () => {
-      const userData = await fetchUserDataById(props.studyPost.userid);
-      setUserDataa(userData);
-    };
-
-    getStudyData();
+    fetchUserData();
   }, []);
 
   return (

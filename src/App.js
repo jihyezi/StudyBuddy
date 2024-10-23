@@ -22,6 +22,7 @@ import StudyPost from "pages/Post/StudyPost";
 import DetailPost from "pages/Post/DetailPost";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
 import RevisePost from "pages/Post/RevisePost";
+import ReviseCommunity from "pages/Post/ReviseCommunity";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
@@ -58,7 +59,10 @@ const MainContent = () => {
   const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   useEffect(() => {
-    if (!user && (location.pathname === "/profile" || location.pathname === "/bookmarks")) {
+    if (
+      !user &&
+      (location.pathname === "/profile" || location.pathname === "/bookmarks")
+    ) {
       setLoginModalIsOpen(true);
     } else {
       setLoginModalIsOpen(false);
@@ -99,11 +103,15 @@ const MainContent = () => {
         <Route path="/create-study" element={<StudyPost />} />
         <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
         <Route path="/revisepost" element={<RevisePost />} />
+        <Route path="/revisecommunity" element={<ReviseCommunity />} />
         <Route
           path="/detail-community/:communityId"
           element={<CommunityDetailsPage />}
         />
-        <Route path="/bookmarkdetail/:communityid" element={<BookmarkDetail />} />
+        <Route
+          path="/bookmarkdetail/:communityid"
+          element={<BookmarkDetail />}
+        />
         <Route path="/detailpost" element={<DetailPost />} />
       </Routes>
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />

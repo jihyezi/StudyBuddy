@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import styles from "./CommunityDetailsPage.module.css";
 import TabList from "components/Communities/TabList";
@@ -8,17 +8,18 @@ import imgbackground from "assets/images/bookmarkbackground.png";
 import commmunityicon from "assets/icons/palette.png";
 import Header from "components/Header";
 import supabase from "components/supabaseClient";
-import loadinggif from "assets/images/loading.gif"
+import loadinggif from "assets/images/loading.gif";
 import nobackground from "assets/images/Profile/nobackground.png";
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const {
-    communityData,
-    allJoinCommunityData,
-    joinCommunityData,
-    postData,
+    // communityData,
+    // allJoinCommunityData,
+    // joinCommunityData,
+    // postData,
     userData,
   } = location.state;
   const [isJoined, setIsJoined] = useState(false);
@@ -27,7 +28,10 @@ const CommunityDetailsPage = () => {
   const [posts, setPosts] = useState([]);
 
   const handleJoinClick = async () => {
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
 
     if (sessionError) {
       console.error("Error getting session:", sessionError);
@@ -133,34 +137,50 @@ const CommunityDetailsPage = () => {
     fetchJoinCommunityDataById();
     fetchPostDataById(communityId);
     console.log("communityId", communityId);
-    console.log("communityData", communityData);
+    // console.log("communityData", communityData);
   }, [communityId]);
 
   if (!community || !posts) {
-    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} />
+      </div>
+    );
   }
 
   const userRole =
     joinCommunity && joinCommunity.length > 0 ? joinCommunity[0].role : null;
+
+  const handleReviseClick = () => {
+    navigate(
+      `/revisecommunity?communityData=${encodeURIComponent(
+        JSON.stringify(community)
+      )}`
+    );
+  };
 
   return (
     <div className={styles.container}>
       <Header headerName={community[0].name} />
       <div className={styles.imageWrapper}>
         <div className={styles.imageContainer}>
-          {community[0].image ?
+          {community[0].image ? (
             <img
               src={community[0].image}
               alt="profile"
               className={styles.image}
             />
-            : <img
-              src={nobackground}
-              alt="profile"
-              className={styles.image}
-            />
-          }
-
+          ) : (
+            <img src={nobackground} alt="profile" className={styles.image} />
+          )}
         </div>
         <div className={styles.iconWrapper}>
           <div className={styles.communityPostIconWrapper}>
@@ -180,7 +200,9 @@ const CommunityDetailsPage = () => {
         <div className={styles.header}>
           <div className={styles.communityName}>{community[0].name}</div>
           {userRole === "admin" ? (
-            <button className={styles.joinButton}>수정</button>
+            <button className={styles.joinButton} onClick={handleReviseClick}>
+              수정
+            </button>
           ) : (
             <button
               className={isJoined ? styles.joinButtonActive : styles.joinButton}

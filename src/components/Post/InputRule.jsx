@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./InputRule.module.css";
 import "fonts/Font.css";
 
@@ -10,6 +10,10 @@ const InputRule = (props) => {
   const [rules, setRules] = useState([
     { id: 1, text: "존중하고 서로 배려하며 예의를 지켜요", isEditing: false },
   ]);
+
+  useEffect(() => {
+    updateRules();
+  }, []);
 
   const updateRules = () => {
     props.onRulesChange(rules);
