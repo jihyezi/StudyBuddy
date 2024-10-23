@@ -31,7 +31,9 @@ const DetailPost = ({ }) => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData, allUserData, communityData, postData } = location.state;
+  const { userData, allUserData, communityData, postData } = location.state || {};
+
+  console.log(location.state);
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === postData.communityid)

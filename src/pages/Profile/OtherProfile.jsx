@@ -12,7 +12,7 @@ import ProfileEditModal from "components/Profile/ProfileEditModal";
 // Images
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
-import loadinggif from "assets/images/loading.gif"
+import loadinggif from "assets/images/loading.gif";
 
 const OtherProfile = () => {
     const location = useLocation();
@@ -21,7 +21,7 @@ const OtherProfile = () => {
     const { user: sessionUser } = useAuth(); // 현재 로그인된 유저 정보 가져오기
     const [user, setUser] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // 기본적으로 로딩 상태를 true로 설정
 
     const [allUser, setAllUser] = useState([]);
     const [community, setCommunity] = useState([]);
@@ -43,18 +43,18 @@ const OtherProfile = () => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase
-                    .from("User")
-                    .select("*")
-                    .eq("userid", sessionUser.id);
+            const { data, error } = await supabase
+                .from("User")
+                .select("*")
+                .eq("userid", userData.userid); // 로그인 여부와 관계없이 프로필 사용자 데이터 가져오기
 
-                if (error) {
-                    console.error("Error fetching user data:", error);
-                } else {
-                    setUser(data);
-                    setUserInfo(data[0]);
-                }
+            if (error) {
+                console.error("Error fetching user data:", error);
+                setLoading(false);
+            } else {
+                setUser(data);
+                setUserInfo(data[0]);
+                setLoading(false); // 데이터 로딩 후 로딩 상태를 false로 설정
             }
         };
 
@@ -69,89 +69,71 @@ const OtherProfile = () => {
         };
 
         const fetchCommunityData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase.from("Community").select("*");
+            const { data, error } = await supabase.from("Community").select("*");
 
-                if (error) {
-                    console.error("Error", error);
-                } else {
-                    setCommunity(data);
-                }
+            if (error) {
+                console.error("Error", error);
+            } else {
+                setCommunity(data);
             }
         };
 
         const fetchPostData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase.from("Post").select("*");
+            const { data, error } = await supabase.from("Post").select("*");
 
-                if (error) {
-                    console.error("Error", error);
-                } else {
-                    setPost(data);
-                }
+            if (error) {
+                console.error("Error", error);
+            } else {
+                setPost(data);
             }
         };
 
         const fetchUserPostData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase.from("Post").select("*").eq('userid', userData.userid);
+            const { data, error } = await supabase.from("Post").select("*").eq('userid', userData.userid);
 
-                if (error) {
-                    console.error("Error", error);
-                } else {
-                    setUserPost(data);
-                }
+            if (error) {
+                console.error("Error", error);
+            } else {
+                setUserPost(data);
             }
         };
 
         const fetchCommentData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase
-                    .from("Comment")
-                    .select("*");
+            const { data, error } = await supabase
+                .from("Comment")
+                .select("*");
 
-                if (error) {
-                    console.error("Error", error);
-                } else {
-                    setComment(data);
-                }
+            if (error) {
+                console.error("Error", error);
             } else {
-                console.warn("postid가 정의되지 않았습니다.");
+                setComment(data);
             }
         };
 
         const fetchUserCommentData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase
-                    .from("Comment")
-                    .select("*")
-                    .eq("userid", userData.userid);
+            const { data, error } = await supabase
+                .from("Comment")
+                .select("*")
+                .eq("userid", userData.userid);
 
-                if (error) {
-                    console.error("Error", error);
-                } else {
-                    setUserComment(data);
-                }
+            if (error) {
+                console.error("Error", error);
             } else {
-                console.warn("postid가 정의되지 않았습니다.");
+                setUserComment(data);
             }
         };
 
         const fetchUserLikeData = async () => {
-            if (sessionUser) {
-                const { data, error } = await supabase.from("PostLike").select("postid").eq('userid', userData.userid);
+            const { data, error } = await supabase.from("PostLike").select("postid").eq('userid', userData.userid);
 
-                if (error) {
-                    console.error("Error", error);
-                } else {
-                    setUserLike(data);
-                }
-                setLoading(false);
+            if (error) {
+                console.error("Error", error);
+            } else {
+                setUserLike(data);
             }
         };
 
-
-
+        // 모든 데이터 fetching
         fetchUserData();
         fetchAllUserData();
         fetchCommunityData();
@@ -160,14 +142,14 @@ const OtherProfile = () => {
         fetchCommentData();
         fetchUserCommentData();
         fetchUserLikeData();
-    }, [sessionUser, userData]);
+    }, [userData]);
 
     if (loading) {
-        return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
-    }
-
-    if (!sessionUser) {
-        return <div> </div>;
+        return (
+            <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+                <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
+            </div>
+        );
     }
 
     if (!user) {
@@ -185,28 +167,23 @@ const OtherProfile = () => {
     return (
         <div className={styles.container}>
             <Header headerName={userData.nickname} />
-            {loading ? (
-                <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-                    <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
-                </div>
-            ) : (
-                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <div className={styles.info}>
-                        <div className={styles.imageWrapper}>
-                            {userData.backgroundimage ?
-                                <img src={userData.backgroundimage} alt="profile background" className={styles.image} />
-                                : <img src={nobackground} alt="profile background" className={styles.image} />
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <div className={styles.info}>
+                    <div className={styles.imageWrapper}>
+                        {userData.backgroundimage ?
+                            <img src={userData.backgroundimage} alt="profile background" className={styles.image} />
+                            : <img src={nobackground} alt="profile background" className={styles.image} />
+                        }
+                        <div className={styles.profileImgContainer}>
+                            {userData.profileimage ?
+                                <img src={userData.profileimage} alt="profile" className={styles.profileImg} />
+                                : <img src={noprofile} alt="profile" className={styles.profileImg} />
                             }
-                            <div className={styles.profileImgContainer}>
-                                {userData.profileimage ?
-                                    <img src={userData.profileimage} alt="profile" className={styles.profileImg} />
-                                    : <img src={noprofile} alt="profile" className={styles.profileImg} />
-                                }
-
-                            </div>
                         </div>
+                    </div>
 
-                        <div className={styles.details}>
+                    <div className={styles.details}>
+                        {sessionUser && sessionUser.id === userData.userid ? ( // 로그인한 경우에만 Edit 버튼 표시
                             <div className={styles.edit}>
                                 <div className={styles.communityName}>{communityInfo.community}</div>
                                 <button className={styles.joinButton} onClick={openModal}>
@@ -221,26 +198,28 @@ const OtherProfile = () => {
                                     userNickname={userData.nickname}
                                 />
                             </div>
-                            <div className={styles.infoList}>
-                                <span className={styles.description1}>{userData.nickname}</span>
-                                <span className={styles.description2}>@{userData.username}</span>
-                                <span className={styles.description3}>{userData.bio}</span>
-                                <span className={styles.description4}>🎂 {userData.birthdate}</span>
-                            </div>
-                        </div>
-                        <ProfileTablist
-                            post={post}
-                            community={community}
-                            user={userData}
-                            allUser={allUser}
-                            comment={comment}
-                            userPost={userPost}
-                            userLike={filterLikePost}
-                            userComment={filterCommentPost} />
-                    </div>
-                </div>
-            )}
+                        ) : (
+                            <div className={styles.noedit}></div>
+                        )}
 
+                        <div className={styles.infoList}>
+                            <span className={styles.description1}>{userData.nickname}</span>
+                            <span className={styles.description2}>@{userData.username}</span>
+                            <span className={styles.description3}>{userData.bio}</span>
+                            <span className={styles.description4}>🎂 {userData.birthdate}</span>
+                        </div>
+                    </div>
+                    <ProfileTablist
+                        post={post}
+                        community={community}
+                        user={userData}
+                        allUser={allUser}
+                        comment={comment}
+                        userPost={userPost}
+                        userLike={filterLikePost}
+                        userComment={filterCommentPost} />
+                </div>
+            </div>
         </div>
     );
 };
