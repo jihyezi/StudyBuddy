@@ -206,7 +206,9 @@ const OtherProfile = () => {
                             <span className={styles.description1}>{userData.nickname}</span>
                             <span className={styles.description2}>@{userData.username}</span>
                             <span className={styles.description3}>{userData.bio}</span>
-                            <span className={styles.description4}>🎂 {userData.birthdate}</span>
+                            <span className={styles.description4}>
+                                {userInfo.birthdate ? `🎂 ${userInfo.birthdate}` : null}
+                            </span>
                         </div>
                     </div>
                     <ProfileTablist

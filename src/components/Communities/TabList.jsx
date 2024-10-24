@@ -21,8 +21,6 @@ export const TabList = () => {
   const [user, setUser] = useState([]);
   const [allUser, setAllUser] = useState([]);
 
-  console.log(community)
-
   const menuArr = [
     {
       name: "인기",

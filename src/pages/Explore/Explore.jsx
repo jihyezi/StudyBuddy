@@ -196,6 +196,8 @@ const Explore = () => {
                 description={post.description.split("\n")[0]}
                 tag={post.tag}
                 studyPost={post}
+                user={user}
+                allUser={allUser}
               />
             ))}
           </div>

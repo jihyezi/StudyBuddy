@@ -55,7 +55,7 @@ const Center = styled.div`
   flex: 1;
 `;
 
-const MainContent = () => {
+const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
@@ -121,7 +121,7 @@ const MainContent = () => {
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
         location.pathname === "/studies" ||
-        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended />}
+        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended user={loginuser} />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -194,7 +194,7 @@ const App = () => {
               loginUser={loginUser}
             />
             <Center>
-              <MainContent />
+              <MainContent loginuser={loginUser} />
               <Notifications
                 showNotifications={showNotifications}
                 setShowNotifications={setShowNotifications}

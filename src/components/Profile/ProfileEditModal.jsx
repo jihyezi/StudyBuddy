@@ -31,7 +31,7 @@ Modal.setAppElement("#root");
 const ProfileEditModal = ({ modalIsOpen, closeModal, profileImg, backgroundimage, userData, userNickname }) => {
     const [name, setName] = useState(userNickname);
     const [bio, setBio] = useState(userData.bio);
-    const [birthDate, setBirthDate] = useState("");
+    const [birthDate, setBirthDate] = useState(userData.birthdate);
     const [profileFile, setProfileFile] = useState(null);
     const [backgroundFile, setBackgroundFile] = useState(null);
     const [profilePreview, setProfilePreview] = useState(profileImg);

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styles from "./MemberPage.module.css";
 import profile from "assets/images/profile1.png";
 import supabase from "components/supabaseClient";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const MemberPage = ({ adminData = {}, memberData = {} }) => {
   const { communityId } = useParams();
@@ -14,7 +15,7 @@ const MemberPage = ({ adminData = {}, memberData = {} }) => {
         {adminData.map((user, index) => (
           <div key={index} className={styles.userItem}>
             <img
-              src={user.profile || profile}
+              src={user.profileimage || noprofile}
               className={styles.profileImage}
               alt="profile"
             />
@@ -31,7 +32,7 @@ const MemberPage = ({ adminData = {}, memberData = {} }) => {
           {memberData.map((user, index) => (
             <div key={index} className={styles.userItem}>
               <img
-                src={user.profile || profile}
+                src={user.profileimage || noprofile}
                 className={styles.profileImage}
                 alt="profile"
               />

@@ -8,10 +8,10 @@ import art from "assets/icons/Home/palette.png";
 import CommunityField from "components/Communities/CommunityField";
 
 const HotCommunity = ({ small, community, communityData, onClick, allcommunity }) => {
-  useEffect(() => {
-    console.log("community", community);
-    console.log("communityDataa", communityData);
-  }, []);
+  // useEffect(() => {
+  //   console.log("community", community);
+  //   console.log("communityDataa", communityData);
+  // }, []);
 
   return (
     <div

@@ -149,8 +149,6 @@ const Profile = () => {
       }
     };
 
-
-
     fetchUserData();
     fetchAllUserData();
     fetchCommunityData();
@@ -160,6 +158,7 @@ const Profile = () => {
     fetchUserCommentData();
     fetchUserLikeData();
   }, [sessionUser, userInfo]);
+
 
   if (loading) {
     return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
@@ -224,7 +223,10 @@ const Profile = () => {
                 <span className={styles.description1}>{userInfo.nickname}</span>
                 <span className={styles.description2}>@{userInfo.username}</span>
                 <span className={styles.description3}>{userInfo.bio}</span>
-                <span className={styles.description4}>🎂 {userInfo.birthdate}</span>
+                <span className={styles.description4}>
+                  {userInfo.birthdate ? `🎂 ${userInfo.birthdate}` : null}
+                </span>
+
               </div>
             </div>
             <ProfileTablist

@@ -21,7 +21,7 @@ import image from "assets/images/Studies/studyIntroduce.png";
 import loadinggif from "assets/images/loading.gif";
 import noprofile from "assets/images/Profile/noprofile.png";
 
-const DetailStudyPost = ({}) => {
+const DetailStudyPost = ({ }) => {
   const { studyId } = useParams();
   const [inputValue, setInputValue] = useState("");
   const [userData, setUserData] = useState(null);
@@ -33,6 +33,8 @@ const DetailStudyPost = ({}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { studyData, userDataa } = location.state;
+
+  console.log(userDataa);
 
   const fetchUserDataById = async (userid) => {
     const { data, error } = await supabase
@@ -75,7 +77,7 @@ const DetailStudyPost = ({}) => {
   };
 
   useEffect(() => {
-    console.log("userDataa", userDataa[0].userid);
+    // console.log("userDataa", userDataa[0].userid);
     console.log("studyData", studyData.userid);
 
     const getStudyData = async () => {
@@ -344,7 +346,7 @@ const DetailStudyPost = ({}) => {
               <>
                 <div
                   className={styles.revise}
-                  // onClick={handleReviseClick}
+                // onClick={handleReviseClick}
                 >
                   수정
                 </div>
@@ -455,7 +457,7 @@ const DetailStudyPost = ({}) => {
             >
               <img
                 className={styles.commentWriterProfile}
-                src={userDataa[0].profileimage || noprofile}
+                src={userDataa && userDataa.length > 0 ? userDataa[0].profileimage : noprofile}
                 alt="noprofile"
               />
               <div

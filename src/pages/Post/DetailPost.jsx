@@ -22,7 +22,7 @@ import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 
-const DetailPost = ({}) => {
+const DetailPost = ({ }) => {
   const [commentData, setCommentData] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [liked, setLiked] = useState(false);
@@ -37,7 +37,7 @@ const DetailPost = ({}) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === postData.communityid)
-        ?.name
+      ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
@@ -402,8 +402,8 @@ const DetailPost = ({}) => {
           }}
         >
           {userData &&
-          userData.length > 0 &&
-          userData[0].userid === postData.userid ? (
+            userData.length > 0 &&
+            userData[0].userid === postData.userid ? (
             <>
               <div className={styles.revise} onClick={handleReviseClick}>
                 수정
@@ -553,10 +553,10 @@ const DetailPost = ({}) => {
               <img
                 className={styles.commentWriterProfile}
                 src={
-                  // userData && userData.length > 0
-                  //   ? userData[0].profileimage
-                  //   : noprofile
-                  userData[0].profileimage || noprofile
+                  userData && userData.length > 0
+                    ? userData[0].profileimage
+                    : noprofile
+                  // userData[0].profileimage || noprofile
                 }
                 alt="noprofile"
               />

@@ -9,17 +9,21 @@ import StudyPost from "components/Studies/StudyPost";
 import useCommunities from "../../components/Explore/hooks/useCommunities";
 import usePostsAndUsers from "../../components/Explore/hooks/usePostsAndUsers";
 import useStudies from "../../components/Explore/hooks/useStudies";
+import { useAuth } from "contexts/AuthContext";
 
 const SearchResults = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
 
   const [currentTab, setCurrentTab] = useState(0);
 
   const communities = useCommunities(query);
-  const { posts, users, communityInfo, allUserData, commentData } =
+  const { posts, users = {}, communityInfo, allUserData, commentData } =
     usePostsAndUsers(query);
   const { studies, likesCount, commentsCount } = useStudies(query);
+  const loginUser = Object.values(users).filter((p) => p.userid === user.id);
+  console.log('로그인', loginUser)
   useEffect(() => {
     console.log("유저 데이터:", users);
   }, [users]);
@@ -54,7 +58,7 @@ const SearchResults = () => {
           <JoinPostList
             postData={posts}
             communityData={communityInfo}
-            userData={users}
+            userData={loginUser}
             allUserData={allUserData} // now you can pass allUserData
             comment={commentData}
           />
