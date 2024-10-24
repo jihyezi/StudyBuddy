@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Recommended.module.css";
 import supabase from "components/supabaseClient";
 import "fonts/Font.css";
@@ -7,7 +8,7 @@ import "fonts/Font.css";
 import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
 
-const Recommended = ({ }) => {
+const Recommended = ({ user }) => {
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [communityName, setCommunityName] = useState([]);
@@ -15,6 +16,9 @@ const Recommended = ({ }) => {
   const [postData, setPostData] = useState([]);
   const [postLike, setPostLike] = useState(null);
   const [comment, setComment] = useState(null);
+  const [allUser, setAllUser] = useState([]);
+
+  const navigate = useNavigate();
 
   const fetchHotCommunities = async () => {
     const { data, error } = await supabase
@@ -161,10 +165,47 @@ const Recommended = ({ }) => {
     }
   };
 
+  const fetchAllUserData = async () => {
+    const { data, error } = await supabase.from("User").select("*");
+
+    if (error) {
+      console.error("Error", error);
+    } else {
+      setAllUser(data);
+    }
+  };
+
   useEffect(() => {
     fetchHotCommunities();
     fetchPopularPosts();
+    fetchAllUserData();
   }, []);
+
+  const handleCommuntiyClick = (community) => {
+    navigate(`/detail-community/${community.communityid}`, {
+      state: {
+        // id: `${item.id}`,
+        // img: `${item.img}`,
+        // community: `${item.community}`,
+        communityData: communityData,
+        // allJoinCommunityData: allJoinCommunityData,
+        // joinCommunityData: joinCommunityData,
+        // postData: postData,
+        userData: allUser,
+      },
+    });
+  };
+
+  const handlePostClick = (post) => {
+    navigate(`/detail-post/${post.postid}`, {
+      state: {
+        communityData: communityData,
+        userData: [user],
+        allUserData: allUser,
+        postData: postData[0],
+      },
+    });
+  };
 
   return (
     <div className={styles.recommendedContainer}>
@@ -176,7 +217,7 @@ const Recommended = ({ }) => {
               small
               community={community}
               communityData={communityData[index]}
-            // onClick={() => handleCommuntiyClick(community)}
+              onClick={() => handleCommuntiyClick(community)}
             />
           ))}
           {popularPosts.map((post, index) => (
@@ -186,7 +227,7 @@ const Recommended = ({ }) => {
               postLike={postLike}
               comment={comment}
               communityName={communityName[index]}
-            // onClick={() => handlePostClick(post)}
+              onClick={() => handlePostClick(post)}
             />
           ))}
         </div>
