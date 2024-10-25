@@ -9,19 +9,25 @@
 |김도영|김상우|이재호|하지혜|
 |---|---|---|---|
 |~|~|~|~|
+<br/><br/>
 
 ## 🖥️ 개발 환경
 **Environment**
+<br/>
 <img  src="https://img.shields.io/badge/VISUAL STUDIO CODE-29B6F6?style=for-the-badge&logo=visual studio&logoColor=white"/> <img  src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=GIT&logoColor=white"/> <img  src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=GITHUB&logoColor=white"/>
 
 **Config**
+<br/>
 <img  src="https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=NPM&logoColor=white"/>
 
 **Development**
+<br/>
 <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/react-black?style=for-the-badge&logo=react&logoColor=61DAFB"> <img  src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
 
 **Communication**
+<br/>
 <img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-black?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/DISCORD-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+<br/><br/>
 
 ## 🗂️ 프로젝트 구조
 <br/><br/>
@@ -41,26 +47,27 @@
 
 ## 📄 페이지별 기능
 ### Home
-
+<br/>
 ### Explore
-
+<br/>
 ### Communities
-
+<br/>
 ### Studies
-
+<br/>
 ### Notifications
-
+<br/>
 ### Messages
-
+<br/>
 ### Bookmarks
-
+<br/>
 ### Profile
-
+<br/>
 ### Post
-
+<br/>
 ### SignUp
-
+<br/>
 ### Login/Logout
+<br/><br/>
 
 ## 💬 후기
 ### 김도영
