@@ -1,16 +1,27 @@
 # StudyBuddy 스터디버디
-<br/>
-<img width="63" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/3f6de1a5-0594-4f95-ab0c-6ea68d27c0d0">
+<img width="100" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/3f6de1a5-0594-4f95-ab0c-6ea68d27c0d0">
 <br/><br/>
 
 ## 📝 프로젝트 소개
 <br/><br/>
 
 ## 🙋‍♂️ 팀원 구성
-<br/><br/>
+|김도영|김상우|이재호|하지혜|
+|---|---|---|---|
+|~|~|~|~|
 
 ## 🖥️ 개발 환경
-<br/><br/>
+**Environment**
+<img  src="https://img.shields.io/badge/VISUAL STUDIO CODE-29B6F6?style=for-the-badge&logo=visual studio&logoColor=white"/> <img  src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=GIT&logoColor=white"/> <img  src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=GITHUB&logoColor=white"/>
+
+**Config**
+<img  src="https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=NPM&logoColor=white"/>
+
+**Development**
+<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/react-black?style=for-the-badge&logo=react&logoColor=61DAFB"> <img  src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
+
+**Communication**
+<img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-black?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/DISCORD-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 
 ## 🗂️ 프로젝트 구조
 <br/><br/>
@@ -19,10 +30,50 @@
 <br/><br/>
 
 ## ⏱️ 개발 기간 및 작업 관리
-<br/><br/>
+### 개발 기간
+- **전체 개발 기간** : 2024년 ~
+- **UI 구현** : 
+- **기능 구현** :
+<br/>
+
+### 작업 관리
+- 
 
 ## 📄 페이지별 기능
-<br/><br/>
+### Home
+
+### Explore
+
+### Communities
+
+### Studies
+
+### Notifications
+
+### Messages
+
+### Bookmarks
+
+### Profile
+
+### Post
+
+### SignUp
+
+### Login/Logout
 
 ## 💬 후기
-<br/><br/>
+### 김도영
+<br/>
+
+### 김상우
+<br/>
+
+### 이재호
+<br/>
+
+### 하지혜
+<br/>
+
+
+<a href="https://github.com/jihyezi/StudyBuddy"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjihyezi%2FStudyBuddy&count_bg=%23555555&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=GitHub&edge_flat=false"/></a>
