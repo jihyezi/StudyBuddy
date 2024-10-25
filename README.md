@@ -9,6 +9,7 @@
 |김도영|김상우|이재호|하지혜|
 |---|---|---|---|
 |~|~|~|~|
+
 <br/><br/>
 
 ## 🖥️ 개발 환경
@@ -48,24 +49,34 @@
 ## 📄 페이지별 기능
 ### Home
 <br/>
+
 ### Explore
 <br/>
+
 ### Communities
 <br/>
+
 ### Studies
 <br/>
+
 ### Notifications
 <br/>
+
 ### Messages
 <br/>
+
 ### Bookmarks
 <br/>
+
 ### Profile
 <br/>
+
 ### Post
 <br/>
+
 ### SignUp
 <br/>
+
 ### Login/Logout
 <br/><br/>
 
