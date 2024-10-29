@@ -22,10 +22,12 @@ import StudyPost from "pages/Post/StudyPost";
 import DetailPost from "pages/Post/DetailPost";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
 import RevisePost from "pages/Post/RevisePost";
+import ReviseCommunity from "pages/Post/ReviseCommunity";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
+import OtherProfile from "pages/Profile/OtherProfile";
 
 const Body = styled.div`
   width: 100%;
@@ -53,12 +55,15 @@ const Center = styled.div`
   flex: 1;
 `;
 
-const MainContent = () => {
+const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth(); // useAuth 훅 사용
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   useEffect(() => {
-    if (!user && (location.pathname === "/profile" || location.pathname === "/bookmarks")) {
+    if (
+      !user &&
+      (location.pathname === "/profile" || location.pathname === "/bookmarks")
+    ) {
       setLoginModalIsOpen(true);
     } else {
       setLoginModalIsOpen(false);
@@ -93,17 +98,22 @@ const MainContent = () => {
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/other-profile/:userId" element={<OtherProfile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
         <Route path="/create-community" element={<CommunityPost />} />
         <Route path="/create-study" element={<StudyPost />} />
         <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
         <Route path="/revisepost" element={<RevisePost />} />
+        <Route path="/revisecommunity" element={<ReviseCommunity />} />
         <Route
           path="/detail-community/:communityId"
           element={<CommunityDetailsPage />}
         />
-        <Route path="/bookmarkdetail/:communityid" element={<BookmarkDetail />} />
+        <Route
+          path="/bookmarkdetail/:communityid"
+          element={<BookmarkDetail />}
+        />
         <Route path="/detailpost" element={<DetailPost />} />
       </Routes>
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
@@ -111,7 +121,7 @@ const MainContent = () => {
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
         location.pathname === "/studies" ||
-        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended />}
+        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended user={loginuser} />}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -184,7 +194,7 @@ const App = () => {
               loginUser={loginUser}
             />
             <Center>
-              <MainContent />
+              <MainContent loginuser={loginUser} />
               <Notifications
                 showNotifications={showNotifications}
                 setShowNotifications={setShowNotifications}

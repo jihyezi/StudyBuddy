@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "contexts/AuthContext";  // AuthContext에서 인증된 유저 정보 가져오기
 import supabase from "components/supabaseClient";
 import styles from "./Notifications.module.css";
+import noprofile from "assets/images/Profile/noprofile.png";
 
 const Notifications = ({ showNotifications }) => {
   const { user } = useAuth();  // 현재 로그인된 유저 정보 가져오기
@@ -12,12 +13,16 @@ const Notifications = ({ showNotifications }) => {
 
   // 유저 정보를 불러와 UUID와 username 매핑
   const fetchUsers = async () => {
-    const { data: users, error } = await supabase.from("User").select("userid, username");
+    const { data: users, error } = await supabase.from("User").select("userid, username, nickname, profileimage");
     if (error) {
       console.error("Error fetching users:", error.message);
     } else {
       const userMapping = users.reduce((acc, user) => {
-        acc[user.userid] = user.username; // UUID를 키로 하고, 유저 이름을 값으로 저장
+        // UUID를 키로 하고, 유저 이름을 값으로 저장
+        acc[user.userid] = {
+          nickname: user.nickname,
+          profileimage: user.profileimage || noprofile
+        }
         return acc;
       }, {});
       setUserMap(userMapping); // 상태에 저장
@@ -93,11 +98,13 @@ const Notifications = ({ showNotifications }) => {
 
               // 알림 내용 포맷 처리
               let content = notification.content;
+              let image = noprofile;
 
               // 메시지 수신 알림 처리
               if (notification.content.startsWith("You have received a new message from")) {
                 const senderId = notification.content.split("from ")[1];
-                content = `${userMap[senderId] || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`;
+                content = `${userMap[senderId]?.nickname || "알 수 없는 유저"}님이 메시지를 보내셨습니다.`;
+                image = userMap[senderId]?.profileimage || noprofile;  // 프로필 이미지 설정
               }
               // 커뮤니티에 새 글 알림 처리 (작성자의 닉네임을 표시, 커뮤니티 이름 표시)
               else if (notification.content.startsWith("A new post was created in the community")) {
@@ -105,18 +112,22 @@ const Notifications = ({ showNotifications }) => {
                 const communityId = parseInt(parts[0], 10); // 커뮤니티 ID 추출
                 const postAuthorId = parts[1]; // 작성자 UUID 추출
                 const communityName = communityMap[communityId] || "알 수 없는 커뮤니티"; // 커뮤니티 이름
-                content = `${userMap[postAuthorId] || "알 수 없는 유저"}님이 ${communityName} 커뮤니티에 새 글을 작성하였습니다.`;
+                content = `${userMap[postAuthorId]?.nickname || "알 수 없는 유저"}님이 ${communityName} 커뮤니티에 새 글을 작성하였습니다.`;
+                image = userMap[postAuthorId]?.profileimage || noprofile;
               }
               // 내가 쓴 글에 좋아요를 눌렀을 때
               else if (notification.content.startsWith("Your post was liked by")) {
                 const likerId = notification.content.split("by ")[1];
-                content = `${userMap[likerId] || "알 수 없는 유저"}님이 회원님의 게시물을 좋아합니다.`;
+                content = `${userMap[likerId]?.nickname || "알 수 없는 유저"}님이 회원님의 게시물을 좋아합니다.`;
+                image = userMap[likerId]?.profileimage || noprofile;
               }
               // 내가 쓴 글에 댓글을 남겼을 때
               else if (notification.content.startsWith("Your post received a new comment from")) {
                 const commenterId = notification.content.split("from ")[1];
-                content = `${userMap[commenterId] || "알 수 없는 유저"}님이 댓글을 남겼습니다.`;
+                content = `${userMap[commenterId]?.nickname || "알 수 없는 유저"}님이 댓글을 남겼습니다.`;
+                image = userMap[commenterId]?.profileimage || noprofile;
               }
+
 
               if (!acc[dateLabel]) {
                 acc[dateLabel] = [];
@@ -124,6 +135,7 @@ const Notifications = ({ showNotifications }) => {
               acc[dateLabel].push({
                 content,
                 createdat: notification.createdat,
+                image
               });
               return acc;
             }, {});
@@ -155,7 +167,7 @@ const Notifications = ({ showNotifications }) => {
           'postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'Notification' },
           (payload) => {
-            fetchNotifications(); // 새로운 알림이 도착하면 알림을 업데이트합니다.
+            fetchNotifications(); // 새 알림이 도착할 때만 업데이트
           }
         )
         .subscribe();
@@ -181,7 +193,11 @@ const Notifications = ({ showNotifications }) => {
           {section.items.length > 0 ? (
             section.items.map((item, idx) => (
               <div key={idx} className={styles.notificationItem}>
-                <div className={styles.avatar}></div>
+                <img
+                  src={item.image.startsWith('data:image') ? item.image : item.image || noprofile}
+                  className={styles.avatar}
+                  alt="Profile Image"
+                />
                 <div className={styles.notificationText}>
                   <span className={styles.action}> {item.content}</span>
                   <div className={styles.notificationDetails}>

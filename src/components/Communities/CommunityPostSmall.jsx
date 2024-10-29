@@ -2,12 +2,16 @@ import React from "react";
 import styles from "./CommunityPostSmall.module.css";
 import imgbackground from "assets/images/bookmarkbackground.png";
 import { useNavigate } from "react-router-dom";
+import CommunityField from "./CommunityField";
+
 const CommunityPostSmall = (props) => {
   const navigate = useNavigate(); // 페이지 이동을 위한 훅 사용
 
   const handleClick = () => {
     navigate(`/detail-community/${props.communityId}`); // 클릭 시 경로 이동
   };
+
+  console.log(props)
 
   return (
     <div className={styles.communityPostContainer} onClick={handleClick}>
@@ -47,11 +51,12 @@ const CommunityPostSmall = (props) => {
           className={styles.communityPostIconBackground}
           alt="Background"
         />
-        <img
+        {/* <img
           src={props.commmunityicon}
           className={styles.communityPostIconPalette}
           alt="Icon"
-        />
+        /> */}
+        <CommunityField field={props?.field} />
       </div>
     </div>
   );

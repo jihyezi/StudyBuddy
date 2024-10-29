@@ -7,6 +7,8 @@ const StudyPost = (props) => {
   const navigate = useNavigate();
   const [userDataa, setUserDataa] = useState(null);
 
+  // const userData = Array.isArray(props.user) ? props.user[0] : props.user;
+
   const fetchUserDataById = async (userid) => {
     const { data, error } = await supabase
       .from("User")
@@ -24,10 +26,11 @@ const StudyPost = (props) => {
     navigate(`/detail-study/${props.studyId}`, {
       state: {
         studyData: props.studyPost,
-        userDataa: userDataa,
+        userDataa: props.user,
       },
     });
   };
+
 
   useEffect(() => {
     const getStudyData = async () => {

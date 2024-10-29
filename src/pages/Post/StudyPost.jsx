@@ -14,6 +14,7 @@ import InputTag from "components/Post/InputTag";
 
 //icon
 import album from "assets/icons/Post/album.png";
+import caution from "assets/icons/Post/caution.png";
 
 const StudyPost = () => {
   const navigate = useNavigate();
@@ -29,6 +30,28 @@ const StudyPost = () => {
   const [tags, setTags] = useState([]);
   const editorRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showCaution, setShowCaution] = useState({
+    name: false,
+    proceed: false,
+    people: false,
+    period: false,
+    schedule: false,
+    location: false,
+    studyDescription: false,
+  });
+
+  const fetchUserDataById = async (userid) => {
+    const { data, error } = await supabase
+      .from("User")
+      .select("profileimage, nickname")
+      .eq("userid", userid);
+
+    if (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+    return data;
+  };
 
   const handleAlbumClick = () => {
     const input = document.createElement("input");
@@ -56,6 +79,7 @@ const StudyPost = () => {
       });
     };
     input.click();
+    setShowCaution({ ...showCaution, studyDescription: false });
   };
 
   const extractNodes = (node, descriptionParts, collectedFiles) => {
@@ -86,7 +110,58 @@ const StudyPost = () => {
   };
 
   const handlePostClick = () => {
-    console.log("입력한 태그:", tags);
+    let hasError = false;
+    const newCautionState = {
+      name: false,
+      proceed: false,
+      people: false,
+      period: false,
+      schedule: false,
+      location: false,
+      studyDescription: false,
+    };
+
+    if (!name) {
+      newCautionState.name = true;
+      hasError = true;
+    }
+    if (!proceed) {
+      newCautionState.proceed = true;
+      hasError = true;
+    }
+    if (!people) {
+      newCautionState.people = true;
+      hasError = true;
+    }
+    if (!period) {
+      newCautionState.period = true;
+      hasError = true;
+    }
+    if (!schedule) {
+      newCautionState.schedule = true;
+      hasError = true;
+    }
+    // if (!location) {
+    //   newCautionState.location = true;
+    //   hasError = true;
+    // }
+    if (proceed.name === "오프라인" && !location) {
+      newCautionState.location = true;
+      hasError = true;
+    }
+    if (!proceed && !location) {
+      newCautionState.location = true;
+      hasError = true;
+    }
+    if (!studyDescription) {
+      newCautionState.studyDescription = true;
+      hasError = true;
+    }
+
+    setShowCaution(newCautionState);
+
+    if (hasError) return;
+
     setIsModalOpen(true);
   };
 
@@ -145,9 +220,9 @@ const StudyPost = () => {
         {
           userid: userId,
           title: name,
-          proceed: proceed,
-          maxmembers: people,
-          duration: period,
+          proceed: proceed.name,
+          maxmembers: people.name,
+          duration: period.name,
           schedule: schedule,
           location: location,
           description: finalDescription,
@@ -163,7 +238,14 @@ const StudyPost = () => {
       console.error("Error inserting data:", studyError);
     } else {
       console.log("Data inserted successfully!", studyData[0].studyid);
-      navigate(`/detail-study/${studyData[0].studyid}`);
+      const userData = await fetchUserDataById(studyData[0].userid);
+      console.log("userData", userData);
+      navigate(`/detail-study/${studyData[0].studyid}`, {
+        state: {
+          studyData: studyData[0],
+          userDataa: userData,
+        },
+      });
     }
   };
 
@@ -174,54 +256,180 @@ const StudyPost = () => {
         <CreateModal onCreate={handleCreateClick} onCancel={handleModalClose} />
       )}
       <div className={styles.postContainer}>
-        <InputText
-          title={"제목"}
-          placeholder={"제목을 입력해 주세요."}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <InputSelect
-            title={"진행방식"}
-            placeholder={"온라인/오프라인"}
-            onSelect={setProceed}
-          />
-          <InputSelect
-            title={"모집인원"}
-            placeholder={"인원 미정~10명 이상"}
-            onSelect={setPeople}
-          />
-        </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <InputSelect
-            title={"기간"}
-            placeholder={"기간 미정~6개월 이상"}
-            onSelect={setPeriod}
-          />
+        <div
+          style={{
+            minHeight: "72px",
+          }}
+        >
           <InputText
-            title={"일정"}
-            placeholder={"ex) 매주 월요일 1시"}
-            onChange={(e) => setSchedule(e.target.value)}
+            title={"제목"}
+            placeholder={"제목을 입력해 주세요."}
+            onChange={(e) => {
+              setName(e.target.value);
+              setShowCaution({ ...showCaution, name: false });
+            }}
           />
+          {showCaution.name && (
+            <div className={styles.cautionContainer}>
+              <img className={styles.cautionIcon} src={caution} />
+              <div className={styles.cautionText}>
+                스터디 이름을 입력해주세요.
+              </div>
+            </div>
+          )}
         </div>
-        <InputModal
-          title={"장소"}
-          placeholder={"오프라인 스터디 진행 시 장소를 입력해주세요."}
-          onSelect={setLocation}
-        />
-        <div className={styles.inputContainer}>
-          <div className={styles.inputTitle}>스터디 소개</div>
-          <div className={styles.inputFieldWrapper}>
-            <div
-              ref={editorRef}
-              className={styles.inputField}
-              contentEditable
-              placeholder="스터디 소개를 입력하세요."
-              onInput={(e) => setStudyDescription(e.currentTarget.textContent)}
+
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <div
+            style={{
+              minHeight: "72px",
+            }}
+          >
+            <InputSelect
+              title={"진행방식"}
+              placeholder={"온라인/오프라인"}
+              onSelect={(selectedOption) => {
+                console.log(selectedOption);
+                setProceed(selectedOption);
+                setShowCaution({ ...showCaution, proceed: false });
+              }}
             />
-            <div className={styles.fileIconWrapper} onClick={handleAlbumClick}>
-              <img className={styles.albumIcon} src={album} alt="albumIcon" />
+            {showCaution.proceed && (
+              <div className={styles.cautionContainer}>
+                <img className={styles.cautionIcon} src={caution} />
+                <div className={styles.cautionText}>
+                  진행방식을 선택해주세요.
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              minHeight: "72px",
+            }}
+          >
+            <InputSelect
+              title={"모집인원"}
+              placeholder={"인원 미정~10명 이상"}
+              onSelect={(selectedOption) => {
+                setPeople(selectedOption);
+                setShowCaution({ ...showCaution, people: false });
+              }}
+            />
+            {showCaution.people && (
+              <div className={styles.cautionContainer}>
+                <img className={styles.cautionIcon} src={caution} />
+                <div className={styles.cautionText}>
+                  모집인원을 선택해주세요.
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <div
+            style={{
+              minHeight: "72px",
+            }}
+          >
+            <InputSelect
+              title={"기간"}
+              placeholder={"기간 미정~6개월 이상"}
+              onSelect={(selectedOption) => {
+                setPeriod(selectedOption);
+                setShowCaution({ ...showCaution, period: false });
+              }}
+            />
+            {showCaution.period && (
+              <div className={styles.cautionContainer}>
+                <img className={styles.cautionIcon} src={caution} />
+                <div className={styles.cautionText}>
+                  진행기간을 선택해주세요.
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              minHeight: "72px",
+            }}
+          >
+            <InputText
+              title={"일정"}
+              placeholder={"ex) 매주 월요일 1시"}
+              onChange={(e) => {
+                setSchedule(e.target.value);
+                setShowCaution({ ...showCaution, schedule: false });
+              }}
+            />
+            {showCaution.schedule && (
+              <div className={styles.cautionContainer}>
+                <img className={styles.cautionIcon} src={caution} />
+                <div className={styles.cautionText}>일정를 입력해주세요.</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div
+          style={{
+            minHeight: "72px",
+          }}
+        >
+          <InputModal
+            title={"장소"}
+            placeholder={"오프라인 스터디 진행 시 장소를 입력해주세요."}
+            onSelect={(e) => {
+              setLocation(e);
+              setShowCaution({ ...showCaution, location: false });
+            }}
+          />
+          {showCaution.location && (
+            <div className={styles.cautionContainer}>
+              <img className={styles.cautionIcon} src={caution} />
+              <div className={styles.cautionText}>
+                오프라인 장소를 입력해주세요.
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            minHeight: "72px",
+          }}
+        >
+          <div className={styles.inputContainer}>
+            <div className={styles.inputTitle}>스터디 소개</div>
+            <div className={styles.inputFieldWrapper}>
+              <div
+                ref={editorRef}
+                className={styles.inputField}
+                contentEditable
+                placeholder="스터디 소개를 입력하세요."
+                onInput={(e) => {
+                  setStudyDescription(e.currentTarget.textContent);
+                  setShowCaution({ ...showCaution, studyDescription: false });
+                }}
+              />
+              <div
+                className={styles.fileIconWrapper}
+                onClick={handleAlbumClick}
+              >
+                <img className={styles.albumIcon} src={album} alt="albumIcon" />
+              </div>
             </div>
           </div>
+          {showCaution.studyDescription && (
+            <div className={styles.cautionContainer}>
+              <img className={styles.cautionIcon} src={caution} />
+              <div className={styles.cautionText}>
+                스터디 소개를 입력해주세요.
+              </div>
+            </div>
+          )}
         </div>
         <InputTag onChange={setTags} />
       </div>

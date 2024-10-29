@@ -123,3 +123,24 @@
     width: 18px;
     height: 18px;
 }
+
+/* 새로 추가할 CSS */
+.fieldIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px; /* 아이콘 크기 설정 */
+    height: 50px;
+    z-index: 2; /* 배경보다 위에 오도록 설정 */
+}
+
+.noFieldIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-size: 12px;
+    color: #888;
+    background-color: #f0f0f0;
+}

@@ -9,21 +9,25 @@ const CommunityPostList = ({
   commentData,
   onBookmarkToggle,
 }) => {
-  console.log("allUserData:", allUserData);
-  console.log("postData:", postData);
   return (
     <div style={{ width: '100%' }}>
-      {postData.map((post) => (
-        <Post
-          key={post.postid} // post.id -> post.postid 로 수정
-          post={post}
-          community={communityData}
-          user={userData}
-          allUser={allUserData}
-          comment={commentData}
-          onBookmarkToggle={onBookmarkToggle}
-        />
-      ))}
+      {postData.length > 0 ? (
+        postData.map((post) => (
+          <Post
+            key={post.postid}
+            post={post}
+            community={communityData}
+            user={userData}
+            allUser={allUserData}
+            comment={commentData}
+            onBookmarkToggle={onBookmarkToggle}
+          />
+        ))
+      ) : (
+        <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '24px', fontFamily: 'BalooTammudu2-SemiBold', color: '#7b7b7b' }}>
+          No Posts Yet.
+        </div>
+      )}
     </div>
   );
 };

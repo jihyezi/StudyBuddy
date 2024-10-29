@@ -170,8 +170,6 @@ const Communities = () => {
     setSelectEvent(event);
   };
 
-  console.log('comm-select', selectedEvent)
-
   const filterCommunity = community.filter((c) =>
     joinCommunity.some((jc) => jc.communityid === c.communityid)
   );

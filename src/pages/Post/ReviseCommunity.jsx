@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./CommunityPost.module.css";
+import { useNavigate, useLocation } from "react-router-dom";
+import styles from "./ReviseCommunity.module.css";
 import supabase from "components/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
+import { useAuth } from "contexts/AuthContext";
 
 // component
 import Header from "components/Post/Header";
@@ -12,21 +14,116 @@ import InputSelect from "components/Post/InputSelect";
 import InputRule from "components/Post/InputRule";
 import CreateModal from "components/Post/CreateModal";
 
+// icons
+import caution from "assets/icons/Post/caution.png";
+
 const ReviseCommunity = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const communityData = JSON.parse(
+    decodeURIComponent(query.get("communityData"))
+  );
+  const { user: sessionUser } = useAuth();
+  const [user, setUser] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [field, setField] = useState("");
   const [rules, setRules] = useState([]);
   const [file, setFile] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showCaution, setShowCaution] = useState({
+    name: false,
+    description: false,
+    field: false,
+    image: false,
+  });
+
+  useEffect(() => {
+    if (communityData) {
+      console.log("communityData", communityData[0].field);
+      setName(communityData[0].name);
+      setDescription(communityData[0].description);
+      setField(communityData[0].field);
+      setRules(communityData[0].rules || []);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (sessionUser) {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          return;
+        }
+
+        const userId = session.user.id;
+
+        const { data, error } = await supabase
+          .from("User")
+          .select("*")
+          .eq("userid", userId);
+
+        if (error) {
+          console.error("Error", error);
+        } else {
+          setUser(data);
+        }
+      } else {
+        setUser([]);
+      }
+    };
+
+    if (sessionUser) {
+      fetchUserData();
+    }
+  }, [sessionUser]);
 
   const handlePostClick = () => {
+    let hasError = false;
+    const newCautionState = {
+      name: false,
+      description: false,
+      field: false,
+      image: false,
+    };
+
+    if (!name) {
+      newCautionState.name = true;
+      hasError = true;
+    }
+    if (!description) {
+      newCautionState.description = true;
+      hasError = true;
+    }
+    if (!field) {
+      newCautionState.field = true;
+      hasError = true;
+    }
+    if (!file) {
+      newCautionState.image = true;
+      hasError = true;
+    }
+
+    setShowCaution(newCautionState);
+
+    if (hasError) return;
+
     setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
+  // const handleCreateClick = async () => {
+  //   console.log("field", field.name);
+  //   console.log("rules", rules);
+  // };
 
   const handleCreateClick = async () => {
     let userId = "";
@@ -59,7 +156,7 @@ const ReviseCommunity = (props) => {
           description: description,
           createdat: new Date(),
           updatedat: new Date(),
-          field: field,
+          field: field.name,
           rules: rules,
           createdby: userId,
           image: url,
@@ -88,6 +185,11 @@ const ReviseCommunity = (props) => {
       console.error("데이터 삽입 에러:", joinError);
     } else {
       console.log("데이터 삽입 성공:", joinData);
+      navigate(`/detail-community/${postData[0].communityid}`, {
+        state: {
+          userData: user,
+        },
+      });
     }
   };
 
@@ -101,23 +203,69 @@ const ReviseCommunity = (props) => {
         <InputImage
           title={"대표 이미지"}
           placeholder={"커뮤니티 대표 이미지를 넣어주세요."}
-          onFileSelect={(file) => setFile(file)}
+          onFileSelect={(file) => {
+            setFile(file);
+            setShowCaution({ ...showCaution, image: false });
+          }}
         />
+        {showCaution.image && (
+          <div className={styles.cautionContainer}>
+            <img className={styles.cautionIcon} src={caution} />
+            <div className={styles.cautionText}>대표 이미지를 넣어주세요.</div>
+          </div>
+        )}
+
         <InputText
           title={"이름"}
           placeholder={"커뮤니티 이름을 입력해주세요."}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setShowCaution({ ...showCaution, name: false });
+          }}
+          value={name}
         />
+        {showCaution.name && (
+          <div className={styles.cautionContainer}>
+            <img className={styles.cautionIcon} src={caution} />
+            <div className={styles.cautionText}>
+              커뮤니티 이름을 작성해주세요.
+            </div>
+          </div>
+        )}
         <InputText
           title={"설명"}
           placeholder={"커뮤니티에 대해 간단하게 설명해주세요."}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            setShowCaution({ ...showCaution, description: false });
+          }}
+          value={description}
         />
+        {showCaution.description && (
+          <div className={styles.cautionContainer}>
+            <img className={styles.cautionIcon} src={caution} />
+            <div className={styles.cautionText}>
+              커뮤니티 설명을 작성해주세요.
+            </div>
+          </div>
+        )}
         <InputSelect
           title={"분류"}
           placeholder={"분류를 선택해주세요"}
-          onSelect={setField}
+          onSelect={(selectedField) => {
+            setField(selectedField);
+            setShowCaution({ ...showCaution, field: false });
+          }}
+          defaultValue={communityData[0].field}
         />
+        {showCaution.field && (
+          <div className={styles.cautionContainer}>
+            <img className={styles.cautionIcon} src={caution} />
+            <div className={styles.cautionText}>
+              커뮤니티 분류를 선택해주세요.
+            </div>
+          </div>
+        )}
         <InputRule title={"규칙"} onRulesChange={setRules} />
       </div>
     </div>

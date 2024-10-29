@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import back from "assets/icons/Post/back.png";
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
-import camera from "assets/icons/camera.png";
+import camera from "assets/icons/Profile/camera.png";
 import ProfileInputImage from "./ProfileInputImage";
 
 const customStyles = {
@@ -31,7 +31,7 @@ Modal.setAppElement("#root");
 const ProfileEditModal = ({ modalIsOpen, closeModal, profileImg, backgroundimage, userData, userNickname }) => {
     const [name, setName] = useState(userNickname);
     const [bio, setBio] = useState(userData.bio);
-    const [birthDate, setBirthDate] = useState("");
+    const [birthDate, setBirthDate] = useState(userData.birthdate);
     const [profileFile, setProfileFile] = useState(null);
     const [backgroundFile, setBackgroundFile] = useState(null);
     const [profilePreview, setProfilePreview] = useState(profileImg);

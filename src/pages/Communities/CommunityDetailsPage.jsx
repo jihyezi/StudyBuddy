@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import styles from "./CommunityDetailsPage.module.css";
 import TabList from "components/Communities/TabList";
@@ -10,15 +10,17 @@ import Header from "components/Header";
 import supabase from "components/supabaseClient";
 import loadinggif from "assets/images/loading.gif";
 import nobackground from "assets/images/Profile/nobackground.png";
+import CommunityField from "components/Communities/CommunityField";
 
 const CommunityDetailsPage = () => {
   const { communityId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const {
-    communityData,
-    allJoinCommunityData,
-    joinCommunityData,
-    postData,
+    // communityData,
+    // allJoinCommunityData,
+    // joinCommunityData,
+    // postData,
     userData,
   } = location.state || {};
   const [isJoined, setIsJoined] = useState(false);
@@ -136,7 +138,7 @@ const CommunityDetailsPage = () => {
     fetchJoinCommunityDataById();
     fetchPostDataById(communityId);
     console.log("communityId", communityId);
-    console.log("communityData", communityData);
+    // console.log("communityData", communityData);
   }, [communityId]);
 
   if (!community || !posts) {
@@ -157,6 +159,14 @@ const CommunityDetailsPage = () => {
 
   const userRole =
     joinCommunity && joinCommunity.length > 0 ? joinCommunity[0].role : null;
+
+  const handleReviseClick = () => {
+    navigate(
+      `/revisecommunity?communityData=${encodeURIComponent(
+        JSON.stringify(community)
+      )}`
+    );
+  };
 
   return (
     <div className={styles.container}>
@@ -179,10 +189,7 @@ const CommunityDetailsPage = () => {
               src={imgbackground}
               className={styles.communityPostIconBackground}
             />
-            <img
-              src={commmunityicon}
-              className={styles.communityPostIconPalette}
-            />
+            <CommunityField field={community[0].field} />
           </div>
         </div>
       </div>
@@ -191,7 +198,9 @@ const CommunityDetailsPage = () => {
         <div className={styles.header}>
           <div className={styles.communityName}>{community[0].name}</div>
           {userRole === "admin" ? (
-            <button className={styles.joinButton}>수정</button>
+            <button className={styles.joinButton} onClick={handleReviseClick}>
+              수정
+            </button>
           ) : (
             <button
               className={isJoined ? styles.joinButtonActive : styles.joinButton}
