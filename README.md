@@ -12,7 +12,7 @@
 ## 🙋‍♂️ 팀원 구성
 |김도영|김상우|이재호|하지혜|
 |---|---|---|---|
-|~|~|~|[@jihyezi](https://github.com/jihyezi)|
+|[@rlaehdud159](https://github.com/rlaehdud159)|[@BlackShrike](https://github.com/BlackShrike)|[@jaeho9](https://github.com/jaeho9)|[@jihyezi](https://github.com/jihyezi)|
 
 <br/><br/>
 
