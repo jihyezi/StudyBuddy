@@ -1,52 +1,60 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "contexts/AuthContext";  // AuthContext에서 인증된 유저 정보 가져오기
+import { useAuth } from "contexts/AuthContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
 import styles from "./DMSend.module.css";
 import SearchUserModal from "./SearchUserModal";
 
+const fetchOtherUsers = async (userEmail) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("userid, username, profileimage")
+    .neq("email", userEmail);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 function DMSend({ setIsSending, setSelectedUser }) {
-  const { user } = useAuth();  // 현재 로그인한 유저 정보 가져오기
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [selectedUser, setLocalSelectedUser] = useState(null);
+  const [localSelectedUser, setLocalSelectedUser] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      if (user) {
-        // 현재 로그인한 유저의 데이터를 제외하고 다른 유저들의 데이터 불러오기
-        const { data, error } = await supabase
-          .from("User")
-          .select("userid, username, profileimage")
-          .neq("email", user.email);  // 로그인한 유저의 이메일 제외
+    if (!user) return;
 
-        if (error) {
-          console.error("Error fetching users:", error.message);
-        } else {
-          setFilteredUsers(data);  // 다른 유저 데이터 설정
-        }
-      }
+    const channel = supabase
+      .channel("user_add_channel")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "User" },
+        () => queryClient.invalidateQueries({ queryKey: ["otherUsers"] })
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
     };
+  }, [user, queryClient]);
 
-    fetchUsers();
-  }, [user]);
+  const { data: filteredUsers, isLoading } = useQuery({
+    queryKey: ["otherUsers", user?.email],
+    queryFn: () => fetchOtherUsers(user.email),
+    enabled: !!user,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  if (!user) return null;
 
   const handleUserClick = (user) => {
     setLocalSelectedUser(user);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    const filtered = filteredUsers.filter(
-      (user) =>
-        user.username.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setFilteredUsers(filtered);
-  };
-
   const handleSendMessage = () => {
-    if (selectedUser) {
-      setSelectedUser(selectedUser);  // 선택된 유저 설정
-      setIsSending(false);  // 모달 닫기
+    if (localSelectedUser) {
+      setSelectedUser(localSelectedUser);
+      setIsSending(false);
     }
   };
 
@@ -56,8 +64,8 @@ function DMSend({ setIsSending, setSelectedUser }) {
         setIsSending={setIsSending}
         filteredUsers={filteredUsers}
         handleUserClick={handleUserClick}
-        selectedUser={selectedUser}
-        handleSearchChange={handleSearchChange}
+        selectedUser={localSelectedUser}
+        handleSearchChange={(e) => setSearchTerm(e.target.value)}
         searchTerm={searchTerm}
         onSendMessage={handleSendMessage}
       />
