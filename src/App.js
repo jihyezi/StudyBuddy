@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "contexts/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
 import styled from "styled-components";
 
@@ -54,6 +55,7 @@ const Center = styled.div`
   flex-direction: row;
   flex: 1;
 `;
+const queryClient = new QueryClient();
 
 const MainContent = ({ loginuser }) => {
   const location = useLocation();
@@ -185,26 +187,28 @@ const App = () => {
   };
 
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Body>
-          <Content>
-            <Sidebar
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Body>
+            <Content>
+              <Sidebar
               toggleNotifications={toggleNotifications}
               loginUser={loginUser}
-            />
-            <Center>
+              />
+              <Center>
               <MainContent loginuser={loginUser} />
-              <Notifications
+                <Notifications
                 showNotifications={showNotifications}
                 setShowNotifications={setShowNotifications}
                 toggleNotifications={toggleNotifications}
-              />
-            </Center>
-          </Content>
-        </Body>
-      </BrowserRouter>
-    </AuthProvider>
+                />
+              </Center>
+            </Content>
+          </Body>
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 
