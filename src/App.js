@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "contexts/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -29,6 +29,7 @@ import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 import OtherProfile from "pages/Profile/OtherProfile";
+import { DataProvider, useDataContext } from "api/DataContext";
 
 const Body = styled.div`
   width: 100%;
@@ -59,8 +60,9 @@ const queryClient = new QueryClient();
 
 const MainContent = ({ loginuser }) => {
   const location = useLocation();
-  const { user } = useAuth(); // useAuth 훅 사용
+  const { user } = useAuth();
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+  const { userData, allUserData, communityData, postData, isLoading, hasError } = useDataContext();
   useEffect(() => {
     if (
       !user &&
@@ -99,7 +101,7 @@ const MainContent = ({ loginuser }) => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} isLoading={isLoading} />} />
         <Route path="/other-profile/:userId" element={<OtherProfile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
@@ -131,26 +133,10 @@ const MainContent = ({ loginuser }) => {
 
 const App = () => {
   const [loginUser, setLoginUser] = useState(null);
-  const [users, setUsers] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const { user: sessionUser } = useAuth();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        let { data: users, error } = await supabase.from("User").select("*");
-
-        if (error) {
-          console.error("Error fetching users:", error);
-        } else {
-          setUsers(users);
-          console.log("User data:", users);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
     const fetchUserData = async () => {
       if (sessionUser) {
         const {
@@ -177,7 +163,6 @@ const App = () => {
       }
     };
 
-    fetchUsers();
     fetchUserData();
   }, [sessionUser]);
 
@@ -189,24 +174,26 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <Body>
-            <Content>
-              <Sidebar
-              toggleNotifications={toggleNotifications}
-              loginUser={loginUser}
-              />
-              <Center>
-              <MainContent loginuser={loginUser} />
-                <Notifications
-                showNotifications={showNotifications}
-                setShowNotifications={setShowNotifications}
-                toggleNotifications={toggleNotifications}
+        <DataProvider>
+          <BrowserRouter>
+            <Body>
+              <Content>
+                <Sidebar
+                  toggleNotifications={toggleNotifications}
+                  loginUser={loginUser}
                 />
-              </Center>
-            </Content>
-          </Body>
-        </BrowserRouter>
+                <Center>
+                  <MainContent loginuser={loginUser} />
+                  <Notifications
+                    showNotifications={showNotifications}
+                    setShowNotifications={setShowNotifications}
+                    toggleNotifications={toggleNotifications}
+                  />
+                </Center>
+              </Content>
+            </Body>
+          </BrowserRouter>
+        </DataProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -96,11 +96,6 @@ const DetailPost = ({ }) => {
   };
 
   useEffect(() => {
-    console.log("userData", userData);
-    console.log("allUserData", allUserData);
-    console.log("communityData", communityData);
-    console.log("postData", postData);
-
     const getCommentData = async () => {
       const commentData = await fetchCommentDataById(postData.postid);
       setCommentData(commentData);

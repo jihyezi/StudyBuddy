@@ -23,7 +23,6 @@ const Post = ({
   community = [],
   user = [],
   allUser = [],
-  comment = [],
   onBookmarkToggle,
 }) => {
   const { communityId } = useParams();
@@ -75,10 +74,6 @@ const Post = ({
     Array.isArray(allUser) && allUser.length > 0
       ? allUser.find((u) => u.userid === post.userid)?.username
       : "Unknown User";
-
-  const commentCount = Array.isArray(comment)
-    ? comment.filter((c) => c.postid === post.postid).length
-    : 0;
 
   useEffect(() => {
     const checkLikeAndBookmark = async () => {

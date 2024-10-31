@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import styles from './ProfileTablist.module.css';
 import JoinPostList from 'components/Communities/CommunityJoinPostList';
-import { dummyPostData } from 'components/Dummydata';
 
-export const ProfileTablist = ({ post, community, user, allUser, comment, userPost, userLike, userComment }) => {
+export const ProfileTablist = ({ community, user, allUser, userPost, userLike, userComment }) => {
     const [currentTab, clickTab] = useState(0);
 
     const menuArr = [
@@ -15,7 +14,6 @@ export const ProfileTablist = ({ post, community, user, allUser, comment, userPo
                     communityData={community}
                     userData={user}
                     allUserData={allUser}
-                    commentData={comment}
                 />
         },
         {
@@ -26,7 +24,6 @@ export const ProfileTablist = ({ post, community, user, allUser, comment, userPo
                     communityData={community}
                     userData={user}
                     allUserData={allUser}
-                    commentData={comment}
                 />
         },
         {
@@ -37,7 +34,6 @@ export const ProfileTablist = ({ post, community, user, allUser, comment, userPo
                     communityData={community}
                     userData={user}
                     allUserData={allUser}
-                    commentData={comment}
                 />
         }
     ];

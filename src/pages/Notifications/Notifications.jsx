@@ -86,7 +86,7 @@ const Notifications = ({ showNotifications }) => {
     };
   }, [userId, queryClient]);
 
-  if (!userId) return <div>Please log in to view notifications.</div>;
+  if (!userId) return <div></div>;
 
   if (isUserLoading || isCommunityLoading || isNotificationsLoading) {
     return <div>Loading...</div>;
