@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import styles from './Profile.module.css';
 import supabase from "components/supabaseClient";
 
@@ -11,11 +11,40 @@ import ProfileEditModal from "components/Profile/ProfileEditModal";
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import loadinggif from "assets/images/loading.gif"
+import { useQuery } from "@tanstack/react-query";
+
+// Data
+const fetchUserPostData = async (userId) => {
+  const { data, error } = await supabase
+    .from("Post")
+    .select("*")
+    .eq('userid', userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchUserCommentData = async (userId) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .select("*")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchUserLikeData = async (userId) => {
+  const { data, error } = await supabase
+    .from("PostLike")
+    .select("postid")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
 
 const Profile = ({ userData, allUserData, communityData, postData, isLoading }) => {
-  const [userPost, setUserPost] = useState([]);
-  const [userComment, setUserComment] = useState([]);
-  const [userLike, setUserLike] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
@@ -26,68 +55,41 @@ const Profile = ({ userData, allUserData, communityData, postData, isLoading }) 
     setModalIsOpen(false);
   };
 
-  useEffect(() => {
-    const fetchUserPostData = async () => {
-      if (userData) {
-        const { data, error } = await supabase
-          .from("Post")
-          .select("*")
-          .eq('userid', userData.userid);
+  const { data: userPost = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ['userPost', userData?.userid],
+    queryFn: () => fetchUserPostData(userData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUserPost(data);
-        }
-      }
-    };
+  const { data: userComment = [], isLoading: isCommentLoading } = useQuery({
+    queryKey: ['userComment', userData?.userid],
+    queryFn: () => fetchUserCommentData(userData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-    const fetchUserCommentData = async () => {
-      if (userData) {
-        const { data, error } = await supabase
-          .from("Comment")
-          .select("*")
-          .eq("userid", userData.userid);
+  const { data: userLike = [], isLoading: isLikeLoading } = useQuery({
+    queryKey: ['userLike', userData?.userid],
+    queryFn: () => fetchUserLikeData(userData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUserComment(data);
-        }
-      }
-    };
+  const filterLikePost = useMemo(() => {
+    return postData ? postData.filter((postItem) =>
+      userLike.some((likeItem) => likeItem.postid === postItem.postid)
+    ) : []
+  }, [userLike, postData]);
 
-    const fetchUserLikeData = async () => {
-      if (userData) {
-        const { data, error } = await supabase
-          .from("PostLike")
-          .select("postid")
-          .eq('userid', userData.userid);
+  const filterCommentPost = useMemo(() => {
+    return postData ? postData.filter((postItem) =>
+      userComment.some((likeItem) => likeItem.postid === postItem.postid)
+    ) : []
+  }, [userComment, postData]);
 
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUserLike(data);
-        }
-      }
-    };
-
-    fetchUserPostData();
-    fetchUserCommentData();
-    fetchUserLikeData();
-  }, [userData]);
-
-  const filterLikePost = postData.filter((postItem) =>
-    userLike.some((likeItem) => likeItem.postid === postItem.postid)
-  );
-
-  const filterCommentPost = postData.filter((postItem) =>
-    userComment.some((likeItem) => likeItem.postid === postItem.postid)
-  );
+  const loading = isLoading || isPostLoading || isCommentLoading || isLikeLoading;
 
   return (
     <div className={styles.container}>
-      {isLoading ? (
+      {loading ? (
         <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
           <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
         </div>
