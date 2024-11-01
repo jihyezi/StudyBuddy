@@ -3,11 +3,12 @@ import styles from "./ProfileEditModal.module.css";
 import Modal from "react-modal";
 import supabase from "components/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
+import { useMutation } from "@tanstack/react-query";
 
+// Images
 import back from "assets/icons/Post/back.png";
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
-import camera from "assets/icons/Profile/camera.png";
 import ProfileInputImage from "./ProfileInputImage";
 
 const customStyles = {
@@ -28,16 +29,16 @@ const customStyles = {
 };
 Modal.setAppElement("#root");
 
-const ProfileEditModal = ({ modalIsOpen, closeModal, profileImg, backgroundimage, userData, userNickname }) => {
-    const [name, setName] = useState(userNickname);
+const ProfileEditModal = ({ modalIsOpen, closeModal, userData, refetchUserData }) => {
+    const [name, setName] = useState(userData.nickname);
     const [bio, setBio] = useState(userData.bio);
     const [birthDate, setBirthDate] = useState(userData.birthdate);
+    const [profilePreview, setProfilePreview] = useState(userData.profileimage);
+    const [backgroundPreview, setBackgroundPreview] = useState(userData.backgroundimage);
     const [profileFile, setProfileFile] = useState(null);
     const [backgroundFile, setBackgroundFile] = useState(null);
-    const [profilePreview, setProfilePreview] = useState(profileImg);
-    const [backgroundPreview, setBackgroundPreview] = useState(backgroundimage);
 
-    // 파일 선택 시 미리보기 생성
+    // 미리보기
     useEffect(() => {
         if (profileFile) {
             const objectUrl = URL.createObjectURL(profileFile);
@@ -54,72 +55,71 @@ const ProfileEditModal = ({ modalIsOpen, closeModal, profileImg, backgroundimage
         }
     }, [backgroundFile]);
 
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const userId = userData.userid;
+
+            // 프로필 이미지 업로드
+            let profileImgUrl = userData.profileimage;
+            if (profileFile) {
+                const uniqueFileName = `${uuidv4()}-${profileFile.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
+                const { data, error } = await supabase.storage
+                    .from("Images")
+                    .upload(`user/${uniqueFileName}`, profileFile);
+
+                if (error) {
+                    throw new Error("프로필 이미지 업로드 오류: " + error.message);
+                } else {
+                    profileImgUrl = supabase.storage
+                        .from("Images")
+                        .getPublicUrl(`${data.path}`).data.publicUrl;
+                }
+            }
+
+            // 배경 이미지 업로드
+            let backgroundImgUrl = userData.backgroundimage;
+            if (backgroundFile) {
+                const uniqueFileName = `${uuidv4()}-${backgroundFile.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
+                const { data, error } = await supabase.storage
+                    .from("Images")
+                    .upload(`user/${uniqueFileName}`, backgroundFile);
+
+                if (error) {
+                    throw new Error("배경 이미지 업로드 오류: " + error.message);
+                } else {
+                    backgroundImgUrl = supabase.storage
+                        .from("Images")
+                        .getPublicUrl(`${data.path}`).data.publicUrl;
+                }
+            }
+
+            // 데이터베이스 업데이트
+            const { data: UserData, error: userError } = await supabase
+                .from("User")
+                .update({
+                    nickname: name,
+                    bio: bio,
+                    birthdate: birthDate || null,
+                    profileimage: profileImgUrl,
+                    backgroundimage: backgroundImgUrl,
+                })
+                .eq("userid", userId);
+
+            if (userError) {
+                throw new Error("데이터 업데이트 오류: " + userError.message);
+            }
+        },
+        onSuccess: () => {
+            refetchUserData();
+            closeModal();
+        },
+        onError: (error) => {
+            console.error('mutation 오류', error);
+        }
+    });
+
     const handleSaveClick = async () => {
-        const {
-            data: { session },
-            error: sessionError,
-        } = await supabase.auth.getSession();
-
-        if (sessionError) {
-            console.error("세션 오류:", sessionError);
-            return;
-        }
-
-        const userId = session.user.id;
-
-        // 프로필 이미지 업로드
-        let profileImgUrl = profileImg;
-        if (profileFile) {
-            // 한글 및 특수 문자를 제거한 파일 이름 생성
-            const uniqueFileName = `${uuidv4()}-${profileFile.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
-            const { data, error } = await supabase.storage
-                .from("Images")
-                .upload(`user/${uniqueFileName}`, profileFile);
-
-            if (error) {
-                console.error("프로필 이미지 업로드 오류:", error);
-            } else {
-                profileImgUrl = supabase.storage
-                    .from("Images")
-                    .getPublicUrl(`${data.path}`).data.publicUrl;
-            }
-        }
-
-        // 배경 이미지 업로드
-        let backgroundImgUrl = backgroundimage;
-        if (backgroundFile) {
-            const uniqueFileName = `${uuidv4()}-${backgroundFile.name}`;
-            const { data, error } = await supabase.storage
-                .from("Images")
-                .upload(`user/${uniqueFileName}`, backgroundFile);
-
-            if (error) {
-                console.error("배경 이미지 업로드 오류:", error);
-            } else {
-                backgroundImgUrl = supabase.storage
-                    .from("Images")
-                    .getPublicUrl(`${data.path}`).data.publicUrl;
-            }
-        }
-
-        // 데이터베이스 업데이트
-        const { data: UserData, error: userError } = await supabase
-            .from("User")
-            .update({
-                nickname: name,
-                bio: bio,
-                birthdate: birthDate || null,
-                profileimage: profileImgUrl, // 프로필 이미지 URL 저장
-                backgroundimage: backgroundImgUrl, // 배경 이미지 URL 저장
-            })
-            .eq("userid", userId);
-
-        if (userError) {
-            console.error("데이터 업데이트 오류:", userError);
-            return;
-        }
-
-        closeModal();
+        mutation.mutate();
     };
 
     return (
@@ -148,7 +148,6 @@ const ProfileEditModal = ({ modalIsOpen, closeModal, profileImg, backgroundimage
                 </div>
 
                 <div className={styles.imageWrapper}>
-                    {/* 배경 이미지 미리보기 */}
                     {backgroundPreview ? (
                         <img
                             src={backgroundPreview}
@@ -164,7 +163,6 @@ const ProfileEditModal = ({ modalIsOpen, closeModal, profileImg, backgroundimage
                     )}
                     <ProfileInputImage title={"background"} onFileSelect={setBackgroundFile} />
 
-                    {/* 프로필 이미지 미리보기 */}
                     <div className={styles.profileImgContainer}>
                         {profilePreview ? (
                             <img

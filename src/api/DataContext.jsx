@@ -5,7 +5,7 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
     const { data: allUserData, isLoading: isAllUserDataLoading, error: allUserDataError } = useAllUserData();
-    const { data: userData, isLoading: isUserDataLoading, error: userDataError } = useUserData();
+    const { data: userData, isLoading: isUserDataLoading, error: userDataError, refetch: refetchUserData, } = useUserData();
     const { data: communityData, isLoading: isCommunityDataLoading, error: communityDataError } = useCommunityData();
     const { data: postData, isLoading: isPostDataLoading, error: postDataError } = usePostData();
 
@@ -18,6 +18,7 @@ export const DataProvider = ({ children }) => {
             userData,
             communityData,
             postData,
+            refetchUserData,
             isLoading,
             hasError,
         }}>

@@ -89,7 +89,7 @@ const Notifications = ({ showNotifications }) => {
   if (!userId) return <div></div>;
 
   if (isUserLoading || isCommunityLoading || isNotificationsLoading) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (userError || communityError || notificationsError) {

@@ -44,7 +44,7 @@ const fetchUserLikeData = async (userId) => {
   return data;
 };
 
-const Profile = ({ userData, allUserData, communityData, postData, isLoading }) => {
+const Profile = ({ userData, allUserData, communityData, postData, refetchUserData, isLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
@@ -122,10 +122,8 @@ const Profile = ({ userData, allUserData, communityData, postData, isLoading }) 
                   <ProfileEditModal
                     modalIsOpen={modalIsOpen}
                     closeModal={closeModal}
-                    profileImg={userData.profileimage}
-                    backgroundimage={userData.backgroundimage}
                     userData={userData}
-                    userNickname={userData.nickname}
+                    refetchUserData={refetchUserData}
                   />
                 </div>
                 <div className={styles.infoList}>
@@ -138,8 +136,8 @@ const Profile = ({ userData, allUserData, communityData, postData, isLoading }) 
                 </div>
               </div>
               <ProfileTablist
-                community={communityData}
-                allUser={allUserData}
+                communityData={communityData}
+                allUserData={allUserData}
                 userPost={userPost}
                 userLike={filterLikePost}
                 userComment={filterCommentPost}

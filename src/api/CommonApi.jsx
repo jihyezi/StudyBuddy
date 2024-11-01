@@ -35,14 +35,14 @@ export const fetchUserData = async (userId) => {
 export const useUserData = () => {
     const { user: sessionUser } = useAuth();
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['userData', sessionUser?.id],
         queryFn: () => fetchUserData(sessionUser.id),
         enabled: !!sessionUser,
         onError: (error) => console.error(error.message),
     });
 
-    return { data, isLoading, error };
+    return { data, isLoading, error, refetch };
 }
 
 export const fetchCommunityData = async () => {
