@@ -11,12 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 // component
 import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
-import RecentCommunity from "components/Home/RecentCommunity";
 import PopularStudy from "components/Home/PopularStudy";
-import HomeImage from "assets/images/Home/OnBoardingImage1.png";
-import leftarrow from "assets/icons/Home/leftarrow.png";
-import rightarrow from "assets/icons/Home/rightarrow.png";
-import downarrow from "assets/icons/Home/downarrow.png";
 
 import LoginModal from "components/Home/LoginModal";
 
@@ -25,8 +20,6 @@ import onboarding2 from "assets/images/Onboarding/onboarding2.png";
 import onboarding3 from "assets/images/Onboarding/onboarding3.png";
 import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
-import onboardingimg from "assets/images/Home/OnBoarding.png";
-import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
 const Home = ({}) => {
@@ -48,9 +41,8 @@ const Home = ({}) => {
   const [communityy, setCommunityy] = useState([]);
   const navigate = useNavigate();
 
-  console.log('communityy', communityy)
-  console.log('communityData', communityData)
-
+  console.log("communityy", communityy);
+  console.log("communityData", communityData);
 
   useEffect(() => {
     const fetchInitialPopularStudies = async () => {
@@ -307,13 +299,7 @@ const Home = ({}) => {
   const handleCommuntiyClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {
       state: {
-        // id: `${item.id}`,
-        // img: `${item.img}`,
-        // community: `${item.community}`,
         communityData: communityy,
-        // allJoinCommunityData: allJoinCommunityData,
-        // joinCommunityData: joinCommunityData,
-        // postData: postData,
         userData: user,
       },
     });
@@ -571,118 +557,6 @@ const Home = ({}) => {
                 />
               ))}
             </div>
-            {/* <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                maxWidth: 1020,
-                alignItems: "center",
-                justifyContent: "space-between", // Space out the elements
-              }}
-            >
-              <img src={leftarrow} />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "20px", // 버튼 간의 간격 설정
-                  alignItems: "center",
-                  flexGrow: 1,
-                }}
-              >
-                <button
-                  style={{
-                    padding: "4px 7px",
-                    borderRadius: 8,
-                    backgroundColor: "#FF74741F",
-                    fontWeight: 400,
-                    fontSize: 20,
-                    color: "#FF7474",
-                    border: "1px solid #FFF",
-                    width: 122,
-                    height: 43,
-                  }}
-                >
-                  Technology
-                </button>
-                <button
-                  style={{
-                    padding: "4px 7px",
-                    borderRadius: 8,
-                    backgroundColor: "#0000",
-                    fontWeight: 400,
-                    fontSize: 20,
-                    color: "#9c9c9c",
-                    border: "1px solid #DDD",
-                    width: 76,
-                    height: 43,
-                  }}
-                >
-                  Sports
-                </button>
-                <button
-                  style={{
-                    padding: "4px 7px",
-                    borderRadius: 8,
-                    backgroundColor: "#0000",
-                    fontWeight: 400,
-                    fontSize: 20,
-                    color: "#9c9c9c",
-                    border: "1px solid #DDD",
-                    width: 42,
-                    height: 43,
-                  }}
-                >
-                  Art
-                </button>
-                <button
-                  style={{
-                    padding: "4px 7px",
-                    borderRadius: 8,
-                    backgroundColor: "#0000",
-                    fontWeight: 400,
-                    fontSize: 20,
-                    color: "#9c9c9c",
-                    border: "1px solid #DDD",
-                    width: 148,
-                    height: 43,
-                  }}
-                >
-                  Entertainment
-                </button>
-              </div>
-              <img src={rightarrow} />
-            </div>
-            <div className={styles.hotCommunityItem}>
-              <PopularStudy />
-            </div>
-            <div
-              style={{
-                marginTop: 40,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <button
-                style={{
-                  width: 134,
-                  height: 43,
-                  borderRadius: 12,
-                  backgroundColor: "#FFF",
-                  padding: "10px 20px",
-                  border: "1px solid #9c9c9c",
-                  fontWeight: 600,
-                  fontSize: 20,
-                  color: "#9c9c9c",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                more <img src={downarrow} />
-              </button>
-            </div> */}
           </div>
         </div>
       </div>

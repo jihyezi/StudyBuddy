@@ -121,7 +121,9 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
         location.pathname === "/studies" ||
-        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended user={loginuser} />}
+        location.pathname.startsWith("/bookmarkdetail/")) && (
+        <Recommended user={loginuser} />
+      )}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
