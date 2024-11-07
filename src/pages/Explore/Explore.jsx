@@ -9,8 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Explore = () => {
   const [hotCommunities, setHotCommunities] = useState([]);
-  const [communityData, setCommunityData] = useState({});
-  // const [selectedTags, setSelectedTags] = useState([]);
+  const [communityData, setCommunityData] = useState([]);
   const { user: sessionUser } = useAuth();
   const [user, setUser] = useState([]);
   const [allUser, setAllUser] = useState([]);
@@ -29,6 +28,7 @@ const Explore = () => {
       console.error("Error fetching hot communities:", error);
     } else {
       setHotCommunities(data);
+
       const fetchedCommunityData = await Promise.all(
         data.map(async (community) => {
           const { data: communityInfo, error: communityError } = await supabase
@@ -96,9 +96,8 @@ const Explore = () => {
     const validStudies = studiesWithLikes.filter(Boolean);
     const topStudies = validStudies
       .sort((a, b) => b.likesCount - a.likesCount)
-      .slice(0, 2); // 몇 개로 할건지?
+      .slice(0, 2);
 
-    console.log("Top studies:", topStudies);
     setPopularStudies(topStudies);
   };
 
@@ -159,7 +158,6 @@ const Explore = () => {
     <div className={styles.Explore}>
       <div className={styles.PopularTagContainer}>
         <div style={{ position: "relative" }}>
-          {/* 인기 태그 검색 으로 수정? */}
           <div className={styles.CategoryText}>인기 태그 검색🏷️</div>
           <div className={styles.CategoryTag}>
             <Tag />

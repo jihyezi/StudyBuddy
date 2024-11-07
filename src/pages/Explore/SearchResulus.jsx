@@ -19,11 +19,16 @@ const SearchResults = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const communities = useCommunities(query);
-  const { posts, users = {}, communityInfo, allUserData, commentData } =
-    usePostsAndUsers(query);
+  const {
+    posts,
+    users = {},
+    communityInfo,
+    allUserData,
+    commentData,
+  } = usePostsAndUsers(query);
   const { studies, likesCount, commentsCount } = useStudies(query);
   const loginUser = Object.values(users).filter((p) => p.userid === user.id);
-  console.log('로그인', loginUser)
+  console.log("로그인", loginUser);
   useEffect(() => {
     console.log("유저 데이터:", users);
   }, [users]);
@@ -125,7 +130,13 @@ const SearchResults = () => {
           </div>
         ))}
       </div>
-      <div className={menuArr.name === '커뮤니티' ? styles.communityPostSmallWrap : styles.communityPostSmallWrap2}>
+      <div
+        className={
+          menuArr.name === "커뮤니티"
+            ? styles.communityPostSmallWrap
+            : styles.communityPostSmallWrap2
+        }
+      >
         {menuArr[currentTab].content}
       </div>
     </div>
