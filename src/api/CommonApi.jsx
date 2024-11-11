@@ -55,13 +55,13 @@ export const fetchCommunityData = async () => {
 }
 
 export const useCommunityData = () => {
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['communityData'],
         queryFn: fetchCommunityData,
         onError: (error) => console.log(error.message),
     });
 
-    return { data, isLoading, error }
+    return { data, isLoading, error, refetch }
 }
 
 export const fetchPostData = async () => {

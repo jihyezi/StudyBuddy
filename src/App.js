@@ -62,7 +62,7 @@ const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth();
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
-  const { userData, allUserData, communityData, postData, refetchUserData, isLoading, hasError } = useDataContext();
+  const { userData, allUserData, communityData, postData, refetchUserData, isLoading, hasError, refetchCommunityData } = useDataContext();
   useEffect(() => {
     if (
       !user &&
@@ -73,6 +73,11 @@ const MainContent = ({ loginuser }) => {
       setLoginModalIsOpen(false);
     }
   }, [user, location.pathname]);
+
+  // 경로가 변경될 때마다 데이터를 새로 불러오도록 useEffect 설정
+  useEffect(() => {
+    refetchCommunityData();
+  }, [user, location.pathname]); // 경로 변경 시마다 실행
 
   const closeLoginModal = () => setLoginModalIsOpen(false);
 
@@ -96,12 +101,12 @@ const MainContent = ({ loginuser }) => {
             </CommonLayout>
           }
         />
-        <Route path="/communities" element={<Communities />} />
+        <Route path="/communities" element={<Communities userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} refetchUserData={refetchUserData} isLoading={isLoading} />} />
         <Route path="/studies" element={<Studies />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
-        <Route path="/profile" element={<Profile userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} refetchUserData={refetchUserData} isLoading={isLoading} />} />
+        <Route path="/profile" element={<Profile userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} isLoading={isLoading} />} />
         <Route path="/other-profile/:userId" element={<OtherProfile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
@@ -112,7 +117,7 @@ const MainContent = ({ loginuser }) => {
         <Route path="/revisecommunity" element={<ReviseCommunity />} />
         <Route
           path="/detail-community/:communityId"
-          element={<CommunityDetailsPage />}
+          element={<CommunityDetailsPage communityData={communityData} />}
         />
         <Route
           path="/bookmarkdetail/:communityid"

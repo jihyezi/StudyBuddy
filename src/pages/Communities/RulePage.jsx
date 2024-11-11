@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import styles from "./RulePage.module.css";
-import supabase from "components/supabaseClient";
 
 const RulePage = ({ ruleData = {} }) => {
-  const { communityId } = useParams();
 
   return (
     <div className={styles.container}>
