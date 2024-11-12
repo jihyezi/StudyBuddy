@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CommunityDetailsPage.module.css";
 import supabase from "components/supabaseClient";
 
@@ -19,46 +19,62 @@ const CommunityDetailsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { userData = {}, allUserData = [], communityData = [], postData = [], joinCommunityData = [] } = location.state || {};
-  const [isJoined, setIsJoined] = useState(false);
   const queryClient = useQueryClient();
   const userId = userData.userid;
 
-  const handleJoinClick = useMutation({
-    mutationFn: async () => {
-      if (isJoined) {
-        const { error } = await supabase
-          .from("JoinCommunity")
-          .delete()
-          .eq("userid", userId)
-          .eq("communityid", communityId);
+  const { data: joinData, isLoading, isError } = useQuery({
+    queryKey: ["joinCommunityData", { userId, communityId }],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("JoinCommunity")
+        .select("*")
+        .eq("userid", userId)
+        .eq("communityid", communityId);
 
-        if (error) throw new Error("Error leaving community", error);
-      } else {
-        const { error } = await supabase
-          .from("JoinCommunity")
-          .insert([{ userid: userId, communityid: communityId }]);
-
-        if (error) throw new Error("Error joining community", error);
+      if (error) {
+        throw new Error("Error fetching JoinCommunity data");
       }
+      return data;
     },
-    onMutate: async () => {
-      setIsJoined((prev) => !prev);
-    },
-    onError: (error) => {
-      console.error(error);
-      setIsJoined(isJoined);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries("joinCommunity");
+    enabled: !!userId,
+  });
+
+  const isJoined = joinData && joinData.length > 0;
+
+  const handleJoinClick = async () => {
+    if (isJoined) {
+      const { error } = await supabase
+        .from("JoinCommunity")
+        .delete()
+        .eq("userid", userId)
+        .eq("communityid", communityId);
+
+      if (error) {
+        console.error("Error leaving community:", error);
+      } else {
+        queryClient.invalidateQueries(["joinCommunityData", userId, communityId]);
+        console.log("Successfully left the community");
+      }
+    } else {
+      const { error } = await supabase
+        .from("JoinCommunity")
+        .insert([{ userid: userId, communityid: communityId }]);
+
+      if (error) {
+        console.error("Error joining community:", error);
+      } else {
+        queryClient.invalidateQueries(["joinCommunityData", userId, communityId]);
+        console.log("Successfully joined the community");
+      }
     }
-  })
+  };
 
   const filterCommunity = useMemo(() =>
     communityData.filter((c) => Number(c.communityid) === Number(communityId)
     ), [communityData, communityId]);
   const thisCommunity = filterCommunity.length > 0 ? filterCommunity[0] : null;
 
-  if (!thisCommunity) {
+  if (!thisCommunity || isLoading) {
     return (
       <div
         style={{
@@ -121,7 +137,7 @@ const CommunityDetailsPage = () => {
           ) : (
             <button
               className={isJoined ? styles.joinButtonActive : styles.joinButton}
-              onClick={() => handleJoinClick.mutate()}
+              onClick={handleJoinClick}
             >
               {isJoined ? "나가기" : "가입"}
             </button>
