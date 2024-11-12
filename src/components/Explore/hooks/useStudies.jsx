@@ -1,80 +1,86 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
 
+// 각 데이터를 가져오는 함수들
+const fetchStudiesData = async (query) => {
+  const { data: studiesData, error: studiesError } = await supabase
+    .from("Study")
+    .select("*")
+    .ilike("title", `%${query}%`);
+
+  if (studiesError) throw new Error("Error fetching studies");
+
+  return studiesData || [];
+};
+
+const fetchLikesCount = async (studyIds) => {
+  const { data: likesData, error: likesError } = await supabase
+    .from("studylikescount")
+    .select("*")
+    .in("studyid", studyIds);
+
+  if (likesError) throw new Error("Error fetching likes count");
+
+  const likesMap = likesData.reduce((map, item) => {
+    map[item.studyid] = item.like_count;
+    return map;
+  }, {});
+
+  return likesMap;
+};
+
+const fetchCommentsCount = async (studyIds) => {
+  const { data: commentsData, error: commentsError } = await supabase
+    .from("studycommentscount")
+    .select("*")
+    .in("studyid", studyIds);
+
+  if (commentsError) throw new Error("Error fetching comments count");
+
+  const commentsMap = commentsData.reduce((map, item) => {
+    map[item.studyid] = item.comment_count;
+    return map;
+  }, {});
+
+  return commentsMap;
+};
+
+// 주 훅
 const useStudies = (query) => {
-  const [studies, setStudies] = useState([]);
-  const [likesCount, setLikesCount] = useState({});
-  const [commentsCount, setCommentsCount] = useState({});
+  const {
+    data: studies,
+    isLoading: studiesLoading,
+    error: studiesError,
+  } = useQuery({
+    queryKey: ["studies", query], // 쿼리 키와 쿼리 함수를 객체 형태로 전달
+    queryFn: () => fetchStudiesData(query),
+    enabled: !!query, // query가 있을 때만 실행
+  });
 
-  useEffect(() => {
-    const fetchStudies = async () => {
-      try {
-        const { data: studiesData, error: studiesError } = await supabase
-          .from("Study")
-          .select("*")
-          .ilike("title", `%${query}%`);
+  const studyIds = studies?.map((study) => study.studyid) || [];
 
-        if (studiesError) {
-          console.error("Error fetching studies:", studiesError);
-          return;
-        }
+  const { data: likesCount, isLoading: likesLoading } = useQuery({
+    queryKey: ["likesCount", studyIds],
+    queryFn: () => fetchLikesCount(studyIds),
+    enabled: studyIds.length > 0,
+  });
 
-        setStudies(studiesData);
-        fetchLikesCount(studiesData.map((study) => study.studyid));
-        fetchCommentsCount(studiesData.map((study) => study.studyid));
-      } catch (error) {
-        console.error("Error fetching studies:", error);
-      }
-    };
+  const { data: commentsCount, isLoading: commentsLoading } = useQuery({
+    queryKey: ["commentsCount", studyIds],
+    queryFn: () => fetchCommentsCount(studyIds),
+    enabled: studyIds.length > 0,
+  });
 
-    fetchStudies();
-  }, [query]);
+  if (studiesLoading || likesLoading || commentsLoading) {
+    return { studies: [], likesCount: {}, commentsCount: {}, isLoading: true };
+  }
 
-  const fetchLikesCount = async (studyIds) => {
-    try {
-      const { data: likesData, error: likesError } = await supabase
-        .from("studylikescount")
-        .select("*")
-        .in("studyid", studyIds);
+  if (studiesError) {
+    console.error("Error fetching studies:", studiesError);
+    return { studies: [], likesCount: {}, commentsCount: {}, isLoading: false };
+  }
 
-      if (likesError) {
-        console.error("Error fetching likes count:", likesError);
-        return;
-      }
-
-      const likesMap = {};
-      likesData.forEach((item) => {
-        likesMap[item.studyid] = item.like_count;
-      });
-      setLikesCount(likesMap);
-    } catch (error) {
-      console.error("Error fetching likes count:", error);
-    }
-  };
-
-  const fetchCommentsCount = async (studyIds) => {
-    try {
-      const { data: commentsData, error: commentsError } = await supabase
-        .from("studycommentscount")
-        .select("*")
-        .in("studyid", studyIds);
-
-      if (commentsError) {
-        console.error("Error fetching comments count:", commentsError);
-        return;
-      }
-
-      const commentsMap = {};
-      commentsData.forEach((item) => {
-        commentsMap[item.studyid] = item.comment_count;
-      });
-      setCommentsCount(commentsMap);
-    } catch (error) {
-      console.error("Error fetching comments count:", error);
-    }
-  };
-
-  return { studies, likesCount, commentsCount };
+  return { studies, likesCount, commentsCount, isLoading: false };
 };
 
 export default useStudies;
