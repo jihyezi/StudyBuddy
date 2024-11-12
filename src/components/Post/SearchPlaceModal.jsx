@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./SearchPlaceModal.module.css";
 import "fonts/Font.css";
 import axios from "axios";
@@ -7,9 +7,19 @@ import close from "assets/icons/Messages/close.png";
 import back from "assets/icons/Post/back.png";
 import search from "assets/icons/Post/search.png";
 
-const SearchPlaceModal = ({ closeModal, updateSelectedModal }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const SearchPlaceModal = ({
+  closeModal,
+  updateSelectedModal,
+  initialValue,
+}) => {
+  const [searchTerm, setSearchTerm] = useState(initialValue || "");
   const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    if (initialValue) {
+      handleSearch(); // 초기값으로 검색 수행
+    }
+  }, [initialValue]);
 
   const handleSearch = async () => {
     if (searchTerm.length > 0) {

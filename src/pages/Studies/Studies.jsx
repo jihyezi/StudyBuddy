@@ -5,12 +5,17 @@ import styles from "./Studies.module.css";
 import Toptab from "components/Studies/Toptab";
 import Header from "components/Header";
 
-const Studies = ({}) => {
+const Studies = ({ studyData, userData, allUserData, isLoading }) => {
   return (
     <div className={styles.studycontainer}>
       <Header headerName={"Studies"} />
       <div className={styles.tabstyle}>
-        <Toptab />
+        <Toptab
+          studyData={studyData}
+          userData={userData}
+          allUserData={allUserData}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );

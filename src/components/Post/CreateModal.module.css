@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 999;
 }
 
 .deleteModal {
@@ -18,39 +18,38 @@
   transform: translate(-50%, -50%);
   border: 1px solid #dddddd;
   border-radius: 20px;
-  width: 600px;
-  height: 300px;
-  padding: 20px;
+  width: 400px;
+  padding-top: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  font-family: "Baloo Tammudu 2", sans-serif;
+  font-family: "BalooTammudu2-SemiBold";
 }
 
 .modalQuestion {
-  padding-top: 35px;
+  padding-top: 15px;
   padding-bottom: 25px;
   text-align: center;
   border-bottom: 1px solid #dddddd;
   color: #606060;
-  font-size: 32px;
+  font-size: 24px;
 }
 
 .modalConfirm {
-  padding-top: 16px;
+  padding-top: 8px;
   padding-bottom: 8px;
   text-align: center;
   border-bottom: 1px solid #dddddd;
   color: #ff7474;
-  font-size: 24px;
+  font-size: 18px;
   cursor: pointer;
 }
 
 .modalCancel {
-  padding-top: 16px;
+  padding-top: 8px;
   padding-bottom: 8px;
   text-align: center;
   color: #606060;
-  font-size: 24px;
+  font-size: 18px;
   cursor: pointer;
 }
