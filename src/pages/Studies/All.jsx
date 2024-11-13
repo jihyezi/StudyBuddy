@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+
 import styles from "./All.module.css";
 import Filter from "components/Studies/Filter";
 import Search from "assets/icons/Explore/search.png";
@@ -6,12 +8,21 @@ import StudyPost from "components/Studies/StudyPost";
 import supabase from "components/supabaseClient";
 import loadinggif from "assets/images/loading.gif";
 
-const All = ({ studyData, userData, allUserData, isLoading }) => {
-  const [posts, setPosts] = useState([]);
-  const [likesCount, setLikesCount] = useState({});
-  const [commentsCount, setCommentsCount] = useState({});
+const fetchStudyAllData = async () => {
+  const { data, error } = await supabase.from("Study").select("*");
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const All = ({ userData, allUserData, isLoading }) => {
   const [selectOption, setSelectOption] = useState("전체");
   const [searchText, setSearchText] = useState("");
+
+  const { data: Studies = [], isLoading: isStudyLoading } = useQuery({
+    queryKey: ["Studies"],
+    queryFn: () => fetchStudyAllData(),
+  });
 
   const handleSelectOption = (option) => {
     setSelectOption(option);
@@ -21,7 +32,7 @@ const All = ({ studyData, userData, allUserData, isLoading }) => {
     setSearchText(e.target.value);
   };
 
-  const filterPosts = studyData.filter((p) =>
+  const filterPosts = Studies.filter((p) =>
     selectOption === "전체" ? true : p.completion === selectOption
   );
 
@@ -32,7 +43,7 @@ const All = ({ studyData, userData, allUserData, isLoading }) => {
       p.tag.includes(searchText)
   );
 
-  const loading = isLoading;
+  const loading = isLoading || isStudyLoading;
 
   return (
     <div className={styles.allContainer}>

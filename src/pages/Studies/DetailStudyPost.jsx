@@ -17,6 +17,16 @@ import share from "assets/icons/Communities/share.png";
 import loadinggif from "assets/images/loading.gif";
 import noprofile from "assets/images/Profile/noprofile.png";
 
+const fetchStudyData = async (studyId) => {
+  const { data, error } = await supabase
+    .from("Study")
+    .select("*")
+    .eq("studyid", studyId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 const fetchStudyLikeData = async (studyId) => {
   const { data, error } = await supabase
     .from("StudyLike")
@@ -37,7 +47,7 @@ const fetchStudyCommentData = async (studyId) => {
   return data;
 };
 
-const DetailStudyPost = ({ studyData, userData, allUserData, isLoading }) => {
+const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
   const { studyId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -45,6 +55,11 @@ const DetailStudyPost = ({ studyData, userData, allUserData, isLoading }) => {
   const [inputValue, setInputValue] = useState("");
   const [liked, setLiked] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const { data: Study = [], isLoading: isStudyLoading } = useQuery({
+    queryKey: ["Study", studyId],
+    queryFn: () => fetchStudyData(studyId),
+  });
 
   const { data: studyLike = [], isLoading: isLikeLoading } = useQuery({
     queryKey: ["studyLike", studyId],
@@ -106,7 +121,7 @@ const DetailStudyPost = ({ studyData, userData, allUserData, isLoading }) => {
     },
   });
 
-  if (isLoading || isLikeLoading || isCommentLoading) {
+  if (isLoading || isStudyLoading || isLikeLoading || isCommentLoading) {
     return (
       <div
         style={{
@@ -122,8 +137,8 @@ const DetailStudyPost = ({ studyData, userData, allUserData, isLoading }) => {
     );
   }
 
-  const study = studyData.find((study) => study.studyid === Number(studyId));
-  const author = allUserData.filter((user) => user.userid === study.userid)[0];
+  const study = Study.find((study) => study.studyid === Number(studyId));
+  const author = allUserData.find((user) => user.userid === study.userid);
 
   const formatDescription = (description) => {
     const regex = /!\[Image\]\((.*?)\)/g;
@@ -340,7 +355,9 @@ const DetailStudyPost = ({ studyData, userData, allUserData, isLoading }) => {
           {study.location !== null && (
             <div className={styles.studiesDetails}>
               <div className={styles.studiesDetailIndex}>장소</div>
-              <div className={styles.studiesDetail}>{study.location}</div>
+              <div className={styles.studiesDetail}>
+                {study.location || "X"}
+              </div>
             </div>
           )}
 

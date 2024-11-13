@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./InputTag.module.css";
 import "fonts/Font.css";
 
@@ -6,17 +6,19 @@ import "fonts/Font.css";
 import cancel from "assets/icons/Post/close.png";
 import add from "assets/icons/Post/add_grey.png";
 
-const InputTag = (props) => {
-  const fileInputRef = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [tags, setTags] = useState([""]);
+const InputTag = ({ tags: initialTags, onChange }) => {
+  const [tags, setTags] = useState(initialTags || [""]);
   const [isEditing, setIsEditing] = useState([false]);
+
+  useEffect(() => {
+    setTags(initialTags);
+  }, [initialTags]);
 
   const handleTagChange = (index, value) => {
     const updatedTags = [...tags];
     updatedTags[index] = value;
     setTags(updatedTags);
-    props.onChange(updatedTags);
+    onChange(updatedTags);
   };
 
   const handleAddTag = () => {
@@ -70,7 +72,7 @@ const InputTag = (props) => {
               const updatedEditing = isEditing.filter((_, i) => i !== index);
               setTags(updatedTags);
               setIsEditing(updatedEditing);
-              props.onChange(updatedTags);
+              onChange(updatedTags);
             }}
           />
         </div>

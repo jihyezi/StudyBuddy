@@ -217,8 +217,6 @@ const MainContent = () => {
           path="/studies"
           element={
             <Studies
-              studyData={studyData}
-              studyLikes={studyLikes}
               userData={userData}
               allUserData={allUserData}
               isLoading={isLoading}
@@ -244,8 +242,6 @@ const MainContent = () => {
           path="/detail-study/:studyId"
           element={
             <DetailStudyPost
-              studyData={studyData}
-              studyLikes={studyLikes}
               userData={userData}
               allUserData={allUserData}
               isLoading={isLoading}
@@ -256,9 +252,7 @@ const MainContent = () => {
         <Route path="/revisecommunity" element={<ReviseCommunity />} />
         <Route
           path="/revise-study/:studyId"
-          element={
-            <ReviseStudy studyData={studyData} allUserData={allUserData} />
-          }
+          element={<ReviseStudy allUserData={allUserData} />}
         />
         <Route
           path="/detail-community/:communityId"

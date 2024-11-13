@@ -41,41 +41,7 @@ const StudyPost = ({ allUserData }) => {
     studyDescription: false,
   });
 
-  const [loginUser, setLoginUser] = useState(null);
   const { user: sessionUser } = useAuth();
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const fetchUserDataById = async (userid) => {
-    const { data, error } = await supabase
-      .from("User")
-      .select("profileimage, nickname")
-      .eq("userid", userid);
-
-    if (error) {
-      console.error("Error fetching user data:", error);
-      return null;
-    }
-    return data;
-  };
-
-  const fetchUserData = async () => {
-    if (sessionUser) {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error("Error getting session:", sessionError);
-        return;
-      }
-
-      const userId = session.user.id;
-      setLoginUser(allUserData.filter((user) => user.userid === userId));
-    }
-  };
 
   const handleAlbumClick = () => {
     const input = document.createElement("input");
@@ -258,12 +224,7 @@ const StudyPost = ({ allUserData }) => {
       console.error("Error inserting data:", studyError);
     } else {
       console.log("Data inserted successfully!", studyData[0].studyid);
-      fetchUserData();
-      navigate(`/detail-study/${studyData[0].studyid}`, {
-        state: {
-          study: studyData[0],
-        },
-      });
+      navigate(`/detail-study/${studyData[0].studyid}`);
     }
   };
 

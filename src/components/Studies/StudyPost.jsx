@@ -37,10 +37,13 @@ const StudyPost = (props) => {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user: sessionUser } = useAuth();
 
   const { data: studyLike = [], isLoading: isLikeLoading } = useQuery({
     queryKey: ["studyLike", props.study.studyid],
     queryFn: () => fetchStudyLikeData(props.study.studyid),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     onError: (error) => console.log(error.message),
   });
 
@@ -54,7 +57,7 @@ const StudyPost = (props) => {
     const checkLike = () => {
       const userLike = studyLike.find(
         (like) =>
-          like.userid === props.userData.userid &&
+          like.userid === props.userData?.userid &&
           like.studyid === props.study.studyid
       );
       setLiked(!!userLike);
@@ -62,76 +65,22 @@ const StudyPost = (props) => {
     if (props.userData) {
       checkLike();
     }
-  }, [studyLike]);
+  }, [studyLike, props.userData, props.study.studyid]);
 
   const handlePostClick = () => {
     navigate(`/detail-study/${props.study.studyid}`);
   };
 
-  const mutation = useMutation({
-    mutationFn: async (newLike) => {
-      const { data, error } = liked
-        ? await supabase
-            .from("StudyLike")
-            .delete()
-            .eq("studyid", props.study.studyid)
-            .eq("userid", newLike.userid)
-        : await supabase.from("StudyLike").insert([newLike]);
-      if (error) {
-        console.error("Error on mutation:", error.message);
-        throw new Error(error.message);
-      }
-
-      console.log("Inserted data:", data);
-      return data;
-    },
-    onMutate: async (newLike) => {
-      await queryClient.cancelQueries(["studyLike", props.study.studyid]);
-
-      const previousLike = queryClient.getQueryData([
-        "studyLike",
-        props.study.studyid,
-      ]);
-
-      console.log("onMutate liked", liked);
-      if (liked) {
-        queryClient.setQueryData(["studyLike", props.study.studyid], (old) =>
-          old.filter((like) => like.userid !== newLike.userid)
-        );
-      } else {
-        queryClient.setQueryData(["studyLike", props.study.studyid], (old) => [
-          ...old,
-          { ...newLike, createdat: new Date().toISOString() },
-        ]);
-      }
-
-      return { previousLike };
-    },
-    onError: (err, newLike, context) => {
-      queryClient.setQueryData(
-        ["studyLike", props.study.studyid],
-        context.previousLike
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(["studyLike", props.study.studyid]);
-    },
-  });
-
   const toggleLike = async (event) => {
     event.stopPropagation();
-
-    if (!props.userData) {
-      alert("로그인 후에 좋아요를 클릭할 수 있습니다.");
-      return;
-    }
 
     const {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
-    if (sessionError) {
-      console.error("Error getting session:", sessionError);
+
+    if (sessionError || !session) {
+      alert("로그인 후에 좋아요를 클릭할 수 있습니다.");
       return;
     }
 
@@ -142,9 +91,69 @@ const StudyPost = (props) => {
       createdat: new Date(),
       userid: userId,
     };
-    mutation.mutate(newLike);
+
+    mutation.mutate({ newLike, liked });
     setLiked((prevLiked) => !prevLiked);
+    // queryClient.invalidateQueries(["studyLike", props.study.studyid]);
+    queryClient.refetchQueries(["studyLike", props.study.studyid]);
   };
+
+  const mutation = useMutation({
+    mutationFn: async ({ newLike, liked }) => {
+      const { data, error } = liked
+        ? await supabase
+            .from("StudyLike")
+            .delete()
+            .eq("studyid", props.study.studyid)
+            .eq("userid", newLike.userid)
+        : await supabase.from("StudyLike").insert([newLike]);
+
+      if (error) {
+        console.error("Error on mutation:", error.message);
+        throw new Error(error.message);
+      }
+
+      return data;
+    },
+    onMutate: async ({ newLike, liked }) => {
+      await queryClient.cancelQueries(["studyLike", props.study.studyid]);
+
+      const previousLike = queryClient.getQueryData([
+        "studyLike",
+        props.study.studyid,
+      ]);
+
+      if (liked) {
+        queryClient.setQueryData(["studyLike", props.study.studyid], (old) => {
+          if (!old) return [];
+          return old.filter((like) => like.userid !== newLike.userid);
+        });
+      } else {
+        queryClient.setQueryData(["studyLike", props.study.studyid], (old) => {
+          if (!old)
+            return [{ ...newLike, createdat: new Date().toISOString() }];
+          return [...old, { ...newLike, createdat: new Date().toISOString() }];
+        });
+      }
+
+      return { previousLike };
+    },
+    onError: (err, { newLike }, context) => {
+      queryClient.setQueryData(
+        ["studyLike", props.study.studyid],
+        context.previousLike
+      );
+    },
+    onSettled: async () => {
+      const updatedData = await queryClient.fetchQuery({
+        queryKey: ["studyLike", props.study.studyid],
+        queryFn: () => fetchStudyLikeData(props.study.studyid),
+      });
+
+      console.log("updatedData", updatedData.length);
+      queryClient.setQueryData(["studyLike", props.study.studyid], updatedData);
+    },
+  });
 
   const handleShare = (event) => {
     event.stopPropagation();

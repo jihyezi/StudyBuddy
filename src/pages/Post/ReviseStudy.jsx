@@ -51,7 +51,6 @@ const ReviseStudyPost = ({ allUserData }) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    console.log("study.description", study.description);
     setName(study.title);
     setProceed(study.proceed);
     setPeople(study.maxmembers);
@@ -60,12 +59,13 @@ const ReviseStudyPost = ({ allUserData }) => {
     setSchedule(study.schedule);
     setLocation(study.location);
     setStudyDescription(study.description);
+    setTags(study.tag);
 
     if (editorRef.current) {
       const htmlDescription = study.description
         .replace(
           /!\[.*?\]\((.*?)\)/g,
-          '<img src="$1" alt="Image" class="${styles.image}" />'
+          '<img src="$1" alt="Image" style="max-width: 100%; height: auto;" class="${styles.image}" />'
         )
         .replace(/\n/g, "<br>");
       editorRef.current.innerHTML = htmlDescription;
@@ -274,7 +274,7 @@ const ReviseStudyPost = ({ allUserData }) => {
       console.log("Data update successfully!", updatedStudyData[0].studyid);
       fetchUserData();
       navigate(`/detail-study/${updatedStudyData[0].studyid}`);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -500,7 +500,7 @@ const ReviseStudyPost = ({ allUserData }) => {
             marginTop: "15px",
           }}
         >
-          <InputTag onChange={setTags} />
+          <InputTag tags={tags} onChange={setTags} />
         </div>
       </div>
     </div>
