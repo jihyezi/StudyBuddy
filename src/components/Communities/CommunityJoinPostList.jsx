@@ -4,9 +4,8 @@ import Post from "./Post";
 const CommunityPostList = ({
   userData,
   allUserData,
-  postData,
+  postData = [],
   communityData,
-  onBookmarkToggle,
 }) => {
   return (
     <div style={{ width: '100%' }}>
@@ -19,7 +18,6 @@ const CommunityPostList = ({
             thisPost={post}
             postData={postData}
             communityData={communityData}
-            onBookmarkToggle={onBookmarkToggle}
           />
         ))
       ) : (

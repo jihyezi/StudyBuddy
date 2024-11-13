@@ -23,7 +23,6 @@ const Post = ({
   communityData = [],
   userData = [],
   allUserData = [],
-  onBookmarkToggle,
 }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
@@ -215,7 +214,6 @@ const Post = ({
     if (bookmarked) {
       await supabase.from("Bookmark").delete().eq("postid", thisPost.postid);
       setBookmarked(false);
-      onBookmarkToggle(thisPost.postid);
     } else {
       await supabase.from("Bookmark").insert([
         {
@@ -277,7 +275,7 @@ const Post = ({
         style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
       >
         <span className={styles.communityName}>{communityName}</span>
-        {userData[0]?.userid === thisPost.userid && (
+        {userData?.userid === thisPost.userid && (
           <img
             className={styles.moreIcon}
             src={more}

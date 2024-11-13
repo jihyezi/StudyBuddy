@@ -105,7 +105,7 @@ const MainContent = ({ loginuser }) => {
         <Route path="/studies" element={<Studies />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="/bookmarks" element={<Bookmarks />} />
+        <Route path="/bookmarks" element={<Bookmarks userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} />} />
         <Route path="/profile" element={<Profile userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} isLoading={isLoading} />} />
         <Route path="/other-profile/:userId" element={<OtherProfile />} />
         <Route path="/create-post" element={<Post />} />

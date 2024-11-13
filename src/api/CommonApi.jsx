@@ -38,7 +38,6 @@ export const useUserData = () => {
     const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['userData', sessionUser?.id],
         queryFn: () => fetchUserData(sessionUser.id),
-        enabled: !!sessionUser,
         onError: (error) => console.error(error.message),
     });
 

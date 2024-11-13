@@ -101,6 +101,8 @@ const CommunityDetailsPage = () => {
     );
   };
 
+  console.log(JSON.stringify(thisCommunity))
+
   return (
     <div className={styles.container}>
       <Header headerName={thisCommunity.name} />
