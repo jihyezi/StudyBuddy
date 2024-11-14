@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "contexts/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
 import styled from "styled-components";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
 
 // pages
 import Sidebar from "components/Sidebar/Sidebar";
@@ -61,8 +57,9 @@ const Center = styled.div`
   flex-direction: row;
   flex: 1;
 `;
+const queryClient = new QueryClient();
 
-const MainContent = () => {
+const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth();
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
@@ -207,7 +204,9 @@ const MainContent = () => {
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
         location.pathname === "/studies" ||
-        location.pathname.startsWith("/bookmarkdetail/")) && <Recommended />}
+        location.pathname.startsWith("/bookmarkdetail/")) && (
+        <Recommended user={loginuser} />
+      )}
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -280,11 +279,11 @@ const App = () => {
                 />
                 <Center>
                   <MainContent />
-                  {/* <Notifications
-                  showNotifications={showNotifications}
-                  setShowNotifications={setShowNotifications}
-                  toggleNotifications={toggleNotifications}
-                /> */}
+                  <Notifications
+                    showNotifications={showNotifications}
+                    setShowNotifications={setShowNotifications}
+                    toggleNotifications={toggleNotifications}
+                  />
                 </Center>
               </Content>
             </Body>

@@ -1,70 +1,66 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "contexts/AuthContext";  // AuthContext에서 인증된 유저 정보 가져오기
-import { useNavigate } from "react-router-dom";  // useNavigate 훅 사용
+import { useAuth } from "contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
 import styles from "./DMList.module.css";
 import DMChat from "./DMChat";
 import DMSend from "./DMSend";
-import defaultprofile from "assets/icons/Messages/Profile.jpg";
-import noprofile from "assets/images/Profile/noprofile.png"
+import noprofile from "assets/images/Profile/noprofile.png";
+
+const fetchUsers = async (userEmail) => {
+  const { data: otherUsersData, error } = await supabase
+    .from("User")
+    .select("userid, username, nickname, profileimage")
+    .neq("email", userEmail);
+
+  if (error) throw new Error(error.message);
+  return otherUsersData;
+};
 
 function DMList() {
-  const { user } = useAuth();  // 현재 로그인한 유저 정보 가져오기
+  const { user } = useAuth();
   const [selectedUser, setSelectedUser] = useState(null);
   const [isSending, setIsSending] = useState(false);
-  const [userData, setUserData] = useState([]);  // 다른 유저들의 데이터
-  const [publicUser, setPublicUser] = useState(null);  // 현재 로그인한 유저의 Public 스키마 정보
-  const navigate = useNavigate();  // 리다이렉트를 위한 useNavigate 훅 사용
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    // 유저가 로그인되지 않은 경우 로그인 페이지로 이동
     if (!user) {
-      navigate("/profile");  // 로그인 페이지로 리다이렉트
-      return;  // 리다이렉트 후 더 이상의 코드 실행을 막기 위해 return
+      navigate("/profile");
+      return;
     }
 
-    const fetchUsers = async () => {
-      if (user) {
-        try {
-          // 현재 로그인한 유저의 Public 스키마 정보를 가져오기
-          const { data: currentUserData, error: currentUserError } = await supabase
-            .from("User")
-            .select("userid, username, nickname, profileimage")
-            .eq("email", user.email)
-            .single();  // 현재 로그인한 유저 정보
+    const channel = supabase
+      .channel("user_update_channel")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "User" },
+        () => queryClient.invalidateQueries({ queryKey: ["users"] })
+      )
+      .subscribe();
 
-          if (currentUserError) {
-            throw currentUserError;
-          }
-
-          setPublicUser(currentUserData);  // Public 유저 정보 설정
-
-          // 다른 유저들의 데이터를 가져오기 (현재 로그인한 유저 제외)
-          const { data: otherUsersData, error: otherUsersError } = await supabase
-            .from("User")
-            .select("userid, username, nickname, profileimage")
-            .neq("email", user.email);  // 로그인한 유저의 이메일 제외
-
-          if (otherUsersError) {
-            throw otherUsersError;
-          }
-
-          setUserData(otherUsersData);  // 다른 유저 데이터 상태에 저장
-        } catch (error) {
-          console.error("Error fetching users:", error.message);
-        }
-      }
+    return () => {
+      channel.unsubscribe();
     };
+  }, [user, navigate, queryClient]);
 
-    fetchUsers();
-  }, [user, navigate]); // user 또는 navigate가 변경될 때마다 실행
+  const { data: userData, isLoading, error } = useQuery({
+    queryKey: ["users", user?.email],
+    queryFn: () => fetchUsers(user.email),
+    enabled: !!user,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  if (!user) return null;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching users</div>;
 
   const handleUserClick = (user) => {
-    if (selectedUser && selectedUser.userid === user.userid) {
-      setSelectedUser(null);
-    } else {
-      setSelectedUser(user);
-    }
+    setSelectedUser((prevUser) =>
+      prevUser && prevUser.userid === user.userid ? null : user
+    );
   };
 
   const handleNewMessageClick = () => {
@@ -72,9 +68,6 @@ function DMList() {
   };
 
   const handleSendMessage = (user) => {
-    if (!userData.some((item) => item.userid === user.userid)) {
-      setUserData((prevData) => [...prevData, user]);
-    }
     setSelectedUser(user);
     setIsSending(false);
   };
@@ -86,42 +79,42 @@ function DMList() {
         <div className={styles.messageList}>
           {userData.map((user, index) => (
             <div
-              className={`${styles.messageItem} ${selectedUser && selectedUser.userid === user.userid
-                ? styles.selected
-                : ""
-                }`}
+              className={`${styles.messageItem} ${
+                selectedUser && selectedUser.userid === user.userid
+                  ? styles.selected
+                  : ""
+              }`}
               key={index}
               onClick={() => handleUserClick(user)}
             >
-              <img src={user.profileimage || noprofile} className={styles.profileImage} alt="Profile" />
+              <img
+                src={user.profileimage || noprofile}
+                className={styles.profileImage}
+                alt="Profile"
+              />
               <div className={styles.messageContent}>
                 <div className={styles.messageHeader}>
                   <span className={styles.username}>{user.nickname}</span>
-                  <span className={styles.nickname}>@{user.username || user.username}</span>
+                  <span className={styles.nickname}>@{user.username}</span>
                 </div>
-                <div className={styles.text}>Start chatting with {user.nickname || user.username}!</div>
+                <div className={styles.text}>
+                  Start chatting with {user.nickname || user.username}!
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
       {selectedUser ? (
-        <DMChat selectedUser={selectedUser} publicUser={publicUser} />
+        <DMChat selectedUser={selectedUser} publicUser={user} />
       ) : (
         <div className={styles.noChat} onClick={handleNewMessageClick}>
-          <img
-            src={noprofile}
-            alt="New Message"
-            className={styles.newMessageIcon}
-          />
+          <img src={noprofile} alt="New Message" className={styles.newMessageIcon} />
           <div className={styles.newMessageText}>New Message</div>
         </div>
       )}
       {isSending && (
-        <DMSend
-          setIsSending={setIsSending}
-          setSelectedUser={handleSendMessage}
-        />
+        <DMSend setIsSending={setIsSending} setSelectedUser={handleSendMessage} />
       )}
     </div>
   );
