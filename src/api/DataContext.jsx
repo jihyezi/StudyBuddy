@@ -25,6 +25,7 @@ export const DataProvider = ({ children }) => {
     data: communityData,
     isLoading: isCommunityDataLoading,
     error: communityDataError,
+    refetch: refetchCommunityData,
   } = useCommunityData();
   const {
     data: postData,
@@ -61,6 +62,7 @@ export const DataProvider = ({ children }) => {
         refetchUserData,
         isLoading,
         hasError,
+        refetchCommunityData,
       }}
     >
       {children}

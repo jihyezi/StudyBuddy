@@ -19,8 +19,6 @@ import caution from "assets/icons/Post/caution.png";
 
 const CommunityPost = (props) => {
   const navigate = useNavigate();
-  const { user: sessionUser } = useAuth();
-  const [user, setUser] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [field, setField] = useState("");
@@ -33,40 +31,6 @@ const CommunityPost = (props) => {
     field: false,
     image: false,
   });
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (sessionUser) {
-        const {
-          data: { session },
-          error: sessionError,
-        } = await supabase.auth.getSession();
-        if (sessionError) {
-          console.error("Error getting session:", sessionError);
-          return;
-        }
-
-        const userId = session.user.id;
-
-        const { data, error } = await supabase
-          .from("User")
-          .select("*")
-          .eq("userid", userId);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUser(data);
-        }
-      } else {
-        setUser([]);
-      }
-    };
-
-    if (sessionUser) {
-      fetchUserData();
-    }
-  }, [sessionUser]);
 
   const handlePostClick = () => {
     let hasError = false;
@@ -105,11 +69,6 @@ const CommunityPost = (props) => {
     setIsModalOpen(false);
   };
 
-  // const handleCreateClick = async () => {
-  //   console.log("field", field.name);
-  //   console.log("rules", rules);
-  // };
-
   const handleCreateClick = async () => {
     let userId = "";
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -121,7 +80,6 @@ const CommunityPost = (props) => {
     const uniqueFileName = `${uuidv4()}-${file.name}`;
     const { data, error } = await supabase.storage
       .from("Images")
-      // .upload(`community/${file.name}`, file);
       .upload(`community/${uniqueFileName}`, file);
 
     let url = "";
@@ -133,7 +91,7 @@ const CommunityPost = (props) => {
         .data.publicUrl;
     }
 
-    const { data: postData, error: postError } = await supabase
+    const { data: communityData, error: communityError } = await supabase
       .from("Community")
       .insert([
         {
@@ -149,10 +107,13 @@ const CommunityPost = (props) => {
       ])
       .select();
 
-    if (postError) {
-      console.error("데이터 삽입 에러:", postError);
+    if (communityError) {
+      console.error("데이터 삽입 에러:", communityError);
     } else {
-      console.log("파일 업로드 및 데이터 삽입 성공:", postData[0].communityid);
+      console.log(
+        "파일 업로드 및 데이터 삽입 성공:",
+        communityData[0].communityid
+      );
     }
 
     const { data: joinData, error: joinError } = await supabase
@@ -160,7 +121,7 @@ const CommunityPost = (props) => {
       .insert([
         {
           userid: userId,
-          communityid: postData[0].communityid,
+          communityid: communityData[0].communityid,
           joinedat: new Date(),
           role: "admin",
         },
@@ -170,11 +131,7 @@ const CommunityPost = (props) => {
       console.error("데이터 삽입 에러:", joinError);
     } else {
       console.log("데이터 삽입 성공:", joinData);
-      navigate(`/detail-community/${postData[0].communityid}`, {
-        state: {
-          userData: user,
-        },
-      });
+      navigate(`/detail-community/${communityData[0].communityid}`);
     }
   };
 
@@ -182,7 +139,11 @@ const CommunityPost = (props) => {
     <div>
       <Header title={"Communities"} onPost={handlePostClick} />
       {isModalOpen && (
-        <CreateModal onCreate={handleCreateClick} onCancel={handleModalClose} />
+        <CreateModal
+          title={"Community"}
+          onCreate={handleCreateClick}
+          onCancel={handleModalClose}
+        />
       )}
       <div className={styles.postContainer}>
         <div

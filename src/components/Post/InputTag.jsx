@@ -11,7 +11,9 @@ const InputTag = ({ tags: initialTags, onChange }) => {
   const [isEditing, setIsEditing] = useState([false]);
 
   useEffect(() => {
-    setTags(initialTags);
+    if (initialTags) {
+      setTags(initialTags);
+    }
   }, [initialTags]);
 
   const handleTagChange = (index, value) => {

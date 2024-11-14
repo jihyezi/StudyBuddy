@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./Post.module.css";
 import supabase from "components/supabaseClient";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import DeleteModal from "components/Post/DeleteModal";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
-import profile from "assets/icons/Communities/profile.png";
 import commentOff from "assets/icons/Communities/comment_off.png";
-import commentOn from "assets/icons/Communities/comment_on.png";
 import likeOff from "assets/icons/Communities/like_off.png";
 import likeOn from "assets/icons/Communities/like_on.png";
 import view from "assets/icons/Communities/view.png";
@@ -17,68 +17,51 @@ import share from "assets/icons/Communities/share.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 import noprofile from "assets/images/Profile/noprofile.png";
+import loadinggif from "assets/images/loading.gif";
 
-const Post = ({
-  post = {},
-  community = [],
-  user = [],
-  allUser = [],
-  comment = [],
-  onBookmarkToggle,
-}) => {
-  const { communityId } = useParams();
+const fetchPostData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Post")
+    .select("*")
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const Post = ({ thisPost, communityData, userData, allUserData }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  function formatDate(date) {
-    try {
-      const validDate = new Date(date);
-      return validDate.toISOString();
-    } catch (error) {
-      console.error("formatDate에 전달된 잘못된 날짜:", date);
-      return "잘못된 날짜";
-    }
-  }
+  const { data: Post = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ["Post", thisPost.postid],
+    queryFn: () => fetchPostData(thisPost.postid),
+    onError: (error) => console.log(error.message),
+  });
 
-  const startdate = formatDate(post.startdate);
-  const enddate = formatDate(post.enddate);
+  const fetchLikeCount = async () => {
+    const { count } = await supabase
+      .from("PostLike")
+      .select("*", { count: "exact" })
+      .eq("postid", thisPost.postid);
 
-  const calculateDaysBetween = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const timeDiff = end - start;
-    const dayDiff = timeDiff / (1000 * 3600 * 24);
-    return Math.ceil(dayDiff);
+    setLikeCount(count);
   };
 
-  const days = calculateDaysBetween(startdate, enddate);
+  const fetchCommentCount = async () => {
+    const { count } = await supabase
+      .from("Comment")
+      .select("*", { count: "exact" })
+      .eq("postid", thisPost.postid);
 
-  const communityName =
-    Array.isArray(community) && community.length > 0
-      ? community.find((comm) => comm.communityid === post.communityid)?.name
-      : "Unknown Communityy";
-
-  const userimg =
-    Array.isArray(allUser) && allUser.length > 0
-      ? allUser.find((u) => u.userid === post.userid)?.profileimage
-      : "Unknown User";
-
-  const userNickname =
-    Array.isArray(allUser) && allUser.length > 0
-      ? allUser.find((u) => u.userid === post.userid)?.nickname
-      : "Unknown User";
-
-  const userName =
-    Array.isArray(allUser) && allUser.length > 0
-      ? allUser.find((u) => u.userid === post.userid)?.username
-      : "Unknown User";
-
-  const commentCount = Array.isArray(comment)
-    ? comment.filter((c) => c.postid === post.postid).length
-    : 0;
+    setCommentCount(count);
+  };
 
   useEffect(() => {
     const checkLikeAndBookmark = async () => {
@@ -102,48 +85,97 @@ const Post = ({
       const { data: likeData } = await supabase
         .from("PostLike")
         .select("*")
-        .eq("postid", post.postid)
+        .eq("postid", thisPost.postid)
         .eq("userid", userId);
 
       setLiked(likeData.length > 0);
+      fetchLikeCount();
 
       const { data: bookmarkData } = await supabase
         .from("Bookmark")
         .select("*")
-        .eq("postid", post.postid)
+        .eq("postid", thisPost.postid)
         .eq("userid", userId);
       setBookmarked(bookmarkData.length > 0);
     };
 
     checkLikeAndBookmark();
     fetchLikeCount();
-  }, [post.postid]);
+    fetchCommentCount();
+  }, [thisPost.postid]);
 
-  const fetchLikeCount = async () => {
-    const { count } = await supabase
-      .from("PostLike")
-      .select("*", { count: "exact" })
-      .eq("postid", post.postid);
+  const loading = isPostLoading;
 
-    setLikeCount(count);
+  if (isPostLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} alt="Loading..." />
+      </div>
+    );
+  }
+
+  function formatDate(date) {
+    try {
+      const validDate = new Date(date);
+      return validDate.toISOString();
+    } catch (error) {
+      console.error("formatDate에 전달된 잘못된 날짜:", date);
+      return "잘못된 날짜";
+    }
+  }
+
+  const startdate = formatDate(Post[0].startdate);
+  const enddate = formatDate(Post[0].enddate);
+
+  const calculateDaysBetween = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const timeDiff = end - start;
+    const dayDiff = timeDiff / (1000 * 3600 * 24);
+    return Math.ceil(dayDiff);
   };
+
+  const days = calculateDaysBetween(startdate, enddate);
+
+  const communityName =
+    Array.isArray(communityData) && communityData.length > 0
+      ? communityData.find((comm) => comm.communityid === Post[0].communityid)
+          ?.name
+      : "Unknown Communityy";
+
+  const userimg =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === Post[0].userid)?.profileimage
+      : "Unknown User";
+
+  const userNickname =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === Post[0].userid)?.nickname
+      : "Unknown User";
+
+  const userName =
+    Array.isArray(allUserData) && allUserData.length > 0
+      ? allUserData.find((u) => u.userid === Post[0].userid)?.username
+      : "Unknown User";
 
   const handlePostClick = async () => {
     await supabase
       .from("Post")
-      .update({ viewnumber: post.viewnumber + 1 })
-      .eq("postid", post.postid);
+      .update({ viewnumber: thisPost.viewnumber + 1 })
+      .eq("postid", thisPost.postid);
 
-    navigate(`/detail-post/${post.postid}`, {
-      state: {
-        userData: user,
-        allUserData: allUser,
-        communityData: community,
-        postData: post,
-        // commentData: comment,
-      },
-    });
+    navigate(`/detail-post/${thisPost.postid}`);
   };
+
+  console.log("post-post", thisPost);
 
   const toggleLike = async (event) => {
     event.stopPropagation();
@@ -166,13 +198,13 @@ const Post = ({
     const userId = session.user.id;
 
     if (liked) {
-      await supabase.from("PostLike").delete().eq("postid", post.postid);
+      await supabase.from("PostLike").delete().eq("postid", thisPost.postid);
       setLiked(false);
       setLikeCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
     } else {
       await supabase.from("PostLike").insert([
         {
-          postid: post.postid,
+          postid: thisPost.postid,
           createdat: new Date(),
           userid: userId,
         },
@@ -203,16 +235,15 @@ const Post = ({
     const userId = session.user.id;
 
     if (bookmarked) {
-      await supabase.from("Bookmark").delete().eq("postid", post.postid);
+      await supabase.from("Bookmark").delete().eq("postid", thisPost.postid);
       setBookmarked(false);
-      onBookmarkToggle(post.postid);
     } else {
       await supabase.from("Bookmark").insert([
         {
-          postid: post.postid,
+          postid: thisPost.postid,
           createdat: new Date(),
           userid: userId,
-          communityid: post.communityid,
+          communityid: thisPost.communityid,
         },
       ]);
       setBookmarked(true);
@@ -245,12 +276,17 @@ const Post = ({
     setShowOptions(false);
   };
 
+  const handleRemoveClick = (event) => {
+    event.stopPropagation();
+    setIsDeleteModalOpen(true);
+  };
+
   const handleDeleteClick = async (event) => {
     event.stopPropagation();
     const { data, error } = await supabase
       .from("Post")
       .delete()
-      .eq("postid", post.postid);
+      .eq("postid", thisPost.postid);
 
     if (error) {
       console.error("게시글 삭제 실패:", error);
@@ -258,16 +294,33 @@ const Post = ({
       console.log("게시글 삭제 성공:", data);
     }
 
+    queryClient.invalidateQueries(["Post", thisPost.postid]);
     setShowOptions(false);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleCancelClick = () => {
+    setIsDeleteModalOpen(false);
   };
 
   return (
     <div className={styles.post} onClick={handlePostClick}>
+      {isDeleteModalOpen && (
+        <DeleteModal
+          title={"Study"}
+          onDelete={handleDeleteClick}
+          onCancel={handleCancelClick}
+        />
+      )}
       <div
-        style={{ marginTop: "20px", marginBottom: "20px", marginRight: "20px" }}
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          marginRight: "20px",
+        }}
       >
         <span className={styles.communityName}>{communityName}</span>
-        {user[0]?.userid === post.userid && (
+        {userData.userid === Post[0].userid && (
           <img
             className={styles.moreIcon}
             src={more}
@@ -279,11 +332,11 @@ const Post = ({
 
       <div className={styles.postDetail}>
         <div>
-          {userimg ?
+          {userimg ? (
             <img className={styles.userProfile} src={userimg} alt="profile" />
-            : <img className={styles.userProfile} src={noprofile} alt="profile" />
-          }
-
+          ) : (
+            <img className={styles.userProfile} src={noprofile} alt="profile" />
+          )}
         </div>
 
         <div className={styles.postWriterContent}>
@@ -291,16 +344,16 @@ const Post = ({
             <span className={styles.postWriterNickName}>{userNickname}</span>
             <span className={styles.postWriterID}>@{userName}</span>
             <span className={styles.postWriteDate}>
-              {new Date(post.createdat).toLocaleDateString()}
+              {new Date(Post[0].createdat).toLocaleDateString()}
             </span>
           </div>
           <div className={styles.postContent}>
-            <p className={styles.postTitle}>[{post.title}]</p>
+            <p className={styles.postTitle}>[{Post[0].title}]</p>
             <p className={styles.postPeriod}>
-              1. 준비기간 : {new Date(post.startdate).toLocaleDateString()} ~{" "}
-              {new Date(post.enddate).toLocaleDateString()} ({days}일)
+              1. 준비기간 : {new Date(Post[0].startdate).toLocaleDateString()} ~{" "}
+              {new Date(Post[0].enddate).toLocaleDateString()} ({days}일)
             </p>
-            <p className={styles.postResult}>2. 결과 : {post.result}</p>
+            <p className={styles.postResult}>2. 결과 : {Post[0].result}</p>
           </div>
           <div className={styles.postETC}>
             <div className={styles.postComment}>
@@ -309,7 +362,7 @@ const Post = ({
                 src={commentOff}
                 alt="commentOff"
               />
-              <span className={styles.commentNumber}>{post.commentCount}</span>
+              <span className={styles.commentNumber}>{commentCount}</span>
             </div>
             <div className={styles.postLike}>
               <img
@@ -327,7 +380,7 @@ const Post = ({
             </div>
             <div>
               <img className={styles.viewIcon} src={view} alt="view" />
-              <span className={styles.viewNumber}>{post.viewnumber}</span>
+              <span className={styles.viewNumber}>{Post[0].viewnumber}</span>
             </div>
             <div>
               <img
@@ -357,7 +410,7 @@ const Post = ({
                 alt="edit"
               />
             </div>
-            <div className={styles.moreClickDelete} onClick={handleDeleteClick}>
+            <div className={styles.moreClickDelete} onClick={handleRemoveClick}>
               <div className={styles.moreClickDeleteText}>삭제하기</div>
               <img
                 className={styles.moreClickDeleteIcon}

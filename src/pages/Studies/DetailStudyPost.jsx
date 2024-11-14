@@ -238,16 +238,14 @@ const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
     mutation.mutate(newComment);
   };
 
-  const handleRemoveClick = () => {
-    setIsDeleteModalOpen(true);
+  const handleReviseClick = () => {
+    // navigate(`/revise-study/${studyId}`);
+    alert("수정기능을 구현중입니다");
+    return;
   };
 
-  const handleReviseClick = () => {
-    navigate(`/revise-study/${studyId}`, {
-      state: {
-        study: study,
-      },
-    });
+  const handleRemoveClick = () => {
+    setIsDeleteModalOpen(true);
   };
 
   const handleDeleteClick = async () => {

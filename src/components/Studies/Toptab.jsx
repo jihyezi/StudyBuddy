@@ -20,7 +20,13 @@ export const Toptab = ({ userData, allUserData, isLoading }) => {
     },
     {
       name: "온라인",
-      content: <Online />,
+      content: (
+        <Online
+          userData={userData}
+          allUserData={allUserData}
+          isLoading={isLoading}
+        />
+      ),
     },
     {
       name: "오프라인",

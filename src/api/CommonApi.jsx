@@ -39,7 +39,12 @@ export const fetchUserData = async (userId) => {
 export const useUserData = () => {
   const { user: sessionUser } = useAuth();
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["userData", sessionUser?.id],
     queryFn: () => fetchUserData(sessionUser.id),
     enabled: !!sessionUser,
@@ -58,13 +63,18 @@ export const fetchCommunityData = async () => {
 };
 
 export const useCommunityData = () => {
-  const { data, isLoading, error } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["communityData"],
     queryFn: fetchCommunityData,
     onError: (error) => console.log(error.message),
   });
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch };
 };
 
 //Post
@@ -76,7 +86,11 @@ export const fetchPostData = async () => {
 };
 
 export const usePostData = () => {
-  const { data, isLoading, error } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["postData"],
     queryFn: fetchPostData,
     onError: (error) => console.log(error.message),

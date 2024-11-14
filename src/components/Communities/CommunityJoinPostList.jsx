@@ -2,26 +2,37 @@ import React from "react";
 import Post from "./Post";
 
 const CommunityPostList = ({
-  postData,
-  communityData,
   userData,
   allUserData,
-  commentData,
-  onBookmarkToggle,
+  postData = [],
+  communityData,
 }) => {
   return (
-    <div style={{ width: '100%' }}>
-      {postData.map((post) => (
-        <Post
-          key={post.postid} // post.id -> post.postid 로 수정
-          post={post}
-          community={communityData}
-          user={userData}
-          allUser={allUserData}
-          comment={commentData}
-          onBookmarkToggle={onBookmarkToggle}
-        />
-      ))}
+    <div style={{ width: "100%" }}>
+      {postData.length > 0 ? (
+        postData.map((post) => (
+          <Post
+            key={post.postid}
+            userData={userData}
+            allUserData={allUserData}
+            thisPost={post}
+            postData={postData}
+            communityData={communityData}
+          />
+        ))
+      ) : (
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+            fontSize: "24px",
+            fontFamily: "BalooTammudu2-SemiBold",
+            color: "#7b7b7b",
+          }}
+        >
+          No Posts Yet.
+        </div>
+      )}
     </div>
   );
 };

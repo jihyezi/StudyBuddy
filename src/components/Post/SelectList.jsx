@@ -55,6 +55,7 @@ export const selectList = {
   ],
   joinCommunity: [],
   studyFilter: [{ name: "모집 중" }, { name: "모집 완료" }],
+  studtyfilter: [{ name: "전체" }, { name: "모집 중" }, { name: "모집 완료" }],
 };
 
 export const fetchCommunityData = async (communityIds) => {

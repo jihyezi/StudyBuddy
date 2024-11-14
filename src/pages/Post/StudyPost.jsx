@@ -41,8 +41,6 @@ const StudyPost = ({ allUserData }) => {
     studyDescription: false,
   });
 
-  const { user: sessionUser } = useAuth();
-
   const handleAlbumClick = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -151,7 +149,7 @@ const StudyPost = ({ allUserData }) => {
     setIsModalOpen(true);
   };
 
-  const handleModalClose = () => {
+  const handleCancelClick = () => {
     setIsModalOpen(false);
   };
 
@@ -166,7 +164,13 @@ const StudyPost = ({ allUserData }) => {
       return;
     }
 
+    if (!session) {
+      console.error("No session found. User might not be logged in.");
+      return;
+    }
+
     const userId = session.user.id;
+
     const currentContent = editorRef.current.innerHTML;
     const descriptionParts = [];
     const parser = new DOMParser();
@@ -198,7 +202,6 @@ const StudyPost = ({ allUserData }) => {
     }
 
     const finalDescription = descriptionParts.join("\n");
-    console.log(finalDescription);
 
     const { data: studyData, error: studyError } = await supabase
       .from("Study")
@@ -235,7 +238,7 @@ const StudyPost = ({ allUserData }) => {
         <CreateModal
           title={"Study"}
           onCreate={handleCreateClick}
-          onCancel={handleModalClose}
+          onCancel={handleCancelClick}
         />
       )}
       <div className={styles.postContainer}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "./DetailPost.module.css";
 import supabase from "components/supabaseClient";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 // component
 import Header from "components/Post/DetailHeader";
@@ -15,62 +16,210 @@ import likeOn from "assets/icons/Communities/like_on.png";
 import bookmarkOff from "assets/icons/Communities/bookmark_off.png";
 import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
-import profile1 from "assets/images/Profile/profile1.png";
 import folder from "assets/icons/Post/folder.png";
 import download from "assets/icons/Post/file_download.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 import noprofile from "assets/images/Profile/noprofile.png";
+import loadinggif from "assets/images/loading.gif";
 
-const DetailPost = ({}) => {
-  const [commentData, setCommentData] = useState([]);
+const fetchPostData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Post")
+    .select("*")
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchPostLikeData = async ({ postId, userId }) => {
+  const { data, error } = await supabase
+    .from("PostLike")
+    .select("*")
+    .eq("postid", postId);
+  // .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchPostBookmarkData = async ({ postId, userId }) => {
+  const { data, error } = await supabase
+    .from("Bookmark")
+    .select("*")
+    .eq("postid", postId);
+  // .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchPostCommentData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .select("*")
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const DetailPost = ({
+  userData,
+  allUserData,
+  communityData,
+  postData,
+  isLoading,
+}) => {
+  const { postId } = useParams();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const userId = userData.userid;
   const [inputValue, setInputValue] = useState("");
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { userData, allUserData, communityData, postData } = location.state || {};
+  const { data: Post = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ["Post", postId],
+    queryFn: () => fetchPostData(postId),
+    onError: (error) => console.log(error.message),
+  });
 
-  console.log(location.state);
+  const { data: postLike = [], isLoading: isPostLikeLoading } = useQuery({
+    queryKey: ["postLike", { postId, userId }],
+    queryFn: () => fetchPostLikeData({ postId, userId }),
+    onError: (error) => console.log(error.message),
+  });
+
+  const { data: postBookmark = [], isLoading: isPostBookmarkLoading } =
+    useQuery({
+      queryKey: ["postBookmark", { postId, userId }],
+      queryFn: () => fetchPostBookmarkData({ postId, userId }),
+      onError: (error) => console.log(error.message),
+    });
+
+  const { data: postComments = [], isLoading: isPostCommentLoading } = useQuery(
+    {
+      queryKey: ["postComments", postId],
+      queryFn: () => fetchPostCommentData(postId),
+      onError: (error) => console.log(error.message),
+    }
+  );
+
+  useEffect(() => {
+    console.log("userdata", userData);
+    console.log("new date", new Date());
+    setInputValue("");
+    const checkLikeAndBookmark = async () => {
+      const userLike = postLike.find((like) => like.userid === userData.userid);
+      setLiked(!!userLike);
+
+      const userBookmark = postBookmark.find(
+        (bookmark) => bookmark.userid === userData.userid
+      );
+      setBookmarked(!!userBookmark);
+    };
+
+    if (userData) {
+      checkLikeAndBookmark();
+    }
+  }, [postLike, postBookmark]);
+
+  const mutation = useMutation({
+    mutationFn: async (newComment) => {
+      const { data, error } = await supabase
+        .from("Comment")
+        .insert([newComment]);
+      if (error) throw new Error(error.message);
+
+      return data;
+    },
+    onMutate: async (newComment) => {
+      await queryClient.cancelQueries(["postComments", postId]);
+
+      const previousComments = queryClient.getQueryData([
+        "postComments",
+        postId,
+      ]);
+
+      queryClient.setQueryData(["postComments", postId], (old) => [
+        ...old,
+        { ...newComment, createdat: new Date().toISOString() },
+      ]);
+
+      return { previousComments };
+    },
+    onError: (err, newComment, context) => {
+      queryClient.setQueryData(
+        ["postComments", postId],
+        context.previousComments
+      );
+    },
+    onSettled: () => {
+      setInputValue("");
+      queryClient.invalidateQueries(["postComments", postId]);
+    },
+  });
+
+  if (
+    isLoading ||
+    isPostLoading ||
+    isPostLikeLoading ||
+    isPostBookmarkLoading ||
+    isPostCommentLoading
+  ) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} alt="Loading..." />
+      </div>
+    );
+  }
 
   const communityName = Array.isArray(communityData)
-    ? communityData.find((comm) => comm.communityid === postData.communityid)
+    ? communityData.find((comm) => comm.communityid === Post[0].communityid)
         ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
-    ? communityData.find((comm) => comm.communityid === postData.communityid)
-      ?.communityid
+    ? communityData.find((comm) => comm.communityid === Post[0].communityid)
+        ?.communityid
     : "Unknown Community";
 
   const userid =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid)?.username
+      ? allUserData.find((u) => u.userid === Post[0].userid)?.username
       : "Unknown User";
 
   const selectedUserData =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid) // postData.userid에 해당하는 사용자 데이터 찾기
+      ? allUserData.find((u) => u.userid === Post[0].userid) // postData.userid에 해당하는 사용자 데이터 찾기
       : null;
-
-
 
   const userimg =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid)?.profileimage
+      ? allUserData.find((u) => u.userid === Post[0].userid)?.profileimage
       : "Unknown User";
 
   const userNickname =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid)?.nickname
+      ? allUserData.find((u) => u.userid === Post[0].userid)?.nickname
       : "Unknown User";
 
   const handleReviseClick = () => {
-    navigate(
-      `/revisepost?postData=${encodeURIComponent(JSON.stringify(postData))}`
-    );
+    // navigate(`/revise-post/${postId}`);
+    alert("수정기능을 구현중입니다");
+    return;
   };
 
   const handleRemoveClick = () => {
@@ -81,7 +230,7 @@ const DetailPost = ({}) => {
     const { data, error } = await supabase
       .from("Post")
       .delete()
-      .eq("postud", postData.postid);
+      .eq("postid", postId);
 
     if (error) {
       console.log("삭제 실패 : ", error);
@@ -95,59 +244,7 @@ const DetailPost = ({}) => {
     setIsDeleteModalOpen(false);
   };
 
-  useEffect(() => {
-    console.log("userData", userData);
-    console.log("allUserData", allUserData);
-    console.log("communityData", communityData);
-    console.log("postData", postData);
-
-    const getCommentData = async () => {
-      const commentData = await fetchCommentDataById(postData.postid);
-      setCommentData(commentData);
-    };
-    getCommentData();
-  }, []);
-
-  useEffect(() => {
-    const checkLikeAndBookmark = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-
-      if (sessionError) {
-        console.error("Error getting session:", sessionError);
-        return;
-      }
-
-      if (!session) {
-        console.error("No session found. User might not be logged in.");
-        return;
-      }
-
-      const userId = session.user.id;
-
-      // 좋아요 유무
-      const { data: likeData } = await supabase
-        .from("PostLike")
-        .select("*")
-        .eq("postid", postData.postid)
-        .eq("userid", userId);
-      setLiked(likeData.length > 0);
-
-      // 북마크 유무
-      const { data: bookmarkData } = await supabase
-        .from("Bookmark")
-        .select("*")
-        .eq("postid", postData.postid)
-        .eq("userid", userId);
-      setBookmarked(bookmarkData.length > 0);
-    };
-    checkLikeAndBookmark();
-  }, [postData.postid]);
-
   const formatDescription = (description) => {
-    console.log("filteredPost", userData);
     const regex = /!\[Image\]\((.*?)\)/g;
     const parts = description.split("\n").flatMap((line, index) => {
       const imageParts = line.split(regex);
@@ -188,19 +285,6 @@ const DetailPost = ({}) => {
     }
   };
 
-  const fetchCommentDataById = async (postId) => {
-    const { data, error } = await supabase
-      .from("Comment")
-      .select("*")
-      .eq("postid", postId);
-
-    if (error) {
-      console.log("Error fetching comment data:", error);
-      return null;
-    }
-    return data;
-  };
-
   const toggleLike = async () => {
     const {
       data: { session },
@@ -220,12 +304,12 @@ const DetailPost = ({}) => {
     const userId = session.user.id;
 
     if (liked) {
-      await supabase.from("PostLike").delete().eq("postid", postData.postid);
+      await supabase.from("PostLike").delete().eq("postid", postId);
       setLiked(false);
     } else {
       await supabase.from("PostLike").insert([
         {
-          postid: postData.postid,
+          postid: postId,
           createdat: new Date(),
           userid: userId,
         },
@@ -253,12 +337,12 @@ const DetailPost = ({}) => {
     const userId = session.user.id;
 
     if (bookmarked) {
-      await supabase.from("Bookmark").delete().eq("postid", postData.postid);
+      await supabase.from("Bookmark").delete().eq("postid", postId);
       setBookmarked(false);
     } else {
       await supabase.from("Bookmark").insert([
         {
-          postid: postData.postid,
+          postid: postId,
           createdat: new Date(),
           userid: userId,
           communityid: communityData.communityid,
@@ -282,68 +366,8 @@ const DetailPost = ({}) => {
     }
   };
 
-  const registerClick = async (event) => {
-    if (!inputValue.trim()) return;
-
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
-
-    if (sessionError) {
-      console.error("Error getting session:", sessionError);
-      return;
-    }
-
-    if (!session) {
-      console.error("No session found. User might not be logged in.");
-      return;
-    }
-
-    const userId = session.user.id;
-    const inputValues = document.querySelector(`.${styles.inputField}`).value;
-
-    const { data, error } = await supabase.from("Comment").insert([
-      {
-        postid: postData.postid,
-        userid: userId,
-        content: inputValues,
-        createdat: new Date(),
-        updatedat: new Date(),
-      },
-    ]);
-
-    if (error) {
-      console.error("Error inserting comment:", error);
-    } else {
-      console.log("Comment inserted:", data);
-
-      const commentData = await fetchCommentDataById(postData.postid);
-      if (commentData) {
-        setCommentData(commentData);
-      }
-
-      setInputValue("");
-    }
-  };
-
-  const deleteComment = (commentId) => {
-    setCommentData((prevComments) =>
-      prevComments.filter((comment) => comment.commentid !== commentId)
-    );
-  };
-
   const handleCommunityClick = (item) => {
-    navigate(`/detail-community/${item.communityid}`, {
-      state: {
-        // id: `${item.id}`,
-        // img: `${item.img}`,
-        // community: `${item.community}`,
-        communityData: communityData,
-        postData: postData,
-        userData: userData,
-      },
-    });
+    navigate(`/detail-community/${item.communityid}`);
   };
 
   const handleProfileClick = (item) => {
@@ -356,11 +380,49 @@ const DetailPost = ({}) => {
     });
   };
 
+  //댓글 등록
+  const registerClick = async (event) => {
+    console.log("registerclick");
+    if (!userData) {
+      alert("로그인 후에 댓글을 등록할 수 있습니다.");
+      return;
+    }
+    if (!inputValue.trim()) return;
+
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    const userId = session.user.id;
+    const newComment = {
+      postid: postId,
+      userid: userId,
+      content: inputValue,
+      createdat: new Date(),
+      updatedat: new Date(),
+    };
+
+    mutation.mutate(newComment);
+  };
+
+  const handleCommentDelete = (commentId) => {
+    const updatedComments = postComments.filter(
+      (comment) => comment.commentid !== commentId
+    );
+    queryClient.setQueryData(["postComments", postId], updatedComments);
+  };
+
   return (
     <div style={{ width: "100%", maxWidth: "1200px", margin: "0" }}>
       <Header title={"Post"} />
       {isDeleteModalOpen && (
         <DeleteModal
+          title={"Post"}
           onDelete={handleDeleteClick}
           onCancel={handleCancelClick}
         />
@@ -368,8 +430,13 @@ const DetailPost = ({}) => {
       <div
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
-        <div className={styles.studiesStatus} onClick={() => handleCommunityClick({ communityid })}>{communityName}</div>
-        <div className={styles.studiesTitle}>{postData.title}</div>
+        <div
+          className={styles.studiesStatus}
+          onClick={() => handleCommunityClick({ communityid })}
+        >
+          {communityName}
+        </div>
+        <div className={styles.studiesTitle}>{Post[0].title}</div>
         <div
           style={{
             display: "flex",
@@ -386,7 +453,7 @@ const DetailPost = ({}) => {
           />
           <div className={styles.postWriterNickname}>{userNickname}</div>
           <div className={styles.postWriteDate}>
-            {new Date(postData.createdat).toLocaleDateString()}
+            {new Date(Post[0].createdat).toLocaleDateString()}
           </div>
         </div>
 
@@ -398,32 +465,15 @@ const DetailPost = ({}) => {
             gap: "14px",
             paddingBottom: "16px",
             borderBottom: "3px solid #dddddd",
-            width: '800px'
+            width: "800px",
           }}
         >
-          {userData &&
-          userData.length > 0 &&
-          userData[0].userid === postData.userid ? (
+          {userData && userData.userid === Post[0].userid && (
             <>
               <div className={styles.revise} onClick={handleReviseClick}>
                 수정
               </div>
               <div className={styles.delete} onClick={handleRemoveClick}>
-                삭제
-              </div>
-            </>
-          ) : (
-            <>
-              <div
-                className={`${styles.revise} ${styles.disabled}`}
-                title="로그인이 필요합니다"
-              >
-                수정
-              </div>
-              <div
-                className={`${styles.delete} ${styles.disabled}`}
-                title="로그인이 필요합니다"
-              >
                 삭제
               </div>
             </>
@@ -441,28 +491,28 @@ const DetailPost = ({}) => {
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>준비기간</div>
             <div className={styles.studiesDetail}>
-              {new Date(postData.startdate).toLocaleDateString()} ~{" "}
-              {new Date(postData.enddate).toLocaleDateString()}
+              {new Date(Post[0].startdate).toLocaleDateString()} ~{" "}
+              {new Date(Post[0].enddate).toLocaleDateString()}
             </div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>책</div>
-            <div className={styles.studiesDetail}>{postData.book}</div>
+            <div className={styles.studiesDetail}>{Post[0].book}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>결과</div>
-            <div className={styles.studiesDetail}>{postData.result}</div>
+            <div className={styles.studiesDetail}>{Post[0].result}</div>
           </div>
         </div>
         <div style={{ marginTop: "70px" }}>
           <div className={styles.studiesIntro}>공부방법</div>
           <div style={{ padding: "30px 30px 30px 30px" }}>
             <div className={styles.studiesContent}>
-              {formatDescription(postData.content)}
+              {formatDescription(Post[0].content)}
             </div>
 
-            {postData.references &&
-              postData.references.map((file, index) => (
+            {Post[0].references &&
+              Post[0].references.map((file, index) => (
                 <div
                   key={index}
                   style={{
@@ -496,7 +546,7 @@ const DetailPost = ({}) => {
         <div style={{ marginTop: "70px" }}>
           <div className={styles.studiesComments}>
             <div className={styles.studiesComment}>
-              댓글 {commentData.length}개
+              댓글 {postComments.length}개
             </div>
             <div
               style={{
@@ -529,18 +579,15 @@ const DetailPost = ({}) => {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "40px" }}
             >
-              {commentData &&
-                commentData.length > 0 &&
-                commentData.map((comment, index) => (
-                  <Comment
-                    key={index}
-                    userid={comment.userid}
-                    content={comment.content}
-                    commentData={comment}
-                    onDelete={deleteComment}
-                    userData={userData}
-                  />
-                ))}
+              {postComments.map((comment, index) => (
+                <Comment
+                  key={index}
+                  comment={comment}
+                  userData={userData}
+                  allUserData={allUserData}
+                  onDelete={handleCommentDelete}
+                />
+              ))}
             </div>
 
             <div
@@ -553,10 +600,9 @@ const DetailPost = ({}) => {
               <img
                 className={styles.commentWriterProfile}
                 src={
-                  // userData && userData.length > 0
-                  //   ? userData[0].profileimage
-                  //   : noprofile
-                  userData[0].profileimage || noprofile
+                  userData && userData.profileimage
+                    ? userData.profileimage
+                    : noprofile
                 }
                 alt="noprofile"
               />

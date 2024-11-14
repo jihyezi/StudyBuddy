@@ -62,67 +62,6 @@ const Center = styled.div`
   flex: 1;
 `;
 
-const fetchBookmarks = async () => {
-  const { data, error } = await supabase.from("Bookmark").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchCommunities = async () => {
-  const { data, error } = await supabase.from("Community").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchJoinCommunities = async () => {
-  const { data, error } = await supabase.from("JoinCommunity").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchPosts = async () => {
-  const { data, error } = await supabase.from("Post").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchPostLikes = async () => {
-  const { data, error } = await supabase.from("PostLike").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchPostComments = async () => {
-  const { data, error } = await supabase.from("Comment").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchStudies = async () => {
-  const { data, error } = await supabase.from("Study").select("*");
-  if (error) throw new Error(error.message);
-  else console.log("fetchStudies", data);
-  return data;
-};
-
-const fetchStudyLikes = async () => {
-  const { data, error } = await supabase.from("StudyLike").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchStudyComments = async () => {
-  const { data, error } = await supabase.from("StudyComment").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const fetchUsers = async () => {
-  const { data, error } = await supabase.from("User").select("*");
-  if (error) throw new Error(error.message);
-  return data;
-};
-
 const MainContent = () => {
   const location = useLocation();
   const { user } = useAuth();
@@ -136,48 +75,8 @@ const MainContent = () => {
     refetchUserData,
     isLoading,
     hasError,
+    refetchCommunityData,
   } = useDataContext();
-
-  const { data: bookmarks } = useQuery({
-    queryKey: ["bookmarks"],
-    queryFn: fetchBookmarks,
-  });
-  const { data: communities } = useQuery({
-    queryKey: ["communities"],
-    queryFn: fetchCommunities,
-  });
-  const { data: joinCommunities } = useQuery({
-    queryKey: ["joinCommunities"],
-    queryFn: fetchJoinCommunities,
-  });
-  const { data: posts } = useQuery({
-    queryKey: ["posts"],
-    queryFn: fetchPosts,
-  });
-  const { data: postLikes } = useQuery({
-    queryKey: ["postLikes"],
-    queryFn: fetchPostLikes,
-  });
-  const { data: postComments } = useQuery({
-    queryKey: ["postComments"],
-    queryFn: fetchPostComments,
-  });
-  const { data: studies = [] } = useQuery({
-    queryKey: ["studies"],
-    queryFn: fetchStudies,
-  });
-  const { data: studyLikes = [] } = useQuery({
-    queryKey: ["studyLikes"],
-    queryFn: fetchStudyLikes,
-  });
-  const { data: studyComments = [] } = useQuery({
-    queryKey: ["studyComments"],
-    queryFn: fetchStudyComments,
-  });
-  const { data: users = [] } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
-  });
 
   useEffect(() => {
     if (
@@ -212,7 +111,19 @@ const MainContent = () => {
             </CommonLayout>
           }
         />
-        <Route path="/communities" element={<Communities />} />
+        <Route
+          path="/communities"
+          element={
+            <Communities
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+              refetchUserData={refetchUserData}
+              isLoading={isLoading}
+            />
+          }
+        />
         <Route
           path="/studies"
           element={
@@ -231,9 +142,28 @@ const MainContent = () => {
         <Route path="/create-post" element={<Post />} />
         <Route
           path="/detail-post/:postId"
-          element={<DetailPost users={users} />}
+          element={
+            <DetailPost
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+              isLoading={isLoading}
+            />
+          }
         />
-        <Route path="/create-community" element={<CommunityPost />} />
+        <Route
+          path="/create-community"
+          element={
+            <CommunityPost
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+              isLoading={isLoading}
+            />
+          }
+        />
         <Route
           path="/create-study"
           element={<StudyPost allUserData={allUserData} />}
@@ -256,7 +186,15 @@ const MainContent = () => {
         />
         <Route
           path="/detail-community/:communityId"
-          element={<CommunityDetailsPage />}
+          element={
+            <CommunityDetailsPage
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+              isLoading={isLoading}
+            />
+          }
         />
         <Route
           path="/bookmarkdetail/:communityid"
