@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import styles from './ProfileTablist.module.css';
 import JoinPostList from 'components/Communities/CommunityJoinPostList';
+import { useDataContext } from 'api/DataContext';
 
-export const ProfileTablist = ({ communityData, allUserData, userPost, userLike, userComment }) => {
+export const ProfileTablist = ({ userPost, userLike, userComment }) => {
     const [currentTab, clickTab] = useState(0);
+    const { communityData, allUserData } = useDataContext();
 
     const menuArr = [
         {

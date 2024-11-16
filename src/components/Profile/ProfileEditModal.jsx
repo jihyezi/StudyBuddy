@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import supabase from "components/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
 import { useMutation } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
 
 // Images
 import back from "assets/icons/Post/back.png";
@@ -29,7 +30,8 @@ const customStyles = {
 };
 Modal.setAppElement("#root");
 
-const ProfileEditModal = ({ modalIsOpen, closeModal, userData, refetchUserData }) => {
+const ProfileEditModal = ({ modalIsOpen, closeModal, userData }) => {
+    const { refetchUserData } = useDataContext();
     const [name, setName] = useState(userData.nickname);
     const [bio, setBio] = useState(userData.bio);
     const [birthDate, setBirthDate] = useState(userData.birthdate);

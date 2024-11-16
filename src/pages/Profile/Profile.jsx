@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import styles from './Profile.module.css';
 import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
 
 // Components
 import Header from "components/Header";
@@ -44,8 +45,9 @@ const fetchUserLikeData = async (userId) => {
   return data;
 };
 
-const Profile = ({ userData, allUserData, communityData, postData, refetchUserData, isLoading }) => {
+const Profile = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { userData, allUserData, communityData, postData, refetchUserData, isLoading } = useDataContext();
 
   const openModal = () => {
     setModalIsOpen(true);

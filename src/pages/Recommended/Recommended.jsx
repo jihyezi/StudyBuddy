@@ -8,7 +8,9 @@ import "fonts/Font.css";
 import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
 
-const Recommended = ({ user }) => {
+// Data
+
+const Recommended = ({ user, userData, allUserData }) => {
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [communityName, setCommunityName] = useState([]);
@@ -16,7 +18,6 @@ const Recommended = ({ user }) => {
   const [postData, setPostData] = useState([]);
   const [postLike, setPostLike] = useState(null);
   const [comment, setComment] = useState(null);
-  const [allUser, setAllUser] = useState([]);
 
   const navigate = useNavigate();
 
@@ -165,20 +166,9 @@ const Recommended = ({ user }) => {
     }
   };
 
-  const fetchAllUserData = async () => {
-    const { data, error } = await supabase.from("User").select("*");
-
-    if (error) {
-      console.error("Error", error);
-    } else {
-      setAllUser(data);
-    }
-  };
-
   useEffect(() => {
     fetchHotCommunities();
     fetchPopularPosts();
-    fetchAllUserData();
   }, []);
 
   const handleCommuntiyClick = (community) => {
@@ -191,7 +181,7 @@ const Recommended = ({ user }) => {
         // allJoinCommunityData: allJoinCommunityData,
         // joinCommunityData: joinCommunityData,
         // postData: postData,
-        userData: allUser,
+        userData: allUserData,
       },
     });
   };
@@ -201,7 +191,7 @@ const Recommended = ({ user }) => {
       state: {
         communityData: communityData,
         userData: [user],
-        allUserData: allUser,
+        allUserData: allUserData,
         postData: postData[0],
       },
     });
