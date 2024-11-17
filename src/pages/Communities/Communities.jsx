@@ -2,6 +2,7 @@ import React, { useMemo, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
 import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
 
 // Components
 import Header from "components/Header";
@@ -37,8 +38,9 @@ const fetchCommentData = async (postId) => {
   return data;
 }
 
-const Communities = ({ userData, allUserData, communityData, postData, isLoading }) => {
+const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState("");
+  const { userData, allUserData, communityData, postData, isLoading } = useDataContext();
 
   const { data: joinCommunityData = [] } = useQuery({
     queryKey: ['joinCommunityData', userData?.userid],
@@ -86,7 +88,7 @@ const Communities = ({ userData, allUserData, communityData, postData, isLoading
 
   return (
     <div className={styles.community}>
-      <Header headerName={"Communities"} />
+      <Header headerName={"My Communities"} />
       {isLoading ? (
         <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
           <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />

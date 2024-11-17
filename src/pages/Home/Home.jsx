@@ -304,6 +304,9 @@ const Home = ({ }) => {
     fetchCommunityData();
   }, []);
 
+  console.log(communityy);
+  console.log(user[0])
+
   const handleCommuntiyClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {
       state: {

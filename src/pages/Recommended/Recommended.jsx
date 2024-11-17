@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Recommended.module.css";
 import supabase from "components/supabaseClient";
 import "fonts/Font.css";
+import { useDataContext } from "api/DataContext";
 
 // component
 import HotCommunity from "components/Home/HotCommunity";
 import PopularPost from "components/Home/PopularPost";
 
-// Data
-
-const Recommended = ({ user, userData, allUserData }) => {
+const Recommended = ({ user }) => {
+  const { userData, allUserData } = useDataContext();
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [communityName, setCommunityName] = useState([]);
