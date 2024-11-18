@@ -74,27 +74,30 @@ const AddCommunity = () => {
     return (
         <div className={styles.communityContainer}>
             <Header headerName={"Communities"} />
-            <div className={styles.MainContainer} >
-                <Classification onEventSelect={handleEventSelect} />
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <div className={styles.MainContainer} >
+                    <Classification onEventSelect={handleEventSelect} />
 
-                {enrichedCommunityData && enrichedCommunityData.length > 0 ? (
-                    <div className={styles.communityMap}>
-                        {enrichedCommunityData.map((community, index) => (
-                            <CommunityContainer
-                                key={community.id || index}
-                                community={community}
-                                communityData={communityData[index]}
-                                onClick={() => handleCommuntiyClick(community)}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className={styles.noPostContainer}>
-                        <div className={styles.noPost}>No Community Yet.</div>
-                    </div>
-                )}
+                    {enrichedCommunityData && enrichedCommunityData.length > 0 ? (
+                        <div className={styles.communityMap}>
+                            {enrichedCommunityData.map((community, index) => (
+                                <CommunityContainer
+                                    key={community.id || index}
+                                    community={community}
+                                    communityData={communityData[index]}
+                                    onClick={() => handleCommuntiyClick(community)}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={styles.noPostContainer}>
+                            <div className={styles.noPost}>No Community Yet.</div>
+                        </div>
+                    )}
 
+                </div>
             </div>
+
         </div>
     )
 }

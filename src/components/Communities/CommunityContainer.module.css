@@ -7,8 +7,8 @@
     border: 1px solid #dddddd;
     border-radius: 14px;
     max-width: 300px;
-    width: 240px;
-    height: 300px;
+    width: 200px;
+    height: 280px;
     cursor: pointer;
 }
 
@@ -19,7 +19,7 @@
 .classificationIcon {
     position: absolute;
     top: 0px;
-    left: 38%;
+    left: 28%;
     transform: translateX(350%);
     width: 30.33px;
     height: 39px;
@@ -41,7 +41,7 @@
 
 .communityImage {
     width: 100%;
-    height: 150px;
+    height: 120px;
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #dddddd;
@@ -55,7 +55,7 @@
 
 .communityName {
     color: #ff7474;
-    font-size: 20px;
+    font-size: 18px;
     font-family: "NotoSans-Bold";
     margin: 0;
     margin-bottom: 16px;
@@ -70,7 +70,7 @@
 }
 
 .communityDetailTitle {
-    font-size: 14px;
+    font-size: 12px;
     font-family: "NotoSans-SemiBold";
     margin-right: 12px;
 }
@@ -83,6 +83,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    font-size: 16px;
+    font-size: 14px;
     font-family: "NotoSans-Regular";
 }
