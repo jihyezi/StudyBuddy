@@ -29,7 +29,6 @@ import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
-import OtherProfile from "pages/Profile/OtherProfile";
 import AddCommunity from "pages/Communities/AddCommunity";
 
 const Body = styled.div`
@@ -108,7 +107,6 @@ const MainContent = ({ loginuser }) => {
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/other-profile/:userId" element={<OtherProfile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
         <Route path="/create-community" element={<CommunityPost />} />

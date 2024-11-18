@@ -343,12 +343,12 @@ const DetailPost = ({ }) => {
   };
 
   const handleProfileClick = (item) => {
-    navigate(`/other-profile/${item.userid}`, {
+    navigate(`/profile`, {
       state: {
         communityData: communityData,
         postData: postData,
         thisPost: thisPost,
-        userData: selectedUserData,
+        selectedUserData: selectedUserData,
       },
     });
   };

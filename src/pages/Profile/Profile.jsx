@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react";
 import styles from './Profile.module.css';
 import supabase from "components/supabaseClient";
 import { useDataContext } from "api/DataContext";
+import { useAuth } from "contexts/AuthContext";
+import { useLocation } from "react-router-dom";
 
 // Components
 import Header from "components/Header";
@@ -48,6 +50,12 @@ const fetchUserLikeData = async (userId) => {
 const Profile = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { userData, allUserData, communityData, postData, refetchUserData, isLoading } = useDataContext();
+  const { user: sessionUser } = useAuth();
+  const location = useLocation();
+  const { selectedUserData } = location.state || {};
+  const currentProfileData = selectedUserData || userData;
+
+  console.group(currentProfileData)
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -58,20 +66,20 @@ const Profile = () => {
   };
 
   const { data: userPost = [], isLoading: isPostLoading } = useQuery({
-    queryKey: ['userPost', userData?.userid],
-    queryFn: () => fetchUserPostData(userData.userid),
+    queryKey: ['userPost', currentProfileData?.userid],
+    queryFn: () => fetchUserPostData(currentProfileData.userid),
     onError: (error) => console.error(error.message),
   });
 
   const { data: userComment = [], isLoading: isCommentLoading } = useQuery({
-    queryKey: ['userComment', userData?.userid],
-    queryFn: () => fetchUserCommentData(userData.userid),
+    queryKey: ['userComment', currentProfileData?.userid],
+    queryFn: () => fetchUserCommentData(currentProfileData.userid),
     onError: (error) => console.error(error.message),
   });
 
   const { data: userLike = [], isLoading: isLikeLoading } = useQuery({
-    queryKey: ['userLike', userData?.userid],
-    queryFn: () => fetchUserLikeData(userData.userid),
+    queryKey: ['userLike', currentProfileData?.userid],
+    queryFn: () => fetchUserLikeData(currentProfileData.userid),
     onError: (error) => console.error(error.message),
   });
 
@@ -95,45 +103,49 @@ const Profile = () => {
         <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
           <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
         </div>
-      ) : !userData ? (
-        <div></div>
+      ) : !currentProfileData ? (
+        <div>No profile data found.</div>
       ) : (
         <>
-          <Header headerName={userData.nickname} />
+          <Header headerName={currentProfileData.nickname} />
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <div className={styles.info}>
               <div className={styles.imageWrapper}>
-                {userData.backgroundimage ?
-                  <img src={userData.backgroundimage} alt="profile background" className={styles.image} />
+                {currentProfileData.backgroundimage ?
+                  <img src={currentProfileData.backgroundimage} alt="profile background" className={styles.image} />
                   : <img src={nobackground} alt="profile background" className={styles.image} />
                 }
                 <div className={styles.profileImgContainer}>
-                  {userData.profileimage ?
-                    <img src={userData.profileimage} alt="profile" className={styles.profileImg} />
+                  {currentProfileData.profileimage ?
+                    <img src={currentProfileData.profileimage} alt="profile" className={styles.profileImg} />
                     : <img src={noprofile} alt="profile" className={styles.profileImg} />
                   }
                 </div>
               </div>
 
               <div className={styles.details}>
-                <div className={styles.edit}>
-                  <div className={styles.communityName}></div>
-                  <button className={styles.joinButton} onClick={openModal}>
-                    Edit
-                  </button>
-                  <ProfileEditModal
-                    modalIsOpen={modalIsOpen}
-                    closeModal={closeModal}
-                    userData={userData}
-                    refetchUserData={refetchUserData}
-                  />
-                </div>
+                {sessionUser && sessionUser.id === currentProfileData.userid ? (
+                  <div className={styles.edit}>
+                    <div className={styles.communityName}></div>
+                    <button className={styles.joinButton} onClick={openModal}>
+                      Edit
+                    </button>
+                    <ProfileEditModal
+                      modalIsOpen={modalIsOpen}
+                      closeModal={closeModal}
+                      userData={userData}
+                      refetchUserData={refetchUserData}
+                    />
+                  </div>
+                ) : (
+                  <div className={styles.noedit}></div>
+                )}
                 <div className={styles.infoList}>
-                  <span className={styles.description1}>{userData.nickname}</span>
-                  <span className={styles.description2}>@{userData.username}</span>
-                  <span className={styles.description3}>{userData.bio}</span>
+                  <span className={styles.description1}>{currentProfileData.nickname}</span>
+                  <span className={styles.description2}>@{currentProfileData.username}</span>
+                  <span className={styles.description3}>{currentProfileData.bio}</span>
                   <span className={styles.description4}>
-                    {userData.birthdate ? `🎂 ${userData.birthdate}` : null}
+                    {currentProfileData.birthdate ? `🎂 ${currentProfileData.birthdate}` : null}
                   </span>
                 </div>
               </div>
