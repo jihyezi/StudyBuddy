@@ -3,7 +3,6 @@ import { Link, NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import "fonts/Font.css";
 import { useAuth } from "contexts/AuthContext";
-import { useDataContext } from "api/DataContext";
 import SidebarItem from "components/Sidebar/SidebarItem";
 // Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
@@ -22,17 +21,13 @@ import messages_on from "assets/icons/Sidebar/messages_on.png";
 import bookmarks_off from "assets/icons/Sidebar/bookmarks_off.png";
 import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
-import profile_on from "assets/icons/Sidebar/profile_on.png";
 import nopforile from "assets/images/Profile/noprofile.png";
 import LoginModal from "components/Home/LoginModal";
 
-// Sidebar 컴포넌트를 props로 받아오는 toggleNotifications와 함께 정의
 const Sidebar = ({
   toggleNotifications,
   isNotificationsOpen,
-  userProfile,
   loginUser,
-  showLoginModal,
 }) => {
   const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -40,11 +35,11 @@ const Sidebar = ({
   const dropdownRef = useRef(null);
 
   const openLoginModal = () => {
-    setLoginModalOpen(true); // 모달 열기
+    setLoginModalOpen(true);
   };
 
   const closeLoginModal = () => {
-    setLoginModalOpen(false); // 모달 닫기
+    setLoginModalOpen(false);
   };
 
   const menus = [
@@ -96,20 +91,19 @@ const Sidebar = ({
             <img className={styles.logo} src={logo} alt="logo" />
           </Link>
 
-          {/* 로그아웃 텍스트 추가 */}
           {user ? (
             <Link
               to="#"
               onClick={logout}
-              className={styles.logoutLink} // CSS 클래스 추가
+              className={styles.logoutLink}
             >
               로그아웃
             </Link>
           ) : (
             <Link
               to="#"
-              onClick={openLoginModal} // 로그인 모달을 여는 함수 호출
-              className={styles.logoutLink} // CSS 클래스 추가
+              onClick={openLoginModal}
+              className={styles.logoutLink}
             >
               로그인
             </Link>
@@ -210,11 +204,11 @@ const Sidebar = ({
                     borderRadius: "50%",
                   }}
                   src={
-                    loginUser // 로그인한 경우
-                      ? loginUser.profileimage // 프로필 이미지가 있으면 프로필 이미지
+                    loginUser
+                      ? loginUser.profileimage
                         ? loginUser.profileimage
-                        : nopforile // 프로필 이미지가 없으면 nopforile
-                      : profile_off // 로그인하지 않은 경우 profile_off
+                        : nopforile
+                      : profile_off
                   }
                   alt="icon"
                 />
