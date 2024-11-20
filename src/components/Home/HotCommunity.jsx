@@ -15,9 +15,9 @@ const HotCommunity = ({
   allcommunity,
 }) => {
   useEffect(() => {
-    console.log("community", community);
-    console.log("communityDataa", communityData);
-  }, []);
+    console.log("community1", community); // member_count가 있는 community 객체
+    console.log("communityData1", communityData); // communityData에 모든 필드가 포함되어 있는지 확인
+  }, [community, communityData]);
 
   return (
     <div

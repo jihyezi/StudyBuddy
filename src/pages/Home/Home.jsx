@@ -3,7 +3,7 @@ import styles from "./Home.module.css";
 import supabase from "components/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+import { useQuery } from "@tanstack/react-query";
 // sclick
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -24,9 +24,7 @@ import Tag from "components/Home/Tag";
 
 const Home = ({}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
-  const [communityData, setCommunityData] = useState({});
   const [postData, setPostData] = useState([]);
   const [postLike, setPostLike] = useState(null);
   const [comment, setComment] = useState(null);
@@ -40,9 +38,6 @@ const Home = ({}) => {
   const [allUser, setAllUser] = useState([]);
   const [communityy, setCommunityy] = useState([]);
   const navigate = useNavigate();
-
-  console.log("communityy", communityy);
-  console.log("communityData", communityData);
 
   useEffect(() => {
     const fetchInitialPopularStudies = async () => {
@@ -103,43 +98,66 @@ const Home = ({}) => {
 
     if (error) {
       console.error("Error fetching hot communities:", error);
-    } else {
-      setHotCommunities(data);
-      const fetchedCommunityData = await Promise.all(
-        data.map(async (community) => {
-          const { data: communityInfo, error: communityError } = await supabase
-            .from("Community")
-            .select("*")
-            .eq("communityid", community.communityid)
-            .single();
-
-          if (communityError) {
-            console.error("Error fetching community data:", communityError);
-            return null;
-          }
-
-          const { count: postCount, error: postCountError } = await supabase
-            .from("Post")
-            .select("postid", { count: "exact" })
-            .eq("communityid", community.communityid);
-
-          if (postCountError) {
-            console.error("Error fetching post count:", postCountError);
-            return null;
-          }
-
-          return { communityInfo, postCount };
-        })
-      );
-
-      const combinedData = fetchedCommunityData.filter(Boolean).map((data) => ({
-        ...data.communityInfo,
-        postCount: data.postCount,
-      }));
-
-      setCommunityData(combinedData);
+      throw new Error("Error fetching hot communities");
     }
+
+    console.log("Fetched Hot Communities", data); // 여기에 찍히는 데이터 확인
+
+    // 데이터를 병합
+    const fetchedCommunityData = await Promise.all(
+      data.map(async (community) => {
+        const { data: communityInfo, error: communityError } = await supabase
+          .from("Community")
+          .select("*")
+          .eq("communityid", community.communityid)
+          .single();
+
+        if (communityError) {
+          console.error("Error fetching community data:", communityError);
+          return null;
+        }
+
+        const { count: postCount, error: postCountError } = await supabase
+          .from("Post")
+          .select("postid", { count: "exact" })
+          .eq("communityid", community.communityid);
+
+        if (postCountError) {
+          console.error("Error fetching post count:", postCountError);
+          return null;
+        }
+
+        // communityData와 community를 병합하여 반환
+        return {
+          ...community, // member_count 포함
+          postCount, // postCount 추가
+          name: communityInfo.name, // name 추가
+          createdat: communityInfo.createdat, // createdat 추가
+          field: communityInfo.field, // field 추가
+        };
+      })
+    );
+
+    const filteredCommunityData = fetchedCommunityData.filter(Boolean);
+
+    console.log("Processed Community Data:", filteredCommunityData); // 병합된 데이터 확인
+
+    return filteredCommunityData; // 병합된 데이터 반환
   };
+
+  const {
+    data: hotCommunities = [],
+    isLoading: isLoadingCommunities,
+    error,
+  } = useQuery({
+    queryKey: ["hotCommunities"],
+    queryFn: fetchHotCommunities,
+    staleTime: 5 * 60 * 1000, // 5분 동안 캐싱
+    cacheTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
+    onSuccess: (data) => {
+      console.log("communityData (onSuccess)", data); // 병합된 데이터 확인
+    },
+  });
 
   const fetchPopularPosts = async () => {
     const { data: popularPostsData, error: popularPostsError } = await supabase
@@ -150,98 +168,125 @@ const Home = ({}) => {
 
     if (popularPostsError) {
       console.error("Error fetching popular posts:", popularPostsError);
-    } else {
-      setPopularPosts(popularPostsData);
-
-      const fetchedPostData = await Promise.all(
-        popularPostsData.map(async (post) => {
-          const { data: postData, error: postError } = await supabase
-            .from("Post")
-            .select("*")
-            .eq("postid", post.postid)
-            .single();
-
-          if (postError) {
-            console.error("Error fetching post data:", postError);
-            return null;
-          }
-          return postData;
-        })
-      );
-      const validPostData = fetchedPostData.filter(Boolean);
-      setPostData(validPostData);
-
-      const fetchedPostLikeCounts = await Promise.all(
-        popularPostsData.map(async (post) => {
-          const { count, error: likeError } = await supabase
-            .from("PostLike")
-            .select("userid", { count: "exact" })
-            .eq("postid", post.postid);
-
-          if (likeError) {
-            console.error("Error fetching post like count:", likeError);
-            return null;
-          }
-          return count;
-        })
-      );
-      const validPostLikeCounts = fetchedPostLikeCounts.filter(Boolean);
-      setPostLike(validPostLikeCounts);
-
-      const fetchedCommentCounts = await Promise.all(
-        popularPostsData.map(async (post) => {
-          const { count, error: commentError } = await supabase
-            .from("Comment")
-            .select("userid", { count: "exact" })
-            .eq("postid", post.postid);
-
-          if (commentError) {
-            console.error("Error fetching comment count:", commentError);
-            return null;
-          }
-          return count;
-        })
-      );
-      const validCommentCounts = fetchedCommentCounts.filter(Boolean);
-      setComment(validCommentCounts);
-
-      const fetchedCommunityName = await Promise.all(
-        popularPostsData.map(async (post) => {
-          const { data: postData, error: postError } = await supabase
-            .from("Post")
-            .select("communityid")
-            .eq("postid", post.postid)
-            .single();
-
-          if (postError) {
-            console.error("Error fetching post data:", postError);
-            return null;
-          }
-
-          const communityId = postData.communityid;
-
-          const { data: communityData, error: nameError } = await supabase
-            .from("Community")
-            .select("name")
-            .eq("communityid", communityId)
-            .single();
-
-          if (nameError) {
-            console.error("Error fetching community name:", nameError);
-            return null;
-          }
-
-          return communityData.name;
-        })
-      );
-      const validCommunityName = fetchedCommunityName.filter(Boolean);
-      setCommunityName(validCommunityName);
+      throw new Error("Error fetching popular posts");
     }
+
+    const fetchedPostData = await Promise.all(
+      popularPostsData.map(async (post) => {
+        const { data: postData, error: postError } = await supabase
+          .from("Post")
+          .select("*")
+          .eq("postid", post.postid)
+          .single();
+
+        if (postError) {
+          console.error("Error fetching post data:", postError);
+          return null;
+        }
+        return postData;
+      })
+    );
+    const validPostData = fetchedPostData.filter(Boolean);
+
+    const fetchedPostLikeCounts = await Promise.all(
+      popularPostsData.map(async (post) => {
+        const { count, error: likeError } = await supabase
+          .from("PostLike")
+          .select("userid", { count: "exact" })
+          .eq("postid", post.postid);
+
+        if (likeError) {
+          console.error("Error fetching post like count:", likeError);
+          return null;
+        }
+        return count;
+      })
+    );
+    const validPostLikeCounts = fetchedPostLikeCounts.filter(Boolean);
+
+    const fetchedCommentCounts = await Promise.all(
+      popularPostsData.map(async (post) => {
+        const { count, error: commentError } = await supabase
+          .from("Comment")
+          .select("userid", { count: "exact" })
+          .eq("postid", post.postid);
+
+        if (commentError) {
+          console.error("Error fetching comment count:", commentError);
+          return null;
+        }
+        return count;
+      })
+    );
+    const validCommentCounts = fetchedCommentCounts.filter(Boolean);
+
+    const fetchedCommunityName = await Promise.all(
+      popularPostsData.map(async (post) => {
+        const { data: postData, error: postError } = await supabase
+          .from("Post")
+          .select("communityid")
+          .eq("postid", post.postid)
+          .single();
+
+        if (postError) {
+          console.error("Error fetching post data:", postError);
+          return null;
+        }
+
+        const communityId = postData.communityid;
+
+        const { data: communityData, error: nameError } = await supabase
+          .from("Community")
+          .select("name")
+          .eq("communityid", communityId)
+          .single();
+
+        if (nameError) {
+          console.error("Error fetching community name:", nameError);
+          return null;
+        }
+
+        return communityData.name;
+      })
+    );
+    const validCommunityName = fetchedCommunityName.filter(Boolean);
+
+    return {
+      popularPostsData,
+      validPostData,
+      validPostLikeCounts,
+      validCommentCounts,
+      validCommunityName,
+    };
   };
 
+  const usePopularPosts = () => {
+    return useQuery({
+      queryKey: ["popularPosts"],
+      queryFn: fetchPopularPosts,
+      staleTime: 5 * 60 * 1000, // 5분 동안 캐싱
+      cacheTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
+      onError: (error) => {
+        console.error("Error fetching popular posts:", error);
+      },
+    });
+  };
+  const { data } = usePopularPosts();
+
+  // React Query 데이터를 상태에 설정
   useEffect(() => {
-    fetchHotCommunities();
-    fetchPopularPosts();
+    if (data) {
+      setPopularPosts(data.popularPostsData);
+      setPostData(data.validPostData);
+      setPostLike(data.validPostLikeCounts);
+      setComment(data.validCommentCounts);
+      setCommunityName(data.validCommunityName);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    // fetchHotCommunities();
+    // fetchPopularPosts();
 
     const fetchUserData = async () => {
       if (sessionUser) {
@@ -456,8 +501,9 @@ const Home = ({}) => {
             <div className={styles.hotCommunityItem}>
               {hotCommunities.map((community, index) => (
                 <HotCommunity
+                  key={index}
                   community={community}
-                  communityData={communityData[index]}
+                  communityData={community}
                   allcommunity={communityy}
                   onClick={() => handleCommuntiyClick(community)}
                 />
@@ -500,12 +546,11 @@ const Home = ({}) => {
             <div className={styles.hotCommunityItem}>
               {popularPosts.map((post, index) => (
                 <PopularPost
-                  postData={postData[index]}
-                  postLike={postLike}
-                  comment={comment}
-                  communityName={
-                    communityName ? communityName[index] : "커뮤니티"
-                  }
+                  key={post.postid}
+                  postData={postData[index]} // Post 데이터 전달
+                  postLike={postLike[index]} // 좋아요 수 전달
+                  comment={comment[index]} // 댓글 수 전달
+                  communityName={communityName[index] || "커뮤니티"} // 커뮤니티 이름 전달
                   onClick={() => handlePostClick(post)}
                 />
               ))}
