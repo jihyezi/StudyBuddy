@@ -32,8 +32,6 @@ const DetailPost = ({ }) => {
   const location = useLocation();
   const { userData, allUserData, communityData, postData, thisPost } = location.state || {};
 
-  console.log(location.state);
-
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === thisPost.communityid)
       ?.name
@@ -343,14 +341,7 @@ const DetailPost = ({ }) => {
   };
 
   const handleProfileClick = (item) => {
-    navigate(`/profile`, {
-      state: {
-        communityData: communityData,
-        postData: postData,
-        thisPost: thisPost,
-        selectedUserData: selectedUserData,
-      },
-    });
+    navigate(`/profile/${item}`);
   };
 
   return (
@@ -374,7 +365,7 @@ const DetailPost = ({ }) => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick({ userid })}
+          onClick={() => handleProfileClick(userNickname)}
         >
           <img
             className={styles.postWriterProfile}

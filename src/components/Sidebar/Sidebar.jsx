@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
-import SidebarItem from "components/Sidebar/SidebarItem";
-import "fonts/Font.css";
 import styles from "./Sidebar.module.css";
-import { useAuth } from "contexts/AuthContext"; // useAuth 훅을 가져옵니다.
+import "fonts/Font.css";
+import { useAuth } from "contexts/AuthContext";
+import { useDataContext } from "api/DataContext";
+import SidebarItem from "components/Sidebar/SidebarItem";
 // Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
@@ -35,7 +36,7 @@ const Sidebar = ({
 }) => {
   const { user, logout } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false); // 모달 상태 관리
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const openLoginModal = () => {
@@ -184,7 +185,7 @@ const Sidebar = ({
 
         <div className={styles.menu}>
           <NavLink
-            to={"/profile"}
+            to={loginUser ? `/profile/${loginUser.nickname || "defaultNickname"}` : "/profile"}
             className={({ isActive }) =>
               isActive ? styles.menuOn : styles.menuOff
             }

@@ -3,7 +3,7 @@ import styles from './Profile.module.css';
 import supabase from "components/supabaseClient";
 import { useDataContext } from "api/DataContext";
 import { useAuth } from "contexts/AuthContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 // Components
 import Header from "components/Header";
@@ -51,9 +51,13 @@ const Profile = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { userData, allUserData, communityData, postData, refetchUserData, isLoading } = useDataContext();
   const { user: sessionUser } = useAuth();
+  const { nickname } = useParams();
   const location = useLocation();
   const { selectedUserData } = location.state || {};
-  const currentProfileData = selectedUserData || userData;
+
+  const currentProfileData = useMemo(() => {
+    return allUserData?.find((user) => user.nickname === nickname) || null;
+  }, [nickname, allUserData]);
 
   console.group(currentProfileData)
 
