@@ -22,13 +22,13 @@ import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import Tag from "components/Home/Tag";
 
-const Home = ({ }) => {
+const Home = ({}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularPosts, setPopularPosts] = useState([]);
   const [postData, setPostData] = useState([]);
-  const [postLike, setPostLike] = useState(null);
-  const [comment, setComment] = useState(null);
-  const [communityName, setCommunityName] = useState(null);
+  const [postLike, setPostLike] = useState([]);
+  const [comment, setComment] = useState([]);
+  const [communityName, setCommunityName] = useState("");
   const [selectedTag, setSelectedTag] = useState("🔥");
   const [selectedEvent, setSelectEvent] = useState("");
   const [popularStudies, setPopularStudies] = useState([]);
@@ -271,16 +271,19 @@ const Home = ({ }) => {
       },
     });
   };
-  const { data } = usePopularPosts();
+
+  const { data = { popularPostsData: [] } } = usePopularPosts();
 
   // React Query 데이터를 상태에 설정
   useEffect(() => {
-    if (data) {
+    if (data && Array.isArray(data.popularPostsData)) {
       setPopularPosts(data.popularPostsData);
       setPostData(data.validPostData);
       setPostLike(data.validPostLikeCounts);
       setComment(data.validCommentCounts);
       setCommunityName(data.validCommunityName);
+    } else {
+      console.log(111111111111);
     }
   }, [data]);
 
@@ -342,7 +345,7 @@ const Home = ({ }) => {
   }, []);
 
   console.log(communityy);
-  console.log(user[0])
+  console.log(user[0]);
 
   const handleCommuntiyClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {

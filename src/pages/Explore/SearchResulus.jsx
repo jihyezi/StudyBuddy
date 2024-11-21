@@ -78,21 +78,7 @@ const SearchResults = () => {
       name: "스터디",
       content:
         studies.length > 0 ? (
-          studies.map((study) => (
-            <StudyPost
-              key={study.studyid}
-              studyId={study.studyid}
-              completion={study.completion}
-              title={study.title}
-              description={study.description.split("\n")[0]}
-              tag={study.tag}
-              maxmembers={study.maxmembers}
-              proceed={study.proceed}
-              studyPost={study}
-              likesCount={likesCount[study.studyid] || 0}
-              commentsCount={commentsCount[study.studyid] || 0}
-            />
-          ))
+          studies.map((post, index) => <StudyPost key={index} study={post} />)
         ) : (
           <div className={styles.Nosearchresults}>
             {" "}
