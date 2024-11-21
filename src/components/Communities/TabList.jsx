@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./TabList.module.css";
 import supabase from "components/supabaseClient";
@@ -37,7 +36,6 @@ const fetchUserDataByIds = async (userIds) => {
   return usersData.filter(Boolean);
 };
 
-export const TabList = ({ communityData, userData, postData, allUserData }) => {
 export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const [currentTab, clickTab] = useState(0);
   const { communityId } = useParams();
@@ -87,33 +85,11 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const menuArr = [
     {
       name: "인기",
-      content: (
-        <JoinPostList
-          postData={popularPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-          postData={popularPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-        />
-      ),
+      content: <JoinPostList postData={popularPosts} />,
     },
     {
       name: "최근",
-      content: (
-        <JoinPostList
-          postData={recentPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-          postData={recentPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-        />
-      ),
+      content: <JoinPostList postData={recentPosts} />,
     },
     { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
     { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },

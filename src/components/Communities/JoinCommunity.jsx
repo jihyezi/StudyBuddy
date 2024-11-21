@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
 import { useNavigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
 
 // image
