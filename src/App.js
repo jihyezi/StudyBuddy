@@ -31,7 +31,6 @@ import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 import AddCommunity from "pages/Communities/AddCommunity";
-import OtherProfile from "pages/Profile/OtherProfile";
 
 const Body = styled.div`
   width: 100%;
@@ -171,14 +170,14 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/studies" ||
         location.pathname.startsWith("/bookmarkdetail/") ||
         location.pathname === "/addCommunity") && (
-        <Recommended
-          user={loginuser}
-          userData={userData}
-          allUserData={allUserData}
-          communityData={communityData}
-          postData={postData}
-        />
-      )}
+          <Recommended
+            user={loginuser}
+            userData={userData}
+            allUserData={allUserData}
+            communityData={communityData}
+            postData={postData}
+          />
+        )}
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>

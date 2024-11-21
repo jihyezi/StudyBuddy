@@ -1,10 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import React, { useMemo, useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
-import supabase from "components/supabaseClient";
-import { useDataContext } from "api/DataContext";
 
 // Components
 import supabase from "components/supabaseClient";
@@ -48,7 +44,7 @@ const fetchCommentData = async (postId) => {
   return data;
 };
 
-const Communities = ({}) => {
+const Communities = ({ }) => {
   const { userData, communityData, postData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
 
@@ -66,36 +62,29 @@ const Communities = ({}) => {
   });
 
   const handleEventSelect = useCallback((event) => {
-  const handleEventSelect = useCallback((event) => {
-    setSelectEvent(event);
-  }, []);
+    const handleEventSelect = useCallback((event) => {
+      setSelectEvent(event);
+    }, []);
   }, []);
 
   const filterCommunity = useMemo(() => {
     return communityData && joinCommunityData
       ? communityData.filter((c) =>
-          joinCommunityData.some((jc) => jc.communityid === c.communityid)
-        )
+        joinCommunityData.some((jc) => jc.communityid === c.communityid)
+      )
       : [];
   }, [communityData, joinCommunityData]);
 
   const filteredPosts = useMemo(() => {
     return postData && filterCommunity
       ? postData.filter((p) =>
-          filterCommunity.some(
-            (fc) => Number(fc.communityid) === Number(p.communityid)
-          )
+        filterCommunity.some(
+          (fc) => Number(fc.communityid) === Number(p.communityid)
         )
+      )
       : [];
   }, [postData, filterCommunity]);
 
-  const filteredCommunities = useMemo(() => {
-    return communityData
-      ? selectedEvent === "🔥"
-        ? communityData
-        : communityData.filter((c) => c.field === selectedEvent)
-      : [];
-  }, [communityData, selectedEvent]);
   const filteredCommunities = useMemo(() => {
     return communityData
       ? selectedEvent === "🔥"
@@ -109,10 +98,10 @@ const Communities = ({}) => {
       ? selectedEvent === "🔥"
         ? postData
         : postData.filter((p) =>
-            filteredCommunities.some(
-              (fc) => Number(fc.communityid) === Number(p.communityid)
-            )
+          filteredCommunities.some(
+            (fc) => Number(fc.communityid) === Number(p.communityid)
           )
+        )
       : [];
   }, [postData, communityData, selectedEvent, filteredCommunities]);
 
