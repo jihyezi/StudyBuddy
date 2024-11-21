@@ -92,7 +92,6 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
       content: <JoinPostList postData={recentPosts} />,
     },
     { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
-    { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
     {
       name: "멤버",
       content: <MemberPage adminData={adminUsers} memberData={memberUsers} />,
