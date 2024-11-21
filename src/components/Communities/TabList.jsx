@@ -84,27 +84,12 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const menuArr = [
     {
       name: "인기",
-      content: (
-        <JoinPostList
-          postData={popularPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-        />
-      ),
+      content: <JoinPostList postData={popularPosts} />,
     },
     {
       name: "최근",
-      content: (
-        <JoinPostList
-          postData={recentPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-        />
-      ),
+      content: <JoinPostList postData={recentPosts} />,
     },
-    { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
     { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
     {
       name: "멤버",

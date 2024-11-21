@@ -3,14 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
 
 // Components
-import supabase from "components/supabaseClient";
-import { useDataContext } from "api/DataContext";
-
-// Components
 import Header from "components/Header";
 import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
 import CommunityJoinPostList from "components/Communities/CommunityJoinPostList";
+import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
 
 // Images
 import loadinggif from "assets/images/loading.gif";
@@ -62,9 +60,7 @@ const Communities = ({ }) => {
   });
 
   const handleEventSelect = useCallback((event) => {
-    const handleEventSelect = useCallback((event) => {
-      setSelectEvent(event);
-    }, []);
+    setSelectEvent(event);
   }, []);
 
   const filterCommunity = useMemo(() => {
