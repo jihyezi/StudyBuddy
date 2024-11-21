@@ -31,7 +31,6 @@ import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 import AddCommunity from "pages/Communities/AddCommunity";
-import OtherProfile from "pages/Profile/OtherProfile";
 
 const Body = styled.div`
   width: 100%;
