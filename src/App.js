@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "contexts/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { DataProvider, useDataContext } from "api/DataContext";
 import supabase from "components/supabaseClient";
 import styled from "styled-components";
 
@@ -29,8 +30,8 @@ import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
+import AddCommunity from "pages/Communities/AddCommunity";
 import OtherProfile from "pages/Profile/OtherProfile";
-import { DataProvider, useDataContext } from "api/DataContext";
 
 const Body = styled.div`
   width: 100%;
@@ -86,6 +87,11 @@ const MainContent = ({ loginuser }) => {
     }
   }, [user, location.pathname]);
 
+  // 경로가 변경될 때마다 데이터를 새로 불러오도록 useEffect 설정
+  useEffect(() => {
+    refetchCommunityData();
+  }, [user, location.pathname]); // 경로 변경 시마다 실행
+
   const closeLoginModal = () => setLoginModalIsOpen(false);
 
   return (
@@ -108,13 +114,34 @@ const MainContent = ({ loginuser }) => {
             </CommonLayout>
           }
         />
-        <Route path="/communities" element={<Communities />} />
+        <Route
+          path="/communities"
+          element={
+            <Communities
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+              refetchUserData={refetchUserData}
+              isLoading={isLoading}
+            />
+          }
+        />
         <Route path="/studies" element={<Studies />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="/bookmarks" element={<Bookmarks />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/other-profile/:userId" element={<OtherProfile />} />
+        <Route
+          path="/bookmarks"
+          element={
+            <Bookmarks
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+            />
+          }
+        />
+        <Route path="/profile/:nickname" element={<Profile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
         <Route path="/create-community" element={<CommunityPost />} />
@@ -128,22 +155,31 @@ const MainContent = ({ loginuser }) => {
         <Route path="/revise-study/:studyId" element={<ReviseStudy />} />
         <Route
           path="/detail-community/:communityId"
-          element={<CommunityDetailsPage />}
+          element={<CommunityDetailsPage communityData={communityData} />}
         />
         <Route
           path="/bookmarkdetail/:communityid"
           element={<BookmarkDetail />}
         />
         <Route path="/detailpost" element={<DetailPost />} />
+        <Route path="/addCommunity" element={<AddCommunity />} />
       </Routes>
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
       {(location.pathname === "/communities" ||
         location.pathname === "/CommunityDetailsPage" ||
         location.pathname === "/bookmarks" ||
         location.pathname === "/studies" ||
-        location.pathname.startsWith("/bookmarkdetail/")) && (
-        <Recommended user={loginuser} />
+        location.pathname.startsWith("/bookmarkdetail/") ||
+        location.pathname === "/addCommunity") && (
+        <Recommended
+          user={loginuser}
+          userData={userData}
+          allUserData={allUserData}
+          communityData={communityData}
+          postData={postData}
+        />
       )}
+
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
@@ -151,24 +187,11 @@ const MainContent = ({ loginuser }) => {
 
 const App = () => {
   const queryClient = new QueryClient();
-
   const [loginUser, setLoginUser] = useState(null);
-  const [users, setUsers] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const { user: sessionUser } = useAuth();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const { data, error } = await supabase.from("User").select("*");
-
-      if (error) {
-        console.error("Error fetching users:", error);
-      } else {
-        setUsers(data);
-        console.log("User data:", data);
-      }
-    };
-
     const fetchUserData = async () => {
       if (sessionUser) {
         const {
@@ -194,7 +217,7 @@ const App = () => {
         }
       }
     };
-    fetchUsers();
+
     fetchUserData();
   }, [sessionUser]);
 
@@ -215,7 +238,7 @@ const App = () => {
                   loginUser={loginUser}
                 />
                 <Center>
-                  <MainContent />
+                  <MainContent loginuser={loginUser} />
                   <Notifications
                     showNotifications={showNotifications}
                     setShowNotifications={setShowNotifications}
@@ -225,7 +248,7 @@ const App = () => {
               </Content>
             </Body>
           </BrowserRouter>
-        </DataProvider>{" "}
+        </DataProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

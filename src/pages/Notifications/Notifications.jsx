@@ -41,12 +41,13 @@ const fetchNotifications = async (userId) => {
 
   return notificationsData;
 };
-
 const Notifications = ({ showNotifications }) => {
-  const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
+  const userId = localStorage.getItem("userId");
+
   const [notifications, setNotifications] = useState([]);
   const queryClient = useQueryClient();
 
+  // useQuery hooks
   const { data: userMap, isLoading: isUserLoading, error: userError } = useQuery({
     queryKey: ["userMap"],
     queryFn: fetchUsers,
@@ -86,10 +87,12 @@ const Notifications = ({ showNotifications }) => {
     };
   }, [userId, queryClient]);
 
-  if (!userId) return <div>Please log in to view notifications.</div>;
+  if (!userId) {
+    return null; // userId가 없을 때 컴포넌트를 렌더링하지 않음
+  }
 
   if (isUserLoading || isCommunityLoading || isNotificationsLoading) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (userError || communityError || notificationsError) {

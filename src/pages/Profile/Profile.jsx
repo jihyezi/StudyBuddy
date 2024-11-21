@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useAuth } from "contexts/AuthContext";
+import React, { useState, useMemo } from "react";
 import styles from './Profile.module.css';
 import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
+import { useAuth } from "contexts/AuthContext";
+import { useLocation, useParams } from "react-router-dom";
 
 // Components
 import Header from "components/Header";
@@ -13,24 +14,52 @@ import ProfileEditModal from "components/Profile/ProfileEditModal";
 import nobackground from "assets/images/Profile/nobackground.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import loadinggif from "assets/images/loading.gif"
+import { useQuery } from "@tanstack/react-query";
+
+// Data
+const fetchUserPostData = async (userId) => {
+  const { data, error } = await supabase
+    .from("Post")
+    .select("*")
+    .eq('userid', userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchUserCommentData = async (userId) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .select("*")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchUserLikeData = async (userId) => {
+  const { data, error } = await supabase
+    .from("PostLike")
+    .select("postid")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
 
 const Profile = () => {
-  const location = useLocation();
-  const communityInfo = { ...location.state };
-  const { user: sessionUser } = useAuth(); // 현재 로그인된 유저 정보 가져오기
-  const [user, setUser] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [allUser, setAllUser] = useState([]);
-  const [community, setCommunity] = useState([]);
-  const [post, setPost] = useState([]);
-  const [userPost, setUserPost] = useState([]);
-  const [comment, setComment] = useState([]);
-  const [userComment, setUserComment] = useState([]);
-  const [userLike, setUserLike] = useState([]);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { userData, allUserData, communityData, postData, refetchUserData, isLoading } = useDataContext();
+  const { user: sessionUser } = useAuth();
+  const { nickname } = useParams();
+  const location = useLocation();
+  const { selectedUserData } = location.state || {};
+
+  const currentProfileData = useMemo(() => {
+    return allUserData?.find((user) => user.nickname === nickname) || null;
+  }, [nickname, allUserData]);
+
+  console.group(currentProfileData)
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -40,208 +69,101 @@ const Profile = () => {
     setModalIsOpen(false);
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase
-          .from("User")
-          .select("*")
-          .eq("userid", sessionUser.id);
+  const { data: userPost = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ['userPost', currentProfileData?.userid],
+    queryFn: () => fetchUserPostData(currentProfileData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-        if (error) {
-          console.error("Error fetching user data:", error);
-        } else {
-          setUser(data);
-          setUserInfo(data[0]);
-        }
-      }
-    };
+  const { data: userComment = [], isLoading: isCommentLoading } = useQuery({
+    queryKey: ['userComment', currentProfileData?.userid],
+    queryFn: () => fetchUserCommentData(currentProfileData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-    const fetchAllUserData = async () => {
-      const { data, error } = await supabase.from("User").select("*");
+  const { data: userLike = [], isLoading: isLikeLoading } = useQuery({
+    queryKey: ['userLike', currentProfileData?.userid],
+    queryFn: () => fetchUserLikeData(currentProfileData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setAllUser(data);
-      }
-    };
+  const filterLikePost = useMemo(() => {
+    return postData ? postData.filter((postItem) =>
+      userLike.some((likeItem) => likeItem.postid === postItem.postid)
+    ) : []
+  }, [userLike, postData]);
 
-    const fetchCommunityData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase.from("Community").select("*");
+  const filterCommentPost = useMemo(() => {
+    return postData ? postData.filter((postItem) =>
+      userComment.some((likeItem) => likeItem.postid === postItem.postid)
+    ) : []
+  }, [userComment, postData]);
 
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setCommunity(data);
-        }
-      }
-    };
-
-    const fetchPostData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase.from("Post").select("*");
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setPost(data);
-        }
-      }
-    };
-
-    const fetchUserPostData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase.from("Post").select("*").eq('userid', sessionUser.id);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUserPost(data);
-        }
-      }
-    };
-
-    const fetchCommentData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase
-          .from("Comment")
-          .select("*");
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setComment(data);
-        }
-      } else {
-        console.warn("postid가 정의되지 않았습니다.");
-      }
-    };
-
-    const fetchUserCommentData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase
-          .from("Comment")
-          .select("*")
-          .eq("userid", sessionUser.id);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUserComment(data);
-        }
-      } else {
-        console.warn("postid가 정의되지 않았습니다.");
-      }
-    };
-
-    const fetchUserLikeData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase.from("PostLike").select("postid").eq('userid', sessionUser.id);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUserLike(data);
-        }
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-    fetchAllUserData();
-    fetchCommunityData();
-    fetchPostData();
-    fetchUserPostData();
-    fetchCommentData();
-    fetchUserCommentData();
-    fetchUserLikeData();
-  }, [sessionUser, userInfo]);
-
-
-  if (loading) {
-    return <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}><img src={loadinggif} style={{ width: '80px' }} /></div>;
-  }
-
-  if (!sessionUser) {
-    return <div> </div>;
-  }
-
-  if (!user) {
-    return <div>User data not found.</div>;
-  }
-
-  const filterLikePost = post.filter((postItem) =>
-    userLike.some((likeItem) => likeItem.postid === postItem.postid)
-  );
-
-  const filterCommentPost = post.filter((postItem) =>
-    userComment.some((likeItem) => likeItem.postid === postItem.postid)
-  );
+  const loading = isLoading || isPostLoading || isCommentLoading || isLikeLoading;
 
   return (
     <div className={styles.container}>
-      <Header headerName={user[0].nickname} />
       {loading ? (
         <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
           <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
         </div>
+      ) : !currentProfileData ? (
+        <div>No profile data found.</div>
       ) : (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <div className={styles.info}>
-            <div className={styles.imageWrapper}>
-              {userInfo.backgroundimage ?
-                <img src={userInfo.backgroundimage} alt="profile background" className={styles.image} />
-                : <img src={nobackground} alt="profile background" className={styles.image} />
-              }
-              <div className={styles.profileImgContainer}>
-                {userInfo.profileimage ?
-                  <img src={userInfo.profileimage} alt="profile" className={styles.profileImg} />
-                  : <img src={noprofile} alt="profile" className={styles.profileImg} />
+        <>
+          <Header headerName={currentProfileData.nickname} />
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <div className={styles.info}>
+              <div className={styles.imageWrapper}>
+                {currentProfileData.backgroundimage ?
+                  <img src={currentProfileData.backgroundimage} alt="profile background" className={styles.image} />
+                  : <img src={nobackground} alt="profile background" className={styles.image} />
                 }
-
+                <div className={styles.profileImgContainer}>
+                  {currentProfileData.profileimage ?
+                    <img src={currentProfileData.profileimage} alt="profile" className={styles.profileImg} />
+                    : <img src={noprofile} alt="profile" className={styles.profileImg} />
+                  }
+                </div>
               </div>
+
+              <div className={styles.details}>
+                {sessionUser && sessionUser.id === currentProfileData.userid ? (
+                  <div className={styles.edit}>
+                    <div className={styles.communityName}></div>
+                    <button className={styles.joinButton} onClick={openModal}>
+                      Edit
+                    </button>
+                    <ProfileEditModal
+                      modalIsOpen={modalIsOpen}
+                      closeModal={closeModal}
+                      userData={userData}
+                      refetchUserData={refetchUserData}
+                    />
+                  </div>
+                ) : (
+                  <div className={styles.noedit}></div>
+                )}
+                <div className={styles.infoList}>
+                  <span className={styles.description1}>{currentProfileData.nickname}</span>
+                  <span className={styles.description2}>@{currentProfileData.username}</span>
+                  <span className={styles.description3}>{currentProfileData.bio}</span>
+                  <span className={styles.description4}>
+                    {currentProfileData.birthdate ? `🎂 ${currentProfileData.birthdate}` : null}
+                  </span>
+                </div>
+              </div>
+              <ProfileTablist
+                communityData={communityData}
+                allUserData={allUserData}
+                userPost={userPost}
+                userLike={filterLikePost}
+                userComment={filterCommentPost}
+              />
             </div>
-
-            <div className={styles.details}>
-              <div className={styles.edit}>
-                <div className={styles.communityName}>{communityInfo.community}</div>
-                <button className={styles.joinButton} onClick={openModal}>
-                  Edit
-                </button>
-                <ProfileEditModal
-                  modalIsOpen={modalIsOpen}
-                  closeModal={closeModal}
-                  profileImg={userInfo.profileimage}
-                  backgroundimage={userInfo.backgroundimage}
-                  userData={userInfo}
-                  userNickname={userInfo.nickname}
-                />
-              </div>
-              <div className={styles.infoList}>
-                <span className={styles.description1}>{userInfo.nickname}</span>
-                <span className={styles.description2}>@{userInfo.username}</span>
-                <span className={styles.description3}>{userInfo.bio}</span>
-                <span className={styles.description4}>
-                  {userInfo.birthdate ? `🎂 ${userInfo.birthdate}` : null}
-                </span>
-
-              </div>
-            </div>
-            <ProfileTablist
-              post={post}
-              community={community}
-              user={user}
-              allUser={allUser}
-              comment={comment}
-              userPost={userPost}
-              userLike={filterLikePost}
-              userComment={filterCommentPost} />
           </div>
-        </div>
+        </>
       )}
-
     </div>
   );
 };

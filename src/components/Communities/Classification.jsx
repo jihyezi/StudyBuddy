@@ -2,15 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import useIsOverflow from 'components/useIsOverflow';
 import styles from './Classification.module.css';
 
+// Images
 import leftArrow from '../../assets/icons/left_arrow.png';
 import rightArrow from '../../assets/icons/right_arrow.png';
-import JoinPostList from "components/Communities/CommunityJoinPostList";
-import CommunityPostList from './CommunityPostList';
 
 const Classification = ({ onEventSelect }) => {
   const [scrollState, setScrollState] = useState('start');
   const [selectedButton, setSelectedButton] = useState('🔥');
-
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
@@ -50,9 +48,7 @@ const Classification = ({ onEventSelect }) => {
 
   useEffect(() => {
     onEventSelect('🔥');
-  }, []);
-
-  console.log('clss-select', selectedButton);
+  }, [onEventSelect]);
 
   const handleScroll = () => {
     const { current } = containerRef;
@@ -96,7 +92,6 @@ const Classification = ({ onEventSelect }) => {
       handleScroll();
     }
   };
-
 
   return (
     <div className={styles.stackTagsArea}>

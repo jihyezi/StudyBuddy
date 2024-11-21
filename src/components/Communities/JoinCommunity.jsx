@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
 import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
 
 // image
@@ -39,6 +40,7 @@ const JoinCommunity = ({ onEventSelect, joinCommunityData = {} }) => {
     const { current } = containerRef;
     if (current) {
       current.scrollLeft += current.clientWidth - 20;
+      current.scrollLeft += current.clientWidth - 20;
       handleScroll();
     }
   };
@@ -47,12 +49,14 @@ const JoinCommunity = ({ onEventSelect, joinCommunityData = {} }) => {
     const { current } = containerRef;
     if (current) {
       current.scrollLeft -= current.clientWidth - 20;
+      current.scrollLeft -= current.clientWidth - 20;
       handleScroll();
     }
   };
 
   useEffect(() => {
     if (containerRef.current) {
+      handleScroll();
       handleScroll();
     }
   }, [joinCommunityData]);

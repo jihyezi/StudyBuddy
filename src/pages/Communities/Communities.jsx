@@ -1,6 +1,12 @@
 import React, { useMemo, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
+import React, { useMemo, useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
+import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
+
+// Components
 import supabase from "components/supabaseClient";
 import { useDataContext } from "api/DataContext";
 
@@ -60,7 +66,9 @@ const Communities = ({}) => {
   });
 
   const handleEventSelect = useCallback((event) => {
+  const handleEventSelect = useCallback((event) => {
     setSelectEvent(event);
+  }, []);
   }, []);
 
   const filterCommunity = useMemo(() => {
@@ -81,6 +89,13 @@ const Communities = ({}) => {
       : [];
   }, [postData, filterCommunity]);
 
+  const filteredCommunities = useMemo(() => {
+    return communityData
+      ? selectedEvent === "🔥"
+        ? communityData
+        : communityData.filter((c) => c.field === selectedEvent)
+      : [];
+  }, [communityData, selectedEvent]);
   const filteredCommunities = useMemo(() => {
     return communityData
       ? selectedEvent === "🔥"
