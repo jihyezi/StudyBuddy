@@ -106,9 +106,9 @@ const CommunityDetailsPage = ({}) => {
     joinCommunity && joinCommunity.length > 0 ? joinCommunity[0].role : null;
 
   const handleReviseClick = () => {
-    navigate(`/revise-study/${communityId}`);
-    // alert("수정기능을 구현중입니다");
-    // return;
+    // navigate(`/revise-study/${communityId}`);
+    alert("수정기능을 구현중입니다");
+    return;
   };
 
   return (
