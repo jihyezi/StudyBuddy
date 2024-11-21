@@ -170,14 +170,14 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/studies" ||
         location.pathname.startsWith("/bookmarkdetail/") ||
         location.pathname === "/addCommunity") && (
-        <Recommended
-          user={loginuser}
-          userData={userData}
-          allUserData={allUserData}
-          communityData={communityData}
-          postData={postData}
-        />
-      )}
+          <Recommended
+            user={loginuser}
+            userData={userData}
+            allUserData={allUserData}
+            communityData={communityData}
+            postData={postData}
+          />
+        )}
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>

@@ -4,7 +4,6 @@ import styles from "./TabList.module.css";
 import supabase from "components/supabaseClient";
 
 // Components
-// Components
 import JoinPostList from "./CommunityJoinPostList";
 import RulePage from "pages/Communities/RulePage";
 import MemberPage from "pages/Communities/MemberPage";

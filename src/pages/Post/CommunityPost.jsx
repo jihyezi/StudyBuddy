@@ -136,7 +136,7 @@ const CommunityPost = (props) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header title={"Communities"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
