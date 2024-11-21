@@ -162,7 +162,7 @@ function DMChat({ selectedUser }) {
             chat.new_senderid === publicUserId ? (
               <MyMessage key={index} message={chat.content} />
             ) : (
-              <OtherMessage key={index} message={chat.content} />
+              <OtherMessage key={index} message={chat.content} profile={selectedUser?.profileimage || noprofile} />
             )
           )
         ) : (
@@ -170,24 +170,27 @@ function DMChat({ selectedUser }) {
         )}
       </div>
       <div className={styles.InputContainer}>
-        <input
-          className={styles.chatInput}
-          placeholder="메시지 입력하기"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button
-          className={styles.chatButton}
-          onClick={handleSendMessage}
-          disabled={!publicUserId}
-        >
-          보내기
-        </button>
+        <div className={styles.chatInputContainer}>
+          <input
+            className={styles.chatInput}
+            placeholder="메시지 입력하기"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button
+            className={styles.chatButton}
+            onClick={handleSendMessage}
+            disabled={!publicUserId}
+          >
+            보내기
+          </button>
+        </div>
+        {showDeleteModal && (
+          <DeleteModal onClose={handleCloseModal} onDelete={handleDeleteConversation} />
+        )}
       </div>
-      {showDeleteModal && (
-        <DeleteModal onClose={handleCloseModal} onDelete={handleDeleteConversation} />
-      )}
     </div>
+
   );
 }
 

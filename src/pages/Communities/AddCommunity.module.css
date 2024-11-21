@@ -1,0 +1,47 @@
+.communityContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    max-width: 1200px;
+    border-right: 1px solid #dddddd;
+    margin: 0 0 auto 0; 
+    overflow-x: hidden;
+}
+
+.MainContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    padding-bottom: 30px;
+}
+
+.communityMap {
+    position: relative;
+    display: grid;
+    width: 86%;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 24px;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    place-items: center;
+}
+
+.noPostContainer {
+    display: flex;
+    width: 100%;
+    margin-top: 100px;
+    justify-content: center;
+    align-items: center;
+}
+
+.noPost {
+    text-align: center;
+    font-size: 24px;
+    font-family:'BalooTammudu2-SemiBold';
+    color: #7b7b7b;
+}

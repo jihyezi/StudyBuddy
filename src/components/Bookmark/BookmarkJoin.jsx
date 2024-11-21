@@ -1,44 +1,31 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./BookmarkJoin.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
 
 // image
-import cat from "assets/images/Communities/1.jpg";
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
-import profile from "assets/icons/Communities/communityprofile.jpeg";
 import noCommunityimg from 'assets/images/Communities/whitelogo.png';
 
 const BookmarkJoin = ({
-  onEventSelect,
   communityData = {},
-  allJoinCommunityData = {},
   joinCommunityData = {},
   postData = {},
   userData = {},
-  onBookmarkToggle = {},
   allUserData = {},
 }) => {
   const [scrollState, setScrollState] = useState("start");
-  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
-
-
   const handleClick = (item) => {
-    setSelectedItem(item);
-    onEventSelect(item);
     navigate(`/bookmarkdetail/${item.communityid}`, {
       state: {
         currentCommunityid: `${item.communityid}`,
-        // img: `${item.img}`,
         currentCommunity: `${item.name}`,
         communityData: communityData,
-        allJoinCommunityData: allJoinCommunityData,
-        joinCommunityData: joinCommunityData,
         postData: postData,
         userData: userData,
         allUserData: allUserData
@@ -65,7 +52,7 @@ const BookmarkJoin = ({
   const moveRight = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft += current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
+      current.scrollLeft += current.clientWidth - 20;
       handleScroll();
     }
   };
@@ -73,14 +60,14 @@ const BookmarkJoin = ({
   const moveLeft = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft -= current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
+      current.scrollLeft -= current.clientWidth - 20;
       handleScroll();
     }
   };
 
   useEffect(() => {
     if (containerRef.current) {
-      handleScroll(); // 데이터가 로딩된 후 스크롤 상태를 재계산
+      handleScroll();
     }
   }, [joinCommunityData]);
 
@@ -91,7 +78,7 @@ const BookmarkJoin = ({
         ref={containerRef}
         onScroll={handleScroll}
       >
-        {joinCommunityData.map((item, index) => (
+        {Array.isArray(joinCommunityData) && joinCommunityData.map((item, index) => (
           <div
             key={index}
             className={styles.classification}
@@ -103,12 +90,12 @@ const BookmarkJoin = ({
                   <img
                     className={styles.communityImage}
                     src={item.image}
-                    alt="cat"
+                    alt="communityImage"
                   />
                   : <img
                     className={styles.communityImage}
                     src={noCommunityimg}
-                    alt="cat"
+                    alt="communityImage"
                   />
                 }
 

@@ -2,12 +2,10 @@ import React from "react";
 import Post from "./Post";
 
 const CommunityPostList = ({
-  postData,
-  communityData,
   userData,
   allUserData,
-  commentData,
-  onBookmarkToggle,
+  postData = [],
+  communityData,
 }) => {
   return (
     <div style={{ width: '100%' }}>
@@ -15,12 +13,11 @@ const CommunityPostList = ({
         postData.map((post) => (
           <Post
             key={post.postid}
-            post={post}
-            community={communityData}
-            user={userData}
-            allUser={allUserData}
-            comment={commentData}
-            onBookmarkToggle={onBookmarkToggle}
+            userData={userData}
+            allUserData={allUserData}
+            thisPost={post}
+            postData={postData}
+            communityData={communityData}
           />
         ))
       ) : (

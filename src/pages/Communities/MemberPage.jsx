@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import styles from "./MemberPage.module.css";
-import profile from "assets/images/profile1.png";
-import supabase from "components/supabaseClient";
 import noprofile from "assets/images/Profile/noprofile.png";
 
 const MemberPage = ({ adminData = {}, memberData = {} }) => {
-  const { communityId } = useParams();
 
   return (
     <div className={styles.container}>

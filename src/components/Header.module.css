@@ -1,3 +1,10 @@
+.headerContainer{
+  border-bottom: 1px solid #dddddd;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .header {
   border-bottom: 1px solid #dddddd;
 }

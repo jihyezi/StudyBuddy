@@ -29,7 +29,7 @@ import onboardingimg from "assets/images/Home/OnBoarding.png";
 import Classification from "components/Communities/Classification";
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hotCommunities, setHotCommunities] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
@@ -304,6 +304,9 @@ const Home = ({}) => {
     fetchCommunityData();
   }, []);
 
+  console.log(communityy);
+  console.log(user[0])
+
   const handleCommuntiyClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {
       state: {
@@ -314,7 +317,7 @@ const Home = ({}) => {
         // allJoinCommunityData: allJoinCommunityData,
         // joinCommunityData: joinCommunityData,
         // postData: postData,
-        userData: user,
+        userData: user[0],
       },
     });
   };

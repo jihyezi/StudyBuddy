@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: start;
   padding: 40px 20px;
+  overflow: visible; 
 }
 
 .recommendedHead {

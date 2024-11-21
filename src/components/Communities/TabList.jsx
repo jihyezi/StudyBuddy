@@ -1,35 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./TabList.module.css";
 import supabase from "components/supabaseClient";
-import { useAuth } from "contexts/AuthContext";
 
+// Components
 import JoinPostList from "./CommunityJoinPostList";
-import Post from "./Post";
 import RulePage from "pages/Communities/RulePage";
 import MemberPage from "pages/Communities/MemberPage";
+import { useQuery } from "@tanstack/react-query";
 
-export const TabList = () => {
+// Data
+const fetchJoinCommunityDataById = async (communityId) => {
+  const { data, error } = await supabase
+    .from("JoinCommunity")
+    .select("*")
+    .eq("communityid", communityId);
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+const fetchUserDataByIds = async (userIds) => {
+  const usersDataPromises = userIds.map(async (userId) => {
+    const { data, error } = await supabase
+      .from("User")
+      .select("*")
+      .eq("userid", userId);
+
+    if (error) throw new Error(error.message);
+    return data[0];
+  });
+
+  const usersData = await Promise.all(usersDataPromises);
+  return usersData.filter(Boolean);
+}
+
+export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const [currentTab, clickTab] = useState(0);
   const { communityId } = useParams();
-  const { user: sessionUser } = useAuth();
-  const [posts, setPosts] = useState([]);
-  const [rules, setRules] = useState(null);
   const [adminUsers, setAdminUsers] = useState([]);
   const [memberUsers, setMemberUsers] = useState([]);
-  const [community, setCommunity] = useState([]);
-  const [user, setUser] = useState([]);
-  const [allUser, setAllUser] = useState([]);
+  const [popularPost, setPopularPost] = useState([]);
+
+  const { data: joinCommunityData, isLoading, error } = useQuery({
+    queryKey: ["JoinCommunity", communityId],
+    queryFn: () => fetchJoinCommunityDataById(communityId),
+    enabled: !!communityId,
+  });
+
+  const filterPost = useMemo(() => {
+    return (Array.isArray(postData) ? postData : []).filter(
+      (p) => Number(p.communityid) === Number(communityId)
+    );
+  }, [postData]);
+
+  const filterCommunity = useMemo(() => {
+    return (Array.isArray(communityData) ? communityData : []).filter(
+      (c) => Number(c.communityid) === Number(communityId)
+    );
+  }, [communityData]);
+
+  const popularPosts = useMemo(() => {
+    return filterPost
+      .map((post) => {
+        const likeCount = popularPost.find((item) => item.postid === post.postid)?.like_count || 0;
+        return { ...post, like_count: likeCount };
+      })
+      .sort((a, b) => b.like_count - a.like_count);
+  }, [filterPost, popularPost]);
+
+  const recentPosts = useMemo(() => {
+    return [...filterPost].sort(
+      (a, b) => new Date(b.createdat) - new Date(a.createdat)
+    );
+  }, [filterPost]);
 
   const menuArr = [
     {
       name: "인기",
       content: (
         <JoinPostList
-          postData={posts}
-          communityData={community}
-          userData={user}
-          allUserData={allUser}
+          postData={popularPosts}
+          communityData={communityData}
+          userData={userData}
+          allUserData={allUserData}
         />
       ),
     },
@@ -37,14 +91,14 @@ export const TabList = () => {
       name: "최근",
       content: (
         <JoinPostList
-          postData={posts}
-          communityData={community}
-          userData={user}
-          allUserData={allUser}
+          postData={recentPosts}
+          communityData={communityData}
+          userData={userData}
+          allUserData={allUserData}
         />
       ),
     },
-    { name: "규칙", content: <RulePage ruleData={rules} /> },
+    { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
     {
       name: "멤버",
       content: <MemberPage adminData={adminUsers} memberData={memberUsers} />,
@@ -56,131 +110,44 @@ export const TabList = () => {
   };
 
   useEffect(() => {
-    fetchPostDataById(communityId);
-    fetchCommunityDataById(communityId);
-    fetchJoinCommunityDataById(communityId);
-  }, [communityId]);
+    if (joinCommunityData) {
+      const userIds = joinCommunityData.map((user) => user.userid);
+      fetchUserDataByIds(userIds).then((filteredUsers) => {
+        const admins = joinCommunityData
+          .filter((item) => item.role === "admin")
+          .map((item) => {
+            const user = filteredUsers.find((user) => user.userid === item.userid);
+            return { ...user, role: item.role };
+          });
+
+        const members = joinCommunityData
+          .filter((item) => item.role === "member")
+          .map((item) => {
+            const user = filteredUsers.find((user) => user.userid === item.userid);
+            return { ...user, role: item.role };
+          });
+
+        setAdminUsers(admins);
+        setMemberUsers(members);
+      });
+    }
+  }, [joinCommunityData]);
+
 
   useEffect(() => {
-    fetchUserData();
-    fetchAllUserData();
-    fetchCommunityData();
-  }, [sessionUser]);
+    fetchPopularPost();
+  }, [postData])
 
-  const fetchCommunityData = async () => {
-    const { data, error } = await supabase.from("Community").select("*");
-
-    if (error) {
-      console.error("Error", error);
-    } else {
-      setCommunity(data);
-    }
-  };
-
-  const fetchUserData = async () => {
-    if (sessionUser) {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error("Error getting session:", sessionError);
-        return;
-      }
-
-      const userId = session.user.id;
-
-      const { data, error } = await supabase
-        .from("User")
-        .select("*")
-        .eq("userid", userId);
-
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setUser(data);
-      }
-    }
-  };
-
-  const fetchAllUserData = async () => {
-    const { data, error } = await supabase.from("User").select("*");
-
-    if (error) {
-      console.error("Error", error);
-    } else {
-      setAllUser(data);
-    }
-  };
-
-  const fetchPostDataById = async (communityId) => {
+  const fetchPopularPost = async () => {
     const { data, error } = await supabase
-      .from("Post")
-      .select("*")
-      .eq("communityid", communityId);
+      .from("popular_posts_view")
+      .select("*");
 
     if (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching popular posts:", error);
     } else {
-      setPosts(data);
+      setPopularPost(data);
     }
-  };
-
-  const fetchCommunityDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("Community")
-      .select("*")
-      .eq("communityid", communityId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setRules(data);
-    }
-  };
-
-  const fetchJoinCommunityDataById = async (communityId) => {
-    const { data, error } = await supabase
-      .from("JoinCommunity")
-      .select("*")
-      .eq("communityid", communityId);
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      fetchJoinUsersData(data);
-    }
-  };
-
-  const fetchJoinUsersData = async (joinCommunityData) => {
-    const userIds = joinCommunityData.map((user) => user.userid);
-    const usersDataPromises = userIds.map(async (userId) => {
-      const { data, error } = await supabase
-        .from("User")
-        .select("*")
-        .eq("userid", userId);
-      return data[0];
-    });
-
-    const usersData = await Promise.all(usersDataPromises);
-    const filteredUsers = usersData.filter(Boolean);
-
-    const admins = joinCommunityData
-      .filter((item) => item.role === "admin")
-      .map((item) => {
-        const user = filteredUsers.find((user) => user.userid === item.userid);
-        return { ...user, role: item.role };
-      });
-
-    const members = joinCommunityData
-      .filter((item) => item.role === "member")
-      .map((item) => {
-        const user = filteredUsers.find((user) => user.userid === item.userid);
-        return { ...user, role: item.role };
-      });
-
-    setAdminUsers(admins);
-    setMemberUsers(members);
   };
 
   return (
