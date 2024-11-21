@@ -332,8 +332,6 @@ const Post = ({ postId }) => {
     }
   };
 
-  console.log("post-post", thisPost)
-
   const toggleLike = async (event) => {
     event.stopPropagation();
 
@@ -364,24 +362,6 @@ const Post = ({ postId }) => {
     setLiked((prevLiked) => !prevLiked);
     queryClient.refetchQueries(["postLike", postId]);
   };
-
-  const fetchLikeCount = async () => {
-    const { count } = await supabase
-      .from("PostLike")
-      .select("*", { count: "exact" })
-      .eq("postid", thisPost.postid);
-
-    setLikeCount(count);
-  };
-
-  const fetchCommentCount = async () => {
-    const { count } = await supabase
-      .from("Comment")
-      .select("*", { count: "exact" })
-      .eq("postid", thisPost.postid)
-
-    setCommentCount(count);
-  }
 
   const toggleBookmark = async (event) => {
     event.stopPropagation();
