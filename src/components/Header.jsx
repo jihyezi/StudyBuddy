@@ -25,7 +25,7 @@ const Header = ({ headerName }) => {
                 <img className={styles.backIcon} onClick={backBtn} src={back} alt="back" />
                 <span className={styles.headerName}>{headerName}</span>
             </div>
-            {headerName === "My Communities" ? <img className={styles.backIcon} onClick={addCommunityButton} src={addCommunity} alt="back" />
+            {headerName === "Communities" ? <img className={styles.backIcon} onClick={addCommunityButton} src={addCommunity} alt="back" />
                 : null}
         </div>
 

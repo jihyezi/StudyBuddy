@@ -79,14 +79,7 @@ const All = () => {
           <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
         </div>
       ) : (
-        searchPosts.map((post, index) => (
-          <StudyPost
-            key={index}
-            study={post}
-            userData={userData}
-            allUserData={allUserData}
-          />
-        ))
+        searchPosts.map((post, index) => <StudyPost key={index} study={post} />)
       )}
     </div>
   );
