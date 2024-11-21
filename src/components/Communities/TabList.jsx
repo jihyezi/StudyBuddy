@@ -18,7 +18,7 @@ const fetchJoinCommunityDataById = async (communityId) => {
 
   if (error) throw new Error(error.message);
   return data;
-}
+};
 
 const fetchUserDataByIds = async (userIds) => {
   const usersDataPromises = userIds.map(async (userId) => {
@@ -33,7 +33,7 @@ const fetchUserDataByIds = async (userIds) => {
 
   const usersData = await Promise.all(usersDataPromises);
   return usersData.filter(Boolean);
-}
+};
 
 export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const [currentTab, clickTab] = useState(0);
@@ -42,7 +42,11 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const [memberUsers, setMemberUsers] = useState([]);
   const [popularPost, setPopularPost] = useState([]);
 
-  const { data: joinCommunityData, isLoading, error } = useQuery({
+  const {
+    data: joinCommunityData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["JoinCommunity", communityId],
     queryFn: () => fetchJoinCommunityDataById(communityId),
     enabled: !!communityId,
@@ -63,7 +67,9 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const popularPosts = useMemo(() => {
     return filterPost
       .map((post) => {
-        const likeCount = popularPost.find((item) => item.postid === post.postid)?.like_count || 0;
+        const likeCount =
+          popularPost.find((item) => item.postid === post.postid)?.like_count ||
+          0;
         return { ...post, like_count: likeCount };
       })
       .sort((a, b) => b.like_count - a.like_count);
@@ -78,25 +84,11 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const menuArr = [
     {
       name: "인기",
-      content: (
-        <JoinPostList
-          postData={popularPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-        />
-      ),
+      content: <JoinPostList postData={popularPosts} />,
     },
     {
       name: "최근",
-      content: (
-        <JoinPostList
-          postData={recentPosts}
-          communityData={communityData}
-          userData={userData}
-          allUserData={allUserData}
-        />
-      ),
+      content: <JoinPostList postData={recentPosts} />,
     },
     { name: "규칙", content: <RulePage ruleData={filterCommunity} /> },
     {
@@ -110,20 +102,28 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   };
 
   useEffect(() => {
+    console.log("communitydata", communityData);
+  }, []);
+
+  useEffect(() => {
     if (joinCommunityData) {
       const userIds = joinCommunityData.map((user) => user.userid);
       fetchUserDataByIds(userIds).then((filteredUsers) => {
         const admins = joinCommunityData
           .filter((item) => item.role === "admin")
           .map((item) => {
-            const user = filteredUsers.find((user) => user.userid === item.userid);
+            const user = filteredUsers.find(
+              (user) => user.userid === item.userid
+            );
             return { ...user, role: item.role };
           });
 
         const members = joinCommunityData
           .filter((item) => item.role === "member")
           .map((item) => {
-            const user = filteredUsers.find((user) => user.userid === item.userid);
+            const user = filteredUsers.find(
+              (user) => user.userid === item.userid
+            );
             return { ...user, role: item.role };
           });
 
@@ -133,10 +133,9 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
     }
   }, [joinCommunityData]);
 
-
   useEffect(() => {
     fetchPopularPost();
-  }, [postData])
+  }, [postData]);
 
   const fetchPopularPost = async () => {
     const { data, error } = await supabase

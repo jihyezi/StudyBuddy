@@ -1,9 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./StudyPost.module.css";
+import React, { useRef, useState, useEffect, useDebugValue } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import styles from "./ReviseStudy.module.css";
 import supabase from "components/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
 import { v4 as uuidv4 } from "uuid";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
 
 // component
 import Header from "components/Post/Header";
@@ -17,13 +19,15 @@ import InputTag from "components/Post/InputTag";
 import album from "assets/icons/Post/album.png";
 import caution from "assets/icons/Post/caution.png";
 
-const StudyPost = ({ allUserData }) => {
+const ReviseStudyPost = () => {
   const navigate = useNavigate();
-
+  const { studyId } = useParams();
+  const { allUserData } = useDataContext();
   const [name, setName] = useState("");
   const [proceed, setProceed] = useState("");
   const [people, setPeople] = useState("");
   const [period, setPeriod] = useState("");
+  const [completion, setCompletion] = useState("");
   const [schedule, setSchedule] = useState("");
   const [location, setLocation] = useState("");
   const [studyDescription, setStudyDescription] = useState("");
@@ -36,10 +40,57 @@ const StudyPost = ({ allUserData }) => {
     proceed: false,
     people: false,
     period: false,
+    completion: false,
     schedule: false,
     location: false,
     studyDescription: false,
   });
+
+  const [loginUser, setLoginUser] = useState(null);
+  const { user: sessionUser } = useAuth();
+  const uselocation = useLocation();
+  const { study } = uselocation.state;
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setName(study.title);
+    setProceed(study.proceed);
+    setPeople(study.maxmembers);
+    setPeriod(study.duration);
+    setCompletion(study.completion);
+    setSchedule(study.schedule);
+    setLocation(study.location);
+    setStudyDescription(study.description);
+    setTags(study.tag);
+
+    if (editorRef.current) {
+      const htmlDescription = study.description
+        .replace(
+          /!\[.*?\]\((.*?)\)/g,
+          '<img src="$1" alt="Image" style="max-width: 100%; height: auto;" class="${styles.image}" />'
+        )
+        .replace(/\n/g, "<br>");
+      editorRef.current.innerHTML = htmlDescription;
+    }
+
+    fetchUserData();
+  }, [study]);
+
+  const fetchUserData = async () => {
+    if (sessionUser) {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Error getting session:", sessionError);
+        return;
+      }
+
+      const userId = session.user.id;
+      setLoginUser(allUserData.filter((user) => user.userid === userId));
+    }
+  };
 
   const handleAlbumClick = () => {
     const input = document.createElement("input");
@@ -149,7 +200,7 @@ const StudyPost = ({ allUserData }) => {
     setIsModalOpen(true);
   };
 
-  const handleCancelClick = () => {
+  const handleModalClose = () => {
     setIsModalOpen(false);
   };
 
@@ -164,13 +215,7 @@ const StudyPost = ({ allUserData }) => {
       return;
     }
 
-    if (!session) {
-      console.error("No session found. User might not be logged in.");
-      return;
-    }
-
     const userId = session.user.id;
-
     const currentContent = editorRef.current.innerHTML;
     const descriptionParts = [];
     const parser = new DOMParser();
@@ -202,10 +247,11 @@ const StudyPost = ({ allUserData }) => {
     }
 
     const finalDescription = descriptionParts.join("\n");
+    console.log(finalDescription);
 
-    const { data: studyData, error: studyError } = await supabase
+    const { data: updatedStudyData, error: studyError } = await supabase
       .from("Study")
-      .insert([
+      .update([
         {
           userid: userId,
           title: name,
@@ -216,18 +262,21 @@ const StudyPost = ({ allUserData }) => {
           location: location,
           description: finalDescription,
           tag: tags,
-          createdat: new Date(),
+          // createdat: new Date(),
           updatedat: new Date(),
-          completion: "모집 중",
+          completion: completion.name,
         },
       ])
+      .eq("studyid", studyId)
       .select();
 
     if (studyError) {
-      console.error("Error inserting data:", studyError);
+      console.error("Error updating data:", studyError);
     } else {
-      console.log("Data inserted successfully!", studyData[0].studyid);
-      navigate(`/detail-study/${studyData[0].studyid}`);
+      console.log("Data update successfully!", updatedStudyData[0].studyid);
+      fetchUserData();
+      navigate(`/detail-study/${updatedStudyData[0].studyid}`);
+      // window.location.reload();
     }
   };
 
@@ -238,7 +287,7 @@ const StudyPost = ({ allUserData }) => {
         <CreateModal
           title={"Study"}
           onCreate={handleCreateClick}
-          onCancel={handleCancelClick}
+          onCancel={handleModalClose}
         />
       )}
       <div className={styles.postContainer}>
@@ -254,6 +303,7 @@ const StudyPost = ({ allUserData }) => {
               setName(e.target.value);
               setShowCaution({ ...showCaution, name: false });
             }}
+            value={name}
           />
           {showCaution.name && (
             <div className={styles.cautionContainer}>
@@ -279,6 +329,7 @@ const StudyPost = ({ allUserData }) => {
                 setProceed(selectedOption);
                 setShowCaution({ ...showCaution, proceed: false });
               }}
+              defaultValue={proceed}
             />
             {showCaution.proceed && (
               <div className={styles.cautionContainer}>
@@ -302,6 +353,7 @@ const StudyPost = ({ allUserData }) => {
                 setPeople(selectedOption);
                 setShowCaution({ ...showCaution, people: false });
               }}
+              defaultValue={people}
             />
             {showCaution.people && (
               <div className={styles.cautionContainer}>
@@ -326,6 +378,7 @@ const StudyPost = ({ allUserData }) => {
                 setPeriod(selectedOption);
                 setShowCaution({ ...showCaution, period: false });
               }}
+              defaultValue={period}
             />
             {showCaution.period && (
               <div className={styles.cautionContainer}>
@@ -342,21 +395,45 @@ const StudyPost = ({ allUserData }) => {
               minHeight: "72px",
             }}
           >
-            <InputText
-              title={"일정"}
-              placeholder={"ex) 매주 월요일 1시"}
-              onChange={(e) => {
-                setSchedule(e.target.value);
-                setShowCaution({ ...showCaution, schedule: false });
+            <InputSelect
+              title={"모집상태"}
+              placeholder={"모집 중/모집 완료"}
+              onSelect={(selectedOption) => {
+                setCompletion(selectedOption);
+                setShowCaution({ ...showCaution, completion: false });
               }}
+              defaultValue={completion}
             />
-            {showCaution.schedule && (
+            {showCaution.completion && (
               <div className={styles.cautionContainer}>
                 <img className={styles.cautionIcon} src={caution} />
-                <div className={styles.cautionText}>일정를 입력해주세요.</div>
+                <div className={styles.cautionText}>
+                  모집 상태를 선택해주세요.
+                </div>
               </div>
             )}
           </div>
+        </div>
+        <div
+          style={{
+            minHeight: "72px",
+          }}
+        >
+          <InputText
+            title={"일정"}
+            placeholder={"ex) 매주 월요일 1시"}
+            onChange={(e) => {
+              setSchedule(e.target.value);
+              setShowCaution({ ...showCaution, schedule: false });
+            }}
+            value={schedule}
+          />
+          {showCaution.schedule && (
+            <div className={styles.cautionContainer}>
+              <img className={styles.cautionIcon} src={caution} />
+              <div className={styles.cautionText}>일정를 입력해주세요.</div>
+            </div>
+          )}
         </div>
 
         <div
@@ -371,6 +448,7 @@ const StudyPost = ({ allUserData }) => {
               setLocation(e);
               setShowCaution({ ...showCaution, location: false });
             }}
+            initialValue={location}
           />
           {showCaution.location && (
             <div className={styles.cautionContainer}>
@@ -396,7 +474,9 @@ const StudyPost = ({ allUserData }) => {
                 contentEditable
                 placeholder="스터디 소개를 입력하세요."
                 onInput={(e) => {
-                  setStudyDescription(e.currentTarget.textContent);
+                  const content = e.currentTarget.innerHTML;
+                  setStudyDescription(content);
+                  // setStudyDescription(e.currentTarget.textContent);
                   setShowCaution({ ...showCaution, studyDescription: false });
                 }}
               />
@@ -417,10 +497,16 @@ const StudyPost = ({ allUserData }) => {
             </div>
           )}
         </div>
-        <InputTag onChange={setTags} />
+        <div
+          style={{
+            marginTop: "15px",
+          }}
+        >
+          <InputTag tags={tags} onChange={setTags} />
+        </div>
       </div>
     </div>
   );
 };
 
-export default StudyPost;
+export default ReviseStudyPost;

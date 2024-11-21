@@ -1,83 +1,51 @@
 import React, { useEffect, useState } from "react";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
+
 import styles from "./All.module.css";
 import Filter from "components/Studies/Filter";
 import Search from "assets/icons/Explore/search.png";
 import StudyPost from "components/Studies/StudyPost";
 import supabase from "components/supabaseClient";
-import loadinggif from "assets/images/loading.gif"
+import loadinggif from "assets/images/loading.gif";
+
+const fetchStudyAllData = async () => {
+  const { data, error } = await supabase.from("Study").select("*");
+
+  if (error) throw new Error(error.message);
+  return data;
+};
 
 const All = () => {
-  const [posts, setPosts] = useState([]);
-  const [likesCount, setLikesCount] = useState({});
-  const [commentsCount, setCommentsCount] = useState({});
-  const [selectOption, setSelectOption] = useState('전체');
-  const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(true);
+  const { userData, allUserData, isLoading } = useDataContext();
+  const [selectOption, setSelectOption] = useState("전체");
+  const [searchText, setSearchText] = useState("");
+
+  const { data: Studies = [], isLoading: isStudyLoading } = useQuery({
+    queryKey: ["Studies"],
+    queryFn: () => fetchStudyAllData(),
+  });
 
   const handleSelectOption = (option) => {
     setSelectOption(option);
-  }
+  };
 
   const handleSearchTextChange = (e) => {
     setSearchText(e.target.value);
-  }
-
-  const fetchStudyDataAll = async () => {
-    setLoading(true);
-    const { data, error } = await supabase.from("Study").select("*");
-
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      await fetchLikesCount();
-      await fetchCommentsCount();
-      setPosts(data);
-    }
-    setLoading(false);
   };
 
-  const fetchLikesCount = async () => {
-    const { data, error } = await supabase.from("studylikescount").select("*");
-
-    if (error) {
-      console.error("Error fetching likes count:", error);
-    } else {
-      console.log("DATa", data);
-      const likesMap = {};
-      data.forEach((item) => {
-        likesMap[item.studyid] = item.like_count;
-      });
-      setLikesCount(likesMap);
-    }
-  };
-
-  const fetchCommentsCount = async () => {
-    const { data, error } = await supabase
-      .from("studycommentscount")
-      .select("*");
-
-    if (error) {
-      console.error("Error fetching comments count:", error);
-    } else {
-      const likesMap = {};
-      data.forEach((item) => {
-        likesMap[item.studyid] = item.like_count;
-      });
-      setCommentsCount(likesMap);
-    }
-  };
-
-  useEffect(() => {
-    fetchStudyDataAll();
-  }, [selectOption]);
-
-  const filterPosts = posts.filter((p) =>
-    selectOption === '전체' ? true : p.completion === selectOption
+  const filterPosts = Studies.filter((p) =>
+    selectOption === "전체" ? true : p.completion === selectOption
   );
 
-  const searchPosts = filterPosts.filter((p) =>
-    p.title.includes(searchText) || p.description.includes(searchText) || p.tag.includes(searchText)
+  const searchPosts = filterPosts.filter(
+    (p) =>
+      p.title.includes(searchText) ||
+      p.description.includes(searchText) ||
+      p.tag.includes(searchText)
   );
+
+  const loading = isLoading || isStudyLoading;
 
   return (
     <div className={styles.allContainer}>
@@ -99,23 +67,24 @@ const All = () => {
         </div>
       </div>
       {loading ? (
-        <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-          <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "100vh",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
         </div>
       ) : (
         searchPosts.map((post, index) => (
           <StudyPost
             key={index}
-            studyId={post.studyid}
-            completion={post.completion}
-            title={post.title}
-            description={post.description.split("\n")[0]}
-            tag={post.tag}
-            maxmembers={post.maxmembers}
-            proceed={post.proceed}
-            studyPost={post}
-            likesCount={likesCount[post.studyid] || 0}
-            commentsCount={commentsCount[post.studyid] || 0}
+            study={post}
+            userData={userData}
+            allUserData={allUserData}
           />
         ))
       )}

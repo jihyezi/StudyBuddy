@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./CreateModal.module.css";
 
-const CreateModal = ({ onCreate, onCancel }) => {
+const CreateModal = ({ onCreate, onCancel, title }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.deleteModal}>
-        <div className={styles.modalQuestion}>Create Community?</div>
+        <div className={styles.modalQuestion}>Create {title}?</div>
         <div className={styles.modalConfirm} onClick={onCreate}>
           Create
         </div>
