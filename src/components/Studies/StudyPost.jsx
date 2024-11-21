@@ -4,6 +4,7 @@ import styles from "./StudyPost.module.css";
 import supabase from "components/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
 
 import heart_off from "assets/icons/favorite_off.png";
 import heart_on from "assets/icons/favorite_on.png";
@@ -35,6 +36,7 @@ const fetchStudyCommentData = async (studyId) => {
 const StudyPost = (props) => {
   const [liked, setLiked] = useState(false);
 
+  const { userData } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user: sessionUser } = useAuth();
@@ -57,15 +59,15 @@ const StudyPost = (props) => {
     const checkLike = () => {
       const userLike = studyLike.find(
         (like) =>
-          like.userid === props.userData?.userid &&
+          like.userid === userData?.userid &&
           like.studyid === props.study.studyid
       );
       setLiked(!!userLike);
     };
-    if (props.userData) {
+    if (userData) {
       checkLike();
     }
-  }, [studyLike, props.userData, props.study.studyid]);
+  }, [studyLike, userData, props.study.studyid]);
 
   const handlePostClick = () => {
     navigate(`/detail-study/${props.study.studyid}`);
