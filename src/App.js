@@ -25,11 +25,13 @@ import DetailPost from "pages/Post/DetailPost";
 import DetailStudyPost from "pages/Studies/DetailStudyPost";
 import RevisePost from "pages/Post/RevisePost";
 import ReviseCommunity from "pages/Post/ReviseCommunity";
+import ReviseStudy from "pages/Post/ReviseStudy";
 import SearchResults from "pages/Explore/SearchResulus";
 import LoginModal from "components/Home/LoginModal";
 import CommonLayout from "components/Explore/CommonLayout";
 import BookmarkDetail from "pages/Bookmarks/BookmarkDetail";
 import AddCommunity from "pages/Communities/AddCommunity";
+import OtherProfile from "pages/Profile/OtherProfile";
 
 const Body = styled.div`
   width: 100%;
@@ -62,7 +64,18 @@ const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth();
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
-  const { userData, allUserData, communityData, postData, refetchUserData, isLoading, hasError, refetchCommunityData } = useDataContext();
+  const {
+    userData,
+    allUserData,
+    communityData,
+    postData,
+    studyData,
+    refetchUserData,
+    isLoading,
+    hasError,
+    refetchCommunityData,
+  } = useDataContext();
+
   useEffect(() => {
     if (
       !user &&
@@ -101,19 +114,45 @@ const MainContent = ({ loginuser }) => {
             </CommonLayout>
           }
         />
-        <Route path="/communities" element={<Communities userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} refetchUserData={refetchUserData} isLoading={isLoading} />} />
+        <Route
+          path="/communities"
+          element={
+            <Communities
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+              refetchUserData={refetchUserData}
+              isLoading={isLoading}
+            />
+          }
+        />
         <Route path="/studies" element={<Studies />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="/bookmarks" element={<Bookmarks userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} />} />
+        <Route
+          path="/bookmarks"
+          element={
+            <Bookmarks
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              postData={postData}
+            />
+          }
+        />
         <Route path="/profile/:nickname" element={<Profile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
         <Route path="/create-community" element={<CommunityPost />} />
-        <Route path="/create-study" element={<StudyPost />} />
+        <Route
+          path="/create-study"
+          element={<StudyPost allUserData={allUserData} />}
+        />
         <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
         <Route path="/revisepost" element={<RevisePost />} />
         <Route path="/revisecommunity" element={<ReviseCommunity />} />
+        <Route path="/revise-study/:studyId" element={<ReviseStudy />} />
         <Route
           path="/detail-community/:communityId"
           element={<CommunityDetailsPage communityData={communityData} />}
@@ -131,13 +170,23 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/bookmarks" ||
         location.pathname === "/studies" ||
         location.pathname.startsWith("/bookmarkdetail/") ||
-        location.pathname === "/addCommunity") && <Recommended user={loginuser} userData={userData} allUserData={allUserData} communityData={communityData} postData={postData} />}
+        location.pathname === "/addCommunity") && (
+        <Recommended
+          user={loginuser}
+          userData={userData}
+          allUserData={allUserData}
+          communityData={communityData}
+          postData={postData}
+        />
+      )}
+
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
   );
 };
 
 const App = () => {
+  const queryClient = new QueryClient();
   const [loginUser, setLoginUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const { user: sessionUser } = useAuth();

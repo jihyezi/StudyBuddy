@@ -20,6 +20,7 @@ import caution from "assets/icons/Post/caution.png";
 
 const Post = () => {
   const navigate = useNavigate();
+
   const [community, setCommunity] = useState("");
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -40,117 +41,6 @@ const Post = () => {
     result: false,
     studyMethod: false,
   });
-
-  const { user: sessionUser } = useAuth();
-  const [communityData, setCommunityData] = useState([]);
-  const [joinCommunity, setJoinCommunity] = useState([]);
-  const [userData, setUserData] = useState([]);
-  const [allUserData, setAllUserData] = useState([]);
-  const [postData, setPostData] = useState([]);
-  const [filteredPost, setFilteredPost] = useState();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await Promise.all([
-        fetchCommunityData(),
-        fetchUserData(),
-        fetchAllUserData(),
-        fetchJoinCommunityData(),
-        fetchPostData(),
-      ]);
-    };
-
-    fetchData();
-  }, [sessionUser]);
-
-  useEffect(() => {
-    const filterCommunity = communityData.filter((c) =>
-      joinCommunity.some((jc) => jc.communityid === c.communityid)
-    );
-
-    const filteredPosts = postData.filter((p) =>
-      filterCommunity.some(
-        (fc) => Number(fc.communityid) === Number(p.communityid)
-      )
-    );
-
-    setFilteredPost(filteredPosts); // 상태를 업데이트
-  }, [communityData, joinCommunity, postData]);
-
-  const fetchCommunityData = async () => {
-    const { data, error } = await supabase.from("Community").select("*");
-
-    if (error) {
-      console.error("Error", error);
-    } else {
-      setCommunityData(data);
-    }
-  };
-
-  const fetchUserData = async () => {
-    if (sessionUser) {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error("Error getting session:", sessionError);
-        return;
-      }
-
-      const userId = session.user.id;
-
-      const { data, error } = await supabase
-        .from("User")
-        .select("*")
-        .eq("userid", userId);
-
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setUserData(data);
-      }
-    } else {
-      setUserData([]);
-    }
-  };
-
-  const fetchAllUserData = async () => {
-    const { data, error } = await supabase.from("User").select("*");
-
-    if (error) {
-      console.error("Error", error);
-    } else {
-      setAllUserData(data);
-    }
-  };
-
-  const fetchJoinCommunityData = async () => {
-    if (sessionUser) {
-      const { data, error } = await supabase
-        .from("JoinCommunity")
-        .select("*")
-        .eq("userid", sessionUser.id);
-
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setJoinCommunity(data);
-      }
-    } else {
-      setJoinCommunity([]);
-    }
-  };
-
-  const fetchPostData = async () => {
-    const { data, error } = await supabase.from("Post").select("*");
-
-    if (error) {
-      console.error("Error", error);
-    } else {
-      setPostData(data);
-    }
-  };
 
   const handleAlbumClick = () => {
     const input = document.createElement("input");
@@ -192,8 +82,9 @@ const Post = () => {
         extractNodes(child, descriptionParts, collectedFiles)
       );
     } else if (node.nodeName === "IMG") {
-      // const filename = node.getAttribute("data-filename");
+      const filename = node.getAttribute("data-filename");
       const fileindex = node.getAttribute("data-file-index");
+
       if (fileindex >= 0 && fileindex < selectedFiles.length) {
         collectedFiles.push(selectedFiles[fileindex]);
       }
@@ -268,7 +159,6 @@ const Post = () => {
   };
 
   const handleCreateClick = async () => {
-    console.log("create");
     const {
       data: { session },
       error: sessionError,
@@ -374,14 +264,7 @@ const Post = () => {
         console.error("Error inserting data:", postError);
       } else {
         console.log("Data inserted successfully!", postData[0]);
-        navigate(`/detail-post/${postData[0].postid}`, {
-          state: {
-            userData: userData,
-            allUserData: allUserData,
-            communityData: communityData,
-            postData: postData[0],
-          },
-        });
+        navigate(`/detail-post/${postData[0].postid}`);
       }
     } else {
       const { data: postData, error: postError } = await supabase
@@ -407,22 +290,9 @@ const Post = () => {
         console.error("Error inserting data:", postError);
       } else {
         console.log("Data inserted successfully!", postData[0]);
-        navigate(`/detail-post/${postData[0].postid}`, {
-          state: {
-            userData: userData,
-            allUserData: allUserData,
-            communityData: communityData,
-            postData: postData[0],
-          },
-        });
+        navigate(`/detail-post/${postData[0].postid}`);
       }
     }
-  };
-
-  const handleCommunity = (selectedOption) => {
-    // console.log("Selected Name:", selectedOption.name);
-    // console.log("Selected Community ID:", selectedOption.communityId);
-    setCommunity(selectedOption.communityId);
   };
 
   return (
@@ -430,6 +300,7 @@ const Post = () => {
       <Header title={"Post"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
+          title={"Post"}
           onCreate={handleCreateClick}
           onCancel={handleCancelClick}
         />
@@ -443,7 +314,6 @@ const Post = () => {
           <InputSelect
             title={"커뮤니티"}
             placeholder={"커뮤니티를 선택해주세요"}
-            // onSelect={handleCommunity}
             onSelect={(selectedOption) => {
               setCommunity(selectedOption.communityId);
               setShowCaution({ ...showCaution, community: false });

@@ -1,22 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
 import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
 
 // image
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
-import noCommunityimg from 'assets/images/Communities/whitelogo.png';
+import noCommunityimg from "assets/images/Communities/whitelogo.png";
 
-const JoinCommunity = ({
-  onEventSelect,
-  communityData = {},
-  allJoinCommunityData = {},
-  joinCommunityData = {},
-  postData = {},
-  userData = {},
-  allUserData = {}
-}) => {
+const JoinCommunity = ({ onEventSelect, joinCommunityData = {} }) => {
   const [scrollState, setScrollState] = useState("start");
   const navigate = useNavigate();
   const containerRef = useRef(null);
@@ -24,16 +17,7 @@ const JoinCommunity = ({
 
   const handleClick = (item) => {
     onEventSelect(item);
-    navigate(`/detail-community/${item.communityid}`, {
-      state: {
-        communityData: communityData,
-        allJoinCommunityData: allJoinCommunityData,
-        joinCommunityData: joinCommunityData,
-        postData: postData,
-        userData: userData,
-        allUserData: allUserData
-      },
-    });
+    navigate(`/detail-community/${item.communityid}`);
   };
 
   const handleScroll = () => {
@@ -56,6 +40,7 @@ const JoinCommunity = ({
     const { current } = containerRef;
     if (current) {
       current.scrollLeft += current.clientWidth - 20;
+      current.scrollLeft += current.clientWidth - 20;
       handleScroll();
     }
   };
@@ -64,12 +49,14 @@ const JoinCommunity = ({
     const { current } = containerRef;
     if (current) {
       current.scrollLeft -= current.clientWidth - 20;
+      current.scrollLeft -= current.clientWidth - 20;
       handleScroll();
     }
   };
 
   useEffect(() => {
     if (containerRef.current) {
+      handleScroll();
       handleScroll();
     }
   }, [joinCommunityData]);
@@ -89,19 +76,19 @@ const JoinCommunity = ({
           >
             <div className={styles.joinCommunity}>
               <div className={styles.communityImageContainer}>
-                {item.image ?
+                {item.image ? (
                   <img
                     className={styles.communityImage}
                     src={item.image}
                     alt="cat"
                   />
-                  : <img
+                ) : (
+                  <img
                     className={styles.communityImage}
                     src={noCommunityimg}
                     alt="cat"
                   />
-                }
-
+                )}
               </div>
               <div className={styles.communityName}>{item.name}</div>
             </div>

@@ -23,6 +23,8 @@ const InputSelect = (props) => {
         return selectList.period;
       case "커뮤니티":
         return selectList.joinCommunity;
+      case "모집상태":
+        return selectList.studyFilter;
       default:
         return selectList.classifications;
     }

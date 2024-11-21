@@ -67,6 +67,7 @@ const InputModal = (props) => {
             <SearchPlaceModal
               closeModal={closeModal}
               updateSelectedModal={updateSelectedModal}
+              initialValue={props.initialValue}
             />
           )}
         </>

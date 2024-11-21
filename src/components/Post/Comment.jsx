@@ -9,53 +9,11 @@ import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
-  const [userId, setUserId] = useState("");
-  const [userProfile, setUserProfile] = useState(null);
+const Comment = ({ comment, userData, allUserData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [commentText, setCommentText] = useState(content);
-  const [comments, setComments] = useState([commentData]);
-  const [editedText, setEditedText] = useState(commentData.content);
-
-  const moreClick = (event) => {
-    event.stopPropagation();
-    setShowOptions(!showOptions);
-  };
-
-  const handleClickOutside = (event) => {
-    if (!event.target.closest(".more-button-container")) {
-      setShowOptions(false);
-    }
-  };
-
-  useEffect(() => {
-    console.log("Comment_userData", userDataa);
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session && session.user) {
-        setUserId(session.user.id);
-      } else {
-        // 로그아웃 상태일 경우 userId를 null이나 빈 문자열로 설정
-        setUserId(null);
-      }
-    });
-
-    const fetchUserProfile = async () => {
-      const { data, error } = await supabase
-        .from("User")
-        .select("profileimage, nickname, updatedat")
-        .eq("userid", userid);
-
-      if (error) {
-        console.error("Error fetching user profile:", error);
-      } else {
-        console.log(data[0]);
-        setUserProfile(data[0]);
-      }
-    };
-
-    fetchUserProfile();
-  }, [userid]);
+  const [commentText, setCommentText] = useState(comment.content);
+  const [editedText, setEditedText] = useState(comment.content);
 
   useEffect(() => {
     if (showOptions) {
@@ -68,6 +26,17 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
     };
   }, [showOptions]);
 
+  const moreClick = (event) => {
+    event.stopPropagation();
+    setShowOptions(!showOptions);
+  };
+
+  const handleClickOutside = (event) => {
+    if (!event.target.closest(".more-button-container")) {
+      setShowOptions(false);
+    }
+  };
+
   const handleEditClick = () => {
     setIsEditing(true);
     setShowOptions(false);
@@ -76,16 +45,16 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
 
   const handleDeleteClick = async () => {
     const { data, error } = await supabase
-      .from("Comment")
+      .from("StudyComment")
       .delete()
-      .eq("commentid", commentData.commentid);
+      .eq("commentid", comment.commentid);
 
     if (error) {
       console.error("댓글 삭제 실패:", error);
     } else {
       console.log("댓글 삭제 성공:", data);
       setCommentText("");
-      onDelete(commentData.commentid);
+      onDelete(comment.commentid);
     }
 
     setShowOptions(false);
@@ -113,12 +82,12 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
     }
 
     const { data, error } = await supabase
-      .from("Comment")
+      .from("StudyComment")
       .update({
         content: editedText,
         updatedat: new Date(),
       })
-      .eq("commentid", commentData.commentid);
+      .eq("commentid", comment.commentid);
 
     if (error) {
       console.error("Error updating comment:", error);
@@ -153,6 +122,10 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
     }
   };
 
+  const commentAuthor = allUserData.filter(
+    (user) => user.userid === comment.userid
+  )[0];
+
   return isEditing ? (
     <div className={styles.editClick}>
       <div
@@ -173,7 +146,7 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
             marginTop: "15px",
           }}
         >
-          {userProfile?.nickname || "닉네임"}
+          {commentAuthor?.nickname || "닉네임"}
         </div>
         <textarea
           className={styles.inputField}
@@ -202,7 +175,7 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
       <div>
         <img
           className={styles.commentWriterProfile}
-          src={userProfile?.profileimage || noprofile}
+          src={commentAuthor?.profileimage || noprofile}
           alt="noprofile"
         />
       </div>
@@ -219,15 +192,15 @@ const Comment = ({ userid, content, commentData, onDelete, userDataa }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className={styles.commentWriter}>
             <span className={styles.commentWriterNickname}>
-              {userProfile?.nickname || "닉네임"}
+              {commentAuthor?.nickname || "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
-              {userProfile?.updatedat
-                ? formatDate(userProfile.updatedat)
+              {commentAuthor?.updatedat
+                ? formatDate(commentAuthor.updatedat)
                 : "날짜 없음"}
             </span>
           </div>
-          {userid === userId && (
+          {userData && comment.userid === userData.userid && (
             <button className={styles.moreButton} onClick={moreClick}>
               <img className={styles.moreIcon} src={more} alt="more" />
             </button>
