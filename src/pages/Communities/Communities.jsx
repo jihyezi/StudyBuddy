@@ -1,14 +1,14 @@
 import React, { useMemo, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
-import supabase from "components/supabaseClient";
-import { useDataContext } from "api/DataContext";
 
 // Components
 import Header from "components/Header";
 import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
 import CommunityJoinPostList from "components/Communities/CommunityJoinPostList";
+import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
 
 // Images
 import loadinggif from "assets/images/loading.gif";
@@ -42,7 +42,7 @@ const fetchCommentData = async (postId) => {
   return data;
 };
 
-const Communities = ({}) => {
+const Communities = ({ }) => {
   const { userData, communityData, postData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
 
@@ -66,18 +66,18 @@ const Communities = ({}) => {
   const filterCommunity = useMemo(() => {
     return communityData && joinCommunityData
       ? communityData.filter((c) =>
-          joinCommunityData.some((jc) => jc.communityid === c.communityid)
-        )
+        joinCommunityData.some((jc) => jc.communityid === c.communityid)
+      )
       : [];
   }, [communityData, joinCommunityData]);
 
   const filteredPosts = useMemo(() => {
     return postData && filterCommunity
       ? postData.filter((p) =>
-          filterCommunity.some(
-            (fc) => Number(fc.communityid) === Number(p.communityid)
-          )
+        filterCommunity.some(
+          (fc) => Number(fc.communityid) === Number(p.communityid)
         )
+      )
       : [];
   }, [postData, filterCommunity]);
 
@@ -94,10 +94,10 @@ const Communities = ({}) => {
       ? selectedEvent === "🔥"
         ? postData
         : postData.filter((p) =>
-            filteredCommunities.some(
-              (fc) => Number(fc.communityid) === Number(p.communityid)
-            )
+          filteredCommunities.some(
+            (fc) => Number(fc.communityid) === Number(p.communityid)
           )
+        )
       : [];
   }, [postData, communityData, selectedEvent, filteredCommunities]);
 

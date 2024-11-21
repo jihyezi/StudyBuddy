@@ -6,200 +6,215 @@ import supabase from "components/supabaseClient";
 import Tag from "components/Explore/Explore_Tag";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
+// 핫 커뮤니티 데이터를 가져오는 함수
+const fetchHotCommunities = async () => {
+  const { data, error } = await supabase
+    .from("hot_communities")
+    .select("*")
+    .order("member_count", { ascending: false })
+    .limit(3);
+
+  if (error) {
+    console.error("Error fetching hot communities:", error);
+    throw new Error("Error fetching hot communities");
+  }
+
+  const communityData = await Promise.all(
+    data.map(async (community) => {
+      const { data: communityInfo, error: communityError } = await supabase
+        .from("Community")
+        .select("*")
+        .eq("communityid", community.communityid)
+        .single();
+
+      if (communityError) {
+        console.error(
+          `Error fetching community data for community ID ${community.communityid}:`,
+          communityError
+        );
+        return null;
+      }
+
+      const { count: postCount, error: postCountError } = await supabase
+        .from("Post")
+        .select("postid", { count: "exact" })
+        .eq("communityid", community.communityid);
+
+      if (postCountError) {
+        console.error(
+          `Error fetching post count for community ID ${community.communityid}:`,
+          postCountError
+        );
+        return { ...communityInfo, postCount: 0 };
+      }
+
+      const combinedData = {
+        ...communityInfo,
+        postCount: postCount || 0,
+        member_count: community.member_count, // 여기에 member_count를 추가
+      };
+
+      return combinedData;
+    })
+  );
+
+  return communityData.filter((community) => community !== null);
+};
+
+// 인기 스터디 데이터를 가져오는 함수
+const fetchPopularStudies = async () => {
+  const { data: studies, error } = await supabase.from("Study").select("*");
+  if (error) throw new Error("Error fetching studies");
+
+  const studiesWithLikes = await Promise.all(
+    studies.map(async (study) => {
+      const { count: likesCount } = await supabase
+        .from("StudyLike")
+        .select("studyid", { count: "exact" })
+        .eq("studyid", study.studyid);
+
+      return { ...study, likesCount: likesCount || 0 };
+    })
+  );
+
+  return studiesWithLikes
+    .sort((a, b) => b.likesCount - a.likesCount)
+    .slice(0, 2);
+};
 
 const Explore = () => {
-  const [hotCommunities, setHotCommunities] = useState([]);
-  const [communityData, setCommunityData] = useState({});
-  // const [selectedTags, setSelectedTags] = useState([]);
   const { user: sessionUser } = useAuth();
-  const [user, setUser] = useState([]);
-  const [allUser, setAllUser] = useState([]);
-  const [communityy, setCommunityy] = useState([]);
-  const [popularStudies, setPopularStudies] = useState([]);
+  const [user, setUser] = React.useState([]);
+  const [allUser, setAllUser] = React.useState([]);
   const navigate = useNavigate();
 
-  const fetchHotCommunities = async () => {
-    const { data, error } = await supabase
-      .from("hot_communities")
-      .select("*")
-      .order("member_count", { ascending: false })
-      .limit(3);
+  // 핫 커뮤니티 데이터
+  const {
+    data: hotCommunities,
+    error: hotCommunitiesError,
+    isLoading: isLoadingHotCommunities,
+  } = useQuery({
+    queryKey: ["hotCommunities"],
+    queryFn: fetchHotCommunities,
+    staleTime: 5 * 60 * 1000,
+  });
 
-    if (error) {
-      console.error("Error fetching hot communities:", error);
-    } else {
-      setHotCommunities(data);
-      const fetchedCommunityData = await Promise.all(
-        data.map(async (community) => {
-          const { data: communityInfo, error: communityError } = await supabase
-            .from("Community")
-            .select("*")
-            .eq("communityid", community.communityid)
-            .single();
-
-          if (communityError) {
-            console.error("Error fetching community data:", communityError);
-            return null;
-          }
-
-          const { count: postCount, error: postCountError } = await supabase
-            .from("Post")
-            .select("postid", { count: "exact" })
-            .eq("communityid", community.communityid);
-
-          if (postCountError) {
-            console.error("Error fetching post count:", postCountError);
-            return null;
-          }
-
-          return { communityInfo, postCount };
-        })
-      );
-
-      const combinedData = fetchedCommunityData.filter(Boolean).map((data) => ({
-        ...data.communityInfo,
-        postCount: data.postCount,
-      }));
-
-      setCommunityData(combinedData);
-    }
-  };
-
-  const fetchPopularStudies = async () => {
-    const { data: studies, error: studiesError } = await supabase
-      .from("Study")
-      .select("*");
-
-    if (studiesError) {
-      console.error("Error fetching studies:", studiesError);
-      return;
-    }
-
-    const studiesWithLikes = await Promise.all(
-      studies.map(async (study) => {
-        const { count: likesCount, error: likesError } = await supabase
-          .from("StudyLike")
-          .select("studyid", { count: "exact" })
-          .eq("studyid", study.studyid);
-
-        if (likesError) {
-          console.error("Error fetching likes count:", likesError);
-          return null;
-        }
-
-        const totalLikes = likesCount || 0;
-
-        return { ...study, likesCount: totalLikes };
-      })
-    );
-
-    const validStudies = studiesWithLikes.filter(Boolean);
-    const topStudies = validStudies
-      .sort((a, b) => b.likesCount - a.likesCount)
-      .slice(0, 2); // 몇 개로 할건지?
-
-    console.log("Top studies:", topStudies);
-    setPopularStudies(topStudies);
-  };
+  // 인기 스터디 데이터
+  const {
+    data: popularStudies,
+    error: popularStudiesError,
+    isLoading: isLoadingPopularStudies,
+  } = useQuery({
+    queryKey: ["popularStudies"],
+    queryFn: fetchPopularStudies,
+    staleTime: 5 * 60 * 1000,
+  });
 
   useEffect(() => {
-    fetchHotCommunities();
-    fetchPopularStudies();
-
-    const fetchUserData = async () => {
-      if (sessionUser) {
+    if (sessionUser) {
+      const fetchUserData = async () => {
         const { data, error } = await supabase
           .from("User")
           .select("*")
           .eq("userid", sessionUser.id);
 
-        if (error) {
-          console.error("Error fetching user data:", error);
-        } else {
-          setUser(data);
-        }
-      }
-    };
+        if (error) console.error("Error fetching user data:", error);
+        else setUser(data);
+      };
 
-    const fetchAllUserData = async () => {
-      const { data, error } = await supabase.from("User").select("*");
+      const fetchAllUserData = async () => {
+        const { data, error } = await supabase.from("User").select("*");
 
-      if (error) {
-        console.error("Error fetching all users:", error);
-      } else {
-        setAllUser(data);
-      }
-    };
+        if (error) console.error("Error fetching all users:", error);
+        else setAllUser(data);
+      };
 
-    const fetchCommunityData = async () => {
-      const { data, error } = await supabase.from("Community").select("*");
-
-      if (error) {
-        console.error("Error fetching communities:", error);
-      } else {
-        setCommunityy(data);
-      }
-    };
-
-    fetchUserData();
-    fetchAllUserData();
-    fetchCommunityData();
+      fetchUserData();
+      fetchAllUserData();
+    }
   }, [sessionUser]);
 
   const handleCommunityClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {
       state: {
-        communityData: communityy,
+        communityData: hotCommunities, // hotCommunities 데이터를 전달
         userData: user,
       },
     });
   };
 
+  if (isLoadingHotCommunities || isLoadingPopularStudies) {
+    return <div>Loading...</div>;
+  }
+
+  if (hotCommunitiesError || popularStudiesError) {
+    return (
+      <div>
+        Error loading data:{" "}
+        {hotCommunitiesError?.message || popularStudiesError?.message}
+      </div>
+    );
+  }
+
   return (
     <div className={styles.Explore}>
+      {/* 인기 태그 검색 */}
       <div className={styles.PopularTagContainer}>
         <div style={{ position: "relative" }}>
-          {/* 인기 태그 검색 으로 수정? */}
           <div className={styles.CategoryText}>인기 태그 검색🏷️</div>
           <div className={styles.CategoryTag}>
             <Tag />
           </div>
         </div>
       </div>
+
+      {/* 핫 커뮤니티 */}
       <div className={styles.HotCommunitiesContainer}>
         <div style={{ position: "relative" }}>
           <div className={styles.CategoryText}>🔥 HOT 커뮤니티 </div>
           <div className={styles.HotCommunity}>
             <div className={styles.HotCommunityContainer}>
-              {hotCommunities.map((community, index) => (
-                <HotCommunity
-                  key={index}
-                  community={community}
-                  communityData={communityData[index]}
-                  onClick={() => handleCommunityClick(community)}
-                />
-              ))}
+              {hotCommunities && hotCommunities.length > 0 ? (
+                hotCommunities.map((community, index) => (
+                  <HotCommunity
+                    key={community.communityid}
+                    community={community}
+                    communityData={hotCommunities[index]}
+                    onClick={() => handleCommunityClick(community)}
+                  />
+                ))
+              ) : (
+                <div>No hot communities available.</div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* 인기 스터디 */}
       <div className={styles.PopularStudyContainer}>
         <div style={{ position: "relative", width: "1080px" }}>
           <div className={styles.CategoryText}>⭐️ 인기 스터디</div>
           <div className={styles.StudyPostContainer}>
-            {popularStudies.map((post, index) => (
-              <StudyPost
-                key={index}
-                studyId={post.studyid}
-                completion={post.completion}
-                title={post.title}
-                description={post.description.split("\n")[0]}
-                tag={post.tag}
-                studyPost={post}
-                user={user}
-                allUser={allUser}
-              />
-            ))}
+            {popularStudies && popularStudies.length > 0 ? (
+              popularStudies.map((post) => (
+                <StudyPost
+                  key={post.studyid}
+                  studyId={post.studyid}
+                  completion={post.completion}
+                  title={post.title}
+                  description={post.description.split("\n")[0]}
+                  tag={post.tag}
+                  studyPost={post}
+                  user={user}
+                  allUser={allUser}
+                />
+              ))
+            ) : (
+              <div>No popular studies available.</div>
+            )}
           </div>
         </div>
       </div>
