@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./JoinCommunity.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useIsOverflow from "components/useIsOverflow";
-import supabase from "components/supabaseClient";
 
 // image
 import leftArrow from "assets/icons/left_arrow.png";
@@ -16,26 +15,23 @@ const JoinCommunity = ({
   joinCommunityData = {},
   postData = {},
   userData = {},
+  allUserData = {}
 }) => {
   const [scrollState, setScrollState] = useState("start");
-  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const isOverflow = useIsOverflow(containerRef);
 
   const handleClick = (item) => {
-    setSelectedItem(item);
     onEventSelect(item);
     navigate(`/detail-community/${item.communityid}`, {
       state: {
-        // id: `${item.id}`,
-        // img: `${item.img}`,
-        // community: `${item.community}`,
         communityData: communityData,
         allJoinCommunityData: allJoinCommunityData,
         joinCommunityData: joinCommunityData,
         postData: postData,
         userData: userData,
+        allUserData: allUserData
       },
     });
   };
@@ -59,7 +55,7 @@ const JoinCommunity = ({
   const moveRight = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft += current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
+      current.scrollLeft += current.clientWidth - 20;
       handleScroll();
     }
   };
@@ -67,14 +63,14 @@ const JoinCommunity = ({
   const moveLeft = () => {
     const { current } = containerRef;
     if (current) {
-      current.scrollLeft -= current.clientWidth - 20; // 각 항목의 너비만큼 스크롤
+      current.scrollLeft -= current.clientWidth - 20;
       handleScroll();
     }
   };
 
   useEffect(() => {
     if (containerRef.current) {
-      handleScroll(); // 데이터가 로딩된 후 스크롤 상태를 재계산
+      handleScroll();
     }
   }, [joinCommunityData]);
 

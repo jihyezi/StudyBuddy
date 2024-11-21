@@ -22,7 +22,7 @@ import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularPosts, setPopularPosts] = useState([]);
   const [postData, setPostData] = useState([]);
@@ -341,11 +341,17 @@ const Home = ({}) => {
     fetchCommunityData();
   }, []);
 
+  console.log(communityy);
+  console.log(user[0])
+
   const handleCommuntiyClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {
       state: {
         communityData: communityy,
-        userData: user,
+        // allJoinCommunityData: allJoinCommunityData,
+        // joinCommunityData: joinCommunityData,
+        // postData: postData,
+        userData: user[0],
       },
     });
   };

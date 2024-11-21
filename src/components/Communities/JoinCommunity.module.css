@@ -1,8 +1,6 @@
 .stackTagsArea {
   position: relative;
   width: 100%;
-  /* margin-left: -16px;
-  margin-right: -16px; */
   display: flex;
   align-items: center;
 }
@@ -12,7 +10,7 @@
   overflow-x: auto;
   max-width: 100%;
   margin-left: 32px;
-  margin-right: 32px;
+  margin-right: 60px;
   gap: 10px;
   scroll-behavior: smooth;
   -ms-overflow-style: none; 

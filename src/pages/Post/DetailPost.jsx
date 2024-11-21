@@ -15,7 +15,6 @@ import likeOn from "assets/icons/Communities/like_on.png";
 import bookmarkOff from "assets/icons/Communities/bookmark_off.png";
 import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import share from "assets/icons/Communities/share.png";
-import profile1 from "assets/images/Profile/profile1.png";
 import folder from "assets/icons/Post/folder.png";
 import download from "assets/icons/Post/file_download.png";
 import editIcon from "assets/icons/Post/edit.png";
@@ -31,45 +30,43 @@ const DetailPost = ({ }) => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData, allUserData, communityData, postData } = location.state || {};
-
-  console.log(location.state);
+  const { userData, allUserData, communityData, postData, thisPost } = location.state || {};
 
   const communityName = Array.isArray(communityData)
-    ? communityData.find((comm) => comm.communityid === postData.communityid)
+    ? communityData.find((comm) => comm.communityid === thisPost.communityid)
       ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
-    ? communityData.find((comm) => comm.communityid === postData.communityid)
+    ? communityData.find((comm) => comm.communityid === thisPost.communityid)
       ?.communityid
     : "Unknown Community";
 
   const userid =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid)?.username
+      ? allUserData.find((u) => u.userid === thisPost.userid)?.username
       : "Unknown User";
 
   const selectedUserData =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid) // postData.userid에 해당하는 사용자 데이터 찾기
+      ? allUserData.find((u) => u.userid === thisPost.userid) // postData.userid에 해당하는 사용자 데이터 찾기
       : null;
 
 
 
   const userimg =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid)?.profileimage
+      ? allUserData.find((u) => u.userid === thisPost.userid)?.profileimage
       : "Unknown User";
 
   const userNickname =
     Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === postData.userid)?.nickname
+      ? allUserData.find((u) => u.userid === thisPost.userid)?.nickname
       : "Unknown User";
 
   const handleReviseClick = () => {
     navigate(
-      `/revisepost?postData=${encodeURIComponent(JSON.stringify(postData))}`
+      `/revisepost?postData=${encodeURIComponent(JSON.stringify(thisPost))}`
     );
   };
 
@@ -81,7 +78,7 @@ const DetailPost = ({ }) => {
     const { data, error } = await supabase
       .from("Post")
       .delete()
-      .eq("postud", postData.postid);
+      .eq("postud", thisPost.postid);
 
     if (error) {
       console.log("삭제 실패 : ", error);
@@ -96,13 +93,8 @@ const DetailPost = ({ }) => {
   };
 
   useEffect(() => {
-    console.log("userData", userData);
-    console.log("allUserData", allUserData);
-    console.log("communityData", communityData);
-    console.log("postData", postData);
-
     const getCommentData = async () => {
-      const commentData = await fetchCommentDataById(postData.postid);
+      const commentData = await fetchCommentDataById(thisPost.postid);
       setCommentData(commentData);
     };
     getCommentData();
@@ -131,7 +123,7 @@ const DetailPost = ({ }) => {
       const { data: likeData } = await supabase
         .from("PostLike")
         .select("*")
-        .eq("postid", postData.postid)
+        .eq("postid", thisPost.postid)
         .eq("userid", userId);
       setLiked(likeData.length > 0);
 
@@ -139,15 +131,15 @@ const DetailPost = ({ }) => {
       const { data: bookmarkData } = await supabase
         .from("Bookmark")
         .select("*")
-        .eq("postid", postData.postid)
+        .eq("postid", thisPost.postid)
         .eq("userid", userId);
       setBookmarked(bookmarkData.length > 0);
     };
     checkLikeAndBookmark();
-  }, [postData.postid]);
+  }, [thisPost.postid]);
 
   const formatDescription = (description) => {
-    console.log("filteredPost", postData);
+    console.log("filteredPost", thisPost);
     const regex = /!\[Image\]\((.*?)\)/g;
     const parts = description.split("\n").flatMap((line, index) => {
       const imageParts = line.split(regex);
@@ -220,12 +212,12 @@ const DetailPost = ({ }) => {
     const userId = session.user.id;
 
     if (liked) {
-      await supabase.from("PostLike").delete().eq("postid", postData.postid);
+      await supabase.from("PostLike").delete().eq("postid", thisPost.postid);
       setLiked(false);
     } else {
       await supabase.from("PostLike").insert([
         {
-          postid: postData.postid,
+          postid: thisPost.postid,
           createdat: new Date(),
           userid: userId,
         },
@@ -253,12 +245,12 @@ const DetailPost = ({ }) => {
     const userId = session.user.id;
 
     if (bookmarked) {
-      await supabase.from("Bookmark").delete().eq("postid", postData.postid);
+      await supabase.from("Bookmark").delete().eq("postid", thisPost.postid);
       setBookmarked(false);
     } else {
       await supabase.from("Bookmark").insert([
         {
-          postid: postData.postid,
+          postid: thisPost.postid,
           createdat: new Date(),
           userid: userId,
           communityid: communityData.communityid,
@@ -305,7 +297,7 @@ const DetailPost = ({ }) => {
 
     const { data, error } = await supabase.from("Comment").insert([
       {
-        postid: postData.postid,
+        postid: thisPost.postid,
         userid: userId,
         content: inputValues,
         createdat: new Date(),
@@ -318,7 +310,7 @@ const DetailPost = ({ }) => {
     } else {
       console.log("Comment inserted:", data);
 
-      const commentData = await fetchCommentDataById(postData.postid);
+      const commentData = await fetchCommentDataById(thisPost.postid);
       if (commentData) {
         setCommentData(commentData);
       }
@@ -341,19 +333,15 @@ const DetailPost = ({ }) => {
         // community: `${item.community}`,
         communityData: communityData,
         postData: postData,
+        thisPost, thisPost,
         userData: userData,
+        allUserData: allUserData
       },
     });
   };
 
   const handleProfileClick = (item) => {
-    navigate(`/other-profile/${item.userid}`, {
-      state: {
-        communityData: communityData,
-        postData: postData,
-        userData: selectedUserData,
-      },
-    });
+    navigate(`/profile/${item}`);
   };
 
   return (
@@ -369,7 +357,7 @@ const DetailPost = ({ }) => {
         style={{ marginTop: "60px", marginLeft: "100px", marginRight: "300px" }}
       >
         <div className={styles.studiesStatus} onClick={() => handleCommunityClick({ communityid })}>{communityName}</div>
-        <div className={styles.studiesTitle}>{postData.title}</div>
+        <div className={styles.studiesTitle}>{thisPost.title}</div>
         <div
           style={{
             display: "flex",
@@ -377,7 +365,7 @@ const DetailPost = ({ }) => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick({ userid })}
+          onClick={() => handleProfileClick(userNickname)}
         >
           <img
             className={styles.postWriterProfile}
@@ -386,7 +374,7 @@ const DetailPost = ({ }) => {
           />
           <div className={styles.postWriterNickname}>{userNickname}</div>
           <div className={styles.postWriteDate}>
-            {new Date(postData.createdat).toLocaleDateString()}
+            {new Date(thisPost.createdat).toLocaleDateString()}
           </div>
         </div>
 
@@ -403,7 +391,7 @@ const DetailPost = ({ }) => {
         >
           {userData &&
             userData.length > 0 &&
-            userData[0].userid === postData.userid ? (
+            userData[0].userid === thisPost.userid ? (
             <>
               <div className={styles.revise} onClick={handleReviseClick}>
                 수정
@@ -441,28 +429,28 @@ const DetailPost = ({ }) => {
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>준비기간</div>
             <div className={styles.studiesDetail}>
-              {new Date(postData.startdate).toLocaleDateString()} ~{" "}
-              {new Date(postData.enddate).toLocaleDateString()}
+              {new Date(thisPost.startdate).toLocaleDateString()} ~{" "}
+              {new Date(thisPost.enddate).toLocaleDateString()}
             </div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>책</div>
-            <div className={styles.studiesDetail}>{postData.book}</div>
+            <div className={styles.studiesDetail}>{thisPost.book}</div>
           </div>
           <div className={styles.studiesDetails}>
             <div className={styles.studiesDetailIndex}>결과</div>
-            <div className={styles.studiesDetail}>{postData.result}</div>
+            <div className={styles.studiesDetail}>{thisPost.result}</div>
           </div>
         </div>
         <div style={{ marginTop: "70px" }}>
           <div className={styles.studiesIntro}>공부방법</div>
           <div style={{ padding: "30px 30px 30px 30px" }}>
             <div className={styles.studiesContent}>
-              {formatDescription(postData.content)}
+              {formatDescription(thisPost.content)}
             </div>
 
-            {postData.references &&
-              postData.references.map((file, index) => (
+            {thisPost.references &&
+              thisPost.references.map((file, index) => (
                 <div
                   key={index}
                   style={{

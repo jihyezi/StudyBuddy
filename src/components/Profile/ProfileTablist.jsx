@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import styles from './ProfileTablist.module.css';
 import JoinPostList from 'components/Communities/CommunityJoinPostList';
-import { dummyPostData } from 'components/Dummydata';
+import { useDataContext } from 'api/DataContext';
 
-export const ProfileTablist = ({ post, community, user, allUser, comment, userPost, userLike, userComment }) => {
+export const ProfileTablist = ({ userPost, userLike, userComment }) => {
     const [currentTab, clickTab] = useState(0);
+    const { communityData, allUserData } = useDataContext();
 
     const menuArr = [
         {
@@ -12,10 +13,8 @@ export const ProfileTablist = ({ post, community, user, allUser, comment, userPo
             content:
                 <JoinPostList
                     postData={userPost}
-                    communityData={community}
-                    userData={user}
-                    allUserData={allUser}
-                    commentData={comment}
+                    communityData={communityData}
+                    allUserData={allUserData}
                 />
         },
         {
@@ -23,10 +22,8 @@ export const ProfileTablist = ({ post, community, user, allUser, comment, userPo
             content:
                 <JoinPostList
                     postData={userLike}
-                    communityData={community}
-                    userData={user}
-                    allUserData={allUser}
-                    commentData={comment}
+                    communityData={communityData}
+                    allUserData={allUserData}
                 />
         },
         {
@@ -34,10 +31,8 @@ export const ProfileTablist = ({ post, community, user, allUser, comment, userPo
             content:
                 <JoinPostList
                     postData={userComment}
-                    communityData={community}
-                    userData={user}
-                    allUserData={allUser}
-                    commentData={comment}
+                    communityData={communityData}
+                    allUserData={allUserData}
                 />
         }
     ];

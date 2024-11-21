@@ -1,16 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import React, { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "components/Header";
 import JoinPostList from "components/Communities/CommunityJoinPostList";
 import styles from './BookmarkDetail.module.css'
-import loadinggif from "assets/images/loading.gif"
 
 const BookmarkDetail = () => {
     const location = useLocation();
     const {
         communityData = {},
-        allJoinCommunityData = {},
-        joinCommunityData = {},
         postData = [],
         userData = {},
         allUserData = {},

@@ -1,222 +1,118 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
+import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
+
+// Components
 import Header from "components/Header";
 import Classification from "components/Communities/Classification";
 import JoinCommunity from "components/Communities/JoinCommunity";
-import PostList from "components/Communities/CommunityPostList";
-import JoinPostList from "components/Communities/CommunityJoinPostList";
-import { dummyPostData } from "components/Dummydata";
-import { useAuth } from "contexts/AuthContext";
-import supabase from "components/supabaseClient";
+import CommunityJoinPostList from "components/Communities/CommunityJoinPostList";
+
+// Images
 import loadinggif from "assets/images/loading.gif"
+
+// Data
+const fetchJoinCommunityData = async (userId) => {
+  if (userId) {
+    const { data, error } = await supabase
+      .from("JoinCommunity")
+      .select("*")
+      .eq("userid", userId);
+
+    if (error) { throw new Error(error.message) }
+    return data;
+  } else {
+    return [];
+  }
+}
+
+const fetchCommentData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .select("*")
+    .eq("postid", postId);
+
+  if (error) { throw new Error(error.message) }
+  return data;
+}
 
 const Communities = () => {
   const [selectedEvent, setSelectEvent] = useState("");
-  const [user, setUser] = useState([]);
-  const [allUser, setAllUser] = useState([]);
-  const [community, setCommunity] = useState([]);
-  const [allJoinCommunity, setAllJoinCommunity] = useState([]);
-  const [joinCommunity, setJoinCommunity] = useState([]);
-  const [post, setPost] = useState([]);
-  const [comment, setComment] = useState([]);
-  const [fieldCommunity, setFieldCommunity] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { user: sessionUser } = useAuth();
+  const { userData, allUserData, communityData, postData, isLoading } = useDataContext();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (sessionUser) {
-        const {
-          data: { session },
-          error: sessionError,
-        } = await supabase.auth.getSession();
-        if (sessionError) {
-          console.error("Error getting session:", sessionError);
-          return;
-        }
+  const { data: joinCommunityData = [] } = useQuery({
+    queryKey: ['joinCommunityData', userData?.userid],
+    queryFn: () => fetchJoinCommunityData(userData.userid),
+    onError: (error) => console.error(error.message),
+  });
 
-        const userId = session.user.id;
+  const { data: commentData = [] } = useQuery({
+    queryKey: ['commentData', userData?.userid],
+    queryFn: () => fetchCommentData(postData.postid),
+    onError: (error) => console.error(error.message),
+  });
 
-        const { data, error } = await supabase
-          .from("User")
-          .select("*")
-          .eq("userid", userId);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setUser(data);
-        }
-      } else {
-        setUser([]);
-      }
-    };
-
-    const fetchAllUserData = async () => {
-      const { data, error } = await supabase.from("User").select("*");
-
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setAllUser(data);
-      }
-    };
-
-    const fetchCommunityData = async () => {
-      const { data, error } = await supabase.from("Community").select("*");
-
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setCommunity(data);
-      }
-    };
-
-    const fetchAllJoinCommunityData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase
-          .from("JoinCommunity")
-          .select("*");
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setAllJoinCommunity(data);
-        }
-      } else {
-        setAllJoinCommunity([]);
-      }
-    };
-
-    const fetchJoinCommunityData = async () => {
-      if (sessionUser) {
-        const { data, error } = await supabase
-          .from("JoinCommunity")
-          .select("*")
-          .eq("userid", sessionUser.id);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setJoinCommunity(data);
-        }
-      } else {
-        setJoinCommunity([]);
-      }
-    };
-
-    const fetchPostData = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.from("Post").select("*");
-
-      if (error) {
-        console.error("Error", error);
-      } else {
-        setPost(data);
-      }
-      setLoading(false);
-    };
-
-    const fetchCommentData = async () => {
-      if (post.postid) {
-        const { data, error } = await supabase
-          .from("Comment")
-          .select("*")
-          .eq("postid", post.postid);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          setComment(data);
-        }
-      } else {
-        console.warn("postid가 정의되지 않았습니다.");
-      }
-    };
-
-
-    const fetchfieldData = async () => {
-      if (selectedEvent) {  // selectedEvent가 비어 있지 않은지 확인
-        const { data, error } = await supabase
-          .from('Community')
-          .select('*')
-          .eq('field', selectedEvent);
-
-        if (error) {
-          console.error("Error", error);
-        } else {
-          console.log('data', data);
-          setFieldCommunity(data);
-        }
-      }
-    };
-
-    // sessionUser가 없을 경우에도 기본 데이터를 로드
-    fetchCommunityData();
-    fetchAllUserData();
-    fetchPostData();
-    fetchCommentData();
-    fetchfieldData();
-
-    if (sessionUser) {
-      fetchUserData();
-      fetchJoinCommunityData();
-      fetchAllJoinCommunityData();
-    }
-
-  }, [sessionUser]);
-
-  const handleEventSelect = (event) => {
+  const handleEventSelect = useCallback((event) => {
     setSelectEvent(event);
-  };
+  }, []);
 
-  const filterCommunity = community.filter((c) =>
-    joinCommunity.some((jc) => jc.communityid === c.communityid)
-  );
+  const filterCommunity = useMemo(() => {
+    return communityData && joinCommunityData
+      ? communityData.filter((c) => joinCommunityData.some((jc) => jc.communityid === c.communityid))
+      : [];
+  }, [communityData, joinCommunityData]);
 
-  const filteredPosts = post.filter((p) =>
-    filterCommunity.some(
-      (fc) => Number(fc.communityid) === Number(p.communityid)
-    )
-  );
+  const filteredPosts = useMemo(() => {
+    return postData && filterCommunity
+      ? postData.filter((p) => filterCommunity.some((fc) => Number(fc.communityid) === Number(p.communityid)))
+      : [];
+  }, [postData, filterCommunity]);
 
-  const filteredCommunities = selectedEvent === "🔥"
-    ? community
-    : community.filter(c => c.field === selectedEvent);
+  const filteredCommunities = useMemo(() => {
+    return communityData
+      ? selectedEvent === "🔥"
+        ? communityData
+        : communityData.filter((c) => c.field === selectedEvent)
+      : [];
+  }, [communityData, selectedEvent]);
 
-  const filterfieldPosts = selectedEvent === "🔥"
-    ? post
-    : post.filter(p =>
-      filteredCommunities.some(fc => Number(fc.communityid) === Number(p.communityid))
-    );
+  const filterfieldPosts = useMemo(() => {
+    return postData && communityData
+      ? selectedEvent === "🔥"
+        ? postData
+        : postData.filter((p) => filteredCommunities.some((fc) => Number(fc.communityid) === Number(p.communityid)))
+      : [];
+  }, [postData, communityData, selectedEvent, filteredCommunities]);
 
   return (
     <div className={styles.community}>
-      <Header headerName={"Communities"} />
-      {loading ? (
+      <Header headerName={"My Communities"} />
+      {isLoading ? (
         <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
           <img src={loadinggif} style={{ width: '80px' }} alt="Loading" />
         </div>
       ) : (
-        joinCommunity.length > 0 ? (
+        joinCommunityData.length > 0 ? (
           <>
             <div className={styles.classification1}>
               <JoinCommunity
                 onEventSelect={handleEventSelect}
-                communityData={community}
-                allJoinCommunityData={allJoinCommunity}
+                userData={userData}
+                allUserData={allUserData}
+                communityData={communityData}
                 joinCommunityData={filterCommunity}
-                postData={post}
-                userData={user}
-                allUserData={allUser}
+                postData={postData}
               />
             </div>
-            <JoinPostList
+            <CommunityJoinPostList
+              userData={userData}
+              allUserData={allUserData}
+              communityData={communityData}
+              joinCommunityData={filterCommunity}
               postData={filteredPosts}
-              communityData={community}
-              userData={user}
-              allUserData={allUser}
-              commentData={comment}
+              commentData={commentData}
             />
           </>
         ) : (
@@ -227,22 +123,20 @@ const Communities = () => {
               />
             </div>
             {filterfieldPosts.length > 0 ?
-              <JoinPostList
+              <CommunityJoinPostList
+                userData={userData}
+                allUserData={allUserData}
                 postData={filterfieldPosts}
-                communityData={community}
-                userData={user}
-                allUserData={allUser}
-                commentData={comment}
+                communityData={communityData}
+                commentData={commentData}
               /> :
               <div className={styles.nopostcontainer}>
                 <div className={styles.nopost}>No Posts Yet</div>
               </div>
             }
-
           </>
         )
       )}
-
     </div>
   );
 };
