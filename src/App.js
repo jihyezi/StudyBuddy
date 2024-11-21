@@ -108,90 +108,27 @@ const MainContent = ({ loginuser }) => {
             </CommonLayout>
           }
         />
-        <Route
-          path="/communities"
-          element={
-            <Communities
-              userData={userData}
-              allUserData={allUserData}
-              communityData={communityData}
-              postData={postData}
-              refetchUserData={refetchUserData}
-              isLoading={isLoading}
-            />
-          }
-        />
-        <Route
-          path="/studies"
-          element={
-            <Studies
-              userData={userData}
-              allUserData={allUserData}
-              isLoading={isLoading}
-            />
-          }
-        />
+        <Route path="/communities" element={<Communities />} />
+        <Route path="/studies" element={<Studies />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/other-profile/:userId" element={<OtherProfile />} />
         <Route path="/create-post" element={<Post />} />
-        <Route
-          path="/detail-post/:postId"
-          element={
-            <DetailPost
-              userData={userData}
-              allUserData={allUserData}
-              communityData={communityData}
-              postData={postData}
-              isLoading={isLoading}
-            />
-          }
-        />
-        <Route
-          path="/create-community"
-          element={
-            <CommunityPost
-              userData={userData}
-              allUserData={allUserData}
-              communityData={communityData}
-              postData={postData}
-              isLoading={isLoading}
-            />
-          }
-        />
+        <Route path="/detail-post/:postId" element={<DetailPost />} />
+        <Route path="/create-community" element={<CommunityPost />} />
         <Route
           path="/create-study"
           element={<StudyPost allUserData={allUserData} />}
         />
-        <Route
-          path="/detail-study/:studyId"
-          element={
-            <DetailStudyPost
-              userData={userData}
-              allUserData={allUserData}
-              isLoading={isLoading}
-            />
-          }
-        />
+        <Route path="/detail-study/:studyId" element={<DetailStudyPost />} />
         <Route path="/revisepost" element={<RevisePost />} />
         <Route path="/revisecommunity" element={<ReviseCommunity />} />
-        <Route
-          path="/revise-study/:studyId"
-          element={<ReviseStudy allUserData={allUserData} />}
-        />
+        <Route path="/revise-study/:studyId" element={<ReviseStudy />} />
         <Route
           path="/detail-community/:communityId"
-          element={
-            <CommunityDetailsPage
-              userData={userData}
-              allUserData={allUserData}
-              communityData={communityData}
-              postData={postData}
-              isLoading={isLoading}
-            />
-          }
+          element={<CommunityDetailsPage />}
         />
         <Route
           path="/bookmarkdetail/:communityid"

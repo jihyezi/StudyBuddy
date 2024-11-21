@@ -1,10 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useDebugValue } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "./ReviseStudy.module.css";
 import supabase from "components/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
 import { v4 as uuidv4 } from "uuid";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
 
 // component
 import Header from "components/Post/Header";
@@ -18,9 +19,10 @@ import InputTag from "components/Post/InputTag";
 import album from "assets/icons/Post/album.png";
 import caution from "assets/icons/Post/caution.png";
 
-const ReviseStudyPost = ({ allUserData }) => {
+const ReviseStudyPost = () => {
   const navigate = useNavigate();
   const { studyId } = useParams();
+  const { allUserData } = useDataContext();
   const [name, setName] = useState("");
   const [proceed, setProceed] = useState("");
   const [people, setPeople] = useState("");

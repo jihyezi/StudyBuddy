@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
 
 import styles from "./All.module.css";
 import Filter from "components/Studies/Filter";
@@ -15,7 +16,8 @@ const fetchStudyAllData = async () => {
   return data;
 };
 
-const All = ({ userData, allUserData, isLoading }) => {
+const All = () => {
+  const { userData, allUserData, isLoading } = useDataContext();
   const [selectOption, setSelectOption] = useState("전체");
   const [searchText, setSearchText] = useState("");
 

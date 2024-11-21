@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CommunityDetailsPage.module.css";
 import supabase from "components/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
+import { useDataContext } from "api/DataContext";
 
 // Components
 import TabList from "components/Communities/TabList";
@@ -36,14 +37,9 @@ const fetchJoinCommunityData = async ({ userId, communityId }) => {
   return data;
 };
 
-const CommunityDetailsPage = ({
-  userData,
-  allUserData,
-  communityData,
-  postData,
-  isLoading,
-}) => {
+const CommunityDetailsPage = ({}) => {
   const { communityId } = useParams();
+  const { userData, allUserData, postData, isLoading } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const userId = userData.userid;
@@ -110,9 +106,9 @@ const CommunityDetailsPage = ({
     joinCommunity && joinCommunity.length > 0 ? joinCommunity[0].role : null;
 
   const handleReviseClick = () => {
-    // navigate(`/revise-study/${communityId}`);
-    alert("수정기능을 구현중입니다");
-    return;
+    navigate(`/revise-study/${communityId}`);
+    // alert("수정기능을 구현중입니다");
+    // return;
   };
 
   return (

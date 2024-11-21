@@ -4,29 +4,17 @@ import All from "pages/Studies/All";
 import Online from "pages/Studies/Online";
 import Offline from "pages/Studies/Offline";
 
-export const Toptab = ({ userData, allUserData, isLoading }) => {
+export const Toptab = () => {
   const [currentTab, clickTab] = useState(0);
 
   const menuArr = [
     {
       name: "전체",
-      content: (
-        <All
-          userData={userData}
-          allUserData={allUserData}
-          isLoading={isLoading}
-        />
-      ),
+      content: <All />,
     },
     {
       name: "온라인",
-      content: (
-        <Online
-          userData={userData}
-          allUserData={allUserData}
-          isLoading={isLoading}
-        />
-      ),
+      content: <Online />,
     },
     {
       name: "오프라인",

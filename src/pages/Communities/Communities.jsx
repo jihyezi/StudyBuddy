@@ -2,6 +2,7 @@ import React, { useMemo, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import styles from "./Communities.module.css";
 import supabase from "components/supabaseClient";
+import { useDataContext } from "api/DataContext";
 
 // Components
 import Header from "components/Header";
@@ -41,20 +42,16 @@ const fetchCommentData = async (postId) => {
   return data;
 };
 
-const Communities = ({
-  userData,
-  allUserData,
-  communityData,
-  postData,
-  isLoading,
-}) => {
+const Communities = ({}) => {
+  const { userData, communityData, postData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
 
-  const { data: joinCommunityData = [] } = useQuery({
-    queryKey: ["joinCommunityData", userData?.userid],
-    queryFn: () => fetchJoinCommunityData(userData.userid),
-    onError: (error) => console.error(error.message),
-  });
+  const { data: joinCommunityData = [], isLoading: isJoinCommunityLoading } =
+    useQuery({
+      queryKey: ["joinCommunityData", userData?.userid],
+      queryFn: () => fetchJoinCommunityData(userData.userid),
+      onError: (error) => console.error(error.message),
+    });
 
   const { data: commentData = [] } = useQuery({
     queryKey: ["commentData", userData?.userid],
@@ -104,10 +101,12 @@ const Communities = ({
       : [];
   }, [postData, communityData, selectedEvent, filteredCommunities]);
 
+  const loading = isLoading || isJoinCommunityLoading;
+
   return (
     <div className={styles.community}>
       <Header headerName={"Communities"} />
-      {isLoading ? (
+      {loading ? (
         <div
           style={{
             display: "flex",
@@ -124,21 +123,10 @@ const Communities = ({
           <div className={styles.classification1}>
             <JoinCommunity
               onEventSelect={handleEventSelect}
-              userData={userData}
-              allUserData={allUserData}
-              communityData={communityData}
               joinCommunityData={filterCommunity}
-              postData={postData}
             />
           </div>
-          <CommunityJoinPostList
-            userData={userData}
-            allUserData={allUserData}
-            communityData={communityData}
-            joinCommunityData={filterCommunity}
-            postData={filteredPosts}
-            commentData={commentData}
-          />
+          <CommunityJoinPostList postData={filteredPosts} />
         </>
       ) : (
         <>
@@ -146,13 +134,7 @@ const Communities = ({
             <Classification onEventSelect={handleEventSelect} />
           </div>
           {filterfieldPosts.length > 0 ? (
-            <CommunityJoinPostList
-              userData={userData}
-              allUserData={allUserData}
-              postData={filterfieldPosts}
-              communityData={communityData}
-              commentData={commentData}
-            />
+            <CommunityJoinPostList postData={filterfieldPosts} />
           ) : (
             <div className={styles.nopostcontainer}>
               <div className={styles.nopost}>No Posts Yet</div>

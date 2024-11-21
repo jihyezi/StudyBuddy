@@ -1,25 +1,11 @@
 import React from "react";
 import Post from "./Post";
 
-const CommunityPostList = ({
-  userData,
-  allUserData,
-  postData = [],
-  communityData,
-}) => {
+const CommunityPostList = ({ postData = [] }) => {
   return (
     <div style={{ width: "100%" }}>
       {postData.length > 0 ? (
-        postData.map((post) => (
-          <Post
-            key={post.postid}
-            userData={userData}
-            allUserData={allUserData}
-            thisPost={post}
-            postData={postData}
-            communityData={communityData}
-          />
-        ))
+        postData.map((post) => <Post key={post.postid} postId={post.postid} />)
       ) : (
         <div
           style={{

@@ -71,33 +71,6 @@ const StudyPost = (props) => {
     navigate(`/detail-study/${props.study.studyid}`);
   };
 
-  const toggleLike = async (event) => {
-    event.stopPropagation();
-
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
-
-    if (sessionError || !session) {
-      alert("로그인 후에 좋아요를 클릭할 수 있습니다.");
-      return;
-    }
-
-    const userId = session.user.id;
-
-    const newLike = {
-      studyid: props.study.studyid,
-      createdat: new Date(),
-      userid: userId,
-    };
-
-    mutation.mutate({ newLike, liked });
-    setLiked((prevLiked) => !prevLiked);
-    // queryClient.invalidateQueries(["studyLike", props.study.studyid]);
-    queryClient.refetchQueries(["studyLike", props.study.studyid]);
-  };
-
   const mutation = useMutation({
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
@@ -145,15 +118,39 @@ const StudyPost = (props) => {
       );
     },
     onSettled: async () => {
-      const updatedData = await queryClient.fetchQuery({
-        queryKey: ["studyLike", props.study.studyid],
-        queryFn: () => fetchStudyLikeData(props.study.studyid),
-      });
-
-      console.log("updatedData", updatedData.length);
-      queryClient.setQueryData(["studyLike", props.study.studyid], updatedData);
+      await queryClient.invalidateQueries(["studyLike", props.study.studyid]);
     },
   });
+
+  const toggleLike = async (event) => {
+    event.stopPropagation();
+
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+      return;
+    }
+
+    const userId = session.user.id;
+
+    const newLike = {
+      studyid: props.study.studyid,
+      createdat: new Date(),
+      userid: userId,
+    };
+
+    mutation.mutate({ newLike, liked });
+    setLiked((prevLiked) => !prevLiked);
+  };
 
   const handleShare = (event) => {
     event.stopPropagation();

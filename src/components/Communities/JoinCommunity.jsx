@@ -8,15 +8,7 @@ import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
 import noCommunityimg from "assets/images/Communities/whitelogo.png";
 
-const JoinCommunity = ({
-  onEventSelect,
-  communityData = {},
-  allJoinCommunityData = {},
-  joinCommunityData = {},
-  postData = {},
-  userData = {},
-  allUserData = {},
-}) => {
+const JoinCommunity = ({ onEventSelect, joinCommunityData = {} }) => {
   const [scrollState, setScrollState] = useState("start");
   const navigate = useNavigate();
   const containerRef = useRef(null);

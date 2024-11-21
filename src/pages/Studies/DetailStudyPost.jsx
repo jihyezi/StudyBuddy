@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "./DetailStudyPost.module.css";
 import supabase from "components/supabaseClient";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
 
 // component
 import Header from "components/Post/DetailHeader";
@@ -47,8 +48,9 @@ const fetchStudyCommentData = async (studyId) => {
   return data;
 };
 
-const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
+const DetailStudyPost = () => {
   const { studyId } = useParams();
+  const { userData, allUserData, isLoading } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -164,7 +166,7 @@ const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
   //좋아요
   const toggleLike = async () => {
     if (!userData) {
-      alert("로그인 후에 좋아요를 클릭할 수 있습니다.");
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
       return;
     }
 
@@ -172,8 +174,14 @@ const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
+
     if (sessionError) {
       console.error("Error getting session:", sessionError);
+      return;
+    }
+
+    if (!session) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
       return;
     }
 
@@ -195,7 +203,7 @@ const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
   };
 
   //공유
-  const handleShare = () => {
+  const toggleShare = () => {
     if (navigator.share) {
       navigator
         .share({
@@ -215,16 +223,23 @@ const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
       alert("로그인 후에 댓글을 등록할 수 있습니다.");
       return;
     }
-    if (!inputValue.trim()) return;
 
     const {
       data: { session },
       error: sessionError,
     } = await supabase.auth.getSession();
+
     if (sessionError) {
       console.error("Error getting session:", sessionError);
       return;
     }
+
+    if (!session) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+      return;
+    }
+
+    if (!inputValue.trim()) return;
 
     const userId = session.user.id;
     const newComment = {
@@ -404,7 +419,7 @@ const DetailStudyPost = ({ userData, allUserData, isLoading }) => {
                 className={styles.shareIcon}
                 src={share}
                 alt="share"
-                onClick={handleShare}
+                onClick={toggleShare}
               />
             </div>
           </div>

@@ -4,6 +4,7 @@ import styles from "./Post.module.css";
 import supabase from "components/supabaseClient";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import DeleteModal from "components/Post/DeleteModal";
+import { useDataContext } from "api/DataContext";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
@@ -29,84 +30,243 @@ const fetchPostData = async (postId) => {
   return data;
 };
 
-const Post = ({ thisPost, communityData, userData, allUserData }) => {
+const fetchPostLikeData = async (postId) => {
+  const { data, error } = await supabase
+    .from("PostLike")
+    .select("*", { count: "exact" })
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchPostCommentData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .select("*", { count: "exact" })
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchPostBookmarkData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Bookmark")
+    .select("*")
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const fetchPostViewData = async (postId) => {
+  const { data, error } = await supabase
+    .from("Post")
+    .select("*")
+    .eq("postid", postId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const Post = ({ postId }) => {
+  const { userData, allUserData, communityData, isLoading } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { data: Post = [], isLoading: isPostLoading } = useQuery({
-    queryKey: ["Post", thisPost.postid],
-    queryFn: () => fetchPostData(thisPost.postid),
+    queryKey: ["Post", postId],
+    queryFn: () => fetchPostData(postId),
     onError: (error) => console.log(error.message),
   });
 
-  const fetchLikeCount = async () => {
-    const { count } = await supabase
-      .from("PostLike")
-      .select("*", { count: "exact" })
-      .eq("postid", thisPost.postid);
+  const { data: postLike = [], isLoading: isLikeLoading } = useQuery({
+    queryKey: ["postLike", postId],
+    queryFn: () => fetchPostLikeData(postId),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    onError: (error) => console.log(error.message),
+  });
 
-    setLikeCount(count);
-  };
+  const { data: postComment = [], isLoading: isCommentLoading } = useQuery({
+    queryKey: ["postComment", postId],
+    queryFn: () => fetchPostCommentData(postId),
+    onError: (error) => console.log(error.message),
+  });
 
-  const fetchCommentCount = async () => {
-    const { count } = await supabase
-      .from("Comment")
-      .select("*", { count: "exact" })
-      .eq("postid", thisPost.postid);
+  const { data: postBookmark = [], isLoading: isBookmarkLoading } = useQuery({
+    queryKey: ["postBookmark", postId],
+    queryFn: () => fetchPostBookmarkData(postId),
+    onError: (error) => console.log(error.message),
+  });
 
-    setCommentCount(count);
-  };
+  const { data: postView = [], isLoading: isViewLoading } = useQuery({
+    queryKey: ["postView", postId],
+    queryFn: () => fetchPostViewData(postId),
+    onError: (error) => console.log(error.message),
+  });
 
   useEffect(() => {
     const checkLikeAndBookmark = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
+      const userLike = postLike.find(
+        (like) => like.userid === userData?.userid && like.postid === postId
+      );
+      setLiked(!!userLike);
 
-      if (sessionError) {
-        console.error("Error getting session:", sessionError);
-        return;
-      }
-
-      if (!session) {
-        console.error("No session found. User might not be logged in.");
-        return;
-      }
-
-      const userId = session.user.id;
-
-      const { data: likeData } = await supabase
-        .from("PostLike")
-        .select("*")
-        .eq("postid", thisPost.postid)
-        .eq("userid", userId);
-
-      setLiked(likeData.length > 0);
-      fetchLikeCount();
-
-      const { data: bookmarkData } = await supabase
-        .from("Bookmark")
-        .select("*")
-        .eq("postid", thisPost.postid)
-        .eq("userid", userId);
-      setBookmarked(bookmarkData.length > 0);
+      const userBookmark = postBookmark.find(
+        (bookmark) =>
+          bookmark.userid === userData?.userid && bookmark.postid === postId
+      );
+      setBookmarked(!!userBookmark);
     };
+    if (userData) {
+      checkLikeAndBookmark();
+    }
+  }, [postId, userData, postLike, postBookmark]);
 
-    checkLikeAndBookmark();
-    fetchLikeCount();
-    fetchCommentCount();
-  }, [thisPost.postid]);
+  const likeMutation = useMutation({
+    mutationFn: async ({ newLike, liked }) => {
+      const { data, error } = liked
+        ? await supabase
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
+        : await supabase.from("PostLike").insert([newLike]);
 
-  const loading = isPostLoading;
+      if (error) {
+        console.error("Error on mutation:", error.message);
+        throw new Error(error.message);
+      }
 
-  if (isPostLoading) {
+      return data;
+    },
+    onMutate: async ({ newLike, liked }) => {
+      await queryClient.cancelQueries(["postLike", postId]);
+
+      const previousLike = queryClient.getQueryData(["postLike", postId]);
+
+      if (liked) {
+        queryClient.setQueryData(["postLike", postId], (old) => {
+          if (!old) return [];
+          return old.filter((like) => like.userid !== newLike.userid);
+        });
+      } else {
+        queryClient.setQueryData(["postLike", postId], (old) => {
+          if (!old)
+            return [{ ...newLike, createdat: new Date().toISOString() }];
+          return [...old, { ...newLike, createdat: new Date().toISOString() }];
+        });
+      }
+
+      return { previousLike };
+    },
+    onError: (err, { newLike }, context) => {
+      queryClient.setQueryData(["postLike", postId], context.previousLike);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(["postLike", postId]);
+    },
+  });
+
+  const bookmarkMutation = useMutation({
+    mutationFn: async ({ newBookmark, bookmarked }) => {
+      const { data, error } = bookmarked
+        ? await supabase
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
+        : await supabase.from("Bookmark").insert([newBookmark]);
+
+      if (error) {
+        console.error("Error on mutation:", error.message);
+        throw new Error(error.message);
+      }
+      console.log("bookmark", data);
+      return data;
+    },
+    onMutate: async ({ newBookmark, bookmarked }) => {
+      await queryClient.cancelQueries(["postBookmark", postId]);
+
+      const previousBookmark = queryClient.getQueryData([
+        "postBookmark",
+        postId,
+      ]);
+
+      if (bookmarked) {
+        queryClient.setQueryData(["postBookmark", postId], (old) => {
+          console.log("true bookmark");
+          if (!old) return [];
+          return old.filter(
+            (bookmark) => bookmark.userid !== newBookmark.userid
+          );
+        });
+      } else {
+        queryClient.setQueryData(["postBookmark", postId], (old) => {
+          console.log("false bookmark");
+          if (!old)
+            return [{ ...newBookmark, createdat: new Date().toISOString() }];
+          return [
+            ...old,
+            { ...newBookmark, createdat: new Date().toISOString() },
+          ];
+        });
+      }
+
+      return { previousBookmark };
+    },
+    onError: (err, { newBookmark }, context) => {
+      queryClient.setQueryData(["postBookmark", postId], context.previousLike);
+    },
+    onSettled: async () => {
+      const updatedData = await queryClient.fetchQuery({
+        queryKey: ["postBookmark", postId],
+        queryFn: () => fetchPostLikeData(postId),
+      });
+
+      console.log("updatedData", updatedData.length);
+      queryClient.setQueryData(["postBookmark", postId], updatedData);
+    },
+  });
+
+  const viewMutation = useMutation({
+    mutationFn: async (postId) => {
+      const { data, error } = await supabase
+        .from("Post")
+        .update({ viewnumber: postView[0].viewnumber + 1 })
+        .eq("postid", postId);
+
+      if (error) {
+        console.error("Error on mutation:", error.message);
+        throw new Error(error.message);
+      }
+
+      return data;
+    },
+    onSuccess: () => {
+      navigate(`/detail-post/${postId}`);
+      queryClient.invalidateQueries(["postView", postId]);
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+
+  const loading =
+    isLoading ||
+    isPostLoading ||
+    isLikeLoading ||
+    isCommentLoading ||
+    isBookmarkLoading ||
+    isViewLoading;
+
+  if (loading) {
     return (
       <div
         style={{
@@ -166,16 +326,11 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
       ? allUserData.find((u) => u.userid === Post[0].userid)?.username
       : "Unknown User";
 
-  const handlePostClick = async () => {
-    await supabase
-      .from("Post")
-      .update({ viewnumber: thisPost.viewnumber + 1 })
-      .eq("postid", thisPost.postid);
-
-    navigate(`/detail-post/${thisPost.postid}`);
+  const handlePostClick = () => {
+    if (!isViewLoading) {
+      viewMutation.mutate(postId);
+    }
   };
-
-  console.log("post-post", thisPost);
 
   const toggleLike = async (event) => {
     event.stopPropagation();
@@ -197,21 +352,15 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
 
     const userId = session.user.id;
 
-    if (liked) {
-      await supabase.from("PostLike").delete().eq("postid", thisPost.postid);
-      setLiked(false);
-      setLikeCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
-    } else {
-      await supabase.from("PostLike").insert([
-        {
-          postid: thisPost.postid,
-          createdat: new Date(),
-          userid: userId,
-        },
-      ]);
-      setLiked(true);
-      setLikeCount((prevCount) => prevCount + 1);
-    }
+    const newLike = {
+      postid: postId,
+      createdat: new Date(),
+      userid: userId,
+    };
+
+    likeMutation.mutate({ newLike, liked });
+    setLiked((prevLiked) => !prevLiked);
+    queryClient.refetchQueries(["postLike", postId]);
   };
 
   const toggleBookmark = async (event) => {
@@ -234,20 +383,16 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
 
     const userId = session.user.id;
 
-    if (bookmarked) {
-      await supabase.from("Bookmark").delete().eq("postid", thisPost.postid);
-      setBookmarked(false);
-    } else {
-      await supabase.from("Bookmark").insert([
-        {
-          postid: thisPost.postid,
-          createdat: new Date(),
-          userid: userId,
-          communityid: thisPost.communityid,
-        },
-      ]);
-      setBookmarked(true);
-    }
+    const newBookmark = {
+      userid: userId,
+      communityid: Post[0].communityid,
+      postid: postId,
+      createdat: new Date(),
+    };
+
+    bookmarkMutation.mutate({ newBookmark, bookmarked });
+    setBookmarked((prevBookmarked) => !prevBookmarked);
+    queryClient.refetchQueries(["postBookmark", postId]);
   };
 
   const handleShare = (event) => {
@@ -286,7 +431,7 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
     const { data, error } = await supabase
       .from("Post")
       .delete()
-      .eq("postid", thisPost.postid);
+      .eq("postid", postId);
 
     if (error) {
       console.error("게시글 삭제 실패:", error);
@@ -294,7 +439,7 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
       console.log("게시글 삭제 성공:", data);
     }
 
-    queryClient.invalidateQueries(["Post", thisPost.postid]);
+    queryClient.invalidateQueries(["Post", postId]);
     setShowOptions(false);
     setIsDeleteModalOpen(false);
   };
@@ -307,7 +452,7 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
     <div className={styles.post} onClick={handlePostClick}>
       {isDeleteModalOpen && (
         <DeleteModal
-          title={"Study"}
+          title={"Post"}
           onDelete={handleDeleteClick}
           onCancel={handleCancelClick}
         />
@@ -362,7 +507,7 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
                 src={commentOff}
                 alt="commentOff"
               />
-              <span className={styles.commentNumber}>{commentCount}</span>
+              <span className={styles.commentNumber}>{postComment.length}</span>
             </div>
             <div className={styles.postLike}>
               <img
@@ -375,7 +520,7 @@ const Post = ({ thisPost, communityData, userData, allUserData }) => {
                 className={styles.likeNumber}
                 style={{ color: liked ? "#ff7474" : "#9c9c9c" }}
               >
-                {likeCount}
+                {postLike.length}
               </span>
             </div>
             <div>
