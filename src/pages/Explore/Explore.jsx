@@ -7,6 +7,7 @@ import Tag from "components/Explore/Explore_Tag";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import loadinggif from "assets/images/loading.gif";
 
 // 핫 커뮤니티 데이터를 가져오는 함수
 const fetchHotCommunities = async () => {
@@ -146,7 +147,19 @@ const Explore = () => {
   };
 
   if (isLoadingHotCommunities || isLoadingPopularStudies) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
+      </div>
+    )
   }
 
   if (hotCommunitiesError || popularStudiesError) {
