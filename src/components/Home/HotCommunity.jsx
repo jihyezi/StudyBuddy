@@ -7,89 +7,85 @@ import bookmark from "assets/icons/Home/bookmark.png";
 import art from "assets/icons/Home/palette.png";
 import CommunityField from "components/Communities/CommunityField";
 
-const HotCommunity = ({
-  small,
-  community,
-  communityData,
-  onClick,
-  allcommunity,
-}) => {
-  useEffect(() => {
-    console.log("community1", community); // member_count가 있는 community 객체
-    console.log("communityData1", communityData); // communityData에 모든 필드가 포함되어 있는지 확인
-  }, [community, communityData]);
+const HotCommunity = React.memo(
+  ({ small, community, communityData, onClick, allcommunity }) => {
+    useEffect(() => {
+      console.log("community1", community); // member_count가 있는 community 객체
+      console.log("communityData1", communityData); // communityData에 모든 필드가 포함되어 있는지 확인
+    }, [community, communityData]);
 
-  return (
-    <div
-      className={`${styles.community} ${small ? styles.smallCommunity : ""}`}
-      onClick={onClick}
-    >
+    return (
       <div
-        className={`${styles.classificationIcon} ${
-          small ? styles.smallclassificationIcon : ""
-        }`}
+        className={`${styles.community} ${small ? styles.smallCommunity : ""}`}
+        onClick={onClick}
       >
-        <img className={styles.bookmarkIcon} src={bookmark} alt="bookmark" />
-        <CommunityField field={communityData?.field} />
-        {/* <img className={styles.artIcon} src={art} alt="art" /> */}
+        <div
+          className={`${styles.classificationIcon} ${
+            small ? styles.smallclassificationIcon : ""
+          }`}
+        >
+          <img className={styles.bookmarkIcon} src={bookmark} alt="bookmark" />
+          <CommunityField field={communityData?.field} />
+          {/* <img className={styles.artIcon} src={art} alt="art" /> */}
+        </div>
+        <p
+          className={`${styles.communityName} ${
+            small ? styles.smallCommunityName : ""
+          }`}
+        >
+          {communityData?.name}
+        </p>
+        <p className={styles.communityDetail}>
+          <span
+            className={`${styles.communityDetailTitle} ${
+              small ? styles.smallCommunityDetailTitle : ""
+            }`}
+          >
+            인원
+          </span>
+          <span
+            className={`${styles.communityDetailContent} ${
+              small ? styles.smallCommunityDetailContent : ""
+            }`}
+          >
+            {community?.member_count}명
+          </span>
+        </p>
+        <p className={styles.communityDetail}>
+          <span
+            className={`${styles.communityDetailTitle} ${
+              small ? styles.smallCommunityDetailTitle : ""
+            }`}
+          >
+            게시글
+          </span>
+          <span
+            className={`${styles.communityDetailContent} ${
+              small ? styles.smallCommunityDetailContent : ""
+            }`}
+          >
+            {communityData?.postCount}개
+          </span>
+        </p>
+        <p className={styles.communityDetail}>
+          <span
+            className={`${styles.communityDetailTitle} ${
+              small ? styles.smallCommunityDetailTitle : ""
+            }`}
+          >
+            시작일
+          </span>
+          <span
+            className={`${styles.communityDetailContent} ${
+              small ? styles.smallCommunityDetailContent : ""
+            }`}
+          >
+            {new Date(communityData?.createdat).toLocaleDateString()}
+          </span>
+        </p>
       </div>
-      <p
-        className={`${styles.communityName} ${
-          small ? styles.smallCommunityName : ""
-        }`}
-      >
-        {communityData?.name}
-      </p>
-      <p className={styles.communityDetail}>
-        <span
-          className={`${styles.communityDetailTitle} ${
-            small ? styles.smallCommunityDetailTitle : ""
-          }`}
-        >
-          인원
-        </span>
-        <span
-          className={`${styles.communityDetailContent} ${
-            small ? styles.smallCommunityDetailContent : ""
-          }`}
-        >
-          {community?.member_count}명
-        </span>
-      </p>
-      <p className={styles.communityDetail}>
-        <span
-          className={`${styles.communityDetailTitle} ${
-            small ? styles.smallCommunityDetailTitle : ""
-          }`}
-        >
-          게시글
-        </span>
-        <span
-          className={`${styles.communityDetailContent} ${
-            small ? styles.smallCommunityDetailContent : ""
-          }`}
-        >
-          {communityData?.postCount}개
-        </span>
-      </p>
-      <p className={styles.communityDetail}>
-        <span
-          className={`${styles.communityDetailTitle} ${
-            small ? styles.smallCommunityDetailTitle : ""
-          }`}
-        >
-          시작일
-        </span>
-        <span
-          className={`${styles.communityDetailContent} ${
-            small ? styles.smallCommunityDetailContent : ""
-          }`}
-        >
-          {new Date(communityData?.createdat).toLocaleDateString()}
-        </span>
-      </p>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default HotCommunity;

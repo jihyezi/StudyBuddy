@@ -6,8 +6,8 @@ import supabase from "components/supabaseClient";
 import Tag from "components/Explore/Explore_Tag";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import loadinggif from "assets/images/loading.gif";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // 핫 커뮤니티 데이터를 가져오는 함수
 const fetchHotCommunities = async () => {
@@ -85,11 +85,18 @@ const fetchPopularStudies = async () => {
     .slice(0, 2);
 };
 
+// HotCommunity 컴포넌트를 React.memo로 감싸서 메모이제이션 처리
+const MemoizedHotCommunity = React.memo(HotCommunity);
+
+// StudyPost 컴포넌트를 React.memo로 감싸서 메모이제이션 처리
+const MemoizedStudyPost = React.memo(StudyPost);
+
 const Explore = () => {
   const { user: sessionUser } = useAuth();
-  const [user, setUser] = React.useState([]);
-  const [allUser, setAllUser] = React.useState([]);
+  const [user, setUser] = useState([]);
+  const [allUser, setAllUser] = useState([]);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // 핫 커뮤니티 데이터
   const {
@@ -99,7 +106,9 @@ const Explore = () => {
   } = useQuery({
     queryKey: ["hotCommunities"],
     queryFn: fetchHotCommunities,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5분
+    cacheTime: 10 * 60 * 1000, // 10분
+    refetchOnWindowFocus: false,
   });
 
   // 인기 스터디 데이터
@@ -111,6 +120,8 @@ const Explore = () => {
     queryKey: ["popularStudies"],
     queryFn: fetchPopularStudies,
     staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -146,7 +157,17 @@ const Explore = () => {
     });
   };
 
-  if (isLoadingHotCommunities || isLoadingPopularStudies) {
+  useEffect(() => {
+    return () => {
+      queryClient.invalidateQueries(["hotCommunities"]);
+      queryClient.invalidateQueries(["popularStudies"]);
+    };
+  }, [queryClient]);
+
+  // 모든 데이터가 로딩되었는지 확인
+  const isLoading = isLoadingHotCommunities || isLoadingPopularStudies;
+
+  if (isLoading) {
     return (
       <div
         style={{
@@ -159,7 +180,7 @@ const Explore = () => {
       >
         <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
       </div>
-    )
+    );
   }
 
   if (hotCommunitiesError || popularStudiesError) {
@@ -167,6 +188,7 @@ const Explore = () => {
       <div>
         Error loading data:{" "}
         {hotCommunitiesError?.message || popularStudiesError?.message}
+        <button onClick={() => window.location.reload()}>Retry</button>
       </div>
     );
   }
@@ -191,7 +213,7 @@ const Explore = () => {
             <div className={styles.HotCommunityContainer}>
               {hotCommunities && hotCommunities.length > 0 ? (
                 hotCommunities.map((community, index) => (
-                  <HotCommunity
+                  <MemoizedHotCommunity
                     key={community.communityid}
                     community={community}
                     communityData={hotCommunities[index]}
@@ -213,7 +235,7 @@ const Explore = () => {
           <div className={styles.StudyPostContainer}>
             {popularStudies && popularStudies.length > 0 ? (
               popularStudies.map((post) => (
-                <StudyPost
+                <MemoizedStudyPost
                   key={post.studyid}
                   studyId={post.studyid}
                   completion={post.completion}

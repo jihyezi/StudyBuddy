@@ -46,6 +46,7 @@ const SearchResults = () => {
               communityname={community.name}
               person={community.membercount}
               post={community.postcount}
+              field={community.field} //////////////확인해봐야함
               date={new Date(community.createdat).toLocaleDateString()}
               field={community.field}
               communityicon="icon_url_here"
