@@ -6,6 +6,7 @@ import supabase from "components/supabaseClient";
 import Tag from "components/Explore/Explore_Tag";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import loadinggif from "assets/images/loading.gif";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // 핫 커뮤니티 데이터를 가져오는 함수
@@ -168,8 +169,16 @@ const Explore = () => {
 
   if (isLoading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}>Loading...</div>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
       </div>
     );
   }

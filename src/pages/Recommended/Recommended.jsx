@@ -20,8 +20,6 @@ const fetchHotCommunities = async () => {
 
   if (error) throw new Error("Error fetching hot communities");
 
-  if (!data || data.length === 0) return [];
-
   const communityDetails = await Promise.all(
     data.map(async (community) => {
       const { data: communityInfo } = await supabase
@@ -54,8 +52,6 @@ const fetchPopularPosts = async () => {
     .limit(2);
 
   if (error) throw new Error("Error fetching popular posts");
-
-  if (!data || data.length === 0) return [];
 
   const postsDetails = await Promise.all(
     data.map(async (post) => {
@@ -97,12 +93,12 @@ const Recommended = ({ user }) => {
   const { allUserData } = useDataContext();
   const navigate = useNavigate();
 
-  const { data: hotCommunities, sError: isHotCommunitiesError, } = useQuery({
+  const { data: hotCommunities } = useQuery({
     queryKey: ["hotCommunities"],
     queryFn: fetchHotCommunities
   });
 
-  const { data: popularPosts, isError: isPopularPostsError, } = useQuery({
+  const { data: popularPosts } = useQuery({
     queryKey: ["popularPosts"],
     queryFn: fetchPopularPosts
   });
@@ -144,7 +140,6 @@ const Recommended = ({ user }) => {
           {Array.isArray(popularPosts) && popularPosts.length > 0 ? (
             popularPosts.map((post, index) => (
               <PopularPost
-                small
                 key={index}
                 postData={post}
                 postLike={post.likeCount}
@@ -156,7 +151,6 @@ const Recommended = ({ user }) => {
           ) : (
             <div></div>
           )}
-
         </div>
       </div>
     </div>

@@ -288,6 +288,11 @@ const DetailStudyPost = () => {
     queryClient.setQueryData(["studyComments", studyId], updatedComments);
   };
 
+  const handleProfileClick = (item) => {
+    navigate(`/profile/${item}`);
+  };
+
+
   return (
     <div>
       <Header title={"Studies"} />
@@ -314,6 +319,7 @@ const DetailStudyPost = () => {
             gap: "14px",
             marginTop: "30px",
           }}
+          onClick={() => handleProfileClick(author?.nickname)}
         >
           <img
             className={styles.postWriterProfile}

@@ -30,18 +30,6 @@ const fetchJoinCommunityData = async (userId) => {
   }
 };
 
-const fetchCommentData = async (postId) => {
-  const { data, error } = await supabase
-    .from("Comment")
-    .select("*")
-    .eq("postid", postId);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
-};
-
 const Communities = ({ }) => {
   const { userData, communityData, postData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
@@ -52,12 +40,6 @@ const Communities = ({ }) => {
       queryFn: () => fetchJoinCommunityData(userData.userid),
       onError: (error) => console.error(error.message),
     });
-
-  const { data: commentData = [] } = useQuery({
-    queryKey: ["commentData", userData?.userid],
-    queryFn: () => fetchCommentData(postData.postid),
-    onError: (error) => console.error(error.message),
-  });
 
   const handleEventSelect = useCallback((event) => {
     setSelectEvent(event);
