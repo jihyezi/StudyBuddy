@@ -25,9 +25,8 @@ const PopularPost = ({
       onClick={onClick}
     >
       <p
-        className={`${styles.communityName} ${
-          small ? styles.smallcommunityName : ""
-        }`}
+        className={`${styles.communityName} ${small ? styles.smallcommunityName : ""
+          }`}
       >
         {communityName ? communityName : "0"}
       </p>
@@ -40,7 +39,7 @@ const PopularPost = ({
         <div className={styles.like}>
           <img className={styles.likeIcon} src={likeOff} alt="likeOff" />
           <span className={styles.likeNumber}>
-            {postLike && postLike.length > 0 ? postLike[0] : "0"}
+            {postLike ? postLike[0] : "0"}
           </span>
         </div>
         <div className={styles.comment}>
@@ -50,7 +49,7 @@ const PopularPost = ({
             alt="commentOff"
           />
           <span className={styles.commentNumber}>
-            {comment && comment.length > 0 ? comment[0] : "0"}
+            {comment ? comment[0] : "0"}
           </span>
         </div>
         <div className={styles.bookmark}>

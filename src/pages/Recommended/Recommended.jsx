@@ -20,8 +20,6 @@ const fetchHotCommunities = async () => {
 
   if (error) throw new Error("Error fetching hot communities");
 
-  if (!data || data.length === 0) return [];
-
   const communityDetails = await Promise.all(
     data.map(async (community) => {
       const { data: communityInfo } = await supabase
@@ -54,8 +52,6 @@ const fetchPopularPosts = async () => {
     .limit(2);
 
   if (error) throw new Error("Error fetching popular posts");
-
-  if (!data || data.length === 0) return [];
 
   const postsDetails = await Promise.all(
     data.map(async (post) => {
@@ -141,22 +137,17 @@ const Recommended = ({ user }) => {
               onClick={() => handleCommunityClick(community)}
             />
           ))}
-          {Array.isArray(popularPosts) && popularPosts.length > 0 ? (
-            popularPosts.map((post, index) => (
-              <PopularPost
-                small
-                key={index}
-                postData={post}
-                postLike={post.likeCount}
-                comment={post.commentCount}
-                communityName={post.communityName}
-                onClick={() => handlePostClick(post)}
-              />
-            ))
-          ) : (
-            <div></div>
-          )}
-
+          {popularPosts?.map((post, index) => (
+            <PopularPost
+              small
+              key={index}
+              postData={post}
+              postLike={post.likeCount}
+              comment={post.commentCount}
+              communityName={post.communityName}
+              onClick={() => handlePostClick(post)}
+            />
+          ))}
         </div>
       </div>
     </div>

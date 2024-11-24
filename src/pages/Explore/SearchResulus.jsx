@@ -32,6 +32,7 @@ const SearchResults = () => {
   useEffect(() => {
     console.log("유저 데이터:", users);
   }, [users]);
+
   const menuArr = [
     {
       name: "커뮤니티",
@@ -46,6 +47,7 @@ const SearchResults = () => {
               person={community.membercount}
               post={community.postcount}
               date={new Date(community.createdat).toLocaleDateString()}
+              field={community.field}
               communityicon="icon_url_here"
             />
           ))
