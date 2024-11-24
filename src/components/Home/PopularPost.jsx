@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styles from "./PopularPost.module.css";
 import "fonts/Font.css";
-// className={`${styles.community} ${small ? styles.smallCommunity : ""}`}
+
 //icons
 import likeOff from "assets/icons/Home/like_off.png";
 import commentOff from "assets/icons/Home/comment_off.png";
@@ -16,9 +16,6 @@ const PopularPost = React.memo(
     communityName,
     onClick,
   }) => {
-    useEffect(() => {
-      console.log("communityName", communityName);
-    }, []);
 
     return (
       <div
@@ -43,7 +40,7 @@ const PopularPost = React.memo(
           <div className={styles.like}>
             <img className={styles.likeIcon} src={likeOff} alt="likeOff" />
             <span className={styles.likeNumber}>
-              {postLike ? postLike[0] : "0"}
+              {postLike ? postLike : "0"}
             </span>
           </div>
           <div className={styles.comment}>
@@ -53,7 +50,7 @@ const PopularPost = React.memo(
               alt="commentOff"
             />
             <span className={styles.commentNumber}>
-              {comment ? comment[0] : "0"}
+              {comment ? comment : "0"}
             </span>
           </div>
           <div className={styles.bookmark}>

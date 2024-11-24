@@ -133,10 +133,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-            .from("PostLike")
-            .delete()
-            .eq("postid", postId)
-            .eq("userid", newLike.userid)
+          .from("PostLike")
+          .delete()
+          .eq("postid", postId)
+          .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -178,10 +178,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-            .from("Bookmark")
-            .delete()
-            .eq("postid", postId)
-            .eq("userid", newBookmark.userid)
+          .from("Bookmark")
+          .delete()
+          .eq("postid", postId)
+          .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -308,7 +308,7 @@ const Post = ({ postId }) => {
   const communityName =
     Array.isArray(communityData) && communityData.length > 0
       ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-          ?.name
+        ?.name
       : "Unknown Communityy";
 
   const userimg =
