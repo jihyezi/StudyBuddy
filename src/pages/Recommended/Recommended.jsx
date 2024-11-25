@@ -140,6 +140,7 @@ const Recommended = ({ user }) => {
           {Array.isArray(popularPosts) && popularPosts.length > 0 ? (
             popularPosts.map((post, index) => (
               <PopularPost
+                small
                 key={index}
                 postData={post}
                 postLike={post.likeCount}
