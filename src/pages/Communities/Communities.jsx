@@ -30,7 +30,7 @@ const fetchJoinCommunityData = async (userId) => {
   }
 };
 
-const Communities = ({ }) => {
+const Communities = ({}) => {
   const { userData, communityData, postData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
 
@@ -48,18 +48,18 @@ const Communities = ({ }) => {
   const filterCommunity = useMemo(() => {
     return communityData && joinCommunityData
       ? communityData.filter((c) =>
-        joinCommunityData.some((jc) => jc.communityid === c.communityid)
-      )
+          joinCommunityData.some((jc) => jc.communityid === c.communityid)
+        )
       : [];
   }, [communityData, joinCommunityData]);
 
   const filteredPosts = useMemo(() => {
     return postData && filterCommunity
       ? postData.filter((p) =>
-        filterCommunity.some(
-          (fc) => Number(fc.communityid) === Number(p.communityid)
+          filterCommunity.some(
+            (fc) => Number(fc.communityid) === Number(p.communityid)
+          )
         )
-      )
       : [];
   }, [postData, filterCommunity]);
 
@@ -76,10 +76,10 @@ const Communities = ({ }) => {
       ? selectedEvent === "🔥"
         ? postData
         : postData.filter((p) =>
-          filteredCommunities.some(
-            (fc) => Number(fc.communityid) === Number(p.communityid)
+            filteredCommunities.some(
+              (fc) => Number(fc.communityid) === Number(p.communityid)
+            )
           )
-        )
       : [];
   }, [postData, communityData, selectedEvent, filteredCommunities]);
 
