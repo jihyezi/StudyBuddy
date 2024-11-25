@@ -22,13 +22,13 @@ import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import Tag from "components/Home/Tag";
 
-const Home = ({ }) => {
+const Home = ({}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularPosts, setPopularPosts] = useState([]);
   const [postData, setPostData] = useState([]);
-  const [postLike, setPostLike] = useState(null);
-  const [comment, setComment] = useState(null);
-  const [communityName, setCommunityName] = useState(null);
+  const [postLike, setPostLike] = useState([]);
+  const [comment, setComment] = useState([]);
+  const [communityName, setCommunityName] = useState("");
   const [selectedTag, setSelectedTag] = useState("🔥");
   const [selectedEvent, setSelectEvent] = useState("");
   const [popularStudies, setPopularStudies] = useState([]);
@@ -38,19 +38,6 @@ const Home = ({ }) => {
   const [allUser, setAllUser] = useState([]);
   const [communityy, setCommunityy] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchInitialPopularStudies = async () => {
-      await fetchPopularStudies(selectedTag);
-    };
-    fetchInitialPopularStudies();
-  }, []);
-
-  const handleEventSelect = async (event, tag) => {
-    setSelectEvent(event);
-    setSelectedTag(tag);
-    await fetchPopularStudies(tag);
-  };
 
   const fetchPopularStudies = async (tag) => {
     if (tag === "🔥") {
@@ -101,48 +88,46 @@ const Home = ({ }) => {
       throw new Error("Error fetching hot communities");
     }
 
-    console.log("Fetched Hot Communities", data); // 여기에 찍히는 데이터 확인
+    console.log("Fetched Hot Communities", data);
 
-    // 데이터를 병합
+    // 병렬 처리
     const fetchedCommunityData = await Promise.all(
       data.map(async (community) => {
-        const { data: communityInfo, error: communityError } = await supabase
+        const communityInfoPromise = supabase
           .from("Community")
           .select("*")
           .eq("communityid", community.communityid)
           .single();
 
-        if (communityError) {
-          console.error("Error fetching community data:", communityError);
-          return null;
-        }
-
-        const { count: postCount, error: postCountError } = await supabase
+        const postCountPromise = supabase
           .from("Post")
           .select("postid", { count: "exact" })
           .eq("communityid", community.communityid);
 
-        if (postCountError) {
-          console.error("Error fetching post count:", postCountError);
+        const [communityInfo, postCount] = await Promise.all([
+          communityInfoPromise,
+          postCountPromise,
+        ]);
+
+        if (communityInfo.error || postCount.error) {
+          console.error(
+            "Error fetching community data:",
+            communityInfo.error || postCount.error
+          );
           return null;
         }
 
-        // communityData와 community를 병합하여 반환
         return {
           ...community, // member_count 포함
-          postCount, // postCount 추가
-          name: communityInfo.name, // name 추가
-          createdat: communityInfo.createdat, // createdat 추가
-          field: communityInfo.field, // field 추가
+          postCount: postCount.count, // postCount 추가
+          name: communityInfo.data.name, // name 추가
+          createdat: communityInfo.data.createdat, // createdat 추가
+          field: communityInfo.data.field, // field 추가
         };
       })
     );
 
-    const filteredCommunityData = fetchedCommunityData.filter(Boolean);
-
-    console.log("Processed Community Data:", filteredCommunityData); // 병합된 데이터 확인
-
-    return filteredCommunityData; // 병합된 데이터 반환
+    return fetchedCommunityData.filter(Boolean); // null 제거
   };
 
   const {
@@ -154,9 +139,7 @@ const Home = ({ }) => {
     queryFn: fetchHotCommunities,
     staleTime: 5 * 60 * 1000, // 5분 동안 캐싱
     cacheTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
-    onSuccess: (data) => {
-      console.log("communityData (onSuccess)", data); // 병합된 데이터 확인
-    },
+    refetchOnWindowFocus: false,
   });
 
   const fetchPopularPosts = async () => {
@@ -266,24 +249,42 @@ const Home = ({ }) => {
       queryFn: fetchPopularPosts,
       staleTime: 5 * 60 * 1000, // 5분 동안 캐싱
       cacheTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
+      refetchOnWindowFocus: false,
       onError: (error) => {
         console.error("Error fetching popular posts:", error);
       },
     });
   };
-  const { data } = usePopularPosts();
+
+  const { data = { popularPostsData: [] } } = usePopularPosts();
 
   // React Query 데이터를 상태에 설정
   useEffect(() => {
-    if (data) {
-      setPopularPosts(data.popularPostsData);
-      setPostData(data.validPostData);
-      setPostLike(data.validPostLikeCounts);
-      setComment(data.validCommentCounts);
-      setCommunityName(data.validCommunityName);
+    if (data && Array.isArray(data.popularPostsData)) {
+      if (
+        JSON.stringify(data.popularPostsData) !== JSON.stringify(popularPosts)
+      ) {
+        setPopularPosts(data.popularPostsData);
+      }
+      if (JSON.stringify(data.validPostData) !== JSON.stringify(postData)) {
+        setPostData(data.validPostData);
+      }
+      if (
+        JSON.stringify(data.validPostLikeCounts) !== JSON.stringify(postLike)
+      ) {
+        setPostLike(data.validPostLikeCounts);
+      }
+      if (JSON.stringify(data.validCommentCounts) !== JSON.stringify(comment)) {
+        setComment(data.validCommentCounts);
+      }
+      if (
+        JSON.stringify(data.validCommunityName) !==
+        JSON.stringify(communityName)
+      ) {
+        setCommunityName(data.validCommunityName);
+      }
     }
-  }, [data]);
-
+  }, [data, popularPosts, postData, postLike, comment, communityName]);
   useEffect(() => {
     // fetchHotCommunities();
     // fetchPopularPosts();
@@ -341,16 +342,25 @@ const Home = ({ }) => {
     fetchCommunityData();
   }, []);
 
-  console.log(communityy);
-  console.log(user[0])
+  useEffect(() => {
+    const fetchInitialPopularStudies = async () => {
+      if (!popularStudies.length) {
+        await fetchPopularStudies(selectedTag);
+      }
+    };
+
+    fetchInitialPopularStudies();
+  }, [selectedTag, popularStudies]);
+  const handleEventSelect = async (event, tag) => {
+    setSelectEvent(event);
+    setSelectedTag(tag);
+    await fetchPopularStudies(tag);
+  };
 
   const handleCommuntiyClick = (community) => {
     navigate(`/detail-community/${community.communityid}`, {
       state: {
         communityData: communityy,
-        // allJoinCommunityData: allJoinCommunityData,
-        // joinCommunityData: joinCommunityData,
-        // postData: postData,
         userData: user[0],
       },
     });

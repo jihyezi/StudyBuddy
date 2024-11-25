@@ -93,12 +93,12 @@ const Recommended = ({ user }) => {
   const { allUserData } = useDataContext();
   const navigate = useNavigate();
 
-  const { data: hotCommunities, sError: isHotCommunitiesError, } = useQuery({
+  const { data: hotCommunities } = useQuery({
     queryKey: ["hotCommunities"],
     queryFn: fetchHotCommunities
   });
 
-  const { data: popularPosts, isError: isPopularPostsError, } = useQuery({
+  const { data: popularPosts } = useQuery({
     queryKey: ["popularPosts"],
     queryFn: fetchPopularPosts
   });
@@ -137,17 +137,20 @@ const Recommended = ({ user }) => {
               onClick={() => handleCommunityClick(community)}
             />
           ))}
-          {popularPosts?.map((post, index) => (
-            <PopularPost
-              small
-              key={index}
-              postData={post}
-              postLike={post.likeCount}
-              comment={post.commentCount}
-              communityName={post.communityName}
-              onClick={() => handlePostClick(post)}
-            />
-          ))}
+          {Array.isArray(popularPosts) && popularPosts.length > 0 ? (
+            popularPosts.map((post, index) => (
+              <PopularPost
+                key={index}
+                postData={post}
+                postLike={post.likeCount}
+                comment={post.commentCount}
+                communityName={post.communityName}
+                onClick={() => handlePostClick(post)}
+              />
+            ))
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>

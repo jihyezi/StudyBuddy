@@ -1,12 +1,15 @@
 import React, { useState, useCallback, useMemo } from "react";
 import styles from "./AddCommunity.module.css";
-import Header from "components/Header";
-import CommunityContainer from "components/Communities/CommunityContainer";
-import { useDataContext } from "api/DataContext";
-import Classification from "components/Communities/Classification";
-import { useQuery } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useDataContext } from "api/DataContext";
+
+// components & image
+import Header from "components/Header";
+import CommunityContainer from "components/Communities/CommunityContainer";
+import Classification from "components/Communities/Classification";
+import loadinggif from "assets/images/loading.gif";
 
 const fetchHotCommunities = async () => {
     const { data, error } = await supabase
@@ -26,7 +29,7 @@ const AddCommunity = () => {
     const [selectedEvent, setSelectEvent] = useState("");
     const navigate = useNavigate();
 
-    const { data: hotCommunities, error } = useQuery({
+    const { data: hotCommunities, isLoading } = useQuery({
         queryKey: ["hotCimmunities"],
         queryFn: fetchHotCommunities
     });
@@ -70,10 +73,25 @@ const AddCommunity = () => {
         });
     }, [filterfieldCommunity, hotCommunities]);
 
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    width: "100%",
+                    height: "100vh",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
+            </div>
+        )
+    };
 
     return (
         <div className={styles.communityContainer}>
-            <Header headerName={"Communities"} />
+            <Header headerName={"AllCommunities"} />
             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                 <div className={styles.MainContainer} >
                     <Classification onEventSelect={handleEventSelect} />
