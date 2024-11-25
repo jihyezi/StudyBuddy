@@ -23,16 +23,28 @@ import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
 import nopforile from "assets/images/Profile/noprofile.png";
 import LoginModal from "components/Home/LoginModal";
+import PostModal from "components/Sidebar/PostModal";
 
-const Sidebar = ({
-  toggleNotifications,
-  isNotificationsOpen,
-  loginUser,
-}) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
   const { user, logout } = useAuth();
+  const [isPostModalOpen, setPostModalOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const openPostModal = () => {
+    if (!user) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+    } else {
+      setDropdownVisible(!dropdownVisible);
+    }
+
+    setPostModalOpen(true);
+  };
+
+  const closePostModal = () => {
+    setPostModalOpen(false);
+  };
 
   const openLoginModal = () => {
     setLoginModalOpen(true);
@@ -92,19 +104,11 @@ const Sidebar = ({
           </Link>
 
           {user ? (
-            <Link
-              to="#"
-              onClick={logout}
-              className={styles.logoutLink}
-            >
+            <Link to="#" onClick={logout} className={styles.logoutLink}>
               로그아웃
             </Link>
           ) : (
-            <Link
-              to="#"
-              onClick={openLoginModal}
-              className={styles.logoutLink}
-            >
+            <Link to="#" onClick={openLoginModal} className={styles.logoutLink}>
               로그인
             </Link>
           )}
@@ -179,7 +183,11 @@ const Sidebar = ({
 
         <div className={styles.menu}>
           <NavLink
-            to={loginUser ? `/profile/${loginUser.nickname || "defaultNickname"}` : "/profile"}
+            to={
+              loginUser
+                ? `/profile/${loginUser.nickname || "defaultNickname"}`
+                : "/profile"
+            }
             className={({ isActive }) =>
               isActive ? styles.menuOn : styles.menuOff
             }
@@ -223,7 +231,7 @@ const Sidebar = ({
           </NavLink>
         </div>
 
-        <div
+        {/* <div
           className={styles.post}
           onClick={handlePostClick}
           ref={dropdownRef}
@@ -242,7 +250,14 @@ const Sidebar = ({
               </Link>
             </div>
           )}
+        </div> */}
+
+        <div className={styles.post} onClick={openPostModal}>
+          Post
         </div>
+
+        {isPostModalOpen && <PostModal closeModal={closePostModal} />}
+
         <LoginModal
           modalIsOpen={isLoginModalOpen}
           closeModal={closeLoginModal}
