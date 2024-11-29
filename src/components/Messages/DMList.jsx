@@ -19,31 +19,32 @@ const fetchUsers = async (userEmail) => {
 };
 
 function DMList() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth(); // loading 상태 추가
   const [selectedUser, setSelectedUser] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigate("/profile");
-      return;
     }
 
-    const channel = supabase
-      .channel("user_update_channel")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "User" },
-        () => queryClient.invalidateQueries({ queryKey: ["users"] })
-      )
-      .subscribe();
+    if (user) {
+      const channel = supabase
+        .channel("user_update_channel")
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "User" },
+          () => queryClient.invalidateQueries({ queryKey: ["users"] })
+        )
+        .subscribe();
 
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [user, navigate, queryClient]);
+      return () => {
+        channel.unsubscribe();
+      };
+    }
+  }, [user, loading, navigate, queryClient]);
 
   const { data: userData, isLoading, error } = useQuery({
     queryKey: ["users", user?.email],
@@ -52,9 +53,9 @@ function DMList() {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (!user) return null;
-
-  if (isLoading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>; // 로딩 중일 때 표시
+  if (!user) return null; // user가 없으면 아무것도 렌더링하지 않음
+  if (isLoading) return <div>Loading user data...</div>;
   if (error) return <div>Error fetching users</div>;
 
   const handleUserClick = (user) => {
@@ -109,7 +110,11 @@ function DMList() {
         <DMChat selectedUser={selectedUser} publicUser={user} />
       ) : (
         <div className={styles.noChat} onClick={handleNewMessageClick}>
-          <img src={noprofile} alt="New Message" className={styles.newMessageIcon} />
+          <img
+            src={noprofile}
+            alt="New Message"
+            className={styles.newMessageIcon}
+          />
           <div className={styles.newMessageText}>New Message</div>
         </div>
       )}
