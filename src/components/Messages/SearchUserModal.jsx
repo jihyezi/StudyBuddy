@@ -5,7 +5,7 @@ import noprofile from "assets/images/Profile/noprofile.png";
 
 function SearchUserModal({
   setIsSending,
-  filteredUsers,
+  filteredUsers = [], // 기본값 설정
   handleUserClick,
   selectedUser,
   handleSearchChange,
@@ -51,20 +51,29 @@ function SearchUserModal({
 
       <div className={styles.userList}>
         {!selectedUser &&
-          filteredUsers.map((user) => (
-            <div
-              key={user.userid}
-              className={`${styles.userItem} ${selectedUser && selectedUser.userid === user.userid
-                ? styles.selected
-                : ""
+          (filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
+              <div
+                key={user.userid}
+                className={`${styles.userItem} ${
+                  selectedUser && selectedUser.userid === user.userid
+                    ? styles.selected
+                    : ""
                 }`}
-              onClick={() => handleUserClick(user)}
-            >
-              <img src={user.profileimage || noprofile} alt="Profile" className={styles.profileImage} />
-              <div className={styles.userInfo}>
-                <span className={styles.username}>{user.username}</span>
+                onClick={() => handleUserClick(user)}
+              >
+                <img
+                  src={user.profileimage || noprofile}
+                  alt="Profile"
+                  className={styles.profileImage}
+                />
+                <div className={styles.userInfo}>
+                  <span className={styles.username}>{user.username}</span>
+                </div>
               </div>
-            </div>
+            ))
+          ) : (
+            <div className={styles.noUsers}>No users found</div>
           ))}
         {selectedUser && <div className={styles.emptyUserList}></div>}
       </div>

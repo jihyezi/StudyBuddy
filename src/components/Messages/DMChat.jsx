@@ -77,7 +77,6 @@ function DMChat({ selectedUser }) {
       return;
     }
 
-    console.log("Sending message with sender ID:", publicUserId); // 메시지 전송 전 publicUserId 확인
 
     // 메시지 삽입 시도
     const { data, error } = await supabase.from("DirectMessage").insert([
@@ -93,15 +92,11 @@ function DMChat({ selectedUser }) {
       console.error("Error sending message:", error.message);
       return;
     }
-
-    console.log("Message sent successfully:", data); // 삽입 성공 확인
-
     setMessage(""); // 메시지 전송 후 상태 초기화
 
     // 최신 데이터 가져오기
     refetch()
       .then(() => {
-        console.log("Refetch complete: chat data updated.");
       })
       .catch((err) => {
         console.error("Error during refetch:", err);
