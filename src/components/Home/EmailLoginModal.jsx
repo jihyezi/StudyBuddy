@@ -46,6 +46,7 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
       if (error) {
         console.error("로그인 오류:", error.message);
         setError("로그인 실패: " + error.message);
+        alert("로그인 실패"); // alert 메시지 추가
         return;
       }
 
@@ -55,7 +56,7 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
         return;
       }
 
-      console.log("로그인 성공:", user);
+      // console.log("로그인 성공:", user);
       localStorage.setItem("userId", user.id); // user.id 저장
       window.location.reload(); // 페이지 새로고침
     } catch (err) {
