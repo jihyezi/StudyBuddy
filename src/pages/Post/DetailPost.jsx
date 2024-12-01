@@ -299,7 +299,7 @@ const DetailPost = ({ }) => {
       ?.communityid
     : "Unknown Community";
 
-  const userid =
+  const username =
     Array.isArray(allUserData) && allUserData.length > 0
       ? allUserData.find((u) => u.userid === Post[0].userid)?.username
       : "Unknown User";
@@ -543,7 +543,7 @@ const DetailPost = ({ }) => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick(userNickname)}
+          onClick={() => handleProfileClick(username)}
         >
           <img
             className={styles.postWriterProfile}

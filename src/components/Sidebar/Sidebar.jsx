@@ -184,7 +184,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
           <NavLink
             to={
               loginUser
-                ? `/profile/${loginUser.nickname || "defaultNickname"}`
+                ? `/profile/${loginUser.username || "defaultNickname"}`
                 : "/profile"
             }
             className={({ isActive }) =>

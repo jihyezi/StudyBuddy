@@ -140,7 +140,7 @@ const MainContent = ({ loginuser }) => {
             />
           }
         />
-        <Route path="/profile/:nickname" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
         <Route path="/create-community" element={<CommunityPost />} />
@@ -170,14 +170,14 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/studies" ||
         location.pathname.startsWith("/bookmarkdetail/") ||
         location.pathname === "/addCommunity") && (
-        <Recommended
-          user={loginuser}
-          userData={userData}
-          allUserData={allUserData}
-          communityData={communityData}
-          postData={postData}
-        />
-      )}
+          <Recommended
+            user={loginuser}
+            userData={userData}
+            allUserData={allUserData}
+            communityData={communityData}
+            postData={postData}
+          />
+        )}
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
