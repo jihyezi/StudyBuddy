@@ -54,6 +54,9 @@ const Profile = () => {
   const { username } = useParams();
 
   const currentProfileData = useMemo(() => {
+    if (userData?.username === username) {
+      return userData;
+    }
     return allUserData?.find((user) => user.username === username) || null;
   }, [userData, username, allUserData]);
 

@@ -1,19 +1,43 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Comment.module.css";
 import supabase from "components/supabaseClient";
+import { useQuery } from "@tanstack/react-query";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
-import profile1 from "assets/images/Profile/profile1.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 
-const Comment = ({ comment, userData, allUserData, onDelete }) => {
+const fetchAllUserData = async (userId) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("userid", userId)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+const Comment = ({ comment, userData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(comment.content);
   const [editedText, setEditedText] = useState(comment.content);
+
+  const { data: allUser, refetch } = useQuery({
+    queryKey: ["allUser", comment.userid],
+    queryFn: () => fetchAllUserData(comment.userid),
+    enabled: false,
+    onError: (error) => console.log(error.message),
+  });
+
+  useEffect(() => {
+    if (isEditing === false) {
+      refetch();
+    }
+  }, [isEditing, refetch]);
 
   useEffect(() => {
     if (showOptions) {
@@ -122,9 +146,7 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
     }
   };
 
-  const commentAuthor = allUserData.filter(
-    (user) => user.userid === comment.userid
-  )[0];
+
 
   return isEditing ? (
     <div className={styles.editClick}>
@@ -146,7 +168,7 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
             marginTop: "15px",
           }}
         >
-          {commentAuthor?.nickname || "닉네임"}
+          {allUser?.nickname || "닉네임"}
         </div>
         <textarea
           className={styles.inputField}
@@ -175,7 +197,7 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
       <div>
         <img
           className={styles.commentWriterProfile}
-          src={commentAuthor?.profileimage || noprofile}
+          src={allUser?.profileimage || noprofile}
           alt="noprofile"
         />
       </div>
@@ -192,11 +214,11 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className={styles.commentWriter}>
             <span className={styles.commentWriterNickname}>
-              {commentAuthor?.nickname || "닉네임"}
+              {allUser?.nickname || "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
-              {commentAuthor?.updatedat
-                ? formatDate(commentAuthor.updatedat)
+              {allUser?.updatedat
+                ? formatDate(allUser.updatedat)
                 : "날짜 없음"}
             </span>
           </div>

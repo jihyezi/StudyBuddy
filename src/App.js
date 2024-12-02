@@ -78,7 +78,7 @@ const MainContent = ({ loginuser }) => {
   useEffect(() => {
     if (
       !user &&
-      (location.pathname === "/profile" || location.pathname === "/bookmarks")
+      (location.pathname === "/profile/:username" || location.pathname === "/bookmarks")
     ) {
       setLoginModalIsOpen(true);
     } else {
@@ -190,6 +190,7 @@ const App = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const { user: sessionUser } = useAuth();
 
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (sessionUser) {
@@ -233,6 +234,7 @@ const App = () => {
             <Body>
               <Content>
                 <Sidebar
+                  key={loginUser?.profileimage || "default"}
                   toggleNotifications={toggleNotifications}
                   loginUser={loginUser}
                 />
