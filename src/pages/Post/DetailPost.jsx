@@ -64,6 +64,16 @@ const fetchPostCommentData = async (postId) => {
   return data;
 };
 
+const fetchAllUserData = async (userId) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 const DetailPost = ({ }) => {
   const { postId } = useParams();
   const { userData, allUserData, communityData, postData, isLoading } =
@@ -103,6 +113,13 @@ const DetailPost = ({ }) => {
       onError: (error) => console.log(error.message),
     }
   );
+
+  const { data: allUser = {}, isLoading: isAllUser } = useQuery({
+    queryKey: ["allUser", postId, userData],
+    queryFn: () => fetchAllUserData(Post[0].userid),
+    select: (data) => (Array.isArray(data) && data.length > 0 ? data[0] : {}),
+    onError: (error) => console.log(error.message),
+  });
 
   useEffect(() => {
     setInputValue("");
@@ -272,7 +289,8 @@ const DetailPost = ({ }) => {
     isPostLoading ||
     isPostLikeLoading ||
     isPostBookmarkLoading ||
-    isPostCommentLoading
+    isPostCommentLoading ||
+    isAllUser
   ) {
     return (
       <div
@@ -299,25 +317,10 @@ const DetailPost = ({ }) => {
       ?.communityid
     : "Unknown Community";
 
-  const userid =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.username
-      : "Unknown User";
-
   const selectedUserData =
     Array.isArray(allUserData) && allUserData.length > 0
       ? allUserData.find((u) => u.userid === Post[0].userid) // postData.userid에 해당하는 사용자 데이터 찾기
       : null;
-
-  const userimg =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.profileimage
-      : "Unknown User";
-
-  const userNickname =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.nickname
-      : "Unknown User";
 
   const handleReviseClick = () => {
     // navigate(`/revise-post/${postId}`);
@@ -543,14 +546,14 @@ const DetailPost = ({ }) => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick(userNickname)}
+          onClick={() => handleProfileClick(allUser?.username)}
         >
           <img
             className={styles.postWriterProfile}
-            src={userimg || noprofile}
+            src={allUser?.profileimage || noprofile}
             alt="noprofile"
           />
-          <div className={styles.postWriterNickname}>{userNickname}</div>
+          <div className={styles.postWriterNickname}>{allUser?.nickname}</div>
           <div className={styles.postWriteDate}>
             {new Date(Post[0].createdat).toLocaleDateString()}
           </div>
