@@ -19,6 +19,22 @@ const InputRule = (props) => {
     props.onRulesChange(rules);
   };
 
+  const handleDeleteRule = (id) => {
+    // if (id !== 1) {
+    //   setRules(rules.filter((rule) => rule.id !== id));
+    //   updateRules();
+    // }
+    if (id !== 1) {
+      const updatedRules = rules.filter((rule) => rule.id !== id);
+      const reindexedRules = updatedRules.map((rule, index) => ({
+        ...rule,
+        id: index + 1,
+      }));
+      setRules(reindexedRules);
+      updateRules();
+    }
+  };
+
   const handleAddRule = () => {
     const newRule = {
       id: rules.length + 1,
@@ -27,13 +43,6 @@ const InputRule = (props) => {
     };
     setRules([...rules, newRule]);
     updateRules();
-  };
-
-  const handleDeleteRule = (id) => {
-    if (id !== 1) {
-      setRules(rules.filter((rule) => rule.id !== id));
-      updateRules();
-    }
   };
 
   const handleToggleEdit = (id) => {

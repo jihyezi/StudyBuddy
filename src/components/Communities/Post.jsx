@@ -78,7 +78,7 @@ const fetchAllUserData = async (userId) => {
 
   if (error) throw new Error(error.message);
   return data;
-}
+};
 
 const Post = ({ postId }) => {
   const { userData, communityData, isLoading } = useDataContext();
@@ -475,7 +475,11 @@ const Post = ({ postId }) => {
       <div className={styles.postDetail}>
         <div>
           {allUser?.profileimage ? (
-            <img className={styles.userProfile} src={allUser?.profileimage} alt="profile" />
+            <img
+              className={styles.userProfile}
+              src={allUser?.profileimage}
+              alt="profile"
+            />
           ) : (
             <img className={styles.userProfile} src={noprofile} alt="profile" />
           )}
@@ -483,7 +487,9 @@ const Post = ({ postId }) => {
 
         <div className={styles.postWriterContent}>
           <div className={styles.postWriter}>
-            <span className={styles.postWriterNickName}>{allUser?.nickname}</span>
+            <span className={styles.postWriterNickName}>
+              {allUser?.nickname}
+            </span>
             <span className={styles.postWriterID}>@{allUser?.username}</span>
             <span className={styles.postWriteDate}>
               {new Date(Post[0].createdat).toLocaleDateString()}
