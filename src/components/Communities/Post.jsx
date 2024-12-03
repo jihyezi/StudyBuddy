@@ -151,10 +151,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-            .from("PostLike")
-            .delete()
-            .eq("postid", postId)
-            .eq("userid", newLike.userid)
+          .from("PostLike")
+          .delete()
+          .eq("postid", postId)
+          .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -188,8 +188,7 @@ const Post = ({ postId }) => {
       queryClient.setQueryData(["postLike", postId], context.previousLike);
     },
     onSuccess: (data) => {
-      // 좋아요 상태를 변경한 후, 서버에서 최신 데이터를 다시 가져옵니다.
-      refetch(); // 여기서 refetch를 호출하여 최신 데이터를 가져옵니다.
+      refetch();
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(["postLike", postId]);
@@ -200,10 +199,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-            .from("Bookmark")
-            .delete()
-            .eq("postid", postId)
-            .eq("userid", newBookmark.userid)
+          .from("Bookmark")
+          .delete()
+          .eq("postid", postId)
+          .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -325,7 +324,7 @@ const Post = ({ postId }) => {
   const communityName =
     Array.isArray(communityData) && communityData.length > 0
       ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-          ?.name
+        ?.name
       : "Unknown Communityy";
 
   const handlePostClick = () => {
@@ -441,7 +440,7 @@ const Post = ({ postId }) => {
       console.log("게시글 삭제 성공:", data);
     }
 
-    queryClient.invalidateQueries(["Post", postId]);
+    queryClient.invalidateQueries("Post");
     setShowOptions(false);
     setIsDeleteModalOpen(false);
   };
