@@ -95,11 +95,12 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postLike = [], isLoading: isLikeLoading } = useQuery({
+  const { data: postLike = [], isLoading: isLikeLoading, refetch } = useQuery({
     queryKey: ["postLike", postId],
     queryFn: () => fetchPostLikeData(postId),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    initialData: [],
     onError: (error) => console.log(error.message),
   });
 
@@ -185,6 +186,10 @@ const Post = ({ postId }) => {
     },
     onError: (err, { newLike }, context) => {
       queryClient.setQueryData(["postLike", postId], context.previousLike);
+    },
+    onSuccess: (data) => {
+      // 좋아요 상태를 변경한 후, 서버에서 최신 데이터를 다시 가져옵니다.
+      refetch(); // 여기서 refetch를 호출하여 최신 데이터를 가져옵니다.
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(["postLike", postId]);
