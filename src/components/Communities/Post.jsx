@@ -95,7 +95,11 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postLike = [], isLoading: isLikeLoading, refetch } = useQuery({
+  const {
+    data: postLike = [],
+    isLoading: isLikeLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["postLike", postId],
     queryFn: () => fetchPostLikeData(postId),
     staleTime: 0,
@@ -110,9 +114,16 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postBookmark = [], isLoading: isBookmarkLoading } = useQuery({
+  const {
+    data: postBookmark = [],
+    isLoading: isBookmarkLoading,
+    refetchBookmark,
+  } = useQuery({
     queryKey: ["postBookmark", postId],
     queryFn: () => fetchPostBookmarkData(postId),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    initialData: [],
     onError: (error) => console.log(error.message),
   });
 
@@ -188,8 +199,7 @@ const Post = ({ postId }) => {
       queryClient.setQueryData(["postLike", postId], context.previousLike);
     },
     onSuccess: (data) => {
-      // 좋아요 상태를 변경한 후, 서버에서 최신 데이터를 다시 가져옵니다.
-      refetch(); // 여기서 refetch를 호출하여 최신 데이터를 가져옵니다.
+      refetch();
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(["postLike", postId]);
@@ -240,12 +250,17 @@ const Post = ({ postId }) => {
 
       return { previousBookmark };
     },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["postBookmark", postId]);
+      refetchBookmark();
+    },
     onError: (err, { newBookmark }, context) => {
       queryClient.setQueryData(
         ["postBookmark", postId],
         context.previousBookmark
       );
     },
+
     onSettled: async () => {
       await queryClient.invalidateQueries(["postBookmark", postId]);
     },
