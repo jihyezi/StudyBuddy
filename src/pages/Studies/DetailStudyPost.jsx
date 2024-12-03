@@ -294,7 +294,7 @@ const DetailStudyPost = () => {
 
   return (
     <div>
-      <Header title={"Studies"} />
+      <Header title={"Studies"} detailStudy />
       {isDeleteModalOpen && (
         <DeleteModal
           title={"Study"}

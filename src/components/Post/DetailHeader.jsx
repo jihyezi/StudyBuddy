@@ -12,13 +12,27 @@ const Header = (props) => {
     navigate(-1);
   };
 
+  const StudyBtn = () => {
+    navigate(`/studies`)
+  }
+
+  const CommunityBtn = () => {
+    navigate(`/communities`)
+  }
+
   return (
     <div className={styles.header}>
       <img
         className={styles.backIcon}
         src={back}
         alt="back"
-        onClick={backBtn}
+        onClick={
+          props.detailStudy
+            ? StudyBtn
+            : props.detailCommunity
+              ? CommunityBtn
+              : backBtn
+        }
       />
       <div className={styles.headerName}>{props.title}</div>
       <div className={styles.rightSection}></div>

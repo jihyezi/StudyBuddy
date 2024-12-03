@@ -74,7 +74,7 @@ const fetchAllUserData = async (userId) => {
   return data;
 };
 
-const DetailPost = ({}) => {
+const DetailPost = ({ }) => {
   const { postId } = useParams();
   const { userData, allUserData, communityData, isLoading } = useDataContext();
   const queryClient = useQueryClient();
@@ -141,10 +141,10 @@ const DetailPost = ({}) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-            .from("PostLike")
-            .delete()
-            .eq("postid", postId)
-            .eq("userid", newLike.userid)
+          .from("PostLike")
+          .delete()
+          .eq("postid", postId)
+          .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -192,10 +192,10 @@ const DetailPost = ({}) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-            .from("Bookmark")
-            .delete()
-            .eq("postid", postId)
-            .eq("userid", newBookmark.userid)
+          .from("Bookmark")
+          .delete()
+          .eq("postid", postId)
+          .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -312,12 +312,12 @@ const DetailPost = ({}) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-        ?.name
+      ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-        ?.communityid
+      ?.communityid
     : "Unknown Community";
 
   const selectedUserData =
@@ -527,7 +527,7 @@ const DetailPost = ({}) => {
 
   return (
     <div style={{ width: "100%", maxWidth: "1200px", margin: "0" }}>
-      <Header title={"Post"} />
+      <Header title={"Post"} detailCommunity />
       {isDeleteModalOpen && (
         <DeleteModal
           title={"Post"}
