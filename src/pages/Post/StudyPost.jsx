@@ -232,7 +232,7 @@ const StudyPost = ({ allUserData }) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header title={"Studies"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
@@ -265,7 +265,7 @@ const StudyPost = ({ allUserData }) => {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
           <div
             style={{
               minHeight: "72px",
@@ -313,7 +313,7 @@ const StudyPost = ({ allUserData }) => {
             )}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
           <div
             style={{
               minHeight: "72px",
