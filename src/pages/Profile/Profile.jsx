@@ -21,7 +21,7 @@ const fetchUserPostData = async (userId) => {
   const { data, error } = await supabase
     .from("Post")
     .select("*")
-    .eq('userid', userId);
+    .eq("userid", userId);
 
   if (error) throw new Error(error.message);
   return data;
@@ -101,8 +101,8 @@ const Profile = () => {
 
   const loading = isLoading || isPostLoading || isCommentLoading || isLikeLoading;
 
-  console.log(userData)
-  console.log(userData.nickname)
+  console.log(userPost)
+  console.log(currentProfileData.userid)
 
   return (
     <div className={styles.container}>

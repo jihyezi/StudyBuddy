@@ -183,7 +183,7 @@ const StudyPost = ({ allUserData }) => {
 
     for (let i = 0; i < collectedFiles.length; i++) {
       const file = collectedFiles[i];
-      const uniqueFileName = `${uuidv4()}-${file.name}`;
+      const uniqueFileName = `${uuidv4()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
       const { data, error } = await supabase.storage
         .from("Images")
         .upload(`study/${uniqueFileName}`, file);
@@ -232,7 +232,7 @@ const StudyPost = ({ allUserData }) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header title={"Studies"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
@@ -265,7 +265,7 @@ const StudyPost = ({ allUserData }) => {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
           <div
             style={{
               minHeight: "72px",
@@ -313,7 +313,7 @@ const StudyPost = ({ allUserData }) => {
             )}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
           <div
             style={{
               minHeight: "72px",
