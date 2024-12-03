@@ -52,7 +52,6 @@ const PopularPost = React.memo(
     communityName,
     onClick,
   }) => {
-
     const { userData } = useDataContext();
     const queryClient = useQueryClient();
     const [liked, setLiked] = useState(false);
@@ -81,13 +80,15 @@ const PopularPost = React.memo(
     useEffect(() => {
       const checkLikeAndBookmark = async () => {
         const userLike = postLikeData.find(
-          (like) => like.userid === userData?.userid && like.postid === postData.postid
+          (like) =>
+            like.userid === userData?.userid && like.postid === postData.postid
         );
         setLiked(!!userLike);
 
         const userBookmark = postBookmark.find(
           (bookmark) =>
-            bookmark.userid === userData?.userid && bookmark.postid === postData.postid
+            bookmark.userid === userData?.userid &&
+            bookmark.postid === postData.postid
         );
         setBookmarked(!!userBookmark);
       };
@@ -100,10 +101,10 @@ const PopularPost = React.memo(
       mutationFn: async ({ newLike, liked }) => {
         const { data, error } = liked
           ? await supabase
-            .from("PostLike")
-            .delete()
-            .eq("postid", postData.postid)
-            .eq("userid", newLike.userid)
+              .from("PostLike")
+              .delete()
+              .eq("postid", postData.postid)
+              .eq("userid", newLike.userid)
           : await supabase.from("PostLike").insert([newLike]);
 
         if (error) {
@@ -116,7 +117,10 @@ const PopularPost = React.memo(
       onMutate: async ({ newLike, liked }) => {
         await queryClient.cancelQueries(["postLikeData", postData.postid]);
 
-        const previousLike = queryClient.getQueryData(["postLikeData", postData.postid]);
+        const previousLike = queryClient.getQueryData([
+          "postLikeData",
+          postData.postid,
+        ]);
 
         if (liked) {
           queryClient.setQueryData(["postLikeData", postData.postid], (old) => {
@@ -127,14 +131,20 @@ const PopularPost = React.memo(
           queryClient.setQueryData(["postLikeData", postData.postid], (old) => {
             if (!old)
               return [{ ...newLike, createdat: new Date().toISOString() }];
-            return [...old, { ...newLike, createdat: new Date().toISOString() }];
+            return [
+              ...old,
+              { ...newLike, createdat: new Date().toISOString() },
+            ];
           });
         }
 
         return { previousLike };
       },
       onError: (err, { newLike }, context) => {
-        queryClient.setQueryData(["postLikeData", postData.postid], context.previousLike);
+        queryClient.setQueryData(
+          ["postLikeData", postData.postid],
+          context.previousLike
+        );
       },
       onSettled: async () => {
         await queryClient.invalidateQueries(["postLikeData", postData.postid]);
@@ -145,10 +155,10 @@ const PopularPost = React.memo(
       mutationFn: async ({ newBookmark, bookmarked }) => {
         const { data, error } = bookmarked
           ? await supabase
-            .from("Bookmark")
-            .delete()
-            .eq("postid", postData.postid)
-            .eq("userid", newBookmark.userid)
+              .from("Bookmark")
+              .delete()
+              .eq("postid", postData.postid)
+              .eq("userid", newBookmark.userid)
           : await supabase.from("Bookmark").insert([newBookmark]);
 
         if (error) {
@@ -186,14 +196,13 @@ const PopularPost = React.memo(
         return { previousBookmark };
       },
       onError: (err, { newBookmark }, context) => {
-        queryClient.setQueryData(["postBookmark", postData.postid], context.previousLike);
+        queryClient.setQueryData(
+          ["postBookmark", postData.postid],
+          context.previousBookmark
+        );
       },
       onSettled: async () => {
-        const updatedData = await queryClient.fetchQuery({
-          queryKey: ["postBookmark", postData.postid],
-          queryFn: () => fetchPostLikeData(postData.postid),
-        });
-        queryClient.setQueryData(["postBookmark", postData.postid], updatedData);
+        await queryClient.invalidateQueries(["postBookmark", postData.postid]);
       },
     });
 
@@ -266,14 +275,16 @@ const PopularPost = React.memo(
         onClick={onClick}
       >
         <p
-          className={`${styles.communityName} ${small ? styles.smallcommunityName : ""
-            }`}
+          className={`${styles.communityName} ${
+            small ? styles.smallcommunityName : ""
+          }`}
         >
           {communityName ? communityName : "0"}
         </p>
         <p
-          className={`${styles.postTitle} ${small ? styles.smallpostTitle : ""
-            }`}
+          className={`${styles.postTitle} ${
+            small ? styles.smallpostTitle : ""
+          }`}
         >
           {postData?.title}
         </p>
@@ -281,8 +292,16 @@ const PopularPost = React.memo(
           className={`${styles.postETC} ${small ? styles.smallpostETC : ""}`}
         >
           <div className={styles.like}>
-            <img className={styles.likeIcon} src={liked ? likeOn : likeOff} alt="likeOff" onClick={toggleLike} />
-            <span className={styles.likeNumber} style={{ color: liked ? "#ff7474" : "#9c9c9c" }}>
+            <img
+              className={styles.likeIcon}
+              src={liked ? likeOn : likeOff}
+              alt="likeOff"
+              onClick={toggleLike}
+            />
+            <span
+              className={styles.likeNumber}
+              style={{ color: liked ? "#ff7474" : "#9c9c9c" }}
+            >
               {postLikeData.length}
             </span>
           </div>

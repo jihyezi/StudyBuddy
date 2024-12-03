@@ -7,7 +7,7 @@ import { useDataContext } from "api/DataContext";
 
 // component
 import Header from "components/Post/DetailHeader";
-import Comment from "components/Post/Comment";
+import StudyComment from "components/Post/StudyComment";
 import DeleteModal from "components/Post/DeleteModal";
 
 // icon & image
@@ -292,7 +292,6 @@ const DetailStudyPost = () => {
     navigate(`/profile/${item}`);
   };
 
-
   return (
     <div>
       <Header title={"Studies"} />
@@ -439,7 +438,7 @@ const DetailStudyPost = () => {
               }}
             >
               {studyComments.map((comment, index) => (
-                <Comment
+                <StudyComment
                   key={comment.commentid}
                   comment={comment}
                   userData={userData}

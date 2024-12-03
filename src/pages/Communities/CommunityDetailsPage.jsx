@@ -155,13 +155,7 @@ const CommunityDetailsPage = ({}) => {
         </div>
         <div className={styles.description}>{Community[0].description}</div>
       </div>
-      <TabList
-        communityData={Community}
-        userData={userData}
-        postData={postData}
-        allUserData={allUserData}
-        joinCommunityData={joinCommunity}
-      />
+      <TabList communityData={Community} postData={postData} />
     </div>
   );
 };

@@ -150,10 +150,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("PostLike")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newLike.userid)
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -195,17 +195,16 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-          .from("Bookmark")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newBookmark.userid)
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
         console.error("Error on mutation:", error.message);
         throw new Error(error.message);
       }
-      console.log("bookmark", data);
       return data;
     },
     onMutate: async ({ newBookmark, bookmarked }) => {
@@ -218,7 +217,6 @@ const Post = ({ postId }) => {
 
       if (bookmarked) {
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          console.log("true bookmark");
           if (!old) return [];
           return old.filter(
             (bookmark) => bookmark.userid !== newBookmark.userid
@@ -226,7 +224,6 @@ const Post = ({ postId }) => {
         });
       } else {
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          console.log("false bookmark");
           if (!old)
             return [{ ...newBookmark, createdat: new Date().toISOString() }];
           return [
@@ -239,16 +236,13 @@ const Post = ({ postId }) => {
       return { previousBookmark };
     },
     onError: (err, { newBookmark }, context) => {
-      queryClient.setQueryData(["postBookmark", postId], context.previousLike);
+      queryClient.setQueryData(
+        ["postBookmark", postId],
+        context.previousBookmark
+      );
     },
     onSettled: async () => {
-      const updatedData = await queryClient.fetchQuery({
-        queryKey: ["postBookmark", postId],
-        queryFn: () => fetchPostLikeData(postId),
-      });
-
-      console.log("updatedData", updatedData.length);
-      queryClient.setQueryData(["postBookmark", postId], updatedData);
+      await queryClient.invalidateQueries(["postBookmark", postId]);
     },
   });
 
@@ -284,7 +278,7 @@ const Post = ({ postId }) => {
     isViewLoading ||
     isAllUser;
 
-  if (loading) {
+  if (loading || Post.length === 0) {
     return (
       <div
         style={{
@@ -326,7 +320,7 @@ const Post = ({ postId }) => {
   const communityName =
     Array.isArray(communityData) && communityData.length > 0
       ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-        ?.name
+          ?.name
       : "Unknown Communityy";
 
   const handlePostClick = () => {

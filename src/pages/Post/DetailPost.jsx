@@ -72,12 +72,11 @@ const fetchAllUserData = async (userId) => {
 
   if (error) throw new Error(error.message);
   return data;
-}
+};
 
-const DetailPost = ({ }) => {
+const DetailPost = ({}) => {
   const { postId } = useParams();
-  const { userData, allUserData, communityData, postData, isLoading } =
-    useDataContext();
+  const { userData, allUserData, communityData, isLoading } = useDataContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -142,10 +141,10 @@ const DetailPost = ({ }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("PostLike")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newLike.userid)
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -193,10 +192,10 @@ const DetailPost = ({ }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-          .from("Bookmark")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newBookmark.userid)
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -260,12 +259,10 @@ const DetailPost = ({ }) => {
     onMutate: async (newComment) => {
       await queryClient.cancelQueries(["postComments", postId]);
 
-      const previousComments = queryClient.getQueryData([
-        "postComments",
-        postId,
-      ]);
+      const previousComments =
+        queryClient.getQueryData(["postComments", postId]) || [];
 
-      queryClient.setQueryData(["postComments", postId], (old) => [
+      queryClient.setQueryData(["postComments", postId], (old = []) => [
         ...old,
         { ...newComment, createdat: new Date().toISOString() },
       ]);
@@ -277,10 +274,16 @@ const DetailPost = ({ }) => {
         ["postComments", postId],
         context.previousComments
       );
+      console.error("댓글 등록 중 오류 발생:", err);
+      alert("댓글 등록에 실패했습니다.");
     },
-    onSettled: () => {
-      setInputValue("");
+    onSettled: async () => {
       queryClient.invalidateQueries(["postComments", postId]);
+
+      const updatedComments = await fetchPostCommentData(postId);
+      queryClient.setQueryData(["postComments", postId], updatedComments);
+
+      setInputValue("");
     },
   });
 
@@ -309,12 +312,12 @@ const DetailPost = ({ }) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-      ?.name
+        ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-      ?.communityid
+        ?.communityid
     : "Unknown Community";
 
   const selectedUserData =
@@ -476,7 +479,6 @@ const DetailPost = ({ }) => {
     navigate(`/profile/${item}`);
   };
 
-  //댓글 등록
   const registerClick = async (event) => {
     if (!userData) {
       alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
@@ -501,12 +503,14 @@ const DetailPost = ({ }) => {
     if (!inputValue.trim()) return;
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newComment = {
       postid: postId,
       userid: userId,
       content: inputValue,
-      createdat: new Date(),
-      updatedat: new Date(),
+      createdat: currentDate,
+      updatedat: currentDate,
     };
 
     commentMutation.mutate(newComment);
@@ -516,7 +520,9 @@ const DetailPost = ({ }) => {
     const updatedComments = postComments.filter(
       (comment) => comment.commentid !== commentId
     );
+    // queryClient.invalidateQueries(["postComments", postId]);
     queryClient.setQueryData(["postComments", postId], updatedComments);
+    queryClient.invalidateQueries(["postComments", postId]);
   };
 
   return (
