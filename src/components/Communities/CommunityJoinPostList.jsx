@@ -2,10 +2,15 @@ import React from "react";
 import Post from "./Post";
 
 const CommunityPostList = ({ postData = [] }) => {
+
+  const sortedPosts = postData.sort((a, b) => {
+    return new Date(b.createdat) - new Date(a.createdat);
+  });
+
   return (
     <div style={{ width: "100%" }}>
-      {postData.length > 0 ? (
-        postData.map((post) => <Post key={post.postid} postId={post.postid} />)
+      {sortedPosts.length > 0 ? (
+        sortedPosts.map((post) => <Post key={post.postid} postId={post.postid} />)
       ) : (
         <div
           style={{

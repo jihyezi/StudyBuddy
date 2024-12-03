@@ -13,7 +13,8 @@ const fetchStudyOnlineData = async () => {
   const { data, error } = await supabase
     .from("Study")
     .select("*")
-    .eq("proceed", "온라인");
+    .eq("proceed", "온라인")
+    .order("createdat", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
