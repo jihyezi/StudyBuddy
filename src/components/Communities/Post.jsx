@@ -70,8 +70,18 @@ const fetchPostViewData = async (postId) => {
   return data;
 };
 
+const fetchAllUserData = async (userId) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 const Post = ({ postId }) => {
-  const { userData, allUserData, communityData, isLoading } = useDataContext();
+  const { userData, communityData, isLoading } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [liked, setLiked] = useState(false);
@@ -108,6 +118,13 @@ const Post = ({ postId }) => {
   const { data: postView = [], isLoading: isViewLoading } = useQuery({
     queryKey: ["postView", postId],
     queryFn: () => fetchPostViewData(postId),
+    onError: (error) => console.log(error.message),
+  });
+
+  const { data: allUser = {}, isLoading: isAllUser } = useQuery({
+    queryKey: ["allUser", postId, userData],
+    queryFn: () => fetchAllUserData(Post[0].userid),
+    select: (data) => (Array.isArray(data) && data.length > 0 ? data[0] : {}),
     onError: (error) => console.log(error.message),
   });
 
@@ -258,7 +275,8 @@ const Post = ({ postId }) => {
     isLikeLoading ||
     isCommentLoading ||
     isBookmarkLoading ||
-    isViewLoading;
+    isViewLoading ||
+    isAllUser;
 
   if (loading || Post.length === 0) {
     return (
@@ -304,21 +322,6 @@ const Post = ({ postId }) => {
       ? communityData.find((comm) => comm.communityid === Post[0].communityid)
           ?.name
       : "Unknown Communityy";
-
-  const userimg =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.profileimage
-      : "Unknown User";
-
-  const userNickname =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.nickname
-      : "Unknown User";
-
-  const userName =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.username
-      : "Unknown User";
 
   const handlePostClick = () => {
     if (!isViewLoading) {
@@ -471,8 +474,8 @@ const Post = ({ postId }) => {
 
       <div className={styles.postDetail}>
         <div>
-          {userimg ? (
-            <img className={styles.userProfile} src={userimg} alt="profile" />
+          {allUser?.profileimage ? (
+            <img className={styles.userProfile} src={allUser?.profileimage} alt="profile" />
           ) : (
             <img className={styles.userProfile} src={noprofile} alt="profile" />
           )}
@@ -480,8 +483,8 @@ const Post = ({ postId }) => {
 
         <div className={styles.postWriterContent}>
           <div className={styles.postWriter}>
-            <span className={styles.postWriterNickName}>{userNickname}</span>
-            <span className={styles.postWriterID}>@{userName}</span>
+            <span className={styles.postWriterNickName}>{allUser?.nickname}</span>
+            <span className={styles.postWriterID}>@{allUser?.username}</span>
             <span className={styles.postWriteDate}>
               {new Date(Post[0].createdat).toLocaleDateString()}
             </span>

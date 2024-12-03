@@ -318,7 +318,7 @@ const DetailStudyPost = () => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick(author?.nickname)}
+          onClick={() => handleProfileClick(author?.username)}
         >
           <img
             className={styles.postWriterProfile}

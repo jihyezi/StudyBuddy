@@ -28,10 +28,10 @@ const SearchResults = () => {
   } = usePostsAndUsers(query);
   const { studies, likesCount, commentsCount } = useStudies(query);
   const loginUser = Object.values(users).filter((p) => p.userid === user.id);
-  console.log("로그인", loginUser);
-  useEffect(() => {
-    console.log("유저 데이터:", users);
-  }, [users]);
+  // console.log("로그인", loginUser);
+  // useEffect(() => {
+  //   console.log("유저 데이터:", users);
+  // }, [users]);
 
   const menuArr = [
     {
@@ -46,7 +46,6 @@ const SearchResults = () => {
               communityname={community.name}
               person={community.membercount}
               post={community.postcount}
-              field={community.field} //////////////확인해봐야함
               date={new Date(community.createdat).toLocaleDateString()}
               field={community.field}
               communityicon="icon_url_here"
@@ -67,7 +66,7 @@ const SearchResults = () => {
             postData={posts}
             communityData={communityInfo}
             userData={loginUser}
-            allUserData={allUserData} // now you can pass allUserData
+            allUserData={allUserData}
             comment={commentData}
           />
         ) : (

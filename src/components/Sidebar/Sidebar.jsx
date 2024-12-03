@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import "fonts/Font.css";
 import { useAuth } from "contexts/AuthContext";
+import { useDataContext } from "api/DataContext";
 import SidebarItem from "components/Sidebar/SidebarItem";
 // Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
@@ -25,8 +26,9 @@ import nopforile from "assets/images/Profile/noprofile.png";
 import LoginModal from "components/Home/LoginModal";
 import PostModal from "components/Sidebar/PostModal";
 
-const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
   const { user, logout } = useAuth();
+  const { userData } = useDataContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [isPostModalOpen, setPostModalOpen] = useState(false);
@@ -38,7 +40,6 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
     if (!user) {
       alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
     } else {
-      // setDropdownVisible(!dropdownVisible);
       setPostModalOpen(true);
     }
   };
@@ -86,14 +87,6 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
     notifications: { off: notifications_off, on: notifications_on },
     messages: { off: messages_off, on: messages_on },
     bookmarks: { off: bookmarks_off, on: bookmarks_on },
-  };
-
-  const handlePostClick = () => {
-    if (!user) {
-      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
-    } else {
-      setDropdownVisible(!dropdownVisible);
-    }
   };
 
   const handleClickOutside = (event) => {
@@ -198,8 +191,8 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
         <div className={styles.menu}>
           <NavLink
             to={
-              loginUser
-                ? `/profile/${loginUser.nickname || "defaultNickname"}`
+              userData
+                ? `/profile/${userData.username || "defaultNickname"}`
                 : "/profile"
             }
             className={({ isActive }) =>
@@ -226,9 +219,9 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
                     borderRadius: "50%",
                   }}
                   src={
-                    loginUser
-                      ? loginUser.profileimage
-                        ? loginUser.profileimage
+                    userData
+                      ? userData.profileimage
+                        ? userData.profileimage
                         : nopforile
                       : profile_off
                   }
@@ -244,27 +237,6 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
             )}
           </NavLink>
         </div>
-
-        {/* <div
-          className={styles.post}
-          onClick={handlePostClick}
-          ref={dropdownRef}
-        >
-          Post
-          {dropdownVisible && (
-            <div className={styles.dropdown}>
-              <Link to="/create-post" className={styles.dropdownItem}>
-                게시물 작성
-              </Link>
-              <Link to="/create-community" className={styles.dropdownItem}>
-                커뮤니티 개설
-              </Link>
-              <Link to="/create-study" className={styles.dropdownItem}>
-                스터디 생성
-              </Link>
-            </div>
-          )}
-        </div> */}
 
         <div className={styles.post} onClick={openPostModal}>
           Post

@@ -6,7 +6,7 @@ import supabase from "components/supabaseClient";
 import leftArrow from "assets/icons/left_arrow.png";
 import rightArrow from "assets/icons/right_arrow.png";
 
-const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
+const Tag = ({ onEventSelect = () => {}, onTagSelect = () => {} }) => {
   const [scrollState, setScrollState] = useState("start");
   const [selectedButton, setSelectedButton] = useState("🔥");
   const [tags, setTags] = useState([]);
@@ -34,7 +34,7 @@ const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
 
     if (onTagSelect) {
       onTagSelect(tag); // 태그 선택 시 onTagSelect 호출
-      console.log("Selected Tag:", tag); // 태그 선택 로그 확인
+      // console.log("Selected Tag:", tag); // 태그 선택 로그 확인
     }
     if (onEventSelect) {
       onEventSelect("click", tag); // 이벤트 선택 시 onEventSelect 호출
@@ -46,7 +46,8 @@ const Tag = ({ onEventSelect = () => { }, onTagSelect = () => { } }) => {
 
     if (current) {
       const isAtStart = current.scrollLeft === 0;
-      const isAtEnd = current.scrollLeft + current.clientWidth >= current.scrollWidth - 8;
+      const isAtEnd =
+        current.scrollLeft + current.clientWidth >= current.scrollWidth - 8;
 
       if (isAtStart) {
         setScrollState("start");
