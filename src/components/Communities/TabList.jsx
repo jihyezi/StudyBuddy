@@ -10,6 +10,12 @@ import MemberPage from "pages/Communities/MemberPage";
 import { useQuery } from "@tanstack/react-query";
 
 // Data
+const fetchPostData = async () => {
+  const { data, error } = await supabase.from("Post").select("*");
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 const fetchJoinCommunityDataById = async (communityId) => {
   const { data, error } = await supabase
     .from("JoinCommunity")
@@ -35,12 +41,18 @@ const fetchUserDataByIds = async (userIds) => {
   return usersData.filter(Boolean);
 };
 
-export const TabList = ({ communityData, userData, postData, allUserData }) => {
+export const TabList = ({ communityData }) => {
   const [currentTab, clickTab] = useState(0);
   const { communityId } = useParams();
   const [adminUsers, setAdminUsers] = useState([]);
   const [memberUsers, setMemberUsers] = useState([]);
   const [popularPost, setPopularPost] = useState([]);
+
+  const { data: postData, isLoading: isPostLoading } = useQuery({
+    queryKey: ["Post"],
+    queryFn: fetchPostData,
+    refetchInterval: 5000,
+  });
 
   const {
     data: joinCommunityData,
@@ -100,10 +112,6 @@ export const TabList = ({ communityData, userData, postData, allUserData }) => {
   const selectMenuHandler = (index) => {
     clickTab(index);
   };
-
-  useEffect(() => {
-    console.log("communitydata", communityData);
-  }, []);
 
   useEffect(() => {
     if (joinCommunityData) {

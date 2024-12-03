@@ -30,8 +30,16 @@ const fetchJoinCommunityData = async (userId) => {
   }
 };
 
+const fetchPostData = async () => {
+  const { data, error } = await supabase.from("Post").select("*");
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
 const Communities = ({}) => {
-  const { userData, communityData, postData, isLoading } = useDataContext();
+  const { userData, communityData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
 
   const { data: joinCommunityData = [], isLoading: isJoinCommunityLoading } =
@@ -40,6 +48,12 @@ const Communities = ({}) => {
       queryFn: () => fetchJoinCommunityData(userData.userid),
       onError: (error) => console.error(error.message),
     });
+
+  const { data: postData = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ["postData"],
+    queryFn: fetchPostData,
+    onError: (error) => console.error(error.message),
+  });
 
   const handleEventSelect = useCallback((event) => {
     setSelectEvent(event);
@@ -83,7 +97,7 @@ const Communities = ({}) => {
       : [];
   }, [postData, communityData, selectedEvent, filteredCommunities]);
 
-  const loading = isLoading || isJoinCommunityLoading;
+  const loading = isLoading || isJoinCommunityLoading || isPostLoading;
 
   return (
     <div className={styles.community}>

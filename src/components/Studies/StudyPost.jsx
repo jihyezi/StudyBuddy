@@ -13,6 +13,16 @@ import share from "assets/icons/share.png";
 import person from "assets/icons/person.png";
 import loadinggif from "assets/images/loading.gif";
 
+const fetchStudyData = async (studyId) => {
+  const { data, error } = await supabase
+    .from("Study")
+    .select("*")
+    .eq("studyid", studyId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 const fetchStudyLikeData = async (studyId) => {
   const { data, error } = await supabase
     .from("StudyLike")
@@ -33,44 +43,47 @@ const fetchStudyCommentData = async (studyId) => {
   return data;
 };
 
-const StudyPost = (props) => {
+const StudyPost = ({ studyId }) => {
   const [liked, setLiked] = useState(false);
-
   const { userData } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user: sessionUser } = useAuth();
+
+  const { data: Study = [], isLoading: isStudyLoading } = useQuery({
+    queryKey: ["Study", studyId],
+    queryFn: () => fetchStudyData(studyId),
+    onError: (error) => console.log(error.message),
+  });
 
   const { data: studyLike = [], isLoading: isLikeLoading } = useQuery({
-    queryKey: ["studyLike", props.study.studyid],
-    queryFn: () => fetchStudyLikeData(props.study.studyid),
+    queryKey: ["studyLike", studyId],
+    queryFn: () => fetchStudyLikeData(studyId),
     staleTime: 0,
     refetchOnWindowFocus: true,
     onError: (error) => console.log(error.message),
   });
 
   const { data: studyComment = [], isLoading: isCommentLoading } = useQuery({
-    queryKey: ["studyComment", props.study.studyid],
-    queryFn: () => fetchStudyCommentData(props.study.studyid),
+    queryKey: ["studyComment", studyId],
+    queryFn: () => fetchStudyCommentData(studyId),
     onError: (error) => console.log(error.message),
   });
 
   useEffect(() => {
+    console.log("fetchStudyData", Study, studyId);
     const checkLike = () => {
       const userLike = studyLike.find(
-        (like) =>
-          like.userid === userData?.userid &&
-          like.studyid === props.study.studyid
+        (like) => like.userid === userData?.userid && like.studyid === studyId
       );
       setLiked(!!userLike);
     };
     if (userData) {
       checkLike();
     }
-  }, [studyLike, userData, props.study.studyid]);
+  }, [studyLike, userData, studyId]);
 
   const handlePostClick = () => {
-    navigate(`/detail-study/${props.study.studyid}`);
+    navigate(`/detail-study/${studyId}`);
   };
 
   const mutation = useMutation({
@@ -79,7 +92,7 @@ const StudyPost = (props) => {
         ? await supabase
             .from("StudyLike")
             .delete()
-            .eq("studyid", props.study.studyid)
+            .eq("studyid", studyId)
             .eq("userid", newLike.userid)
         : await supabase.from("StudyLike").insert([newLike]);
 
@@ -91,20 +104,17 @@ const StudyPost = (props) => {
       return data;
     },
     onMutate: async ({ newLike, liked }) => {
-      await queryClient.cancelQueries(["studyLike", props.study.studyid]);
+      await queryClient.cancelQueries(["studyLike", studyId]);
 
-      const previousLike = queryClient.getQueryData([
-        "studyLike",
-        props.study.studyid,
-      ]);
+      const previousLike = queryClient.getQueryData(["studyLike", studyId]);
 
       if (liked) {
-        queryClient.setQueryData(["studyLike", props.study.studyid], (old) => {
+        queryClient.setQueryData(["studyLike", studyId], (old) => {
           if (!old) return [];
           return old.filter((like) => like.userid !== newLike.userid);
         });
       } else {
-        queryClient.setQueryData(["studyLike", props.study.studyid], (old) => {
+        queryClient.setQueryData(["studyLike", studyId], (old) => {
           if (!old)
             return [{ ...newLike, createdat: new Date().toISOString() }];
           return [...old, { ...newLike, createdat: new Date().toISOString() }];
@@ -114,13 +124,10 @@ const StudyPost = (props) => {
       return { previousLike };
     },
     onError: (err, { newLike }, context) => {
-      queryClient.setQueryData(
-        ["studyLike", props.study.studyid],
-        context.previousLike
-      );
+      queryClient.setQueryData(["studyLike", studyId], context.previousLike);
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries(["studyLike", props.study.studyid]);
+      await queryClient.invalidateQueries(["studyLike", studyId]);
     },
   });
 
@@ -145,7 +152,7 @@ const StudyPost = (props) => {
     const userId = session.user.id;
 
     const newLike = {
-      studyid: props.study.studyid,
+      studyid: studyId,
       createdat: new Date(),
       userid: userId,
     };
@@ -170,7 +177,7 @@ const StudyPost = (props) => {
     }
   };
 
-  const loading = isLikeLoading || isCommentLoading;
+  const loading = isStudyLoading || isLikeLoading || isCommentLoading;
 
   return (
     <div className={styles.StudyPostContainer}>
@@ -189,18 +196,18 @@ const StudyPost = (props) => {
       ) : (
         <div className={styles.StudyPostWrapper} onClick={handlePostClick}>
           <div className={styles.StudyPostTitleContainer}>
-            {props.study.completion === "모집 중" ? (
+            {Study[0].completion === "모집 중" ? (
               <div className={styles.StudyPostState}>모집 중</div>
             ) : (
               <div className={styles.StudyPostState2}>모집완료</div>
             )}
-            <div className={styles.StudyPostTitle}>{props.study.title}</div>
+            <div className={styles.StudyPostTitle}>{Study[0].title}</div>
           </div>
           <div className={styles.StudyPostDescription}>
-            {props.study.description.split("\n")[0]}
+            {Study[0].description.split("\n")[0]}
           </div>
           <div className={styles.StudyPostTags}>
-            {props.study.tag.map((tag, index) => (
+            {Study[0].tag.map((tag, index) => (
               <div key={index} className={styles.StudyPostTag}>
                 {tag}
               </div>
@@ -214,7 +221,7 @@ const StudyPost = (props) => {
                 <div
                   style={{ color: "#606060", fontSize: 12, fontWeight: 500 }}
                 >
-                  {props.study.maxmembers}
+                  {Study[0].maxmembers}
                 </div>
               </div>
               <div
@@ -227,7 +234,7 @@ const StudyPost = (props) => {
                 }}
               />
               <div style={{ color: "#606060", fontSize: 12, fontWeight: 500 }}>
-                {props.study.proceed}
+                {Study[0].proceed}
               </div>
             </div>
             <div className={styles.StudyPostIconGroup}>

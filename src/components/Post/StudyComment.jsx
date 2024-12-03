@@ -20,7 +20,7 @@ const fetchPostCommentData = async (commentId) => {
   return data;
 };
 
-const Comment = ({ comment, userData, allUserData, onDelete }) => {
+const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(comment.content);
@@ -65,7 +65,7 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
 
   const handleDeleteClick = async () => {
     const { data, error } = await supabase
-      .from("Comment")
+      .from("StudyComment")
       .delete()
       .eq("commentid", comment.commentid);
 
@@ -102,7 +102,7 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
     }
 
     const { data, error } = await supabase
-      .from("Comment")
+      .from("StudyComment")
       .update({
         content: editedText,
         updatedat: new Date(),
@@ -255,4 +255,4 @@ const Comment = ({ comment, userData, allUserData, onDelete }) => {
   );
 };
 
-export default Comment;
+export default StudyComment;

@@ -82,7 +82,9 @@ const Online = () => {
           <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
         </div>
       ) : (
-        searchPosts.map((post, index) => <StudyPost key={index} study={post} />)
+        searchPosts.map((post, index) => (
+          <StudyPost key={index} studyId={post.studyid} />
+        ))
       )}
     </div>
   );

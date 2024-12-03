@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import "fonts/Font.css";
 import { useAuth } from "contexts/AuthContext";
@@ -27,6 +27,8 @@ import PostModal from "components/Sidebar/PostModal";
 
 const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isPostModalOpen, setPostModalOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -51,6 +53,19 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
 
   const closeLoginModal = () => {
     setLoginModalOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+
+    const currentPath = location.pathname;
+    if (
+      currentPath === "/create-post" ||
+      currentPath === "/create-community" ||
+      currentPath === "/create-study"
+    ) {
+      navigate("/");
+    }
   };
 
   const menus = [
@@ -103,7 +118,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen, loginUser }) => {
           </Link>
 
           {user ? (
-            <Link to="#" onClick={logout} className={styles.logoutLink}>
+            <Link to="#" onClick={handleLogout} className={styles.logoutLink}>
               로그아웃
             </Link>
           ) : (
