@@ -90,10 +90,10 @@ const StudyPost = ({ studyId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-            .from("StudyLike")
-            .delete()
-            .eq("studyid", studyId)
-            .eq("userid", newLike.userid)
+          .from("StudyLike")
+          .delete()
+          .eq("studyid", studyId)
+          .eq("userid", newLike.userid)
         : await supabase.from("StudyLike").insert([newLike]);
 
       if (error) {

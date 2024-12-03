@@ -228,7 +228,7 @@ const ReviseStudyPost = () => {
 
     for (let i = 0; i < collectedFiles.length; i++) {
       const file = collectedFiles[i];
-      const uniqueFileName = `${uuidv4()}-${file.name}`;
+      const uniqueFileName = `${uuidv4()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
       const { data, error } = await supabase.storage
         .from("Images")
         .upload(`study/${uniqueFileName}`, file);

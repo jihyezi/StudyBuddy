@@ -188,7 +188,7 @@ const Post = () => {
 
     for (let i = 0; i < collectedFiles.length; i++) {
       const file = collectedFiles[i];
-      const uniqueFileName = `${uuidv4()}-${file.name}`;
+      const uniqueFileName = `${uuidv4()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
       const { data, error } = await supabase.storage
         .from("Images")
         .upload(`post/${uniqueFileName}`, file);
@@ -296,7 +296,7 @@ const Post = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header title={"Post"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
@@ -348,7 +348,7 @@ const Post = () => {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
           <div
             style={{
               minHeight: "72px",
@@ -378,6 +378,7 @@ const Post = () => {
             }}
           >
             <InputDate
+              small
               title={"종료날짜"}
               placeholder={"종료날짜를 선택해 주세요."}
               onDateChange={(e) => {
