@@ -296,7 +296,7 @@ const Post = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header title={"Post"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
@@ -348,7 +348,7 @@ const Post = () => {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
           <div
             style={{
               minHeight: "72px",
@@ -378,6 +378,7 @@ const Post = () => {
             }}
           >
             <InputDate
+              small
               title={"종료날짜"}
               placeholder={"종료날짜를 선택해 주세요."}
               onDateChange={(e) => {

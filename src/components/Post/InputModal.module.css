@@ -3,8 +3,6 @@
   flex-direction: row;
   align-items: center;
   gap: 25px;
-  padding-left: 100px;
-  padding-right: 100px;
 }
 
 .inputTitle {

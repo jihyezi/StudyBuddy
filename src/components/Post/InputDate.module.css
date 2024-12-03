@@ -4,8 +4,14 @@
   align-items: center;
   flex-grow: 1;
   gap: 25px;
-  padding-left: 100px;
-  padding-right: 100px;
+}
+
+.inputContainer2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  gap: 25px;
 }
 
 .inputTitle {
@@ -18,7 +24,7 @@
 
 .inputClick {
   flex-grow: 1;
-  width: 350px;
+  width: 300px;
   height: 40px;
   display: flex;
   justify-content: space-between;
