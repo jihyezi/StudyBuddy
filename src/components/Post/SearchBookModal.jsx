@@ -12,8 +12,8 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
   const handleSearch = async () => {
     if (searchTerm.length > 0) {
       try {
-        var client_id = "cmXBh8bXkO6fNXJ9oI8K";
-        var client_secret = "U73K0VaG7_";
+        var client_id = process.env.REACT_APP_SEARCHBOOK_ID;
+        var client_secret = process.env.REACT_APP_SEARCHBOOK_SECRET;
         const api_url = `/api/v1/search/book.json?query=${encodeURI(
           searchTerm
         )}`;
