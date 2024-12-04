@@ -1,0 +1,46 @@
+.home {
+  width: 100%;
+  display: block;
+  flex-direction: column;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.home::-webkit-scrollbar {
+  display: none;
+}
+
+.top {
+  width: 100%;
+  height: 240px;
+  background: #ff7474;
+}
+
+.scrollContainer {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent wrapping of child elements */
+  -ms-overflow-style: none; /* for Internet Explorer and Edge */
+}
+
+.hotCommunityItem {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.newSearch {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.popularStudy {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}

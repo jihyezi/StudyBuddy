@@ -1,0 +1,52 @@
+.background {
+    border-bottom: 1px solid #dddddd;
+    display: flex;
+}
+
+.communityDetailClick {
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    width: 30%;
+  }
+  
+  .communityTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% / 3);
+    height: 60px;
+    margin-top: 20px;
+    position: relative;
+    cursor: pointer;
+    font-family: "NotoSans-Medium";
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .communityTab:hover{
+    background-color: #dddddd;
+  }
+  
+  .communityTabClick {
+    width: calc(100% - 20px);
+    border: 3px solid #ff7474;
+    border-radius: 36px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .communityTabText {
+    color: #606060;
+  }
+  
+  .communityTabText.selected {
+    color: #ff7474; 
+  }
+  
+  .desc {
+    font-family: "NotoSans-Medium";
+    width: 100%;
+  }

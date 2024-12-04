@@ -1,0 +1,25 @@
+.headerContainer{
+  border-bottom: 1px solid #dddddd;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.header {
+  border-bottom: 1px solid #dddddd;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin: 15px 25px 15px 25px;
+  cursor: pointer;
+}
+
+.headerName {
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 18px;
+  vertical-align: middle;
+}

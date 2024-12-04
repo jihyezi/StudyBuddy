@@ -1,0 +1,15 @@
+.studycontainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  max-width: 1200px;
+  border-right: 1px solid #dddddd;
+  margin: 0 0 auto 0; 
+}
+
+.tabstyle {
+  padding-right: 40px;
+  padding-left: 40px;
+}
+  

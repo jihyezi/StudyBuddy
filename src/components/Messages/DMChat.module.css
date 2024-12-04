@@ -1,0 +1,109 @@
+.chatContainer {
+  font-family: "Manrope", sans-serif;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.chatHeader {
+  padding: 12px;
+  font-size: 16px;
+  font-family: "Manrope-Bold";
+  font-weight: 700;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+}
+
+.profileImage {
+  width: 48px;
+  height: 48px;
+  margin-right: 14px;
+  margin-left: 10px;
+  border-radius: 50px;
+  object-fit: cover;
+}
+
+.headerText {
+  flex-grow: 1;
+}
+
+.chatDate {
+  font-size: 0.9em;
+  color: #888;
+  margin-left: 10px;
+}
+
+.deleteIcon {
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.chatContent {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.messageGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.dateDivider {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #888;
+  margin: 10px 0;
+}
+
+.InputContainer {
+  display: flex;
+  padding-top: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatInputContainer {
+  width: calc(100% - 60px);
+  height: 46px;
+  display: flex;
+  border: 1.4px solid #ddd;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 20px;
+  border: none;
+  border-radius: 16px;
+  font-size: 14px;
+  outline: none;
+  font-family: "Manrope-Medium";
+}
+
+.chatButton {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #ff7474;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Manrope-Bold";
+  font-weight: bold;
+}
+
+.noMessagesContainer{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.noMessages {
+  font-size: 20px;
+  font-family: "BalooTammudu2-SemiBold";
+  color: #7b7b7b;
+}

@@ -1,0 +1,121 @@
+.searchBookModal {
+  width: 500px;
+  border: 1px solid #dddddd;
+  border-radius: 30px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 30px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+  z-index: 2000;
+}
+
+.searchBookModalHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px 15px 20px 15px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.closeIcon {
+  width: 24px;
+  height: 24px;
+  padding-top: 6px;
+  cursor: pointer;
+}
+
+.newMessage {
+  color: #969696;
+  font-family: "NotoSans-SemiBold";
+  font-size: 18px;
+}
+
+.send {
+  padding-top: 6px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 20px;
+  background-color: rgba(255, 116, 116, 0.7);
+  color: #ffffff;
+  font-family: "BalooTammudu";
+  cursor: pointer;
+}
+
+.send:hover {
+  background-color: #ff7474;
+}
+
+.searchBookModalMiddle {
+  border-bottom: 1px solid #dddddd;
+  padding: 15px 10px 15px 10px;
+}
+
+.sendTo {
+  color: #969696;
+  font-family: "NotoSans-Regular";
+  margin-right: 10px;
+}
+
+.input {
+  border: none;
+  outline: none;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+  color: #969696;
+}
+
+.input::placeholder {
+  color: #bdbdbd;
+  font-family: "BalooTammudu2-Regular";
+  font-size: 16px;
+}
+
+.resultList {
+  height: 400px;
+  overflow-y: auto;
+}
+
+.directInput {
+  font-family: "NotoSans-SemiBold";
+  height: 45px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.directInput:hover {
+  background-color: rgba(221, 221, 221, 0.2);
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  height: 45px;
+  cursor: pointer;
+  font-family: "NotoSans-SemiBold";
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.resultItem:hover {
+  background-color: rgba(221, 221, 221, 0.2);
+}
+
+.bookImage {
+  width: 20px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.bookTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

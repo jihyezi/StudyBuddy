@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 # StudyBuddy 스터디버디
 <img width="100" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/3f6de1a5-0594-4f95-ab0c-6ea68d27c0d0">
 <br/><br/>
@@ -191,3 +193,4 @@
 
 
 <a href="https://github.com/jihyezi/StudyBuddy"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjihyezi%2FStudyBuddy&count_bg=%23555555&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=GitHub&edge_flat=false"/></a>
+>>>>>>> 49a27a70590fc50725c10c1151e9c9890e334659

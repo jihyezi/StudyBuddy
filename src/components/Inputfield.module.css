@@ -1,0 +1,29 @@
+.InputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+}
+
+.Title {
+    color: #808080;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.InputField {
+    width: 900px; 
+    height: 40px; 
+    padding-left: 16px; 
+    border-radius: 8px; 
+    border-width: 1.5px; 
+    border-style: solid; 
+    border-color: #B6B6B6; 
+    outline-color: #FF7474; 
+} 
+
+.InputField::placeholder {
+    color: #B6B6B6; 
+    font-size: 14px; 
+}
+

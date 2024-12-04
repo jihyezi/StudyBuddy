@@ -1,0 +1,79 @@
+.community {
+  position: relative;
+  padding-bottom: 15px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  max-width: 250px;
+}
+
+.cancelIcon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.communityImageContainer {
+  height: 100px;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.communityImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.communityName {
+  margin-top: 15px;
+  margin-bottom: 0px;
+  margin-left: 15px;
+  color: #ff7474;
+  font-family: "NotoSans-Bold";
+}
+
+.communityDetailIntro {
+  margin-top: 15px;
+  margin-bottom: 0px;
+  margin-left: 15px;
+  margin-right: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #333333;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.communityGroup {
+  margin-top: 10px;
+}
+
+.communityGroupIcon {
+  width: 16px;
+  height: 16px;
+  margin-left: 15px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.communityGroupNumber {
+  color: #333333;
+  font-family: "NotoSans-Regular";
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.join {
+  text-align: center;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #ff7474;
+  font-family: "BalooTammudu";
+}

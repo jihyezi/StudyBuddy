@@ -1,0 +1,86 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.inputTitle {
+  text-align: right;
+  color: #808080;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+}
+
+.addContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #b6b6b6;
+  padding: 6px 10px 6px 10px;
+  cursor: pointer;
+}
+
+.addIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.addText {
+  color: #808080;
+  font-family: "NotoSans-Regular";
+}
+
+.ruleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  padding-left: 100px;
+  padding-right: 100px;
+  margin-top: 30px;
+}
+
+.ruleNumberContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 100px;
+}
+
+.ruleNumber {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #b6b6b6;
+  font-family: "BalooTammudu";
+  font-size: 20px;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #dddddd;
+  width: 30px;
+  height: 30px;
+  padding: 10px;
+}
+
+.ruleTextInput {
+}
+
+.ruleText {
+  flex-grow: 1;
+  color: #b6b6b6;
+  font-family: "NotoSans-SemiBold";
+}
+
+.cancelIcon {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
