@@ -24,8 +24,8 @@ const SearchPlaceModal = ({
   const handleSearch = async () => {
     if (searchTerm.length > 0) {
       try {
-        const client_id = process.env.REACT_APP_SEARCHBOOK_ID;
-        const client_secret = process.env.REACT_APP_SEARCHBOOK_SECRET;
+        const client_id = process.env.NAVER_CLIENT_ID;
+        const client_secret = process.env.NAVER_CLIENT_SECRET;
         const api_url = `/api/v1/search/local.json?query=${encodeURI(
           searchTerm
         )}&display=10`;
