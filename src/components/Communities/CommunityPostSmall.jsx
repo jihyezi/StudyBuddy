@@ -11,8 +11,6 @@ const CommunityPostSmall = (props) => {
     navigate(`/detail-community/${props.communityId}`); // 클릭 시 경로 이동
   };
 
-  console.log(props)
-
   return (
     <div className={styles.communityPostContainer} onClick={handleClick}>
       <div className={styles.communityPostLeft}>
