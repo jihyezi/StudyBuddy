@@ -74,7 +74,7 @@ const fetchAllUserData = async (userId) => {
   return data;
 };
 
-const DetailPost = ({ }) => {
+const DetailPost = ({}) => {
   const { postId } = useParams();
   const { userData, allUserData, communityData, isLoading } = useDataContext();
   const queryClient = useQueryClient();
@@ -141,10 +141,10 @@ const DetailPost = ({ }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("PostLike")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newLike.userid)
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -165,10 +165,11 @@ const DetailPost = ({ }) => {
           return old.filter((like) => like.userid !== newLike.userid);
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postLike", postId], (old) => {
-          if (!old)
-            return [{ ...newLike, createdat: new Date().toISOString() }];
-          return [...old, { ...newLike, createdat: new Date().toISOString() }];
+          if (!old) return [{ ...newLike, createdat: currentDate }];
+          return [...old, { ...newLike, createdat: currentDate }];
         });
       }
 
@@ -192,10 +193,10 @@ const DetailPost = ({ }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-          .from("Bookmark")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newBookmark.userid)
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -221,13 +222,11 @@ const DetailPost = ({ }) => {
           );
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          if (!old)
-            return [{ ...newBookmark, createdat: new Date().toISOString() }];
-          return [
-            ...old,
-            { ...newBookmark, createdat: new Date().toISOString() },
-          ];
+          if (!old) return [{ ...newBookmark, createdat: currentDate }];
+          return [...old, { ...newBookmark, createdat: currentDate }];
         });
       }
 
@@ -262,9 +261,11 @@ const DetailPost = ({ }) => {
       const previousComments =
         queryClient.getQueryData(["postComments", postId]) || [];
 
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
       queryClient.setQueryData(["postComments", postId], (old = []) => [
         ...old,
-        { ...newComment, createdat: new Date().toISOString() },
+        { ...newComment, createdat: currentDate },
       ]);
 
       return { previousComments };
@@ -312,12 +313,12 @@ const DetailPost = ({ }) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-      ?.name
+        ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-      ?.communityid
+        ?.communityid
     : "Unknown Community";
 
   const selectedUserData =
@@ -413,10 +414,12 @@ const DetailPost = ({ }) => {
     }
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
 
     const newLike = {
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
       userid: userId,
     };
 
@@ -444,12 +447,14 @@ const DetailPost = ({ }) => {
     }
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
 
     const newBookmark = {
       userid: userId,
       communityid: Post[0].communityid,
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
     };
 
     bookmarkMutation.mutate({ newBookmark, bookmarked });
@@ -689,8 +694,10 @@ const DetailPost = ({ }) => {
             >
               {postComments.map((comment, index) => (
                 <Comment
-                  key={index}
+                  key={comment.commentid}
                   comment={comment}
+                  postId={postId}
+                  commentId={comment.commentid}
                   userData={userData}
                   allUserData={allUserData}
                   onDelete={handleCommentDelete}

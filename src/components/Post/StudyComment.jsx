@@ -9,33 +9,60 @@ import profile1 from "assets/images/Profile/profile1.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
+import loadinggif from "assets/images/loading.gif";
 
-const fetchPostCommentData = async (commentId) => {
+const fetchPostCommentData = async ({ studyId, commentId }) => {
   const { data, error } = await supabase
-    .from("Comment")
+    .from("StudyComment")
     .select("*")
+    .eq("studyid", studyId)
     .eq("commentid", commentId);
 
   if (error) throw new Error(error.message);
   return data;
 };
 
-const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
+const fetchAllUserData = async (userId) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("userid", userId)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const StudyComment = ({ comment, studyId, commentId, userData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(comment.content);
   const [editedText, setEditedText] = useState(comment.content);
 
-  const { data: postComments = [], isLoading: isPostCommentLoading } = useQuery(
-    {
-      queryKey: ["postComments", comment.commentid],
-      queryFn: () => fetchPostCommentData(comment.commentid),
-      onError: (error) => console.log(error.message),
-    }
-  );
+  const {
+    data: studyComments = [],
+    isLoading: isPostCommentLoading,
+    refetch: refetchComment,
+  } = useQuery({
+    queryKey: ["studyComments", { studyId, commentId }],
+    queryFn: () => fetchPostCommentData({ studyId, commentId }),
+    onError: (error) => console.log(error.message),
+  });
+
+  const { data: allUser, refetch } = useQuery({
+    queryKey: ["allUser", comment.userid],
+    queryFn: () => fetchAllUserData(comment.userid),
+    enabled: false,
+    onError: (error) => console.log(error.message),
+  });
 
   useEffect(() => {
-    console.log("postComments", postComments);
+    if (isEditing === false) {
+      refetch();
+    }
+  }, [isEditing, refetch]);
+
+  useEffect(() => {
     if (showOptions) {
       document.addEventListener("click", handleClickOutside);
     } else {
@@ -44,7 +71,7 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [showOptions]);
+  }, [showOptions, studyComments, studyId, commentId]);
 
   const moreClick = (event) => {
     event.stopPropagation();
@@ -70,14 +97,13 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
       .eq("commentid", comment.commentid);
 
     if (error) {
-      console.error("댓글 삭제 실패:", error);
+      console.error("Error updating comment:", error);
     } else {
-      console.log("댓글 삭제 성공:", data);
-      // setCommentText("");
       onDelete(comment.commentid);
     }
 
     setShowOptions(false);
+    refetchComment();
   };
 
   const handleCancel = () => {
@@ -101,20 +127,22 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
       return;
     }
 
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const { data, error } = await supabase
       .from("StudyComment")
       .update({
         content: editedText,
-        updatedat: new Date(),
+        updatedat: currentDate,
       })
       .eq("commentid", comment.commentid);
 
     if (error) {
       console.error("Error updating comment:", error);
     } else {
-      console.log("Comment updated successfully:", data);
       setCommentText(editedText);
       setIsEditing(false);
+      refetchComment();
     }
   };
 
@@ -142,9 +170,21 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
     }
   };
 
-  const commentAuthor = allUserData.filter(
-    (user) => user.userid === comment.userid
-  )[0];
+  if (isPostCommentLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} alt="Loading..." />
+      </div>
+    );
+  }
 
   return isEditing ? (
     <div className={styles.editClick}>
@@ -166,7 +206,7 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
             marginTop: "15px",
           }}
         >
-          {commentAuthor?.nickname || "닉네임"}
+          {allUser?.nickname || "닉네임"}
         </div>
         <textarea
           className={styles.inputField}
@@ -195,7 +235,7 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
       <div>
         <img
           className={styles.commentWriterProfile}
-          src={commentAuthor?.profileimage || noprofile}
+          src={allUser?.profileimage || noprofile}
           alt="noprofile"
         />
       </div>
@@ -212,10 +252,10 @@ const StudyComment = ({ comment, userData, allUserData, onDelete }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className={styles.commentWriter}>
             <span className={styles.commentWriterNickname}>
-              {commentAuthor?.nickname || "닉네임"}
+              {allUser?.nickname || "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
-              {formatDate(comment.updatedat) || "날짜 없음"}
+              {formatDate(studyComments[0]?.updatedat) || "날짜 없음"}
             </span>
           </div>
           {userData && comment.userid === userData.userid && (
