@@ -8,11 +8,13 @@ import more from "assets/icons/Communities/more.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
+import loadinggif from "assets/images/loading.gif";
 
-const fetchPostCommentData = async (commentId) => {
+const fetchPostCommentData = async ({ postId, commentId }) => {
   const { data, error } = await supabase
     .from("Comment")
     .select("*")
+    .eq("postid", postId)
     .eq("commentid", commentId);
 
   if (error) throw new Error(error.message);
@@ -30,19 +32,23 @@ const fetchAllUserData = async (userId) => {
   return data;
 };
 
-const Comment = ({ comment, userData, onDelete }) => {
+const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(comment.content);
   const [editedText, setEditedText] = useState(comment.content);
 
-  const { data: postComments = [], isLoading: isPostCommentLoading } = useQuery(
-    {
-      queryKey: ["postComments", comment.commentid],
-      queryFn: () => fetchPostCommentData(comment.commentid),
-      onError: (error) => console.log(error.message),
-    }
-  );
+  const {
+    data: postComments = [],
+    isLoading: isPostCommentLoading,
+    refetch: refetchComment,
+  } = useQuery({
+    queryKey: ["postComments", { postId, commentId }],
+    queryFn: () => fetchPostCommentData({ postId, commentId }),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    onError: (error) => console.log(error.message),
+  });
 
   const { data: allUser, refetch } = useQuery({
     queryKey: ["allUser", comment.userid],
@@ -58,7 +64,6 @@ const Comment = ({ comment, userData, onDelete }) => {
   }, [isEditing, refetch]);
 
   useEffect(() => {
-    console.log("postComments", postComments);
     if (showOptions) {
       document.addEventListener("click", handleClickOutside);
     } else {
@@ -67,7 +72,7 @@ const Comment = ({ comment, userData, onDelete }) => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [showOptions]);
+  }, [showOptions, postComments, postId]);
 
   const moreClick = (event) => {
     event.stopPropagation();
@@ -93,14 +98,12 @@ const Comment = ({ comment, userData, onDelete }) => {
       .eq("commentid", comment.commentid);
 
     if (error) {
-      console.error("댓글 삭제 실패:", error);
     } else {
-      console.log("댓글 삭제 성공:", data);
-      // setCommentText("");
       onDelete(comment.commentid);
     }
 
     setShowOptions(false);
+    refetchComment();
   };
 
   const handleCancel = () => {
@@ -124,20 +127,21 @@ const Comment = ({ comment, userData, onDelete }) => {
       return;
     }
 
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const { data, error } = await supabase
       .from("Comment")
       .update({
         content: editedText,
-        updatedat: new Date(),
+        updatedat: currentDate,
       })
       .eq("commentid", comment.commentid);
 
     if (error) {
-      console.error("Error updating comment:", error);
     } else {
-      console.log("Comment updated successfully:", data);
       setCommentText(editedText);
       setIsEditing(false);
+      refetchComment();
     }
   };
 
@@ -164,6 +168,22 @@ const Comment = ({ comment, userData, onDelete }) => {
       return `${years}년 전`;
     }
   };
+
+  if (isPostCommentLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={loadinggif} style={{ width: "80px" }} alt="Loading..." />
+      </div>
+    );
+  }
 
   return isEditing ? (
     <div className={styles.editClick}>
@@ -234,7 +254,7 @@ const Comment = ({ comment, userData, onDelete }) => {
               {allUser?.nickname || "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
-              {formatDate(comment.updatedat) || "날짜 없음"}
+              {formatDate(postComments[0]?.updatedat) || "날짜 없음"}
             </span>
           </div>
           {userData && comment.userid === userData.userid && (

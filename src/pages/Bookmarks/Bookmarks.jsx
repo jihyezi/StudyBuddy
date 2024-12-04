@@ -13,6 +13,15 @@ import BookmarkJoin from "components/Bookmark/BookmarkJoin";
 import loadinggif from "assets/images/loading.gif";
 
 // Data
+
+const fetchPostData = async () => {
+  const { data, error } = await supabase.from("Post").select("*");
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
 const fetchAllJoinCommunityData = async () => {
   const { data, error } = await supabase.from("JoinCommunity").select("*");
   if (error) throw new Error("fetching allJoinCommunityData error");
@@ -28,7 +37,13 @@ const fetchBookmarks = async (userId) => {
   return data;
 };
 
-const Bookmarks = ({ userData, allUserData, communityData, postData }) => {
+const Bookmarks = ({ userData, allUserData, communityData }) => {
+  const { data: postData = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ["postData"],
+    queryFn: fetchPostData,
+    onError: (error) => console.error(error.message),
+  });
+
   const { data: allJoinCommunityData } = useQuery({
     queryKey: ["allJoinCommunity", userData?.userid],
     queryFn: fetchAllJoinCommunityData,
@@ -69,25 +84,20 @@ const Bookmarks = ({ userData, allUserData, communityData, postData }) => {
         />
       </div>
 
-      {bookmarksLoading ? (
+      {bookmarksLoading || isPostLoading ? (
         <div
           style={{
-            display: 'flex',
-            width: '100%',
-            height: '100vh',
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: "flex",
+            width: "100%",
+            height: "100vh",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <img src={loadinggif} style={{ width: '80px' }} />
+          <img src={loadinggif} style={{ width: "80px" }} />
         </div>
       ) : (
-        <JoinPostList
-          communityData={communityData}
-          postData={filterPost}
-          allUserData={allUserData}
-          userData={userData}
-        />
+        <JoinPostList postData={filterPost} />
       )}
     </div>
   );

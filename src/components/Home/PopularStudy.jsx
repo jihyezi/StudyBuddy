@@ -8,9 +8,6 @@ import member from "assets/icons/Home/member.png";
 import circle from "assets/icons/Home/circle.png";
 
 const PopularStudy = ({ study, onClick }) => {
-  useEffect(() => {
-    console.log("study", study);
-  }, []);
   return (
     <div className={styles.study} onClick={onClick}>
       <img className={styles.studyImage} src={cat} alt="cat" />

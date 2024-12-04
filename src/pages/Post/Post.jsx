@@ -188,7 +188,10 @@ const Post = () => {
 
     for (let i = 0; i < collectedFiles.length; i++) {
       const file = collectedFiles[i];
-      const uniqueFileName = `${uuidv4()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
+      const uniqueFileName = `${uuidv4()}-${file.name.replace(
+        /[^a-zA-Z0-9.]/g,
+        ""
+      )}`;
       const { data, error } = await supabase.storage
         .from("Images")
         .upload(`post/${uniqueFileName}`, file);
@@ -241,6 +244,8 @@ const Post = () => {
         }
       }
 
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
       const { data: postData, error: postError } = await supabase
         .from("Post")
         .insert([
@@ -254,8 +259,8 @@ const Post = () => {
             result: result,
             content: finalDescription,
             references: downloadUrls,
-            createdat: new Date(),
-            updatedat: new Date(),
+            createdat: currentDate,
+            updatedat: currentDate,
           },
         ])
         .select();
@@ -267,6 +272,9 @@ const Post = () => {
         navigate(`/detail-post/${postData[0].postid}`);
       }
     } else {
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
+
       const { data: postData, error: postError } = await supabase
         .from("Post")
         .insert([
@@ -280,8 +288,8 @@ const Post = () => {
             result: result,
             content: finalDescription,
             // references: downloadUrls,
-            createdat: new Date(),
-            updatedat: new Date(),
+            createdat: currentDate,
+            updatedat: currentDate,
           },
         ])
         .select();
@@ -348,7 +356,13 @@ const Post = () => {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <div
             style={{
               minHeight: "72px",

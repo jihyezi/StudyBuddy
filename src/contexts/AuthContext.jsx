@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
       } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
-      console.log("Fetched session:", session);
     };
 
     fetchSession();
@@ -24,7 +23,6 @@ export const AuthProvider = ({ children }) => {
       (_, session) => {
         setUser(session?.user ?? null);
         setLoading(false);
-        console.log("Auth state changed:", session);
       }
     );
 

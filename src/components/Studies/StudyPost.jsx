@@ -55,11 +55,16 @@ const StudyPost = ({ studyId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: studyLike = [], isLoading: isLikeLoading } = useQuery({
+  const {
+    data: studyLike = [],
+    isLoading: isLikeLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["studyLike", studyId],
     queryFn: () => fetchStudyLikeData(studyId),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    initialData: [],
     onError: (error) => console.log(error.message),
   });
 
@@ -70,7 +75,6 @@ const StudyPost = ({ studyId }) => {
   });
 
   useEffect(() => {
-    console.log("fetchStudyData", Study, studyId);
     const checkLike = () => {
       const userLike = studyLike.find(
         (like) => like.userid === userData?.userid && like.studyid === studyId
@@ -90,10 +94,10 @@ const StudyPost = ({ studyId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("StudyLike")
-          .delete()
-          .eq("studyid", studyId)
-          .eq("userid", newLike.userid)
+            .from("StudyLike")
+            .delete()
+            .eq("studyid", studyId)
+            .eq("userid", newLike.userid)
         : await supabase.from("StudyLike").insert([newLike]);
 
       if (error) {
@@ -125,6 +129,9 @@ const StudyPost = ({ studyId }) => {
     },
     onError: (err, { newLike }, context) => {
       queryClient.setQueryData(["studyLike", studyId], context.previousLike);
+    },
+    onSuccess: (data) => {
+      refetch();
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(["studyLike", studyId]);

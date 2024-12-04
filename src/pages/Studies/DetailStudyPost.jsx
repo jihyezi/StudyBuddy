@@ -440,6 +440,8 @@ const DetailStudyPost = () => {
               {studyComments.map((comment, index) => (
                 <StudyComment
                   key={comment.commentid}
+                  studyId={studyId}
+                  commentId={comment.commentid}
                   comment={comment}
                   userData={userData}
                   allUserData={allUserData}
