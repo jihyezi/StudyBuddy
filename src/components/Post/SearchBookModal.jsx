@@ -12,8 +12,8 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
   const handleSearch = async () => {
     if (searchTerm.length > 0) {
       try {
-        var client_id = process.env.NAVER_CLIENT_ID;
-        var client_secret = process.env.NAVER_CLIENT_SECRET;
+        var client_id = process.env.REACT_APP_NAVER_CLIENT_ID;
+        var client_secret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
         const api_url = `/api/v1/search/book.json?query=${encodeURI(
           searchTerm
         )}`;
