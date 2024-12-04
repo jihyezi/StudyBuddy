@@ -78,7 +78,7 @@ const fetchAllUserData = async (userId) => {
 
   if (error) throw new Error(error.message);
   return data;
-}
+};
 
 const Post = ({ postId }) => {
   const { userData, communityData, isLoading } = useDataContext();
@@ -95,7 +95,11 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postLike = [], isLoading: isLikeLoading, refetch } = useQuery({
+  const {
+    data: postLike = [],
+    isLoading: isLikeLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["postLike", postId],
     queryFn: () => fetchPostLikeData(postId),
     staleTime: 0,
@@ -110,9 +114,15 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postBookmark = [], isLoading: isBookmarkLoading } = useQuery({
+  const {
+    data: postBookmark = [],
+    isLoading: isBookmarkLoading,
+    refetch: refetchBookmark,
+  } = useQuery({
     queryKey: ["postBookmark", postId],
     queryFn: () => fetchPostBookmarkData(postId),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     onError: (error) => console.log(error.message),
   });
 
@@ -151,10 +161,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("PostLike")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newLike.userid)
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -175,10 +185,11 @@ const Post = ({ postId }) => {
           return old.filter((like) => like.userid !== newLike.userid);
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postLike", postId], (old) => {
-          if (!old)
-            return [{ ...newLike, createdat: new Date().toISOString() }];
-          return [...old, { ...newLike, createdat: new Date().toISOString() }];
+          if (!old) return [{ ...newLike, createdat: currentDate }];
+          return [...old, { ...newLike, createdat: currentDate }];
         });
       }
 
@@ -199,10 +210,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-          .from("Bookmark")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newBookmark.userid)
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -227,13 +238,11 @@ const Post = ({ postId }) => {
           );
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          if (!old)
-            return [{ ...newBookmark, createdat: new Date().toISOString() }];
-          return [
-            ...old,
-            { ...newBookmark, createdat: new Date().toISOString() },
-          ];
+          if (!old) return [{ ...newBookmark, createdat: currentDate }];
+          return [...old, { ...newBookmark, createdat: currentDate }];
         });
       }
 
@@ -244,6 +253,9 @@ const Post = ({ postId }) => {
         ["postBookmark", postId],
         context.previousBookmark
       );
+    },
+    onSuccess: (data) => {
+      refetchBookmark();
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(["postBookmark", postId]);
@@ -324,7 +336,7 @@ const Post = ({ postId }) => {
   const communityName =
     Array.isArray(communityData) && communityData.length > 0
       ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-        ?.name
+          ?.name
       : "Unknown Communityy";
 
   const handlePostClick = () => {
@@ -352,10 +364,11 @@ const Post = ({ postId }) => {
     }
 
     const userId = session.user.id;
-
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newLike = {
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
       userid: userId,
     };
 
@@ -383,12 +396,13 @@ const Post = ({ postId }) => {
     }
 
     const userId = session.user.id;
-
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newBookmark = {
       userid: userId,
       communityid: Post[0].communityid,
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
     };
 
     bookmarkMutation.mutate({ newBookmark, bookmarked });
@@ -479,7 +493,11 @@ const Post = ({ postId }) => {
       <div className={styles.postDetail}>
         <div>
           {allUser?.profileimage ? (
-            <img className={styles.userProfile} src={allUser?.profileimage} alt="profile" />
+            <img
+              className={styles.userProfile}
+              src={allUser?.profileimage}
+              alt="profile"
+            />
           ) : (
             <img className={styles.userProfile} src={noprofile} alt="profile" />
           )}
@@ -487,7 +505,9 @@ const Post = ({ postId }) => {
 
         <div className={styles.postWriterContent}>
           <div className={styles.postWriter}>
-            <span className={styles.postWriterNickName}>{allUser?.nickname}</span>
+            <span className={styles.postWriterNickName}>
+              {allUser?.nickname}
+            </span>
             <span className={styles.postWriterID}>@{allUser?.username}</span>
             <span className={styles.postWriteDate}>
               {new Date(Post[0].createdat).toLocaleDateString()}
