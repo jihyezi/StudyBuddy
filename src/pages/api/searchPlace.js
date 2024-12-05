@@ -12,6 +12,7 @@ export default async function handler(req, res) {
                 "X-Naver-Client-Secret": process.env.REACT_APP_NAVER_CLIENT_SECRET,
             },
         });
+        res.setHeader('Cache-Control', 'no-store');
         res.status(200).json(response.data);
     } catch (error) {
         console.error("Error fetching data from Naver API:", error);
