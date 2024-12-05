@@ -24,18 +24,7 @@ const SearchPlaceModal = ({
   const handleSearch = async () => {
     if (searchTerm.length > 0) {
       try {
-        const client_id = process.env.NAVER_CLIENT_ID;
-        const client_secret = process.env.NAVER_CLIENT_SECRET;
-        const api_url = `/api/v1/search/local.json?query=${encodeURI(
-          searchTerm
-        )}&display=10`;
-        const options = {
-          headers: {
-            "X-Naver-Client-Id": client_id,
-            "X-Naver-Client-Secret": client_secret,
-          },
-        };
-        const response = await axios.get(api_url, options);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/searchPlace?query=${encodeURIComponent(searchTerm)}`);
 
         // HTML 태그 제거 함수
         const removeHtmlTags = (str) => {
