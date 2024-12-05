@@ -9,6 +9,14 @@
       { "src": "/(.*)", "dest": "/public/$1" },    
       { "handle": "filesystem" },                  
       { "src": "/(.*)", "dest": "server.js" }      
-    ]  
-  }
-  
+    ],
+    "headers": [
+      {
+        "source": "/api/(.*)",
+        "headers": [
+          { "key": "Access-Control-Allow-Origin", "value": "*" },
+          { "key": "Content-Type", "value": "application/json" }
+        ]
+      }
+    ]
+}
