@@ -1,0 +1,254 @@
+/* Explore */
+.Explore {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+} 
+
+.PopularTagContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0px;
+}
+
+.CategoryText {
+  position: relative;
+  font-weight: 700;
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.CategoryTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1084px;
+  max-width: 1200px;
+}
+
+.HotCommunitiesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0px;
+}
+
+.HotCommunity{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.HotCommunityContainer {
+  position: relative;
+  width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.PopularStudyContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0px;
+}
+
+.StudyPostContainer {
+  position: relative;
+  width: 1084px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* CommonLayout */
+.CommonLayout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.SearchContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  position: relative; 
+}
+
+.InputContainer {
+  display: flex;
+}
+
+.InputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.SearchInput {
+  width: 800px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 0px 0px 0px 45px;
+  font-size: 15px;
+  font-weight: 700;
+  color: "black";
+  margin-right: 30px;
+  outline: none;
+}
+
+.SearchInput:focus {
+  border-color: #ff7474;
+}
+
+.SearchInput::placeholder {
+  color: #b6b6b6; /* placeholder 텍스트 색상 */
+  font-size: 15px; /* placeholder 텍스트 크기 */
+  font-weight: 700;
+}
+
+.SearchIcon {
+  position: absolute;
+  left: 10px;
+  width: 24px; /* 아이콘 크기 조정 */
+  height: 24px; /* 아이콘 크기 조정 */
+  opacity: 1; /* 아이콘을 보이게 설정 */
+}
+
+.SearchButton {
+  width: 78px;
+  height: 48px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: "BalooTammudu2-Bold";
+  background-color: #ff7474;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center; /* 가로 방향 중앙 정렬 */
+  align-items: center; /* 세로 방향 중앙 정렬 */
+  cursor: pointer;
+}
+
+.SearchButton:hover {
+  background-color: #e76969;
+}
+
+.SearchHistoryContainer {
+  position: absolute;
+  width: 840px;
+  /* 위치 조정 필요 */
+  top: 50px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.SearchHistoryList {
+  font-size: 16px;
+  font-family: "Manrope-SemiBold";
+  font-weight: 600;
+  color: #333;
+  list-style-type: none;
+  padding-top: 10px;
+}
+
+.SearchText {
+  padding-bottom: 10px;
+  font-family: "Manrope-SemiBold";
+  color: #333;
+}
+
+.SearchHistoryItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.SearchHistoryItem:hover {
+  /* background: #ececec; */
+  border: 1px solid #333;
+}
+
+.HistoryTextContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttonContainer {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.deletebutton {
+  background-color: white;
+  border: none; /* 테두리를 제거 */
+  cursor: pointer; /* 마우스를 올렸을 때 포인터로 변경 */
+  font-size: 16px; /* 텍스트 크기를 적당히 설정 */
+  padding: 0; /* 기본 패딩 제거 */
+  margin-right: 50px;
+}
+
+.deletebutton:hover {
+  background: #ececec;
+}
+
+
+
+
+
+.tagContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.arrowButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  padding: 4px 8px 4px 8px;
+}
+
+.tagButton {
+  height: 32px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  padding: 4px 8px 4px 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #656565;
+}
+
+.hotCommunityItem {
+  margin-right: 25px; 
+}
+
+
+
+
+
+

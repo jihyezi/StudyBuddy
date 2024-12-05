@@ -1,0 +1,270 @@
+.studiesStatus {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: inline-block;
+  padding: 5px 20px 5px 20px;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #ff7474;
+  font-family: "NotoSans-SemiBold";
+}
+
+.studiesTitle {
+  margin-top: 30px;
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 36px;
+}
+
+.postWriterProfile,
+.commentWriterProfile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.postWriterNickname {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+}
+
+.postWriteDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #606060;
+  font-family: "NotoSans-Medium";
+}
+.revise,
+.delete {
+  color: #606060;
+  font-family: "NotoSans-Medium";
+  cursor: pointer;
+}
+
+.studiesDetails {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.studiesDetailIndex {
+  color: #606060;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+  text-align: right;
+}
+
+.studiesDetail {
+  color: #333333;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+}
+
+.studiesIntro {
+  padding-bottom: 24px;
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 24px;
+  border-bottom: 3px solid #dddddd;
+}
+
+.studiesComments {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 25px;
+  padding-bottom: 25px;
+  border-bottom: 3px solid #dddddd;
+}
+
+.studiesComment {
+  color: #333333;
+  font-family: "NotoSans-Bold";
+  font-size: 24px;
+}
+
+.likeIcon,
+.bookmarkIcon,
+.shareIcon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.studiesContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #333333;
+  font-family: "NotoSans-Medium";
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+
+.postDetailFile {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 15px 10px 15px;
+}
+
+.filename {
+  min-width: 250px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #606060;
+  font-family: "NotoSans-Regular";
+}
+
+.folderIcon,
+.downloadIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.moreButton {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
+
+.moreIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.moreClick {
+  position: absolute;
+  top: 30%;
+  right: 0;
+  z-index: 10;
+}
+
+.moreClickEdit,
+.moreClickDelete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+  padding: 8px;
+  background-color: #c8c8c8;
+  cursor: pointer;
+}
+
+.moreClickEdit {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom: 1px solid #ffffff;
+}
+
+.moreClickDelete {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.moreClickEditText,
+.moreClickDeleteText {
+  color: white;
+}
+
+.moreClickEditIcon,
+.moreClickDeleteIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.commentWriter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.commentWriterNickname {
+  color: #2d2d2d;
+  font-family: "NotoSans-SemiBold";
+}
+
+.commentWriterDate {
+  color: #9e9e9e;
+  font-family: "NotoSans-Regular";
+}
+
+.comments {
+  color: #2d2d2d;
+  font-family: "NotoSans-Regular";
+}
+
+.reply {
+  color: #9e9e9e;
+  font-family: "NotoSans-Regular";
+  font-size: 12px;
+}
+
+.inputField {
+  flex-grow: 1;
+  height: 100px;
+  padding-left: 15px;
+  border: none;
+  outline: none;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.inputField::placeholder {
+  color: #dddddd;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.register {
+  color: #ff7474;
+  font-family: "NotoSans-Medium";
+  align-self: flex-end;
+  padding: 5px 20px;
+  cursor: pointer;
+}
+
+.editClick {
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.cancelAndRegister {
+  display: flex;
+  flex-direction: row;
+  font-family: "NotoSans-Medium";
+  align-self: flex-end;
+}
+
+.cancel {
+  padding: 10px 25px 10px 25px;
+  color: #9c9c9c;
+  cursor: pointer;
+}
+
+.editRegister {
+  padding: 10px 25px 10px 25px;
+  border-radius: 10px;
+  color: #ff7474;
+  background-color: rgba(255, 116, 116, 0.12);
+  cursor: pointer;
+}
+
+.image {
+  max-width: 800px;
+  object-fit: contain;
+}

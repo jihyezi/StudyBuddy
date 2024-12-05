@@ -1,0 +1,130 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  gap: 25px;
+}
+
+.inputContainer2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  gap: 25px;
+}
+
+.inputTitle {
+  text-align: right;
+  color: #808080;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+}
+
+.inputClick {
+  flex-grow: 1;
+  width: 300px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #b6b6b6;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.inputPlaceholder {
+  color: #808080;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.inputIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.arrowIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.datePickerContainer {
+  position: absolute;
+  top: 27%;
+  z-index: 1000;
+}
+
+.customHeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  margin-top: 8px;
+  padding: 0 12px 0 24px;
+
+  .month {
+    width: 100px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 800;
+    font-family: "NotoSans-SemiBold";
+    color: black;
+    padding-right: 10px;
+  }
+
+  .year {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding-right: 5px;
+    cursor: pointer;
+    font-family: "NotoSans-SemiBold";
+  }
+
+  .monthButton {
+    width: 34px;
+    height: 34px;
+    padding: 5px;
+    /* border-radius: 50%; */
+    border: none;
+    background-color: white;
+
+    + .monthButton {
+      margin-left: 24px;
+    }
+
+    &:hover {
+      border-radius: 50%;
+      /* background-color: rgba(255, 116, 116, 0.2); */
+      cursor: pointer;
+    }
+
+    &:disabled {
+      cursor: default;
+      background-color: white;
+
+      svg {
+        fill: white;
+      }
+    }
+  }
+}
+
+.calenderWrapper {
+  background-color: white;
+  color: WHITE;
+}

@@ -1,0 +1,60 @@
+.allContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20px;
+    gap: 26px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.filter {
+    width: 140px;
+}
+
+.searchinputfiled {
+    display: flex;
+    flex-direction: row;
+}
+
+.InputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.SearchIcon {
+    position: absolute;
+    left: 10px;
+    width: 24px;
+    height: 24px; 
+    opacity: 1;
+}
+
+.SearchInput {
+    width: 400px;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px solid #b6b6b6;
+    padding: 0px 0px 0px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-right: 20px;
+    outline: none;
+}
+
+.SearchInput::placeholder {
+    color: #b6b6b6; 
+    font-size: 14px; 
+    font-weight: 600;
+}
+
+.SearchInput:focus{
+    border: 1.2px solid #ff7474;
+}

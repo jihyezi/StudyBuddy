@@ -1,10 +1,11 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import SidebarItem from "components/Sidebar/SidebarItem";
-import "fonts/Font.css";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
-
-//icons
+import "fonts/Font.css";
+import { useAuth } from "contexts/AuthContext";
+import { useDataContext } from "api/DataContext";
+import SidebarItem from "components/Sidebar/SidebarItem";
+// Icons
 import logo from "assets/icons/Sidebar/studybuddyLogo.png";
 import home_off from "assets/icons/Sidebar/home_off.png";
 import home_on from "assets/icons/Sidebar/home_on.png";
@@ -21,18 +22,61 @@ import messages_on from "assets/icons/Sidebar/messages_on.png";
 import bookmarks_off from "assets/icons/Sidebar/bookmarks_off.png";
 import bookmarks_on from "assets/icons/Sidebar/bookmarks_on.png";
 import profile_off from "assets/icons/Sidebar/profile_off.png";
-import profile_on from "assets/icons/Sidebar/profile_on.png";
+import nopforile from "assets/images/Profile/noprofile.png";
+import LoginModal from "components/Home/LoginModal";
+import PostModal from "components/Sidebar/PostModal";
 
-const Sidebar = ({}) => {
+const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
+  const { user, logout } = useAuth();
+  const { userData } = useDataContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isPostModalOpen, setPostModalOpen] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const openPostModal = () => {
+    if (!user) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
+    } else {
+      setPostModalOpen(true);
+    }
+  };
+
+  const closePostModal = () => {
+    setPostModalOpen(false);
+  };
+
+  const openLoginModal = () => {
+    setLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setLoginModalOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+
+    const currentPath = location.pathname;
+    if (
+      currentPath === "/create-post" ||
+      currentPath === "/create-community" ||
+      currentPath === "/create-study"
+    ) {
+      navigate("/");
+    }
+  };
+
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
     { name: "Communities", path: "/communities", text: "communities" },
     { name: "Studies", path: "/studies", text: "studies" },
-    { name: "Notifications", path: "/notifications", text: "notifications" },
+    { name: "Notifications", path: "#", text: "notifications" },
     { name: "Messages", path: "/messages", text: "messages" },
     { name: "Bookmarks", path: "/bookmarks", text: "bookmarks" },
-    { name: "Profile", path: "/profile", text: "profile" },
   ];
 
   const iconMapping = {
@@ -43,21 +87,69 @@ const Sidebar = ({}) => {
     notifications: { off: notifications_off, on: notifications_on },
     messages: { off: messages_off, on: messages_on },
     bookmarks: { off: bookmarks_off, on: bookmarks_on },
-    profile: { off: profile_off, on: profile_on },
   };
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div style={{ alignItems: "flex-end" }}>
-      <div className={styles.side}>
-        <div className={styles.menus}>
+    <div className={styles.side}>
+      <div className={styles.menus}>
+        <div className={styles.logoAndLogout}>
           <Link to={"/"}>
             <img className={styles.logo} src={logo} alt="logo" />
           </Link>
 
-          {menus.map((menu, index) => {
-            const { off, on } = iconMapping[menu.text];
-            return (
-              <div className={styles.menu} key={index}>
+          {user ? (
+            <Link to="#" onClick={handleLogout} className={styles.logoutLink}>
+              로그아웃
+            </Link>
+          ) : (
+            <Link to="#" onClick={openLoginModal} className={styles.logoutLink}>
+              로그인
+            </Link>
+          )}
+        </div>
+
+        {menus.map((menu, index) => {
+          const { off, on } = iconMapping[menu.text];
+          return (
+            <div className={styles.menu} key={index}>
+              {menu.text === "notifications" ? (
+                <div
+                  className={styles.menuItem}
+                  onClick={toggleNotifications}
+                  style={{
+                    color: "#333333",
+                    textDecoration: "none",
+                    verticalAlign: "middle",
+                    cursor: "pointer",
+                    fontFamily: "BalooTammudu2-Regular",
+                    fontSize: 20,
+                  }}
+                >
+                  <img
+                    style={{
+                      width: 24,
+                      height: 24,
+                      verticalAlign: "middle",
+                    }}
+                    src={isNotificationsOpen ? on : off}
+                    alt="icon"
+                  />
+                  <SidebarItem menu={menu} />
+                </div>
+              ) : (
                 <NavLink
                   to={menu.path}
                   key={index}
@@ -69,10 +161,16 @@ const Sidebar = ({}) => {
                   className={({ isActive }) =>
                     isActive ? styles.menuOn : styles.menuOff
                   }
+                  onClick={() => {
+                    if (isNotificationsOpen) toggleNotifications();
+                  }}
                 >
                   {({ isActive }) => (
                     <>
                       <img
+                        className={
+                          menu.text === "profile" ? styles.profileImg : ""
+                        }
                         style={{
                           width: 24,
                           height: 24,
@@ -85,15 +183,74 @@ const Sidebar = ({}) => {
                     </>
                   )}
                 </NavLink>
+              )}
+            </div>
+          );
+        })}
+
+        <div className={styles.menu}>
+          <NavLink
+            to={
+              userData
+                ? `/profile/${userData.username || "defaultNickname"}`
+                : "/profile"
+            }
+            className={({ isActive }) =>
+              isActive ? styles.menuOn : styles.menuOff
+            }
+          >
+            {({ isActive }) => (
+              <div
+                className={styles.menuItem}
+                style={{
+                  color: "#333333",
+                  textDecoration: "none",
+                  verticalAlign: "middle",
+                  cursor: "pointer",
+                  fontFamily: "BalooTammudu2-Regular",
+                  fontSize: 20,
+                }}
+              >
+                <img
+                  style={{
+                    width: 24,
+                    height: 24,
+                    verticalAlign: "middle",
+                    borderRadius: "50%",
+                  }}
+                  src={
+                    userData
+                      ? userData.profileimage
+                        ? userData.profileimage
+                        : nopforile
+                      : profile_off
+                  }
+                  alt="icon"
+                />
+                <span
+                  className={isActive ? styles.menuOn : styles.menuOff}
+                  style={{ marginLeft: 20 }}
+                >
+                  Profile
+                </span>
               </div>
-            );
-          })}
-          <Link to={"/post"} style={{ textDecoration: "none" }}>
-            <div className={styles.post}>Post</div>
-          </Link>
+            )}
+          </NavLink>
         </div>
+
+        <div className={styles.post} onClick={openPostModal}>
+          Post
+        </div>
+
+        {isPostModalOpen && <PostModal closeModal={closePostModal} />}
+
+        <LoginModal
+          modalIsOpen={isLoginModalOpen}
+          closeModal={closeLoginModal}
+        />
       </div>
     </div>
   );
 };
+
 export default Sidebar;

@@ -1,0 +1,35 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  gap: 25px;
+}
+
+.inputTitle {
+  text-align: right;
+  color: #808080;
+  font-family: "NotoSans-SemiBold";
+  font-size: 20px;
+  min-width: 100px;
+}
+
+.inputField {
+  flex-grow: 1;
+  width: 300px;
+  height: 40px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #b6b6b6;
+  outline-color: #ff7474;
+  color: #808080;
+}
+
+.inputField::placeholder {
+  color: #b6b6b6;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}

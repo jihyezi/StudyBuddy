@@ -1,15 +1,30 @@
-.recommended {
-  position: sticky;
+.recommendedContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  border-left: 1px solid #dddddd;
-  padding: 40px 40px 40px 40px;
-  margin-right: calc(10vw - 100px);
+  align-items: start;
+  padding: 40px 20px;
+  overflow: visible; 
 }
 
 .recommendedHead {
+  align-self: flex-start;
   color: #333333;
   font-family: "NotoSans-Bold";
   font-size: 20px;
+}
+
+.recommended {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.recommendedPosts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }

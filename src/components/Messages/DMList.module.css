@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@400;500;600;700&display=swap");
+
+.dmListContainer {
+  display: flex;
+  height: 100vh;
+  font-family: "Manrope", sans-serif;
+}
+
+.modal {
+  width: 420px;
+  height: 100vh;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 24px;
+  font-family: "BalooTammudu2-Bold";
+  color: #333;
+}
+
+.messageList {
+  padding: 10px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+}
+
+.noMessages {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+}
+
+.messageItem {
+  display: flex;
+  padding: 14px 10px;
+  cursor: pointer;
+}
+
+.messageItem:hover {
+  background-color: #f6f6f6;
+}
+
+.messageItem.selected {
+  background-color: #f0f0f0;
+}
+
+.profileImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.messageContent {
+  flex: 1;
+}
+
+.messageHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.username {
+  margin-right: 6px;
+  font-size: 16px;
+  font-family: "Manrope-SemiBold";
+  font-weight: 600;
+  color: #333;
+}
+
+.nickname {
+  font-size: 13px;
+  font-family: "Manrope-SemiBold";
+  font-weight: 600;
+  color: #606060;
+}
+
+.id {
+  font-family: "Manrope-Medium";
+  color: #888;
+  margin-right: 5px;
+}
+
+.text {
+  font-family: "Manrope-Medium";
+  font-size: 14px;
+  color: #333;
+}
+
+.noChat {
+  width: 685px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+}
+
+.newMessageIcon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 10px;
+}
+
+.newMessageText {
+  font-family: "BalooTammudu2-Bold";
+  display: flex;
+  width: 179px;
+  height: 38px;
+  border-radius: 52px;
+  font-size: 17px;
+  color: white;
+  background-color: #ff7474;
+  align-items: center;
+  justify-content: center;
+}
+
+.newMessageText:hover {
+  background-color: #f75858;
+}

@@ -1,0 +1,71 @@
+.inputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.inputClick {
+    flex-grow: 1;
+    width: 60px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* z-index: 1; */
+    position: relative;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 20px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #b6b6b6;
+    cursor: pointer;
+}
+
+.inputClickIsOpen {
+    border-radius: 20px;
+    border-width: 1.5px;
+    border-style: solid;
+    border-color: #ff7474;
+}
+
+.inputPlaceholder {
+    width: 80px;
+    color: #b6b6b6;
+    font-family: "NotoSans-Regular";
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inputIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.dropdown {
+    position: absolute;
+    top: 120%;
+    transform: translateX(-5%);
+    width: 120px;
+    max-height: 300px;
+    border: 1.5px solid #b6b6b6;
+    border-radius: 8px;
+    background-color: white;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.dropdownOption {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: #333;
+    font-family: "NotoSans-Regular";
+    font-size: 14px;
+}
+
+.dropdownOption:hover {
+    background-color: #f1f1f1;
+}

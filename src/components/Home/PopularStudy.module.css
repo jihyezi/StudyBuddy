@@ -3,6 +3,7 @@
   flex-direction: row;
   align-items: center;
   border-bottom: 1px solid #dddddd;
+  cursor: pointer;
 }
 
 .studyImage {

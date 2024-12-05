@@ -1,0 +1,124 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    padding-bottom: 20px;
+}
+
+.info {
+    position: relative;
+    width: 100%;
+}
+
+.imageWrapper {
+    display: flex;
+    position: relative;
+}
+
+.image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    background-color: #DDDDDD;
+}
+
+.profileImgContainer {
+    position: absolute;
+    bottom: -80px; 
+    left: 10%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+}
+
+.imageContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.profileImg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid white; 
+    object-fit: cover;
+}
+
+.details {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 70px;
+    margin-bottom: 16px;
+}
+
+.edit {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.communityName {
+    color: #FF7474;
+    font-weight: 700;
+    font-size: 20px;
+    font-family: "NotoSans-Regular";
+}
+
+.joinButton {
+    width: 90px;
+    height: 40px;
+    background-color: #FF7474;
+    border-radius: 30px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    font-family: "BalooTammudu2-SemiBold";
+    transition: background-color 0.3s ease;
+}
+
+.joinButton:hover {
+    background-color: #f75858;
+}
+
+.infoList {
+    display: flex;
+    flex-direction: column;
+}
+
+.description1 {
+    color: #333333;
+    font-size: 24px;
+    font-family: "NotoSans-SemiBold";
+    margin-bottom: 6px;
+}
+
+.description2 {
+    color: #606060;
+    font-size: 16px;
+    font-family: "NotoSans-Regular";
+    margin-bottom: 20px;
+}
+
+.description3 {
+    color: #333333;
+    font-size: 16px;
+    font-family: "NotoSans-Medium";
+    margin-bottom: 14px;
+}
+
+.description4 {
+    color: #333333;
+    font-size: 16px;
+    font-family: "NotoSans-Medium";
+}
+
+.noedit {
+    margin-top: 40px;
+}

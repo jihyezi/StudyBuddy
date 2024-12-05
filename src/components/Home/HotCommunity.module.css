@@ -1,9 +1,17 @@
+.hotCommunityList {
+  display: flex; /* Flexbox를 사용하여 가로 배열 */
+  gap: 225px; /* 컴포넌트 간의 간격 */
+  overflow-x: auto; /* 필요시 수평 스크롤 가능 */
+}
+
 .community {
   position: relative;
-  padding-bottom: 15px;
+  padding: 16px 20px;
   border: 1px solid #dddddd;
   border-radius: 8px;
-  min-width: 350px;
+  max-width: 300px;
+  width: 300px;
+  cursor: pointer;
 }
 
 .classificationIcon {
@@ -30,25 +38,52 @@
 }
 
 .communityName {
-  margin-top: 20px;
-  margin-bottom: 15px;
-  margin-left: 25px;
   color: #ff7474;
+  font-size: 16px;
   font-family: "NotoSans-Bold";
+  margin: 0;
+  margin-bottom: 16px;
 }
 
 .communityDetail {
   margin-top: 0px;
   margin-bottom: 5px;
-  margin-left: 25px;
   color: #606060;
 }
 
 .communityDetailTitle {
-  margin-right: 10px;
+  font-size: 14px;
   font-family: "NotoSans-SemiBold";
+  margin-right: 12px;
 }
 
 .communityDetailContent {
+  font-size: 14px;
   font-family: "NotoSans-Regular";
+}
+
+/* Small 사이즈 */
+.smallCommunity {
+  position: relative;
+  max-width: 300px;
+  width: 220px;
+  cursor: pointer;
+}
+
+.smallclassificationIcon {
+  position: absolute;
+  top: -1px;
+  left: 48%;
+  transform: translateX(350%);
+  width: 28px;
+  height: 37px;
+}
+
+.smallCommunityName {
+  font-size: 15px;
+}
+
+.smallCommunityDetailTitle,
+.smallCommunityDetailContent {
+  font-size: 13px;
 }

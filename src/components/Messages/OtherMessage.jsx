@@ -1,13 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styles from "./OtherMessage.module.css";
-import "fonts/Font.css";
 
-const OtherMessage = ({}) => {
+const OtherMessage = ({ message, last, profile }) => {
   return (
-    <>
-      <div className={styles.otherMessage}>OtherMessage</div>
-      <div className={styles.otherMessageLast}>OtherMessage</div>
-    </>
+    <div className={styles.otherMessageWrapper}>
+      <div className={styles.messageRow}>
+        <img src={profile} className={styles.profileImage} />
+        <div className={last ? styles.otherMessageLast : styles.otherMessage}>
+          {message}
+        </div>
+      </div>
+    </div>
   );
 };
+
 export default OtherMessage;
