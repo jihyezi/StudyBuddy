@@ -4,14 +4,10 @@
     { "src": "server.js", "use": "@vercel/node" },  
     { "src": "public/**", "use": "@vercel/static" } 
   ],
-  "rewrites": [
-    { 
-      "source": "/api/searchBook",
-      "destination": "/api/searchBook.js"
-    },
-    {
-      "source": "/api/searchPlace", 
-      "destination": "/api/searchPlace.js"
-    }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "server.js" }, 
+    { "src": "/(.*)", "dest": "/index.html" },    
+    { "handle": "filesystem" },                  
+    { "src": "/(.*)", "dest": "server.js" }      
   ] 
 }
