@@ -9,12 +9,13 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 
 // 기본 헤더 설정
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', '*');
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', req.header('Origin')); // 클라이언트 요청의 Origin을 허용
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // 허용할 헤더 추가
     next();
 });
+
 
 // 책 검색 API
 app.get("/api/searchBook", async (req, res) => {
