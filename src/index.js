@@ -4,13 +4,6 @@ import "./index.css";
 import App from "./App";
 import { AuthProvider } from 'contexts/AuthContext';
 
-const faviconUrl = `${process.env.REACT_APP_BACKEND_URL}/favicon.ico`;
-const manifestUrl = `${process.env.REACT_APP_BACKEND_URL}/manifest.json`;
-
-document.querySelector("link[rel='icon']").setAttribute('href', faviconUrl);
-document.querySelector("link[rel='apple-touch-icon']").setAttribute('href', faviconUrl);
-document.querySelector("link[rel='manifest']").setAttribute('href', manifestUrl);
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
