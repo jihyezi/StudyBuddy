@@ -6,11 +6,16 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5001;
 
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Naver-Client-Id', 'X-Naver-Client-Secret']
-}));
+app.use(cors());
+
+// 기본 헤더 설정
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+});
+
 // 책 검색 API
 app.get("/api/searchBook", async (req, res) => {
     const query = req.query.query;
