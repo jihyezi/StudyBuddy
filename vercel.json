@@ -1,14 +1,4 @@
 {
-    "rewrites": [
-      {
-        "source": "/api/searchBook",
-        "destination": "https://openapi.naver.com/v1/search/book.json"
-      },
-      {
-        "source": "/api/searchPlace",
-        "destination": "https://openapi.naver.com/v1/search/local.json"
-      }
-    ],
     "headers": [
       {
         "source": "/api/searchBook",
