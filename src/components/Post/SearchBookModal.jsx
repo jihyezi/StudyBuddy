@@ -12,21 +12,10 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
   const handleSearch = async () => {
     if (searchTerm.length > 0) {
       try {
-        var client_id = process.env.REACT_APP_NAVER_CLIENT_ID;
-        var client_secret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
-        const api_url = `/api/v1/search/book.json?query=${encodeURI(
-          searchTerm
-        )}`;
-        const options = {
-          headers: {
-            "X-Naver-Client-Id": client_id,
-            "X-Naver-Client-Secret": client_secret,
-          },
-        };
-        const response = await axios.get(api_url, options);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/searchBook?query=${encodeURIComponent(searchTerm)}`);
         setSearchResults(response.data.items);
       } catch (error) {
-        console.error("Error fetching data from Naver API:", error);
+        console.error("Error fetching data:", error);
       }
     } else {
       setSearchResults([]);
