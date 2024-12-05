@@ -1,6 +1,6 @@
 {
-    "version": 2,
-    "headers": [
+  "version": 2,
+  "headers": [
     {
       "source": "/(.*)",
       "headers": [
@@ -9,14 +9,12 @@
       ]
     }
   ],
-    "builds": [
-      { "src": "server.js", "use": "@vercel/node" },  
-      { "src": "public/**", "use": "@vercel/static" } 
-    ],
-    "routes": [
-      { "src": "/api/(.*)", "dest": "server.js" }, 
-      { "src": "/(.*)", "dest": "/public/$1" },    
-      { "handle": "filesystem" },                  
-      { "src": "/(.*)", "dest": "server.js" }      
-    ]
+  "builds": [
+    { "src": "server.js", "use": "@vercel/node" },
+    { "src": "public/**", "use": "@vercel/static" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/server.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
 }
