@@ -9,5 +9,15 @@
     { "src": "/(.*)", "dest": "/public/$1" },    
     { "handle": "filesystem" },                  
     { "src": "/(.*)", "dest": "server.js" }      
-  ]  
+  ],
+  "rewrites": [
+    { 
+      "source": "/api/searchBook",
+      "destination": "/api/searchBook.js"
+    },
+    {
+      "source": "/api/searchPlace", 
+      "destination": "/api/searchPlace.js"
+    }
+  ] 
 }
