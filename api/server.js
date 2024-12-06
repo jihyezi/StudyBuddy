@@ -4,12 +4,10 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 5001;
-
 app.use(cors());
 
-// 책 검색 API
-app.get("/api/searchBook", async (req, res) => {
+// 책 검색 API 
+const searchBookHandler = async (req, res) => {
     const query = req.query.query;
     const api_url = `https://openapi.naver.com/v1/search/book.json?query=${encodeURIComponent(query)}`;
 
@@ -19,8 +17,7 @@ app.get("/api/searchBook", async (req, res) => {
         return res.status(500).json({ message: "Server configuration error" });
     }
 
-    console.log(api_url)
-
+    console.log(api_url);
 
     try {
         const response = await axios.get(api_url, {
@@ -35,10 +32,10 @@ app.get("/api/searchBook", async (req, res) => {
         console.error("Error fetching data from Naver API:", error);
         res.status(500).json({ message: "Error fetching data", error: error.message });
     }
-});
+};
 
 // 장소 검색 API
-app.get("/api/searchPlace", async (req, res) => {
+const searchPlaceHandler = async (req, res) => {
     const query = req.query.query;
     const api_url = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(query)}&display=10`;
 
@@ -55,7 +52,10 @@ app.get("/api/searchPlace", async (req, res) => {
         console.error("Error fetching data from Naver API:", error);
         res.status(500).json({ message: "Error fetching data", error: error.message });
     }
-});
+};
+
+app.get("/api/searchBook", searchBookHandler);
+app.get("/api/searchPlace", searchPlaceHandler);
 
 if (process.env.NODE_ENV !== 'production') {
     const port = process.env.PORT || 5001;
@@ -64,4 +64,11 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 
-module.exports = app;
+// Vercel serverless function handler
+module.exports = async (req, res) => {
+    // 요청 경로 확인
+    console.log('Request path:', req.url);
+
+    // Express 앱으로 요청 처리
+    return app(req, res);
+};
