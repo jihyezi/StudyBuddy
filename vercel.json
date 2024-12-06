@@ -1,20 +1,16 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/server.js"
-    }
-  ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/searchBook",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/searchPlace",
       "headers": [
         {
           "key": "Cache-Control",
@@ -22,5 +18,24 @@
         }
       ]
     }
-  ]
+  ],
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    },
+    {
+      "src": "api/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "rewrites": [
+      {
+        "source": "/api/(.*)",
+        "destination": "/server.js"
+      }
+    ]
 }
