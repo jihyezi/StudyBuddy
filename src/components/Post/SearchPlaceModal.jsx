@@ -34,7 +34,7 @@ const SearchPlaceModal = ({
         };
 
         // 검색 결과에서 title 전처리
-        const processedResults = response.data.items.map((item) => ({
+        const processedResults = response.data.items?.map((item) => ({
           ...item,
           title: removeHtmlTags(item.title), // HTML 태그 제거
         }));
@@ -95,7 +95,7 @@ const SearchPlaceModal = ({
             직접 입력 '{searchTerm}' 사용하기
           </div>
         )}
-        {searchResults.map((place) => (
+        {searchResults?.map((place) => (
           <div
             className={styles.resultItem}
             key={place.link}

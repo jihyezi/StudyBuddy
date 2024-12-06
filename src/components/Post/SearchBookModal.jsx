@@ -73,7 +73,7 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
             직접 입력 '{searchTerm}' 사용하기
           </div>
         )}
-        {searchResults.map((book) => (
+        {searchResults?.map((book) => (
           <div
             className={styles.resultItem}
             key={book.link}
