@@ -2,5 +2,5 @@
   "compilerOptions": {
     "baseUrl": "src"
   },
-  "include": ["src", "api/server.js", "api/searchBook", "api/searchPlace"]
+  "include": ["src", "server.js", "api/searchBook", "api/searchPlace"]
 }

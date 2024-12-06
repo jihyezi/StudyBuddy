@@ -4,20 +4,14 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+const port = process.env.PORT || 5001;
 
-// 책 검색 API 
-const searchBookHandler = async (req, res) => {
+app.use(cors({ origin: "*" }));
+
+// 책 검색 API
+app.get("/api/searchBook", async (req, res) => {
     const query = req.query.query;
     const api_url = `https://openapi.naver.com/v1/search/book.json?query=${encodeURIComponent(query)}`;
-
-    // 환경변수 확인
-    if (!process.env.REACT_APP_NAVER_CLIENT_ID || !process.env.REACT_APP_NAVER_CLIENT_SECRET) {
-        console.error('Missing Naver API credentials');
-        return res.status(500).json({ message: "Server configuration error" });
-    }
-
-    console.log(api_url);
 
     try {
         const response = await axios.get(api_url, {
@@ -32,10 +26,10 @@ const searchBookHandler = async (req, res) => {
         console.error("Error fetching data from Naver API:", error);
         res.status(500).json({ message: "Error fetching data", error: error.message });
     }
-};
+});
 
 // 장소 검색 API
-const searchPlaceHandler = async (req, res) => {
+app.get("/api/searchPlace", async (req, res) => {
     const query = req.query.query;
     const api_url = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(query)}&display=10`;
 
@@ -52,24 +46,8 @@ const searchPlaceHandler = async (req, res) => {
         console.error("Error fetching data from Naver API:", error);
         res.status(500).json({ message: "Error fetching data", error: error.message });
     }
-};
+});
 
-app.get("/api/searchBook", searchBookHandler);
-app.get("/api/searchPlace", searchPlaceHandler);
-
-if (process.env.NODE_ENV !== 'production') {
-    const port = process.env.PORT || 5001;
-    app.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`);
-    });
-}
-
-// Vercel serverless function handler
-module.exports = (req, res) => {
-    // 응답 헤더 설정
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
-    return app(req, res);
-};
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});

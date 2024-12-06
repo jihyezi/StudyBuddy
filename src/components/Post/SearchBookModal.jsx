@@ -13,11 +13,7 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
     if (searchTerm.length > 0) {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/searchBook?query=${encodeURIComponent(searchTerm)}`);
-        console.log('Requesting URL:', response);
-        console.log('Backend URL:', process.env.REACT_APP_BACKEND_URL);
         setSearchResults(response.data.items);
-        console.log('Response type:', response.headers['content-type']);
-        console.log('Response data:', response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -77,7 +73,7 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
             직접 입력 '{searchTerm}' 사용하기
           </div>
         )}
-        {searchResults?.map((book) => (
+        {searchResults.map((book) => (
           <div
             className={styles.resultItem}
             key={book.link}

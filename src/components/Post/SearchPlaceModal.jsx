@@ -95,7 +95,7 @@ const SearchPlaceModal = ({
             직접 입력 '{searchTerm}' 사용하기
           </div>
         )}
-        {searchResults?.map((place) => (
+        {searchResults.map((place) => (
           <div
             className={styles.resultItem}
             key={place.link}
