@@ -20,14 +20,6 @@
     }
   ],
   "rewrites": [
-      { 
-        "source": "/api/searchBook",
-        "destination": "/api/searchBook.js"
-      },
-      {
-        "source": "/api/searchPlace", 
-        "destination": "/api/searchPlace.js"
-      },
       {
         "source": "/api/(.*)",
         "destination": "/api/server.js"
