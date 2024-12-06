@@ -29,7 +29,7 @@
         "destination": "/api/searchPlace.js"
       },
       {
-        "source": "/api/(.*)",
+        "source": "/(.*)",
         "destination": "/server.js"
       }
     ]
