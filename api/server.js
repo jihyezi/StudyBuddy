@@ -13,6 +13,13 @@ app.get("/api/searchBook", async (req, res) => {
     const query = req.query.query;
     const api_url = `https://openapi.naver.com/v1/search/book.json?query=${encodeURIComponent(query)}`;
 
+    // 환경변수 확인
+    if (!process.env.REACT_APP_NAVER_CLIENT_ID || !process.env.REACT_APP_NAVER_CLIENT_SECRET) {
+        console.error('Missing Naver API credentials');
+        return res.status(500).json({ message: "Server configuration error" });
+    }
+
+
     try {
         const response = await axios.get(api_url, {
             headers: {
