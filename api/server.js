@@ -19,6 +19,8 @@ app.get("/api/searchBook", async (req, res) => {
         return res.status(500).json({ message: "Server configuration error" });
     }
 
+    console.log(api_url)
+
 
     try {
         const response = await axios.get(api_url, {
@@ -55,8 +57,11 @@ app.get("/api/searchPlace", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    const port = process.env.PORT || 5001;
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    });
+}
 
 module.exports = app;

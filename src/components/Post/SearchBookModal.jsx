@@ -13,6 +13,7 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
     if (searchTerm.length > 0) {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/searchBook?query=${encodeURIComponent(searchTerm)}`);
+        console.log('Requesting URL:', response);
         setSearchResults(response.data.items);
         console.log('Response type:', response.headers['content-type']);
         console.log('Response data:', response.data);
