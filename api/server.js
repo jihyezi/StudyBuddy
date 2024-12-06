@@ -65,10 +65,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Vercel serverless function handler
-module.exports = async (req, res) => {
-    // 요청 경로 확인
-    console.log('Request path:', req.url);
+module.exports = (req, res) => {
+    // 응답 헤더 설정
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
-    // Express 앱으로 요청 처리
     return app(req, res);
 };
