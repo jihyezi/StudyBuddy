@@ -14,6 +14,7 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/searchBook?query=${encodeURIComponent(searchTerm)}`);
         setSearchResults(response.data.items);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
