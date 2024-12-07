@@ -34,7 +34,7 @@ const SearchPlaceModal = ({
         };
 
         // 검색 결과에서 title 전처리
-        const processedResults = response.data.items.map((item) => ({
+        const processedResults = response.data.items?.map((item) => ({
           ...item,
           title: removeHtmlTags(item.title), // HTML 태그 제거
         }));
