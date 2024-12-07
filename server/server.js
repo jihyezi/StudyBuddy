@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 8080;
 
 app.use(cors({ origin: "*" }));
 
@@ -51,3 +51,5 @@ app.get("/api/searchPlace", async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+module.exports = app;
