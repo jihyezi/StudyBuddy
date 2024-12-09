@@ -4,15 +4,15 @@
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
-}
-
+  }
+  
 .profileEditModalHeader {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .headerLeft {

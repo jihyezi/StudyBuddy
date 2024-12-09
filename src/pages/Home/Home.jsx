@@ -23,7 +23,7 @@ import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularPosts, setPopularPosts] = useState([]);
   const [postData, setPostData] = useState([]);
