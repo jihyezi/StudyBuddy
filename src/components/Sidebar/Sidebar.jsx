@@ -70,6 +70,8 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
     }
   };
 
+  console.log(userData)
+
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
@@ -193,7 +195,7 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
           <NavLink
             to={
               userData
-                ? `/profile/${userData.username || "defaultNickname"}`
+                ? `/profile/${userData?.username || ""}`
                 : "/profile"
             }
             className={({ isActive }) =>

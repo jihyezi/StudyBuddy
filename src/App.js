@@ -78,7 +78,7 @@ const MainContent = ({ loginuser }) => {
   useEffect(() => {
     if (
       !user &&
-      (location.pathname === "/profile/defaultNickname" || location.pathname === "/bookmarks")
+      (location.pathname === "/profile/" || location.pathname === "/bookmarks" || location.pathname === "/messages")
     ) {
       setLoginModalIsOpen(true);
     } else {
@@ -86,10 +86,10 @@ const MainContent = ({ loginuser }) => {
     }
   }, [user, location.pathname]);
 
-  // 경로가 변경될 때마다 데이터를 새로 불러오도록 useEffect 설정
   useEffect(() => {
     refetchCommunityData();
-  }, [user, location.pathname]); // 경로 변경 시마다 실행
+  }, [user, location.pathname]);
+
 
   const closeLoginModal = () => setLoginModalIsOpen(false);
 
