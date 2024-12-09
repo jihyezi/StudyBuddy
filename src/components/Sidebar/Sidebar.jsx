@@ -63,8 +63,12 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
     if (
       currentPath === "/create-post" ||
       currentPath === "/create-community" ||
+<<<<<<< HEAD
       currentPath === "/create-study" ||
       currentPath.startsWith("/profile")
+=======
+      currentPath === "/create-study"
+>>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
     ) {
       navigate("/");
     }

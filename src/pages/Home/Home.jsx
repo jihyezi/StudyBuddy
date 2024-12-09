@@ -495,7 +495,11 @@ const Home = ({}) => {
               fontFamily: "Manrope-Bold",
             }}
           >
+<<<<<<< HEAD
             🔥 HOT 커뮤니티티
+=======
+            🔥 HOT 커뮤니티
+>>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
           </div>
           <div
             className={styles.scrollContainer}

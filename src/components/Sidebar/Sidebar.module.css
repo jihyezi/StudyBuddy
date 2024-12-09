@@ -75,6 +75,10 @@
   font-family: "BalooTammudu";
   font-size: 20px;
   transition: background-color 0.3s ease;
+<<<<<<< HEAD
+=======
+  cursor: pointer;
+>>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
 }
 
 .post:hover {

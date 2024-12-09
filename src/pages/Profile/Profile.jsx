@@ -101,6 +101,12 @@ const Profile = () => {
 
   const loading = isLoading || isPostLoading || isCommentLoading || isLikeLoading;
 
+<<<<<<< HEAD
+=======
+  console.log(userPost)
+  console.log(currentProfileData.userid)
+
+>>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
   return (
     <div className={styles.container}>
       {loading ? (

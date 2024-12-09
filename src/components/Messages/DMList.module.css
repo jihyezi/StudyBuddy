@@ -106,6 +106,10 @@
   justify-content: center;
   flex: 1;
   text-align: center;
+<<<<<<< HEAD
+=======
+  cursor: pointer;
+>>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
 }
 
 .newMessageIcon {
