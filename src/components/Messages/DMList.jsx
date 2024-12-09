@@ -26,9 +26,6 @@ function DMList() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!loading && !user) {
-      navigate("/profile");
-    }
 
     if (user) {
       const channel = supabase
@@ -80,11 +77,10 @@ function DMList() {
         <div className={styles.messageList}>
           {userData.map((user, index) => (
             <div
-              className={`${styles.messageItem} ${
-                selectedUser && selectedUser.userid === user.userid
+              className={`${styles.messageItem} ${selectedUser && selectedUser.userid === user.userid
                   ? styles.selected
                   : ""
-              }`}
+                }`}
               key={index}
               onClick={() => handleUserClick(user)}
             >
