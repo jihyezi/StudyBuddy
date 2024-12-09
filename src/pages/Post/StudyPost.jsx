@@ -389,6 +389,14 @@ const StudyPost = ({ allUserData }) => {
               setShowCaution({ ...showCaution, location: false });
             }}
           />
+          {/* <InputText
+            title={"장소"}
+            placeholder={"오프라인 스터디 진행 시 장소를 입력해주세요."}
+            onSelect={(e) => {
+              setLocation(e);
+              setShowCaution({ ...showCaution, location: false });
+            }}
+          /> */}
           {showCaution.location && (
             <div className={styles.cautionContainer}>
               <img className={styles.cautionIcon} src={caution} />

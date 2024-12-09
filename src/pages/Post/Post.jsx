@@ -424,6 +424,14 @@ const Post = () => {
               setShowCaution({ ...showCaution, book: false });
             }}
           />
+          {/* <InputText
+            title={"책"}
+            placeholder={"책을 입력해 주세요."}
+            onSelect={(e) => {
+              setBook(e);
+              setShowCaution({ ...showCaution, book: false });
+            }}
+          /> */}
           {showCaution.book && (
             <div className={styles.cautionContainer}>
               <img className={styles.cautionIcon} src={caution} />
