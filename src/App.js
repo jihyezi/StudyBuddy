@@ -78,11 +78,7 @@ const MainContent = ({ loginuser }) => {
   useEffect(() => {
     if (
       !user &&
-<<<<<<< HEAD
       (location.pathname === "/profile/defaultNickname" || location.pathname === "/bookmarks")
-=======
-      (location.pathname === "/profile/:username" || location.pathname === "/bookmarks")
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
     ) {
       setLoginModalIsOpen(true);
     } else {

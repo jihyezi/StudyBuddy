@@ -424,8 +424,6 @@ const Post = () => {
               setShowCaution({ ...showCaution, book: false });
             }}
           />
-<<<<<<< HEAD
-=======
           {/* <InputText
             title={"책"}
             placeholder={"책을 입력해 주세요."}
@@ -434,7 +432,6 @@ const Post = () => {
               setShowCaution({ ...showCaution, book: false });
             }}
           /> */}
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
           {showCaution.book && (
             <div className={styles.cautionContainer}>
               <img className={styles.cautionIcon} src={caution} />

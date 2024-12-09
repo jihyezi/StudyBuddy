@@ -1,85 +1,7 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-=======
->>>>>>> c1847b759f788114210f7ebf8df1e368de5cd104
 # StudyBuddy 스터디버디
 
-<<<<<<< HEAD
 <img width="100" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/3823aa72-9c72-47d6-8db0-447926c58243">
-=======
-<img width="100" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/4ff2ebea-d439-45bc-82c0-9d1447f6ebde">
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
+
 <br/><br/>
 
 ## 📝 프로젝트 소개
@@ -93,11 +15,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## 🙋‍♂️ 팀원 구성
 
-<<<<<<< HEAD
-| 김도영                                         | 김상우                                         | 이재호                               | 하지혜                                 |
-=======
-| 💩 김도영                                         | 김상우                                         | 이재호                               | 하지혜                                 |
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
+# | 김도영 | 김상우 | 이재호 | 하지혜 |
+
+| 💩 김도영 | 김상우 | 이재호 | 하지혜 |
+
 | ---------------------------------------------- | ---------------------------------------------- | ------------------------------------ | -------------------------------------- |
 | [@rlaehdud159](https://github.com/rlaehdud159) | [@BlackShrike](https://github.com/BlackShrike) | [@jaeho9](https://github.com/jaeho9) | [@jihyezi](https://github.com/jihyezi) |
 
@@ -128,9 +49,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 <br/><br/>
 
 ## 🗂️ 프로젝트 구조
-<<<<<<< HEAD
 
 =======
+
 ```
 📦StudyBuddy
  ┣ 📂public
@@ -160,9 +81,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
  ┃ ┃ ┗ 📜AuthContext.jsx
  ┃ ┣ 📂fonts
  ┃ ┣ 📂pages
- ┃ ┃ ┣ 📂api
- ┃ ┃ ┃ ┣ 📜searchBook.js
- ┃ ┃ ┃ ┗ 📜searchPlace.js
  ┃ ┃ ┣ 📂Bookmarks
  ┃ ┃ ┣ 📂Communities
  ┃ ┃ ┣ 📂Explore
@@ -188,10 +106,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
  ┣ 📜jsconfig.json
  ┣ 📜package-lock.json
  ┣ 📜package.json
- ┣ 📜README.md
- ┗ 📜vercel.json
+ ┣ 📜server.js
+ ┗ 📜README.md
 ```
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
+
 <br/><br/>
 
 ## 👥 역할 분담
@@ -230,7 +148,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### 개발 기간
 
-<<<<<<< HEAD
 - **전체 개발 기간** : 2024년 ~
 - **UI 구현** :
 - **기능 구현** :
@@ -238,17 +155,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### 작업 관리
 
--
-=======
+- =======
 - **전체 개발 기간** : 2024년 5월 22일 ~ 12월 9일
 - **UI 구현** : 2024년 5월 22일 ~ 6월 10일
 - **기능 구현** : 2024년 6월 11일 ~ 12월 9일
 
 ### 작업 관리
+
 - **진행 상황 공유** : Discord를 활용하여 팀원들과 실시간 소통하며 진행 상황을 공유했습니다
 - **회의 및 기록** : 매주 정기적으로 회의를 진행하며 작업 순서와 방향성을 논의하였고, 주요 논의 사항과 결론은 Notion에 정리하여 기록 및 공유했습니다.
   <br/><br/>
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
 
 ## 📄 페이지별 기능
 
@@ -342,7 +258,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## 💬 후기
 
-<<<<<<< HEAD
 ### 김도영
 
 <br/>
@@ -350,14 +265,17 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### 김상우
 
 =======
+
 ### 💩 김도영
+
 작년 12월 부트캠프에서 프론트엔드 관련 내용을 학습하고 프로젝트를 통해 만난 팀원들과 지금까지 팀프로젝트를 진행하며 많은 것을 배웠습니다. 하나하나 결정해나가며 의견을 조율하고 모르는 부분을 서로 공유하며 도와주며 최대한으로 좋은 결과물을 만들어내기 위해 모두가 노력하는 과정이 즐거웠습니다. 생각보다 많은 시간이 소요되었지만 그만큼 많은 걸 얻을 수 있었고 특히 깃허브를 통한 협업이 처음에는 정말 어려웠지만 팀원들과 방법을 공유하며 협업에 익숙해질 수 있어서 좋았습니다. 그리고 팀 프로젝트에서 정말 좋은 팀원들을 만나서 부트캠프 끝난 이후에도 끝까지 함께 할 수 있었던 것이 가장 좋았고 함께 할 수 있어서 너무 좋았고 모두 고생했다고 전하고 싶습니다😊
 <br/>
 
 ### 김상우
-이번 프로젝트를 진행하면서  처음 느낀것은 아직도 배워야 할 것이 많았다는 것이었습니다. 새로운 기능을 추가하는데 필요한 코드들과 이것들을 간소화할 라이브러리 도입 사이에서 성능과 편리함 사이에서 고민하고 이전에는 해본 적 없던 것들을 시행착오를 겪어가며 하나하나 수정해가는 과정에서 많은 것들을 배웠으며 팀원과의 소통을 통해 혼자서 해결할려고 하였으면 오래 걸렸을 것들을 수정해가는 과정에서 팀워크의 중요성을 느끼기도 했습니다. 그동안 함께 고민하고 달려온 팀원들에게 감사하며 앞으로도 좋은 일이 있기를 기원합니다!
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
-<br/>
+
+이번 프로젝트를 진행하면서 처음 느낀것은 아직도 배워야 할 것이 많았다는 것이었습니다. 새로운 기능을 추가하는데 필요한 코드들과 이것들을 간소화할 라이브러리 도입 사이에서 성능과 편리함 사이에서 고민하고 이전에는 해본 적 없던 것들을 시행착오를 겪어가며 하나하나 수정해가는 과정에서 많은 것들을 배웠으며 팀원과의 소통을 통해 혼자서 해결할려고 하였으면 오래 걸렸을 것들을 수정해가는 과정에서 팀워크의 중요성을 느끼기도 했습니다. 그동안 함께 고민하고 달려온 팀원들에게 감사하며 앞으로도 좋은 일이 있기를 기원합니다!
+
+ <br/>
 
 ### 이재호
 
@@ -368,7 +286,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 <br/>
 
 <a href="https://github.com/jihyezi/StudyBuddy"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjihyezi%2FStudyBuddy&count_bg=%23555555&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=GitHub&edge_flat=false"/></a>
-<<<<<<< HEAD
->>>>>>> 49a27a70590fc50725c10c1151e9c9890e334659
-=======
->>>>>>> c1847b759f788114210f7ebf8df1e368de5cd104

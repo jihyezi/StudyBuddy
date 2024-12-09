@@ -23,7 +23,7 @@ import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularPosts, setPopularPosts] = useState([]);
   const [postData, setPostData] = useState([]);
@@ -495,11 +495,7 @@ const Home = ({}) => {
               fontFamily: "Manrope-Bold",
             }}
           >
-<<<<<<< HEAD
-            🔥 HOT 커뮤니티티
-=======
             🔥 HOT 커뮤니티
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
           </div>
           <div
             className={styles.scrollContainer}

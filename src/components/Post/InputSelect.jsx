@@ -2,17 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./InputSelect.module.css";
 import "fonts/Font.css";
 import { selectList } from "./SelectList.jsx";
-<<<<<<< HEAD
-=======
 import { useQuery } from "@tanstack/react-query";
 import supabase from "components/supabaseClient";
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
 
 // icon
 import down from "assets/icons/Post/down.png";
 
-<<<<<<< HEAD
-=======
 const fetchJoinCommunityData = async () => {
   const {
     data: { session },
@@ -62,16 +57,11 @@ const fetchCommunityData = async (communityIds) => {
     }));
 };
 
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
 const InputSelect = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.placeholder);
   const inputRef = useRef(null);
 
-<<<<<<< HEAD
-  const selectOptions = (() => {
-    switch (props.title) {
-=======
   const { data: communityIds, isLoading: loadingIds } = useQuery({
     queryKey: ["joinCommunityIds"],
     queryFn: fetchJoinCommunityData,
@@ -87,7 +77,6 @@ const InputSelect = (props) => {
     switch (props.title) {
       case "커뮤니티":
         return communityData || [];
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
       case "분류":
         return selectList.classifications;
       case "진행방식":
@@ -96,11 +85,6 @@ const InputSelect = (props) => {
         return selectList.people;
       case "기간":
         return selectList.period;
-<<<<<<< HEAD
-      case "커뮤니티":
-        return selectList.joinCommunity;
-=======
->>>>>>> e0d8b202abfa26a4f19529701f2611576d619b6d
       case "모집상태":
         return selectList.studyFilter;
       default:
@@ -156,9 +140,8 @@ const InputSelect = (props) => {
     <div className={styles.inputContainer} ref={inputRef}>
       <div className={styles.inputTitle}>{props.title}</div>
       <div
-        className={`${styles.inputClick} ${
-          isOpen ? styles.inputClickIsOpen : ""
-        }`}
+        className={`${styles.inputClick} ${isOpen ? styles.inputClickIsOpen : ""
+          }`}
         onClick={handleClick}
       >
         <span className={styles.inputPlaceholder} style={placeholderStyle}>
