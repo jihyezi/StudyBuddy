@@ -1,6 +1,6 @@
 # StudyBuddy 스터디버디
 
-<img width="100" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/4ff2ebea-d439-45bc-82c0-9d1447f6ebde">
+<img width="100" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/0273646b-053e-4b09-96cb-af02013aaaaf">
 <br/><br/>
 
 ## 📝 프로젝트 소개
