@@ -14,7 +14,7 @@
 
 ## 🙋‍♂️ 팀원 구성
 
-| 김도영                                         | 김상우                                         | 이재호                               | 하지혜                                 |
+| 💩 김도영                                         | 김상우                                         | 이재호                               | 하지혜                                 |
 | ---------------------------------------------- | ---------------------------------------------- | ------------------------------------ | -------------------------------------- |
 | [@rlaehdud159](https://github.com/rlaehdud159) | [@BlackShrike](https://github.com/BlackShrike) | [@jaeho9](https://github.com/jaeho9) | [@jihyezi](https://github.com/jihyezi) |
 
@@ -45,7 +45,66 @@
 <br/><br/>
 
 ## 🗂️ 프로젝트 구조
-
+```
+📦StudyBuddy
+ ┣ 📂public
+ ┃ ┣ 📜index.html
+ ┣ 📂src
+ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📜CommonApi.jsx
+ ┃ ┃ ┗ 📜DataContext.jsx
+ ┃ ┣ 📂assets
+ ┃ ┃ ┣ 📂icons
+ ┃ ┃ ┗ 📂images
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📂Bookmark
+ ┃ ┃ ┣ 📂Communities
+ ┃ ┃ ┣ 📂Explore
+ ┃ ┃ ┃ ┣ 📂hooks
+ ┃ ┃ ┃ ┃ ┣ 📜useCommunities.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜usePostsAndUsers.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜useStudies.jsx
+ ┃ ┃ ┣ 📂Home
+ ┃ ┃ ┣ 📂Messages
+ ┃ ┃ ┣ 📂Post
+ ┃ ┃ ┣ 📂Profile
+ ┃ ┃ ┣ 📂Sidebar
+ ┃ ┃ ┣ 📂Studies
+ ┃ ┣ 📂contexts
+ ┃ ┃ ┗ 📜AuthContext.jsx
+ ┃ ┣ 📂fonts
+ ┃ ┣ 📂pages
+ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┃ ┣ 📜searchBook.js
+ ┃ ┃ ┃ ┗ 📜searchPlace.js
+ ┃ ┃ ┣ 📂Bookmarks
+ ┃ ┃ ┣ 📂Communities
+ ┃ ┃ ┣ 📂Explore
+ ┃ ┃ ┣ 📂Home
+ ┃ ┃ ┣ 📂Messages
+ ┃ ┃ ┣ 📂Notifications
+ ┃ ┃ ┣ 📂Post
+ ┃ ┃ ┣ 📂Profile
+ ┃ ┃ ┣ 📂Recommended
+ ┃ ┃ ┗ 📂Studies
+ ┃ ┣ 📂utils
+ ┃ ┃ ┗ 📜searchHistory.jsx
+ ┃ ┣ 📜App.css
+ ┃ ┣ 📜App.js
+ ┃ ┣ 📜App.module.css
+ ┃ ┣ 📜App.test.js
+ ┃ ┣ 📜index.css
+ ┃ ┣ 📜index.js
+ ┃ ┣ 📜setupProxy.js
+ ┃ ┗ 📜setupTests.js
+ ┣ 📜.env
+ ┣ 📜.gitignore
+ ┣ 📜jsconfig.json
+ ┣ 📜package-lock.json
+ ┣ 📜package.json
+ ┣ 📜README.md
+ ┗ 📜vercel.json
+```
 <br/><br/>
 
 ## 👥 역할 분담
@@ -84,14 +143,14 @@
 
 ### 개발 기간
 
-- **전체 개발 기간** : 2024년 ~
-- **UI 구현** :
-- **기능 구현** :
-  <br/>
+- **전체 개발 기간** : 2024년 5월 22일 ~ 12월 9일
+- **UI 구현** : 2024년 5월 22일 ~ 6월 10일
+- **기능 구현** : 2024년 6월 11일 ~ 12월 9일
 
 ### 작업 관리
-
--
+- **진행 상황 공유** : Discord를 활용하여 팀원들과 실시간 소통하며 진행 상황을 공유했습니다
+- **회의 및 기록** : 매주 정기적으로 회의를 진행하며 작업 순서와 방향성을 논의하였고, 주요 논의 사항과 결론은 Notion에 정리하여 기록 및 공유했습니다.
+  <br/><br/>
 
 ## 📄 페이지별 기능
 
@@ -185,8 +244,8 @@
 
 ## 💬 후기
 
-### 김도영
-
+### 💩 김도영
+작년 12월 부트캠프에서 프론트엔드 관련 내용을 학습하고 프로젝트를 통해 만난 팀원들과 지금까지 팀프로젝트를 진행하며 많은 것을 배웠습니다. 하나하나 결정해나가며 의견을 조율하고 모르는 부분을 서로 공유하며 도와주며 최대한으로 좋은 결과물을 만들어내기 위해 모두가 노력하는 과정이 즐거웠습니다. 생각보다 많은 시간이 소요되었지만 그만큼 많은 걸 얻을 수 있었고 특히 깃허브를 통한 협업이 처음에는 정말 어려웠지만 팀원들과 방법을 공유하며 협업에 익숙해질 수 있어서 좋았습니다. 그리고 팀 프로젝트에서 정말 좋은 팀원들을 만나서 부트캠프 끝난 이후에도 끝까지 함께 할 수 있었던 것이 가장 좋았고 함께 할 수 있어서 너무 좋았고 모두 고생했다고 전하고 싶습니다😊
 <br/>
 
 ### 김상우
