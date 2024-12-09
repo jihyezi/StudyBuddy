@@ -1,0 +1,32 @@
+.inputClick {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.208);
+  z-index: 20;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+.profileInputClick {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.208);
+  z-index: 30;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.inputIcon {
+  width: 60px;
+}

@@ -1,0 +1,83 @@
+.stackTagsArea {
+  position: relative;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-left: -16px;
+  margin-right: -16px;
+}
+
+.classContainer {
+  display: flex;
+  overflow-x: auto;
+  margin-left: 32px;
+  margin-right: 32px;
+  gap: 10px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.classContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+.classificationOn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 12px;
+  background-color: rgba(255, 166, 166, 0.12);
+  color: #ff7474;
+  font-family: "NotoSans-Regular";
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  white-space: nowrap;
+}
+
+.classificationOff {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #9c9c9c;
+  font-family: "NotoSans-Regular";
+  font-size: 16px;
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+
+.overflowBox {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+}
+
+.overflowBoxRight {
+  right: 0;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+}
+
+.overflowBoxLeft {
+  left: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+}
+
+.scrollButton {
+  pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}

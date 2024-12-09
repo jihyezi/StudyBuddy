@@ -1,0 +1,87 @@
+.openButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.modalContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.closeButton {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.btn{
+  width: 20px;
+  height: 20px;
+}
+.modalImageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+  padding-bottom: 70px;
+}
+.modalImage {
+  width: 140px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.googleButton,
+.emailButton {
+  width: 340px;
+  height: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
+  gap: 10px; /* 이미지와 텍스트 사이의 간격 */
+  padding: 10px 20px;
+  font-family: "BalooTammudu2-Bold";
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 52px;
+  cursor: pointer;
+}
+
+.googleButton {
+  background-color: #fff;
+  border: 1px solid #dcd7d7;
+  color: #333;
+}
+
+.emailButton {
+  background-color: #f5f5f5;
+  border: none;
+  color: #333;
+}
+
+.closeButton {
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.ModalImg {
+  top: "50%";
+  left: "50%";
+}

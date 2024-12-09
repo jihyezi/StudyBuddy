@@ -1,0 +1,36 @@
+{
+  "headers": [
+    {
+      "source": "/api/searchBook",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/searchPlace",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+      {
+        "source": "/api/(.*)",
+        "destination": "/server.js"
+      },
+      {
+        "source": "/api/searchBook",
+        "destination": "/api/searchBook.js"
+      },
+      {
+        "source": "/api/searchPlace",
+        "destination": "/api/searchPlace.js"
+      }
+    ]
+} 

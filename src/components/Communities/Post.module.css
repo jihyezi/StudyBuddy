@@ -1,0 +1,162 @@
+.post {
+  border-bottom: 1px solid #dddddd;
+  width: 100%;
+  cursor: pointer;
+}
+
+.communityName {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  margin-left: 25px;
+  color: #ff7474;
+  font-family: "NotoSans-Bold";
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.moreIcon {
+  width: 24px;
+  height: 24px;
+  float: right;
+  vertical-align: middle;
+}
+
+.postDetail {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.userProfile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  object-fit: cover;
+  margin-left: 25px;
+}
+
+.postWriterContent {
+  margin-left: 15px;
+  flex-grow: 1;
+}
+
+.postWriter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.postWriterNickName {
+  color: #333333;
+  font-family: "NotoSans-SemiBold";
+}
+
+.postWriterID {
+  font-size: 14px;
+  color: #606060;
+  font-family: "NotoSans-Regular";
+}
+
+.postWriteDate {
+  color: #606060;
+  font-family: "NotoSans-Regular";
+  font-size: 12px;
+}
+
+.postContent {
+  margin-bottom: 30px;
+}
+
+.postTitle,
+.postPeriod,
+.postResult {
+  color: #333333;
+  font-family: "NotoSans-Regular";
+  line-height: 12px;
+}
+
+.postETC {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 90px;
+  margin-bottom: 10px;
+}
+
+.commentIcon,
+.likeIcon,
+.viewIcon,
+.bookmarkIcon,
+.shareIcon {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+}
+
+.commentNumber {
+  color: #9c9c9c;
+  font-family: "NotoSans-Regular";
+  vertical-align: middle;
+}
+
+.likeNumber {
+  color: #ff7474;
+  font-family: "NotoSans-Regular";
+  vertical-align: middle;
+}
+
+.viewNumber {
+  color: #9c9c9c;
+  font-family: "NotoSans-Regular";
+  vertical-align: middle;
+}
+
+.postComment,
+.postLike {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.moreClick {
+  position: absolute;
+  z-index: 10;
+  top: -20px;
+  right: 10px;
+}
+
+.moreClickEdit,
+.moreClickDelete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+  padding: 8px;
+  background-color: #c8c8c8;
+  cursor: pointer;
+}
+
+.moreClickEdit {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom: 1px solid #ffffff;
+}
+
+.moreClickDelete {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.moreClickEditText,
+.moreClickDeleteText {
+  color: white;
+  font-size: 14px;
+}
+
+.moreClickEditIcon,
+.moreClickDeleteIcon {
+  width: 20px;
+  height: 20px;
+}

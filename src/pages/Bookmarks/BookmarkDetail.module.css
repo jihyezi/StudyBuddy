@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    max-width: 1200px;
+    border-right: 1px solid #dddddd;
+    margin: 0 0 auto 0; 
+    overflow-x: hidden;
+}

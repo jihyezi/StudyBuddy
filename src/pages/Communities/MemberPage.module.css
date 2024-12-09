@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.section {
+    width: 50%;
+    margin-left: 40px;
+}
+
+.title {
+    font-family: "BalooTammudu2-Bold";
+    color: #808080;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.userList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.userItem {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.profileImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    object-fit: cover;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nickname {
+    font-family: "NotoSans-SemiBold";
+    color: #333333;
+    font-size: 14px;
+}
+
+.userId {
+    font-family: "NotoSans-Regular";
+    color: #606060;
+    font-size: 12px;
+}

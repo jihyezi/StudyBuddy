@@ -1,0 +1,9 @@
+.OfflineContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comingsoonicon {
+    width: 300px;
+}

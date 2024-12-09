@@ -1,0 +1,152 @@
+.profileEditModal {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileEditModalHeader {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: row;
+}
+
+.headerText {
+  font-size: 20px;
+  font-family: "NotoSans-Regular";
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.closeIcon {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.saveButton {
+  width: 90px;
+  height: 40px;
+  background-color: #ff7474;
+  border-radius: 30px;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  font-family: "BalooTammudu2-SemiBold";
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  margin-bottom: 130px;
+  background-color: #dddddd;
+}
+
+.image {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  position: relative;
+}
+
+.imageCover {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.208);
+  z-index: 20;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+}
+
+.cameraIcon {
+  width: 60px;
+}
+
+.profileImgContainer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  bottom: -80px;
+  left: 14%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  z-index: 20;
+}
+
+.profileImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+.profileimageCover {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.208);
+  z-index: 30;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 600px;
+  gap: 20px;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputField {
+  width: 440px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+}
+
+.inputField:focus {
+  border-color: #ff7474;
+}
+
+.labelText {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "NotoSans-Medium";
+}

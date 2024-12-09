@@ -1,0 +1,29 @@
+.community {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  max-width: 1200px;
+  border-right: 1px solid #dddddd;
+  margin: 0 0 auto 0; 
+  overflow-x: hidden;
+  padding-bottom: 20px;
+}
+  
+.classification {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 12px;
+  margin-bottom: 15px;
+  justify-content: start;
+  align-items: center;
+}
+  
+.joinCommunity {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 20px 20px 20px;
+  border-bottom: 1px solid #dddddd;
+}
+  

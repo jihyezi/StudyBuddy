@@ -1,0 +1,95 @@
+.community {
+  position: relative;
+  padding-bottom: 15px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  width: 300px;
+  max-width: 350px;
+  padding: 16px 20px;
+  /* max-height: 100px; */
+  cursor: pointer;
+}
+
+.communityName {
+  margin-bottom: 15px;
+  color: #ff7474;
+  font-size: 16px;
+  font-family: "NotoSans-Bold";
+  margin: 0;
+}
+
+.postTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #333333;
+  font-family: "NotoSans-Regular";
+  font-size: 14px;
+}
+
+.postETC {
+  float: right;
+  margin-right: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.like,
+.comment,
+.bookmark {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.likeIcon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.likeNumber {
+  color: #bdbdbd;
+  font-family: "NotoSans-Regular";
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.commentIcon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.commentNumber {
+  color: #bdbdbd;
+  font-family: "NotoSans-Regular";
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.bookmarkIcon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+/* small 사이즈 */
+.smallCommunity {
+  max-width: 260px;
+  width: 220px;
+  cursor: pointer;
+}
+
+.smallcommunityName {
+  font-size: 15px;
+}
+
+.smallpostTitle {
+  font-size: 13px;
+}
+
+.smallpostETC {
+  margin-right: 0px;
+}
