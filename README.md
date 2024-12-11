@@ -190,7 +190,7 @@
 ![로그아웃 상태 커뮤니티](https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04)
 <br />
  - 커뮤니티 가입 시 가입한 커뮤니티 목록이 표시되며, 클릭하면 상세 페이지로 이동합니다.
-![커뮤니티 가입 목록](https://github.com/user-attachments/assets/de57853e-52ef-4ade-966d-5ea33ce622ba)
+![커뮤니티 가입 목록](https://github.com/user-attachments/assets/de57853e-52ef-4ade-966d-5ea33ce622ba.gif)
 <br />
  - 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
 ![커뮤니티 모든](https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832)
