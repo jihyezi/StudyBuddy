@@ -63,7 +63,7 @@ const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth();
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
-  const [isHomePage, setIsHomePage] = useState(false);
+
   const {
     userData,
     allUserData,
@@ -99,7 +99,7 @@ const MainContent = ({ loginuser }) => {
     // 홈 페이지 또는 탐색 페이지에 진입했을 때만 처리
     if (location.pathname === "/" || location.pathname === "/explore") {
       const hasRefreshed = localStorage.getItem("hasRefreshed");
-      console.log("hasRefreshed 값:", hasRefreshed);
+      // console.log("hasRefreshed 값:", hasRefreshed);
 
       // 새로 고침 상태가 없을 때만 새로 고침을 진행
       if (!hasRefreshed) {
