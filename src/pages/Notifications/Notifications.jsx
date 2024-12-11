@@ -11,7 +11,6 @@ const fetchUsers = async () => {
     .select("userid, username, nickname, profileimage");
   if (error) throw new Error(error.message);
 
-
   return users.reduce((acc, user) => {
     acc[user.userid] = {
       nickname: user.nickname || user.username || "Unknown User", // nickname 기본값 설정
@@ -36,6 +35,7 @@ const fetchCommunities = async () => {
 
 // 알림 데이터 Fetch
 const fetchNotifications = async (userId) => {
+  if (!userId) return [];
   const { data: notificationsData, error } = await supabase
     .from("Notification")
     .select("*")
@@ -49,7 +49,6 @@ const fetchNotifications = async (userId) => {
 // 메인 컴포넌트
 const Notifications = ({ showNotifications }) => {
   const userId = localStorage.getItem("userId");
-
   const [formattedNotifications, setFormattedNotifications] = useState([]);
   const queryClient = useQueryClient();
 
@@ -57,14 +56,12 @@ const Notifications = ({ showNotifications }) => {
   const { data: userMap, isLoading: isUserLoading } = useQuery({
     queryKey: ["userMap"],
     queryFn: fetchUsers,
-    enabled: !!userId,
     staleTime: 1000 * 60 * 10,
   });
 
   const { data: communityMap, isLoading: isCommunityLoading } = useQuery({
     queryKey: ["communityMap"],
     queryFn: fetchCommunities,
-    enabled: !!userId,
     staleTime: 1000 * 60 * 10,
   });
 
@@ -75,9 +72,10 @@ const Notifications = ({ showNotifications }) => {
     staleTime: 1000 * 60 * 5,
   });
 
-  // 실시간 알림 구독
+  // 실시간 알림 구독 및 데이터 처리
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !notificationsData || !userMap || !communityMap) return;
+
     const channel = supabase
       .channel("notification_channel")
       .on(
@@ -86,14 +84,6 @@ const Notifications = ({ showNotifications }) => {
         () => queryClient.invalidateQueries(["notifications", userId])
       )
       .subscribe();
-
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [userId, queryClient]);
-
-  useEffect(() => {
-    if (!notificationsData || !userMap || !communityMap) return;
 
     const grouped = notificationsData.reduce((acc, notification) => {
       const notificationDate = new Date(notification.createdat);
@@ -115,10 +105,8 @@ const Notifications = ({ showNotifications }) => {
       let image = noprofile;
 
       if (notification.content.startsWith("You have received a new message from")) {
-        const senderUsername = notification.content.split("from ")[1]?.trim();
-        const sender = userMap?.[senderUsername] || Object.values(userMap).find(
-          (user) => user.username === senderUsername || user.nickname === senderUsername
-        );
+        const senderId = notification.content.split("from ")[1]?.trim();
+        const sender = userMap?.[senderId];
         content = `${sender?.nickname || "알 수 없는 유저"}님이 메시지를 보냈습니다.`;
         image = sender?.profileimage || noprofile;
       } else if (notification.content.startsWith("A new post was created in the community")) {
@@ -165,7 +153,11 @@ const Notifications = ({ showNotifications }) => {
         items,
       }))
     );
-  }, [notificationsData, userMap, communityMap]);
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [userId, notificationsData, userMap, communityMap, queryClient]);
 
   if (isUserLoading || isCommunityLoading || isNotificationsLoading)
     return <div>Loading...</div>;
