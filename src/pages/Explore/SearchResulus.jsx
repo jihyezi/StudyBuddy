@@ -64,6 +64,7 @@ const SearchResults = () => {
             userData={loginUser}
             allUserData={allUserData}
             comment={commentData}
+            newPost
           />
         ) : (
           <div className={styles.Nosearchresults}>
