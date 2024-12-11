@@ -252,6 +252,8 @@
 
 ### Login/Logout
 
+![로그인GIF](https://github.com/user-attachments/assets/6559b82e-c311-4573-a6bc-38c33564c0e1)
+
 1. 로그인
    - 사용자는 회원가입을 한 이메일을 통해 로그인 할 수 있습니다.
 2. 로그아웃 - 사용자는 로그아웃 버튼을 통해 로그아웃을 할 수 있습니다.
