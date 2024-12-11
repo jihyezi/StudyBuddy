@@ -176,36 +176,41 @@
 
 2. 
 - **Hot 커뮤니티** - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/e3399857-84e2-4ded-b791-dda5025b4306">
+<img alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/e3399857-84e2-4ded-b791-dda5025b4306">
 <br/>
 
 - **인기글** - 인기 게시글을 보여주고 클릭하면 상세 게시글 페이지로 이동합니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/cc5f8cad-1748-4e52-9455-ca25cf512b3b">
+<img alt="인기글" src="https://github.com/user-attachments/assets/cc5f8cad-1748-4e52-9455-ca25cf512b3b">
 <br/>
 
 - **태그별 인기 스터디** - 태그별 인기 스터디를 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/79d2769a-cea6-4bf5-819a-e43904709e87">
+<img alt="태그별 인기 스터디" src="https://github.com/user-attachments/assets/79d2769a-cea6-4bf5-819a-e43904709e87">
 <br/>
 
 ### Explore
 
 1. **검색 기능**
    - 검색 결과에 맞는 커뮤니티, 게시글, 스터디 목록을 보여줍니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/19661c93-e7f1-40af-83ac-718aaca9ac69">
+<img alt="검색 기능" src="https://github.com/user-attachments/assets/19661c93-e7f1-40af-83ac-718aaca9ac69">
 <br/>
 
 2. **검색 기록**
    - 로그인한 아이디별로 검색 기록을 보여주고 선택 삭제 기능을 제공합니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/6b84bdf9-d15d-4426-8c44-f7bf2668876a">
+<img alt="검색 기록" src="https://github.com/user-attachments/assets/6b84bdf9-d15d-4426-8c44-f7bf2668876a">
 <br/>
 
 3.
 - **인기태그** - 인기 태그를 보여주고 클릭하면 해당 태그를 검색합니다.
+<img alt="인기태그" src="https://github.com/user-attachments/assets/17335eb0-6eb1-4995-9a15-b4ff6a00075e">
+<br/>
 
 - **Hot 커뮤니티** - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다.
+<img alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/64c0445b-755b-4ecf-8b90-e914b5f7f478">
+<br/>
 
 - **인기 스터디** - 인기 스터디 게시글을 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
-   <br/>
+<img alt="인기 스터디" src="https://github.com/user-attachments/assets/b03b2907-41b1-401e-b8a4-ac029d679712">
+<br/>
 
 ### Communities
 
