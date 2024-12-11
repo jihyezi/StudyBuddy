@@ -187,12 +187,13 @@
 
 1. 커뮤니티 목록
  - 로그아웃 또는 커뮤니티 미가입 시 커뮤니티 분류 목록이 표시되며, 클릭하면 해당 분류의 게시글을 확인할 수 있습니다.
-![로그아웃 상태 커뮤니티](https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04)
+<img alt="로그아웃 상태 커뮤니티" src="https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04">
 <br />
+
  - 커뮤니티 가입 시 가입한 커뮤니티 목록이 표시되며, 클릭하면 상세 페이지로 이동합니다.
-<img width="100%" alt="studybuddyLogo" src="https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23">
-![커뮤니티 가입 목록](https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23)
+<img alt="커뮤니티 가입 목록" src="https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23">
 <br />
+
  - 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
 ![커뮤니티 모든](https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832)
 <br />
@@ -200,9 +201,11 @@
  - 탭 메뉴: 커뮤니티의 인기 게시글, 최신 게시글, 규칙, 멤버 등의 정보를 확인할 수 있습니다.
 ![커뮤니티 상세 페이지](https://github.com/user-attachments/assets/ff757b96-adee-4797-96c8-64de09f57509)
 <br />
+
  - 커뮤니티 가입: 커뮤니티 가입 목록에 표시되며, 해당 커뮤니티 게시글을 확인할 수 있습니다.
-![커뮤니티 가입](https://github.com/user-attachments/assets/2714d823-fb2c-4891-9e7a-7b9ed5238ef8)
+![커뮤니티 가입](https://github.com/user-attachments/assets/2714d823-fb2c-4891-9e7a-7b9ed5238ef8)
 <br />
+
  - 커뮤니티 탈퇴: 커뮤니티 가입 목록에서 삭제됩니다.
 ![커뮤니티 나가기](https://github.com/user-attachments/assets/4aef4df7-264a-47eb-8960-5e02ef3da8d4)
 <br />
@@ -210,9 +213,11 @@
  - 커뮤니티 게시글에 좋아요, 북마크, 공유 기능이 있습니다.
 ![좋아요 북마크 공유](https://github.com/user-attachments/assets/985ab783-3699-43fa-b9bb-72806af9a71e)
 <br />
+
  - 자신이 작성한 게시글은 삭제가 가능합니다.
 ![게시물 삭제](https://github.com/user-attachments/assets/29722794-c925-4dac-8168-961d037aa74e)
 <br />
+
  - 게시글의 준비 기간, 참고 자료, 결과 등의 세부 사항이 표시됩니다.
  - 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다.
 ![상세 게시물 - 댓글](https://github.com/user-attachments/assets/37445356-51f9-4f55-8231-f5babd801160)
