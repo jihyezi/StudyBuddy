@@ -193,43 +193,51 @@
 
  - **가입 상태**: 가입한 커뮤니티 목록이 표시되며, 목록에서 커뮤니티를 클릭하면 상세 페이지로 이동할 수 있습니다.
 <img alt="커뮤니티 가입 목록" src="https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23">
-
+<br />
 <br />
 
  - **모든 커뮤니티 보기**: 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
 <img alt="커뮤니티 모든" src="https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832">
+<br />
 <br />
 
 2. **커뮤니티 상세 페이지**
  - **탭 메뉴**: 커뮤니티의 인기 게시글, 최신 게시글, 규칙, 멤버 등의 정보를 확인할 수 있습니다.
 <img alt="커뮤니티 상세 페이지" src="https://github.com/user-attachments/assets/ff757b96-adee-4797-96c8-64de09f57509">
 <br />
+<br />
 
  - **커뮤니티 가입**: 가입하면 해당 커뮤니티 게시글을 확인할 수 있으며, 가입 목록에도 추가됩니다.
 <img alt="커뮤니티 가입" src="https://github.com/user-attachments/assets/2714d823-fb2c-4891-9e7a-7b9ed5238ef8">
 <br />
+<br />
 
  - **커뮤니티 탈퇴**: 탈퇴 시에는 가입 목록에서 삭제됩니다.
 <img alt="커뮤니티 나가기" src="https://github.com/user-attachments/assets/4aef4df7-264a-47eb-8960-5e02ef3da8d4">
+<br />
 <br />
 
 3. **커뮤니티 게시물**
  - **기능**: 게시글에 좋아요, 북마크, 공유 기능이 제공됩니다.
 <img alt="좋아요 북마크 공유" src="https://github.com/user-attachments/assets/985ab783-3699-43fa-b9bb-72806af9a71e">
 <br />
+<br />
 
  - **작성자 권한**: 자신이 작성한 게시글은 삭제할 수 있습니다.
 <img alt="게시물 삭제" src="https://github.com/user-attachments/assets/29722794-c925-4dac-8168-961d037aa74e">
+<br />
 <br />
 
  - **게시글 상세 정보**: 게시글의 준비 기간, 참고 자료, 결과 등의 세부 사항이 표시됩니다.
  - **댓글**: 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다.
 <img alt="상세 게시물 - 댓글" src="https://github.com/user-attachments/assets/37445356-51f9-4f55-8231-f5babd801160">
 <br />
+<br />
 
  - **상세 게시글에서 커뮤니티 이동**: 상세 게시글에서 커뮤니티를 클릭하면 커뮤니티 상세 페이지로 이동합니다.
 <img alt="상세 게시글 커뮤니티" src="https://github.com/user-attachments/assets/9eb7cba9-17b7-4d5b-9aca-748aeabec8e5">
-<br/>
+<br />
+<br />
 
 
 
@@ -266,14 +274,17 @@
 1. **사용자 프로필**: 사용자 닉네임, 한 줄 소개, 생일, 활동 탭 정보를 확인할 수 있으며, 프로필 수정 버튼을 통해 정보를 변경할 수 있습니다.
 <img alt="프로필 탭" src="https://github.com/user-attachments/assets/1e849c74-6561-4ce9-acbf-42528252a5a7">
 <br />
+<br />
 
 2. **프로필 수정**: 프로필 사진, 닉네임, 한 줄 소개, 생일을 수정할 수 있는 폼(Form)이 제공됩니다.
 <img alt="프로필 수정" src="https://github.com/user-attachments/assets/efb827b1-40d7-41f4-b51c-2389f6725da0">
 <br />
+<br />
 
 3. **다른 사용자 프로필**: 상세 게시글에서 프로필을 클릭하면, 해당 사용자의 닉네임, 한 줄 소개, 생일, 활동 탭 정보를 확인할 수 있습니다.
 <img alt="프로필 수정" src="https://github.com/user-attachments/assets/696a13f6-ea22-46ea-812c-2f8816553c4d">
- <br/>
+<br />
+<br />
 
 ### Post
 
