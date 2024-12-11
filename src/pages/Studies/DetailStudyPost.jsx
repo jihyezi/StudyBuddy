@@ -332,7 +332,7 @@ const DetailStudyPost = () => {
             alt="noprofile"
           />
           <div className={styles.postWriterNickname}>
-            {author?.nickname || "nickname"}
+            {author?.nickname}
           </div>
           <div className={styles.postWriteDate}>
             {new Date(study.createdat).toLocaleDateString()}
