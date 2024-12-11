@@ -171,8 +171,21 @@
 
 1. 온보딩
    - StudyBuddy 설명 온보딩을 통해 안내 메시지를 전달합니다.
-2. Hot 커뮤니티, 인기글, 태그별 인기 스터디 - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다. - 인기 게시글을 보여주고 클릭하면 상세 게시글 페이지로 이동합니다. - 태그별 인기 스터디를 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
-   <br/>
+<img alt="온보딩" src="https://github.com/user-attachments/assets/e8ed284f-d3f2-405c-a991-ce921c34cb66">
+<br />
+
+2. 
+- Hot 커뮤니티 - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다.
+<img alt="온보딩" src="https://github.com/user-attachments/assets/e3399857-84e2-4ded-b791-dda5025b4306">
+<br/>
+
+- 인기글 - 인기 게시글을 보여주고 클릭하면 상세 게시글 페이지로 이동합니다.
+<img alt="온보딩" src="https://github.com/user-attachments/assets/cc5f8cad-1748-4e52-9455-ca25cf512b3b">
+<br/>
+
+- 태그별 인기 스터디 - 태그별 인기 스터디를 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
+<img alt="온보딩" src="https://github.com/user-attachments/assets/79d2769a-cea6-4bf5-819a-e43904709e87">
+<br/>
 
 ### Explore
 
