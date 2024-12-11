@@ -97,7 +97,7 @@ const Bookmarks = ({ userData, allUserData, communityData }) => {
           <img src={loadinggif} style={{ width: "80px" }} />
         </div>
       ) : (
-        <JoinPostList postData={filterPost} />
+        <JoinPostList postData={filterPost} newPost />
       )}
     </div>
   );
