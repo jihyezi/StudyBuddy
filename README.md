@@ -186,29 +186,29 @@
 ### Communities
 
 1. 커뮤니티 목록
-   - 로그아웃 또는 커뮤니티 미가입 시 커뮤니티 분류 목록이 표시되며, 클릭하면 해당 분류의 게시글을 확인할 수 있습니다.
-  ![로그아웃 상태 커뮤니티](https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04)
-   - 커뮤니티 가입 시 가입한 커뮤니티 목록이 표시되며, 클릭하면 상세 페이지로 이동합니다.
-  ![커뮤니티 가입 목록](https://github.com/user-attachments/assets/de57853e-52ef-4ade-966d-5ea33ce622ba)
-   - 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
-  ![커뮤니티 모든](https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832)
+- 로그아웃 또는 커뮤니티 미가입 시 커뮤니티 분류 목록이 표시되며, 클릭하면 해당 분류의 게시글을 확인할 수 있습니다.
+![로그아웃 상태 커뮤니티](https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04)
+- 커뮤니티 가입 시 가입한 커뮤니티 목록이 표시되며, 클릭하면 상세 페이지로 이동합니다.
+![커뮤니티 가입 목록](https://github.com/user-attachments/assets/de57853e-52ef-4ade-966d-5ea33ce622ba)
+- 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
+![커뮤니티 모든](https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832)
 <br />
 2. 커뮤니티 상세 페이지
-  - 탭 메뉴: 커뮤니티의 인기 게시글, 최신 게시글, 규칙, 멤버 등의 정보를 확인할 수 있습니다.
- ![커뮤니티 상세 페이지](https://github.com/user-attachments/assets/3b053db6-bf19-443f-8289-2cf137fe9db6)
-  - 커뮤니티 가입: 커뮤니티 가입 목록에 표시되며, 해당 커뮤니티 게시글을 확인할 수 있습니다.
- ![커뮤니티 가입](https://github.com/user-attachments/assets/9f3b35f7-3657-4ac0-a1b1-4089cc71074f)
-  - 커뮤니티 탈퇴: 커뮤니티 가입 목록에서 삭제됩니다.
- ![커뮤니티 나가기](https://github.com/user-attachments/assets/3e1966dc-b2f1-4d3b-98df-6545cbdfac3c)
+- 탭 메뉴: 커뮤니티의 인기 게시글, 최신 게시글, 규칙, 멤버 등의 정보를 확인할 수 있습니다.
+![커뮤니티 상세 페이지](https://github.com/user-attachments/assets/74197f19-1d87-41ea-90be-d5595f8dd302)
+- 커뮤니티 가입: 커뮤니티 가입 목록에 표시되며, 해당 커뮤니티 게시글을 확인할 수 있습니다.
+![커뮤니티 가입](https://github.com/user-attachments/assets/5f617967-859f-4b0b-8a80-a7b5894228fc)
+- 커뮤니티 탈퇴: 커뮤니티 가입 목록에서 삭제됩니다.
+![커뮤니티 나가기](https://github.com/user-attachments/assets/4aef4df7-264a-47eb-8960-5e02ef3da8d4)
 <br />
 3. 커뮤니티 게시물
-  - 커뮤니티 게시글에 좋아요, 북마크, 공유 기능이 있습니다.
- ![좋아요 북마크 공유](https://github.com/user-attachments/assets/1572109e-b05a-46ce-90eb-dcfa6172e988)
-  - 자신이 작성한 게시글은 삭제가 가능합니다.
- ![게시물 삭제](https://github.com/user-attachments/assets/2b8fd466-9770-42b5-a51f-f6f160c3ebf6)
-  - 게시글의 준비 기간, 참고 자료, 결과 등의 세부 사항이 표시됩니다.
-  - 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다.
- ![상세 게시물 - 댓글](https://github.com/user-attachments/assets/8fbdf2e0-75e2-458f-aca5-6276828837b3)
+- 커뮤니티 게시글에 좋아요, 북마크, 공유 기능이 있습니다.
+![좋아요 북마크 공유](https://github.com/user-attachments/assets/985ab783-3699-43fa-b9bb-72806af9a71e)
+- 자신이 작성한 게시글은 삭제가 가능합니다.
+![게시물 삭제](https://github.com/user-attachments/assets/29722794-c925-4dac-8168-961d037aa74e)
+- 게시글의 준비 기간, 참고 자료, 결과 등의 세부 사항이 표시됩니다.
+- 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다.
+![상세 게시물 - 댓글](https://github.com/user-attachments/assets/37445356-51f9-4f55-8231-f5babd801160)
 <br/>
 
 
