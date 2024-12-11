@@ -63,6 +63,7 @@ const MainContent = ({ loginuser }) => {
   const location = useLocation();
   const { user } = useAuth();
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+
   const {
     userData,
     allUserData,
@@ -78,7 +79,9 @@ const MainContent = ({ loginuser }) => {
   useEffect(() => {
     if (
       !user &&
-      (location.pathname === "/profile/" || location.pathname === "/bookmarks" || location.pathname === "/messages")
+      (location.pathname === "/profile/" ||
+        location.pathname === "/bookmarks" ||
+        location.pathname === "/messages")
     ) {
       setLoginModalIsOpen(true);
     } else {
@@ -90,6 +93,31 @@ const MainContent = ({ loginuser }) => {
     refetchCommunityData();
   }, [user, location.pathname]);
 
+  useEffect(() => {
+    // console.log("현재 경로:", location.pathname);
+
+    // 홈 페이지 또는 탐색 페이지에 진입했을 때만 처리
+    if (location.pathname === "/" || location.pathname === "/explore") {
+      const hasRefreshed = localStorage.getItem("hasRefreshed");
+      // console.log("hasRefreshed 값:", hasRefreshed);
+
+      // 새로 고침 상태가 없을 때만 새로 고침을 진행
+      if (!hasRefreshed) {
+        // console.log("성공");
+        localStorage.setItem("hasRefreshed", "true"); // 새로 고침 상태 설정
+        window.location.reload(); // 페이지 새로 고침
+      } else {
+        // console.log("새로고침 상태 이미 설정됨");
+      }
+    } else {
+      // 다른 페이지로 이동할 때, 새로 고침 상태 초기화
+      const hasRefreshed = localStorage.getItem("hasRefreshed");
+      if (hasRefreshed) {
+        // console.log("새로고침 상태 초기화");
+        localStorage.removeItem("hasRefreshed"); // 'hasRefreshed' 삭제
+      }
+    }
+  }, [location.pathname]);
 
   const closeLoginModal = () => setLoginModalIsOpen(false);
 
@@ -170,14 +198,14 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/studies" ||
         location.pathname.startsWith("/bookmarkdetail/") ||
         location.pathname === "/addCommunity") && (
-          <Recommended
-            user={loginuser}
-            userData={userData}
-            allUserData={allUserData}
-            communityData={communityData}
-            postData={postData}
-          />
-        )}
+        <Recommended
+          user={loginuser}
+          userData={userData}
+          allUserData={allUserData}
+          communityData={communityData}
+          postData={postData}
+        />
+      )}
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
@@ -189,7 +217,6 @@ const App = () => {
   const [loginUser, setLoginUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const { user: sessionUser } = useAuth();
-
 
   useEffect(() => {
     const fetchUserData = async () => {

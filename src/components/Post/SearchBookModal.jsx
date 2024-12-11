@@ -12,7 +12,11 @@ const SearchBookModal = ({ closeModal, updateSelectedModal, initialValue }) => {
   const handleSearch = async () => {
     if (searchTerm.length > 0) {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/searchBook?query=${encodeURIComponent(searchTerm)}`);
+        const response = await axios.get(
+          `${
+            process.env.REACT_APP_BACKEND_URL
+          }/api/searchBook?query=${encodeURIComponent(searchTerm)}`
+        );
         setSearchResults(response.data.items);
       } catch (error) {
         console.error("Error fetching data:", error);
