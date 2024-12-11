@@ -243,7 +243,7 @@
 
 ### SignUp
 
-![회원가입GIF](https://github.com/user-attachments/assets/97e55cc0-0f2e-4afb-b7ad-a5587baf71a5)
+![회원가입3GIF](https://github.com/user-attachments/assets/5eadf8b8-7c76-434f-8d8d-0d547a935962)
 
 1. 회원가입
    - 사용자는 본인이 사용하는 이메일을 통해 회원가입을 할 수 있습니다.
