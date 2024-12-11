@@ -104,9 +104,11 @@ const DetailStudyPost = () => {
         studyId,
       ]);
 
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
       queryClient.setQueryData(["studyComments", studyId], (old) => [
         ...old,
-        { ...newComment, createdat: new Date().toISOString() },
+        { ...newComment, createdat: currentDate },
       ]);
 
       return { previousComments };
@@ -191,10 +193,12 @@ const DetailStudyPost = () => {
       await supabase.from("StudyLike").delete().eq("studyid", studyId);
       setLiked(false);
     } else {
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
       await supabase.from("StudyLike").insert([
         {
           studyid: studyId,
-          createdat: new Date(),
+          createdat: currentDate,
           userid: userId,
         },
       ]);
@@ -242,12 +246,14 @@ const DetailStudyPost = () => {
     if (!inputValue.trim()) return;
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newComment = {
       studyid: studyId,
       userid: userId,
       content: inputValue,
-      createdat: new Date(),
-      updatedat: new Date(),
+      createdat: currentDate,
+      updatedat: currentDate,
     };
 
     mutation.mutate(newComment);
@@ -326,7 +332,7 @@ const DetailStudyPost = () => {
             alt="noprofile"
           />
           <div className={styles.postWriterNickname}>
-            {author?.nickname || "nickname"}
+            {author?.nickname}
           </div>
           <div className={styles.postWriteDate}>
             {new Date(study.createdat).toLocaleDateString()}
