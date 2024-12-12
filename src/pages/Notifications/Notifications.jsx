@@ -87,17 +87,20 @@ const Notifications = ({ showNotifications }) => {
 
     const grouped = notificationsData.reduce((acc, notification) => {
       const notificationDate = new Date(notification.createdat);
+      const correctedDate = new Date(notificationDate.getTime() + 9 * 60 * 60 * 1000); // UTC +9 보정
       const today = new Date();
-      let dateLabel = notificationDate.toLocaleDateString();
+      const correctedToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
 
-      if (notificationDate.toDateString() === today.toDateString()) {
+      let dateLabel = correctedDate.toLocaleDateString();
+
+      if (correctedDate.toDateString() === correctedToday.toDateString()) {
         dateLabel = "오늘";
       } else if (
-        notificationDate.toDateString() ===
-        new Date(today.setDate(today.getDate() - 1)).toDateString()
+        correctedDate.toDateString() ===
+        new Date(correctedToday.setDate(correctedToday.getDate() - 1)).toDateString()
       ) {
         dateLabel = "어제";
-      } else if (notificationDate > new Date(today.setDate(today.getDate() - 7))) {
+      } else if (correctedDate > new Date(correctedToday.setDate(correctedToday.getDate() - 7))) {
         dateLabel = "이번 주";
       }
 
@@ -140,7 +143,7 @@ const Notifications = ({ showNotifications }) => {
       }
       acc[dateLabel].push({
         content,
-        createdat: notification.createdat,
+        createdat: correctedDate.toISOString(),
         image,
       });
 
@@ -184,6 +187,8 @@ const Notifications = ({ showNotifications }) => {
                 <div className={styles.notificationDetails}>
                   <span className={styles.time}>
                     {new Date(item.createdat).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
                       hour12: false,
                     })}
                   </span>
