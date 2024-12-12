@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
       } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
-      console.log("Fetched session:", session);
     };
 
     fetchSession();
@@ -24,7 +23,6 @@ export const AuthProvider = ({ children }) => {
       (_, session) => {
         setUser(session?.user ?? null);
         setLoading(false);
-        console.log("Auth state changed:", session);
       }
     );
 
@@ -40,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("userId"); // 로컬 스토리지에서 userId 제거
     localStorage.removeItem("sb-vrpwhfbfzqwmqlhwhbtu-auth-token"); // 인증 토큰 제거
-    window.location.reload(); // 페이지 새로고침
+    // window.location.reload();
   };
 
   return (

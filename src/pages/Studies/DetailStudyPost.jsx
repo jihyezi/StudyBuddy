@@ -7,7 +7,7 @@ import { useDataContext } from "api/DataContext";
 
 // component
 import Header from "components/Post/DetailHeader";
-import Comment from "components/Post/Comment";
+import StudyComment from "components/Post/StudyComment";
 import DeleteModal from "components/Post/DeleteModal";
 
 // icon & image
@@ -292,10 +292,9 @@ const DetailStudyPost = () => {
     navigate(`/profile/${item}`);
   };
 
-
   return (
     <div>
-      <Header title={"Studies"} />
+      <Header title={"Studies"} detailStudy />
       {isDeleteModalOpen && (
         <DeleteModal
           title={"Study"}
@@ -319,7 +318,7 @@ const DetailStudyPost = () => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick(author?.nickname)}
+          onClick={() => handleProfileClick(author?.username)}
         >
           <img
             className={styles.postWriterProfile}
@@ -327,7 +326,7 @@ const DetailStudyPost = () => {
             alt="noprofile"
           />
           <div className={styles.postWriterNickname}>
-            {author?.nickname || "nickname"}
+            {author?.nickname}
           </div>
           <div className={styles.postWriteDate}>
             {new Date(study.createdat).toLocaleDateString()}
@@ -439,8 +438,10 @@ const DetailStudyPost = () => {
               }}
             >
               {studyComments.map((comment, index) => (
-                <Comment
+                <StudyComment
                   key={comment.commentid}
+                  studyId={studyId}
+                  commentId={comment.commentid}
                   comment={comment}
                   userData={userData}
                   allUserData={allUserData}

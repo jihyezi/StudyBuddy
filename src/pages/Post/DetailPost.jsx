@@ -64,10 +64,19 @@ const fetchPostCommentData = async (postId) => {
   return data;
 };
 
-const DetailPost = ({ }) => {
+const fetchAllUserData = async (userId) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const DetailPost = ({}) => {
   const { postId } = useParams();
-  const { userData, allUserData, communityData, postData, isLoading } =
-    useDataContext();
+  const { userData, allUserData, communityData, isLoading } = useDataContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -104,6 +113,13 @@ const DetailPost = ({ }) => {
     }
   );
 
+  const { data: allUser = {}, isLoading: isAllUser } = useQuery({
+    queryKey: ["allUser", postId, userData],
+    queryFn: () => fetchAllUserData(Post[0].userid),
+    select: (data) => (Array.isArray(data) && data.length > 0 ? data[0] : {}),
+    onError: (error) => console.log(error.message),
+  });
+
   useEffect(() => {
     setInputValue("");
     const checkLikeAndBookmark = async () => {
@@ -125,10 +141,10 @@ const DetailPost = ({ }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("PostLike")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newLike.userid)
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -149,10 +165,11 @@ const DetailPost = ({ }) => {
           return old.filter((like) => like.userid !== newLike.userid);
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postLike", postId], (old) => {
-          if (!old)
-            return [{ ...newLike, createdat: new Date().toISOString() }];
-          return [...old, { ...newLike, createdat: new Date().toISOString() }];
+          if (!old) return [{ ...newLike, createdat: currentDate }];
+          return [...old, { ...newLike, createdat: currentDate }];
         });
       }
 
@@ -176,10 +193,10 @@ const DetailPost = ({ }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-          .from("Bookmark")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newBookmark.userid)
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
@@ -205,13 +222,11 @@ const DetailPost = ({ }) => {
           );
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          if (!old)
-            return [{ ...newBookmark, createdat: new Date().toISOString() }];
-          return [
-            ...old,
-            { ...newBookmark, createdat: new Date().toISOString() },
-          ];
+          if (!old) return [{ ...newBookmark, createdat: currentDate }];
+          return [...old, { ...newBookmark, createdat: currentDate }];
         });
       }
 
@@ -243,14 +258,14 @@ const DetailPost = ({ }) => {
     onMutate: async (newComment) => {
       await queryClient.cancelQueries(["postComments", postId]);
 
-      const previousComments = queryClient.getQueryData([
-        "postComments",
-        postId,
-      ]);
+      const previousComments =
+        queryClient.getQueryData(["postComments", postId]) || [];
 
-      queryClient.setQueryData(["postComments", postId], (old) => [
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
+      queryClient.setQueryData(["postComments", postId], (old = []) => [
         ...old,
-        { ...newComment, createdat: new Date().toISOString() },
+        { ...newComment, createdat: currentDate },
       ]);
 
       return { previousComments };
@@ -260,10 +275,16 @@ const DetailPost = ({ }) => {
         ["postComments", postId],
         context.previousComments
       );
+      console.error("댓글 등록 중 오류 발생:", err);
+      alert("댓글 등록에 실패했습니다.");
     },
-    onSettled: () => {
-      setInputValue("");
+    onSettled: async () => {
       queryClient.invalidateQueries(["postComments", postId]);
+
+      const updatedComments = await fetchPostCommentData(postId);
+      queryClient.setQueryData(["postComments", postId], updatedComments);
+
+      setInputValue("");
     },
   });
 
@@ -272,7 +293,8 @@ const DetailPost = ({ }) => {
     isPostLoading ||
     isPostLikeLoading ||
     isPostBookmarkLoading ||
-    isPostCommentLoading
+    isPostCommentLoading ||
+    isAllUser
   ) {
     return (
       <div
@@ -291,33 +313,18 @@ const DetailPost = ({ }) => {
 
   const communityName = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-      ?.name
+        ?.name
     : "Unknown Community";
 
   const communityid = Array.isArray(communityData)
     ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-      ?.communityid
+        ?.communityid
     : "Unknown Community";
-
-  const userid =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.username
-      : "Unknown User";
 
   const selectedUserData =
     Array.isArray(allUserData) && allUserData.length > 0
       ? allUserData.find((u) => u.userid === Post[0].userid) // postData.userid에 해당하는 사용자 데이터 찾기
       : null;
-
-  const userimg =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.profileimage
-      : "Unknown User";
-
-  const userNickname =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.nickname
-      : "Unknown User";
 
   const handleReviseClick = () => {
     // navigate(`/revise-post/${postId}`);
@@ -407,10 +414,12 @@ const DetailPost = ({ }) => {
     }
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
 
     const newLike = {
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
       userid: userId,
     };
 
@@ -438,12 +447,14 @@ const DetailPost = ({ }) => {
     }
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
 
     const newBookmark = {
       userid: userId,
       communityid: Post[0].communityid,
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
     };
 
     bookmarkMutation.mutate({ newBookmark, bookmarked });
@@ -473,7 +484,6 @@ const DetailPost = ({ }) => {
     navigate(`/profile/${item}`);
   };
 
-  //댓글 등록
   const registerClick = async (event) => {
     if (!userData) {
       alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
@@ -498,12 +508,14 @@ const DetailPost = ({ }) => {
     if (!inputValue.trim()) return;
 
     const userId = session.user.id;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newComment = {
       postid: postId,
       userid: userId,
       content: inputValue,
-      createdat: new Date(),
-      updatedat: new Date(),
+      createdat: currentDate,
+      updatedat: currentDate,
     };
 
     commentMutation.mutate(newComment);
@@ -513,12 +525,14 @@ const DetailPost = ({ }) => {
     const updatedComments = postComments.filter(
       (comment) => comment.commentid !== commentId
     );
+    // queryClient.invalidateQueries(["postComments", postId]);
     queryClient.setQueryData(["postComments", postId], updatedComments);
+    queryClient.invalidateQueries(["postComments", postId]);
   };
 
   return (
     <div style={{ width: "100%", maxWidth: "1200px", margin: "0" }}>
-      <Header title={"Post"} />
+      <Header title={"Post"} detailCommunity />
       {isDeleteModalOpen && (
         <DeleteModal
           title={"Post"}
@@ -543,14 +557,14 @@ const DetailPost = ({ }) => {
             gap: "14px",
             marginTop: "30px",
           }}
-          onClick={() => handleProfileClick(userNickname)}
+          onClick={() => handleProfileClick(allUser?.username)}
         >
           <img
             className={styles.postWriterProfile}
-            src={userimg || noprofile}
+            src={allUser?.profileimage || noprofile}
             alt="noprofile"
           />
-          <div className={styles.postWriterNickname}>{userNickname}</div>
+          <div className={styles.postWriterNickname}>{allUser?.nickname}</div>
           <div className={styles.postWriteDate}>
             {new Date(Post[0].createdat).toLocaleDateString()}
           </div>
@@ -680,8 +694,10 @@ const DetailPost = ({ }) => {
             >
               {postComments.map((comment, index) => (
                 <Comment
-                  key={index}
+                  key={comment.commentid}
                   comment={comment}
+                  postId={postId}
+                  commentId={comment.commentid}
                   userData={userData}
                   allUserData={allUserData}
                   onDelete={handleCommentDelete}

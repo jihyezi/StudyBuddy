@@ -1,11 +1,16 @@
 import React from "react";
 import Post from "./Post";
 
-const CommunityPostList = ({ postData = [] }) => {
+const CommunityPostList = ({ postData = [], newPost }) => {
+  // newPost가 있을 때만 sortedPosts 적용
+  const sortedPosts = newPost
+    ? postData.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
+    : postData;
+
   return (
     <div style={{ width: "100%" }}>
-      {postData.length > 0 ? (
-        postData.map((post) => <Post key={post.postid} postId={post.postid} />)
+      {sortedPosts.length > 0 ? (
+        sortedPosts.map((post) => <Post key={post.postid} postId={post.postid} />)
       ) : (
         <div
           style={{

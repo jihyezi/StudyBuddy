@@ -12,11 +12,18 @@ const InputRule = (props) => {
   ]);
 
   useEffect(() => {
-    updateRules();
-  }, []);
-
-  const updateRules = () => {
     props.onRulesChange(rules);
+  }, [rules]);
+
+  const handleDeleteRule = (id) => {
+    if (id !== 1) {
+      const updatedRules = rules.filter((rule) => rule.id !== id);
+      const reindexedRules = updatedRules.map((rule, index) => ({
+        ...rule,
+        id: index + 1,
+      }));
+      setRules(reindexedRules);
+    }
   };
 
   const handleAddRule = () => {
@@ -26,14 +33,6 @@ const InputRule = (props) => {
       isEditing: false,
     };
     setRules([...rules, newRule]);
-    updateRules();
-  };
-
-  const handleDeleteRule = (id) => {
-    if (id !== 1) {
-      setRules(rules.filter((rule) => rule.id !== id));
-      updateRules();
-    }
   };
 
   const handleToggleEdit = (id) => {
@@ -42,14 +41,12 @@ const InputRule = (props) => {
         rule.id === id ? { ...rule, isEditing: !rule.isEditing } : rule
       )
     );
-    updateRules();
   };
 
   const handleChangeRuleText = (id, newText) => {
     setRules(
       rules.map((rule) => (rule.id === id ? { ...rule, text: newText } : rule))
     );
-    updateRules();
   };
 
   const handleKeyPress = (e, id) => {

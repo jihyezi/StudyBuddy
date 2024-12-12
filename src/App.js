@@ -78,7 +78,7 @@ const MainContent = ({ loginuser }) => {
   useEffect(() => {
     if (
       !user &&
-      (location.pathname === "/profile" || location.pathname === "/bookmarks")
+      (location.pathname === "/profile/" || location.pathname === "/bookmarks" || location.pathname === "/messages")
     ) {
       setLoginModalIsOpen(true);
     } else {
@@ -86,10 +86,10 @@ const MainContent = ({ loginuser }) => {
     }
   }, [user, location.pathname]);
 
-  // 경로가 변경될 때마다 데이터를 새로 불러오도록 useEffect 설정
   useEffect(() => {
     refetchCommunityData();
-  }, [user, location.pathname]); // 경로 변경 시마다 실행
+  }, [user, location.pathname]);
+
 
   const closeLoginModal = () => setLoginModalIsOpen(false);
 
@@ -140,7 +140,7 @@ const MainContent = ({ loginuser }) => {
             />
           }
         />
-        <Route path="/profile/:nickname" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="/create-post" element={<Post />} />
         <Route path="/detail-post/:postId" element={<DetailPost />} />
         <Route path="/create-community" element={<CommunityPost />} />
@@ -170,14 +170,14 @@ const MainContent = ({ loginuser }) => {
         location.pathname === "/studies" ||
         location.pathname.startsWith("/bookmarkdetail/") ||
         location.pathname === "/addCommunity") && (
-        <Recommended
-          user={loginuser}
-          userData={userData}
-          allUserData={allUserData}
-          communityData={communityData}
-          postData={postData}
-        />
-      )}
+          <Recommended
+            user={loginuser}
+            userData={userData}
+            allUserData={allUserData}
+            communityData={communityData}
+            postData={postData}
+          />
+        )}
 
       <LoginModal modalIsOpen={loginModalIsOpen} closeModal={closeLoginModal} />
     </>
@@ -189,6 +189,7 @@ const App = () => {
   const [loginUser, setLoginUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const { user: sessionUser } = useAuth();
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -233,6 +234,7 @@ const App = () => {
             <Body>
               <Content>
                 <Sidebar
+                  key={loginUser?.profileimage || "default"}
                   toggleNotifications={toggleNotifications}
                   loginUser={loginUser}
                 />

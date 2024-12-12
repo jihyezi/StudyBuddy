@@ -1,9 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+}
+
 .postContainer {
   display: flex;
   flex-direction: column;
-  /* flex-wrap: wrap; */
   gap: 10px;
   margin-top: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-bottom: 40px;
 }
 
 .inputContainer {
@@ -11,8 +20,7 @@
   flex-direction: row;
   flex-grow: 1;
   gap: 25px;
-  padding-left: 100px;
-  padding-right: 120px;
+  padding-right: 20px;
 }
 
 .inputTitle {

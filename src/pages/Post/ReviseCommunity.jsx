@@ -133,7 +133,7 @@ const ReviseCommunity = (props) => {
     });
     if (!file) return;
 
-    const uniqueFileName = `${uuidv4()}-${file.name}`;
+    const uniqueFileName = `${uuidv4()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "")}`;
     const { data, error } = await supabase.storage
       .from("Images")
       // .upload(`community/${file.name}`, file);

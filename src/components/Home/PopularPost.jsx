@@ -13,7 +13,7 @@ import bookmarkOn from "assets/icons/Communities/bookmark_on.png";
 import bookmarkOff from "assets/icons/Home/bookmark_off.png";
 
 // data
-const fetchPostLikeData = async (postId) => {
+const fetchPostLike = async (postId) => {
   const { data, error } = await supabase
     .from("PostLike")
     .select("*", { count: "exact" })
@@ -44,25 +44,22 @@ const fetchPostBookmarkData = async (postId) => {
 };
 
 const PopularPost = React.memo(
-  ({
-    small,
-    postData,
-    postLike = [],
-    comment = [],
-    communityName,
-    onClick,
-  }) => {
-
+  ({ small, postData, comment = [], communityName, onClick }) => {
     const { userData } = useDataContext();
     const queryClient = useQueryClient();
     const [liked, setLiked] = useState(false);
     const [bookmarked, setBookmarked] = useState(false);
 
-    const { data: postLikeData = [], isLoading: isLikeLoading } = useQuery({
-      queryKey: ["postLikeData", postData.postid],
-      queryFn: () => fetchPostLikeData(postData.postid),
+    const {
+      data: postLike = [],
+      isLoading: isLikeLoading,
+      refetch,
+    } = useQuery({
+      queryKey: ["postLike", postData.postid],
+      queryFn: () => fetchPostLike(postData.postid),
       staleTime: 0,
       refetchOnWindowFocus: true,
+      initialData: [],
       onError: (error) => console.log(error.message),
     });
 
@@ -72,38 +69,46 @@ const PopularPost = React.memo(
       onError: (error) => console.log(error.message),
     });
 
-    const { data: postBookmark = [], isLoading: isBookmarkLoading } = useQuery({
+    const {
+      data: postBookmark = [],
+      isLoading: isBookmarkLoading,
+      refetch: refetchBookmark,
+    } = useQuery({
       queryKey: ["postBookmark", postData.postid],
       queryFn: () => fetchPostBookmarkData(postData.postid),
+      staleTime: 0,
+      refetchOnWindowFocus: true,
       onError: (error) => console.log(error.message),
     });
 
     useEffect(() => {
       const checkLikeAndBookmark = async () => {
-        const userLike = postLikeData.find(
-          (like) => like.userid === userData?.userid && like.postid === postData.postid
+        const userLike = postLike.find(
+          (like) =>
+            like.userid === userData?.userid && like.postid === postData.postid
         );
         setLiked(!!userLike);
 
         const userBookmark = postBookmark.find(
           (bookmark) =>
-            bookmark.userid === userData?.userid && bookmark.postid === postData.postid
+            bookmark.userid === userData?.userid &&
+            bookmark.postid === postData.postid
         );
         setBookmarked(!!userBookmark);
       };
       if (userData) {
         checkLikeAndBookmark();
       }
-    }, [postData.postid, userData, postLikeData, postBookmark]);
+    }, [postData.postid, userData, postLike, postBookmark]);
 
     const likeMutation = useMutation({
       mutationFn: async ({ newLike, liked }) => {
         const { data, error } = liked
           ? await supabase
-            .from("PostLike")
-            .delete()
-            .eq("postid", postData.postid)
-            .eq("userid", newLike.userid)
+              .from("PostLike")
+              .delete()
+              .eq("postid", postData.postid)
+              .eq("userid", newLike.userid)
           : await supabase.from("PostLike").insert([newLike]);
 
         if (error) {
@@ -114,30 +119,40 @@ const PopularPost = React.memo(
         return data;
       },
       onMutate: async ({ newLike, liked }) => {
-        await queryClient.cancelQueries(["postLikeData", postData.postid]);
+        await queryClient.cancelQueries(["postLike", postData.postid]);
 
-        const previousLike = queryClient.getQueryData(["postLikeData", postData.postid]);
+        const previousLike = queryClient.getQueryData([
+          "postLike",
+          postData.postid,
+        ]);
 
         if (liked) {
-          queryClient.setQueryData(["postLikeData", postData.postid], (old) => {
+          queryClient.setQueryData(["postLike", postData.postid], (old) => {
             if (!old) return [];
             return old.filter((like) => like.userid !== newLike.userid);
           });
         } else {
-          queryClient.setQueryData(["postLikeData", postData.postid], (old) => {
-            if (!old)
-              return [{ ...newLike, createdat: new Date().toISOString() }];
-            return [...old, { ...newLike, createdat: new Date().toISOString() }];
+          const currentDate = new Date();
+          currentDate.setHours(currentDate.getHours() + 9);
+          queryClient.setQueryData(["postLike", postData.postid], (old) => {
+            if (!old) return [{ ...newLike, createdat: currentDate }];
+            return [...old, { ...newLike, createdat: currentDate }];
           });
         }
 
         return { previousLike };
       },
       onError: (err, { newLike }, context) => {
-        queryClient.setQueryData(["postLikeData", postData.postid], context.previousLike);
+        queryClient.setQueryData(
+          ["postLike", postData.postid],
+          context.previousLike
+        );
+      },
+      onSuccess: (data) => {
+        refetch();
       },
       onSettled: async () => {
-        await queryClient.invalidateQueries(["postLikeData", postData.postid]);
+        await queryClient.invalidateQueries(["postLike", postData.postid]);
       },
     });
 
@@ -145,10 +160,10 @@ const PopularPost = React.memo(
       mutationFn: async ({ newBookmark, bookmarked }) => {
         const { data, error } = bookmarked
           ? await supabase
-            .from("Bookmark")
-            .delete()
-            .eq("postid", postData.postid)
-            .eq("userid", newBookmark.userid)
+              .from("Bookmark")
+              .delete()
+              .eq("postid", postData.postid)
+              .eq("userid", newBookmark.userid)
           : await supabase.from("Bookmark").insert([newBookmark]);
 
         if (error) {
@@ -173,27 +188,27 @@ const PopularPost = React.memo(
             );
           });
         } else {
+          const currentDate = new Date();
+          currentDate.setHours(currentDate.getHours() + 9);
           queryClient.setQueryData(["postBookmark", postData.postid], (old) => {
-            if (!old)
-              return [{ ...newBookmark, createdat: new Date().toISOString() }];
-            return [
-              ...old,
-              { ...newBookmark, createdat: new Date().toISOString() },
-            ];
+            if (!old) return [{ ...newBookmark, createdat: currentDate }];
+            return [...old, { ...newBookmark, createdat: currentDate }];
           });
         }
 
         return { previousBookmark };
       },
       onError: (err, { newBookmark }, context) => {
-        queryClient.setQueryData(["postBookmark", postData.postid], context.previousLike);
+        queryClient.setQueryData(
+          ["postBookmark", postData.postid],
+          context.previousBookmark
+        );
+      },
+      onSuccess: (data) => {
+        refetchBookmark();
       },
       onSettled: async () => {
-        const updatedData = await queryClient.fetchQuery({
-          queryKey: ["postBookmark", postData.postid],
-          queryFn: () => fetchPostLikeData(postData.postid),
-        });
-        queryClient.setQueryData(["postBookmark", postData.postid], updatedData);
+        await queryClient.invalidateQueries(["postBookmark", postData.postid]);
       },
     });
 
@@ -216,16 +231,17 @@ const PopularPost = React.memo(
       }
 
       const userId = session.user.id;
-
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
       const newLike = {
         postid: postData.postid,
-        createdat: new Date(),
+        createdat: currentDate,
         userid: userId,
       };
 
       likeMutation.mutate({ newLike, liked });
       setLiked((prevLiked) => !prevLiked);
-      queryClient.refetchQueries(["postLikeData", postData.postid]);
+      queryClient.refetchQueries(["postLike", postData.postid]);
     };
 
     const toggleBookmark = async (event) => {
@@ -247,12 +263,13 @@ const PopularPost = React.memo(
       }
 
       const userId = session.user.id;
-
+      const currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 9);
       const newBookmark = {
         userid: userId,
         communityid: postData.communityid,
         postid: postData.postid,
-        createdat: new Date(),
+        createdat: currentDate,
       };
 
       bookmarkMutation.mutate({ newBookmark, bookmarked });
@@ -266,14 +283,16 @@ const PopularPost = React.memo(
         onClick={onClick}
       >
         <p
-          className={`${styles.communityName} ${small ? styles.smallcommunityName : ""
-            }`}
+          className={`${styles.communityName} ${
+            small ? styles.smallcommunityName : ""
+          }`}
         >
           {communityName ? communityName : "0"}
         </p>
         <p
-          className={`${styles.postTitle} ${small ? styles.smallpostTitle : ""
-            }`}
+          className={`${styles.postTitle} ${
+            small ? styles.smallpostTitle : ""
+          }`}
         >
           {postData?.title}
         </p>
@@ -281,9 +300,17 @@ const PopularPost = React.memo(
           className={`${styles.postETC} ${small ? styles.smallpostETC : ""}`}
         >
           <div className={styles.like}>
-            <img className={styles.likeIcon} src={liked ? likeOn : likeOff} alt="likeOff" onClick={toggleLike} />
-            <span className={styles.likeNumber} style={{ color: liked ? "#ff7474" : "#9c9c9c" }}>
-              {postLikeData.length}
+            <img
+              className={styles.likeIcon}
+              src={liked ? likeOn : likeOff}
+              alt="likeOff"
+              onClick={toggleLike}
+            />
+            <span
+              className={styles.likeNumber}
+              style={{ color: liked ? "#ff7474" : "#9c9c9c" }}
+            >
+              {postLike.length}
             </span>
           </div>
           <div className={styles.comment}>

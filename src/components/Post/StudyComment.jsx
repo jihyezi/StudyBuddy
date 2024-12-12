@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./Comment.module.css";
 import supabase from "components/supabaseClient";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
+import profile1 from "assets/images/Profile/profile1.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";
 import loadinggif from "assets/images/loading.gif";
 
-const fetchPostCommentData = async ({ postId, commentId }) => {
+const fetchPostCommentData = async ({ studyId, commentId }) => {
   const { data, error } = await supabase
-    .from("Comment")
+    .from("StudyComment")
     .select("*")
-    .eq("postid", postId)
+    .eq("studyid", studyId)
     .eq("commentid", commentId);
 
   if (error) throw new Error(error.message);
@@ -32,21 +33,19 @@ const fetchAllUserData = async (userId) => {
   return data;
 };
 
-const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
+const StudyComment = ({ comment, studyId, commentId, userData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [commentText, setCommentText] = useState(comment.content);
   const [editedText, setEditedText] = useState(comment.content);
 
   const {
-    data: postComments = [],
+    data: studyComments = [],
     isLoading: isPostCommentLoading,
     refetch: refetchComment,
   } = useQuery({
-    queryKey: ["postComments", { postId, commentId }],
-    queryFn: () => fetchPostCommentData({ postId, commentId }),
-    staleTime: 0,
-    refetchOnWindowFocus: true,
+    queryKey: ["studyComments", { studyId, commentId }],
+    queryFn: () => fetchPostCommentData({ studyId, commentId }),
     onError: (error) => console.log(error.message),
   });
 
@@ -72,7 +71,7 @@ const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [showOptions, postComments, postId]);
+  }, [showOptions, studyComments, studyId, commentId]);
 
   const moreClick = (event) => {
     event.stopPropagation();
@@ -93,11 +92,12 @@ const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
 
   const handleDeleteClick = async () => {
     const { data, error } = await supabase
-      .from("Comment")
+      .from("StudyComment")
       .delete()
       .eq("commentid", comment.commentid);
 
     if (error) {
+      console.error("Error updating comment:", error);
     } else {
       onDelete(comment.commentid);
     }
@@ -130,7 +130,7 @@ const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 9);
     const { data, error } = await supabase
-      .from("Comment")
+      .from("StudyComment")
       .update({
         content: editedText,
         updatedat: currentDate,
@@ -138,6 +138,7 @@ const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
       .eq("commentid", comment.commentid);
 
     if (error) {
+      console.error("Error updating comment:", error);
     } else {
       setCommentText(editedText);
       setIsEditing(false);
@@ -254,7 +255,7 @@ const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
               {allUser?.nickname || "닉네임"}
             </span>
             <span className={styles.commentWriterDate}>
-              {formatDate(postComments[0]?.updatedat) || "날짜 없음"}
+              {formatDate(studyComments[0]?.updatedat) || "날짜 없음"}
             </span>
           </div>
           {userData && comment.userid === userData.userid && (
@@ -294,4 +295,4 @@ const Comment = ({ comment, commentId, postId, userData, onDelete }) => {
   );
 };
 
-export default Comment;
+export default StudyComment;

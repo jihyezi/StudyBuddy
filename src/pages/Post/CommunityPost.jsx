@@ -77,7 +77,10 @@ const CommunityPost = (props) => {
     });
     if (!file) return;
 
-    const uniqueFileName = `${uuidv4()}-${file.name}`;
+    const uniqueFileName = `${uuidv4()}-${file.name.replace(
+      /[^a-zA-Z0-9.]/g,
+      ""
+    )}`;
     const { data, error } = await supabase.storage
       .from("Images")
       .upload(`community/${uniqueFileName}`, file);
@@ -91,14 +94,16 @@ const CommunityPost = (props) => {
         .data.publicUrl;
     }
 
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const { data: communityData, error: communityError } = await supabase
       .from("Community")
       .insert([
         {
           name: name,
           description: description,
-          createdat: new Date(),
-          updatedat: new Date(),
+          createdat: currentDate,
+          updatedat: currentDate,
           field: field.name,
           rules: rules,
           createdby: userId,

@@ -26,26 +26,27 @@
   font-weight: 600;
   margin-left: 6px;
 }
-  
+
 .closeIcon {
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }
 
 .saveButton {
-    width: 90px;
-    height: 40px;
-    background-color: #FF7474;
-    border-radius: 30px;
-    border: none;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    font-size: 16px;
-    font-family: "BalooTammudu2-SemiBold";
-    transition: background-color 0.3s ease;
+  width: 90px;
+  height: 40px;
+  background-color: #ff7474;
+  border-radius: 30px;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  font-family: "BalooTammudu2-SemiBold";
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .imageWrapper {
@@ -53,7 +54,7 @@
   width: 100%;
   height: 230px;
   margin-bottom: 130px;
-  background-color: #DDDDDD;
+  background-color: #dddddd;
 }
 
 .image {
@@ -63,7 +64,7 @@
   position: relative;
 }
 
-.imageCover{
+.imageCover {
   position: absolute;
   display: flex;
   width: 100%;
@@ -89,7 +90,7 @@
   transform: translateX(-50%);
   width: 140px;
   height: 140px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 50%;
   z-index: 20;
 }
@@ -102,7 +103,7 @@
   object-fit: cover;
 }
 
-.profileimageCover{
+.profileimageCover {
   position: absolute;
   display: flex;
   width: 100%;

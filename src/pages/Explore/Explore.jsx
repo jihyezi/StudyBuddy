@@ -17,10 +17,10 @@ const fetchHotCommunities = async () => {
     .order("member_count", { ascending: false })
     .limit(3);
 
-  if (error) {
-    console.error("Error fetching hot communities:", error);
-    throw new Error("Error fetching hot communities");
-  }
+  // if (error) {
+  //   console.error("Error fetching hot communities:", error);
+  //   throw new Error("Error fetching hot communities");
+  // }
 
   const communityData = await Promise.all(
     data.map(async (community) => {

@@ -26,6 +26,7 @@ const BookmarkDetail = () => {
                 postData={filterPost}
                 allUserData={allUserData}
                 userData={userData}
+                newPost
             />
         </div>
     )

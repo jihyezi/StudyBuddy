@@ -13,7 +13,8 @@ const fetchStudyOnlineData = async () => {
   const { data, error } = await supabase
     .from("Study")
     .select("*")
-    .eq("proceed", "온라인");
+    .eq("proceed", "온라인")
+    .order("createdat", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
@@ -82,7 +83,9 @@ const Online = () => {
           <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
         </div>
       ) : (
-        searchPosts.map((post, index) => <StudyPost key={index} study={post} />)
+        searchPosts.map((post, index) => (
+          <StudyPost key={index} studyId={post.studyid} />
+        ))
       )}
     </div>
   );

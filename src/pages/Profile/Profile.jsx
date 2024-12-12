@@ -21,7 +21,7 @@ const fetchUserPostData = async (userId) => {
   const { data, error } = await supabase
     .from("Post")
     .select("*")
-    .eq('userid', userId);
+    .eq("userid", userId);
 
   if (error) throw new Error(error.message);
   return data;
@@ -51,11 +51,14 @@ const Profile = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { userData, allUserData, communityData, postData, refetchUserData, isLoading } = useDataContext();
   const { user: sessionUser } = useAuth();
-  const { nickname } = useParams();
+  const { username } = useParams();
 
   const currentProfileData = useMemo(() => {
-    return allUserData?.find((user) => user.nickname === nickname) || null;
-  }, [nickname, allUserData]);
+    if (userData?.username === username) {
+      return userData;
+    }
+    return allUserData?.find((user) => user.username === username) || null;
+  }, [userData, username, allUserData]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -63,6 +66,7 @@ const Profile = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    refetchUserData();
   };
 
   const { data: userPost = [], isLoading: isPostLoading } = useQuery({
@@ -87,13 +91,13 @@ const Profile = () => {
     return postData ? postData.filter((postItem) =>
       userLike.some((likeItem) => likeItem.postid === postItem.postid)
     ) : []
-  }, [userLike, postData]);
+  }, [userData, userLike, postData]);
 
   const filterCommentPost = useMemo(() => {
     return postData ? postData.filter((postItem) =>
       userComment.some((likeItem) => likeItem.postid === postItem.postid)
     ) : []
-  }, [userComment, postData]);
+  }, [userData, userComment, postData]);
 
   const loading = isLoading || isPostLoading || isCommentLoading || isLikeLoading;
 
@@ -108,7 +112,7 @@ const Profile = () => {
       ) : (
         <>
           <Header headerName={currentProfileData.nickname} />
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingBottom: '20px' }}>
             <div className={styles.info}>
               <div className={styles.imageWrapper}>
                 {currentProfileData.backgroundimage ?

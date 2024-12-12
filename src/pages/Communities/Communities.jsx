@@ -30,8 +30,16 @@ const fetchJoinCommunityData = async (userId) => {
   }
 };
 
-const Communities = ({}) => {
-  const { userData, communityData, postData, isLoading } = useDataContext();
+const fetchPostData = async () => {
+  const { data, error } = await supabase.from("Post").select("*");
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
+const Communities = ({ }) => {
+  const { userData, communityData, isLoading } = useDataContext();
   const [selectedEvent, setSelectEvent] = useState("");
 
   const { data: joinCommunityData = [], isLoading: isJoinCommunityLoading } =
@@ -41,6 +49,12 @@ const Communities = ({}) => {
       onError: (error) => console.error(error.message),
     });
 
+  const { data: postData = [], isLoading: isPostLoading } = useQuery({
+    queryKey: ["postData"],
+    queryFn: fetchPostData,
+    onError: (error) => console.error(error.message),
+  });
+
   const handleEventSelect = useCallback((event) => {
     setSelectEvent(event);
   }, []);
@@ -48,18 +62,18 @@ const Communities = ({}) => {
   const filterCommunity = useMemo(() => {
     return communityData && joinCommunityData
       ? communityData.filter((c) =>
-          joinCommunityData.some((jc) => jc.communityid === c.communityid)
-        )
+        joinCommunityData.some((jc) => jc.communityid === c.communityid)
+      )
       : [];
   }, [communityData, joinCommunityData]);
 
   const filteredPosts = useMemo(() => {
     return postData && filterCommunity
       ? postData.filter((p) =>
-          filterCommunity.some(
-            (fc) => Number(fc.communityid) === Number(p.communityid)
-          )
+        filterCommunity.some(
+          (fc) => Number(fc.communityid) === Number(p.communityid)
         )
+      )
       : [];
   }, [postData, filterCommunity]);
 
@@ -76,14 +90,14 @@ const Communities = ({}) => {
       ? selectedEvent === "🔥"
         ? postData
         : postData.filter((p) =>
-            filteredCommunities.some(
-              (fc) => Number(fc.communityid) === Number(p.communityid)
-            )
+          filteredCommunities.some(
+            (fc) => Number(fc.communityid) === Number(p.communityid)
           )
+        )
       : [];
   }, [postData, communityData, selectedEvent, filteredCommunities]);
 
-  const loading = isLoading || isJoinCommunityLoading;
+  const loading = isLoading || isJoinCommunityLoading || isPostLoading;
 
   return (
     <div className={styles.community}>
@@ -108,7 +122,7 @@ const Communities = ({}) => {
               joinCommunityData={filterCommunity}
             />
           </div>
-          <CommunityJoinPostList postData={filteredPosts} />
+          <CommunityJoinPostList postData={filteredPosts} newPost />
         </>
       ) : (
         <>
@@ -116,7 +130,7 @@ const Communities = ({}) => {
             <Classification onEventSelect={handleEventSelect} />
           </div>
           {filterfieldPosts.length > 0 ? (
-            <CommunityJoinPostList postData={filterfieldPosts} />
+            <CommunityJoinPostList postData={filterfieldPosts} newPost />
           ) : (
             <div className={styles.nopostcontainer}>
               <div className={styles.nopost}>No Posts Yet</div>

@@ -10,7 +10,7 @@ const useCommunities = (query) => {
     cacheTime: 10 * 60 * 1000, // 캐시는 10분간 유지 후 자동 삭제
     refetchOnWindowFocus: false, // 사용자가 탭을 재방문해도 자동 리패칭하지 않음
   });
-  console.log(data, 111111111111);
+  // console.log(data, 111111111111);
 
   // data만 반환하도록 수정하여 첫 번째 코드와 동일하게 배열을 반환
   return data || [];

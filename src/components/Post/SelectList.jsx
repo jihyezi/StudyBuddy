@@ -1,4 +1,5 @@
 import supabase from "components/supabaseClient";
+import { useQuery } from "@tanstack/react-query";
 
 export const selectList = {
   classifications: [

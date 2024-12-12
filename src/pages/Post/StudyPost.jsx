@@ -183,7 +183,10 @@ const StudyPost = ({ allUserData }) => {
 
     for (let i = 0; i < collectedFiles.length; i++) {
       const file = collectedFiles[i];
-      const uniqueFileName = `${uuidv4()}-${file.name}`;
+      const uniqueFileName = `${uuidv4()}-${file.name.replace(
+        /[^a-zA-Z0-9.]/g,
+        ""
+      )}`;
       const { data, error } = await supabase.storage
         .from("Images")
         .upload(`study/${uniqueFileName}`, file);
@@ -202,6 +205,8 @@ const StudyPost = ({ allUserData }) => {
     }
 
     const finalDescription = descriptionParts.join("\n");
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
 
     const { data: studyData, error: studyError } = await supabase
       .from("Study")
@@ -216,8 +221,8 @@ const StudyPost = ({ allUserData }) => {
           location: location,
           description: finalDescription,
           tag: tags,
-          createdat: new Date(),
-          updatedat: new Date(),
+          createdat: currentDate,
+          updatedat: currentDate,
           completion: "모집 중",
         },
       ])
@@ -232,7 +237,7 @@ const StudyPost = ({ allUserData }) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header title={"Studies"} onPost={handlePostClick} />
       {isModalOpen && (
         <CreateModal
@@ -265,7 +270,13 @@ const StudyPost = ({ allUserData }) => {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <div
             style={{
               minHeight: "72px",
@@ -313,7 +324,13 @@ const StudyPost = ({ allUserData }) => {
             )}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <div
             style={{
               minHeight: "72px",
@@ -372,6 +389,14 @@ const StudyPost = ({ allUserData }) => {
               setShowCaution({ ...showCaution, location: false });
             }}
           />
+          {/* <InputText
+            title={"장소"}
+            placeholder={"오프라인 스터디 진행 시 장소를 입력해주세요."}
+            onSelect={(e) => {
+              setLocation(e);
+              setShowCaution({ ...showCaution, location: false });
+            }}
+          /> */}
           {showCaution.location && (
             <div className={styles.cautionContainer}>
               <img className={styles.cautionIcon} src={caution} />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import styles from "./EmailLoginModal.module.css"; // 스타일을 CSS 모듈로 가져오기
+import { useNavigate } from "react-router-dom";
 
 import close from "assets/icons/Home/close.png";
 import emailloginimg from "assets/images/Home/emailloginimg.png";
@@ -32,6 +33,7 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [signUpModalIsOpen, setSignUpModalIsOpen] = useState(false); // 회원가입 모달 상태
   const [error, setError] = useState(""); // 오류 상태 추가
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -46,6 +48,7 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
       if (error) {
         console.error("로그인 오류:", error.message);
         setError("로그인 실패: " + error.message);
+        alert("로그인 실패"); // alert 메시지 추가
         return;
       }
 
@@ -55,8 +58,9 @@ const EmailLoginModal = ({ modalIsOpen, closeModal }) => {
         return;
       }
 
-      console.log("로그인 성공:", user);
+      // console.log("로그인 성공:", user);
       localStorage.setItem("userId", user.id); // user.id 저장
+      navigate('/')
       window.location.reload(); // 페이지 새로고침
     } catch (err) {
       console.error("로그인 처리 중 오류 발생:", err.message);

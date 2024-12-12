@@ -4,6 +4,7 @@ import supabase from "components/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import isEqual from "lodash/isEqual";
 // sclick
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -22,7 +23,7 @@ import onboarding4 from "assets/images/Onboarding/onboarding4.png";
 
 import Tag from "components/Home/Tag";
 
-const Home = ({}) => {
+const Home = ({ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularPosts, setPopularPosts] = useState([]);
   const [postData, setPostData] = useState([]);
@@ -88,7 +89,7 @@ const Home = ({}) => {
       throw new Error("Error fetching hot communities");
     }
 
-    console.log("Fetched Hot Communities", data);
+    // console.log("Fetched Hot Communities", data);
 
     // 병렬 처리
     const fetchedCommunityData = await Promise.all(
@@ -247,12 +248,9 @@ const Home = ({}) => {
     return useQuery({
       queryKey: ["popularPosts"],
       queryFn: fetchPopularPosts,
-      staleTime: 5 * 60 * 1000, // 5분 동안 캐싱
-      cacheTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
+      staleTime: 15 * 60 * 1000, // 15분 동안 새로고침 방지
+      cacheTime: 30 * 60 * 1000, // 30분 동안 캐시 유지
       refetchOnWindowFocus: false,
-      onError: (error) => {
-        console.error("Error fetching popular posts:", error);
-      },
     });
   };
 
@@ -261,34 +259,25 @@ const Home = ({}) => {
   // React Query 데이터를 상태에 설정
   useEffect(() => {
     if (data && Array.isArray(data.popularPostsData)) {
-      if (
-        JSON.stringify(data.popularPostsData) !== JSON.stringify(popularPosts)
-      ) {
+      if (!isEqual(data.popularPostsData, popularPosts)) {
         setPopularPosts(data.popularPostsData);
       }
-      if (JSON.stringify(data.validPostData) !== JSON.stringify(postData)) {
+      if (!isEqual(data.validPostData, postData)) {
         setPostData(data.validPostData);
       }
-      if (
-        JSON.stringify(data.validPostLikeCounts) !== JSON.stringify(postLike)
-      ) {
+      if (!isEqual(data.validPostLikeCounts, postLike)) {
         setPostLike(data.validPostLikeCounts);
       }
-      if (JSON.stringify(data.validCommentCounts) !== JSON.stringify(comment)) {
+      if (!isEqual(data.validCommentCounts, comment)) {
         setComment(data.validCommentCounts);
       }
-      if (
-        JSON.stringify(data.validCommunityName) !==
-        JSON.stringify(communityName)
-      ) {
+      if (!isEqual(data.validCommunityName, communityName)) {
         setCommunityName(data.validCommunityName);
       }
     }
   }, [data, popularPosts, postData, postLike, comment, communityName]);
-  useEffect(() => {
-    // fetchHotCommunities();
-    // fetchPopularPosts();
 
+  useEffect(() => {
     const fetchUserData = async () => {
       if (sessionUser) {
         const {

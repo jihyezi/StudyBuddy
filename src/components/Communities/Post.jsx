@@ -70,8 +70,18 @@ const fetchPostViewData = async (postId) => {
   return data;
 };
 
+const fetchAllUserData = async (userId) => {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("userid", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 const Post = ({ postId }) => {
-  const { userData, allUserData, communityData, isLoading } = useDataContext();
+  const { userData, communityData, isLoading } = useDataContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [liked, setLiked] = useState(false);
@@ -85,11 +95,16 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postLike = [], isLoading: isLikeLoading } = useQuery({
+  const {
+    data: postLike = [],
+    isLoading: isLikeLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["postLike", postId],
     queryFn: () => fetchPostLikeData(postId),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    initialData: [],
     onError: (error) => console.log(error.message),
   });
 
@@ -99,15 +114,28 @@ const Post = ({ postId }) => {
     onError: (error) => console.log(error.message),
   });
 
-  const { data: postBookmark = [], isLoading: isBookmarkLoading } = useQuery({
+  const {
+    data: postBookmark = [],
+    isLoading: isBookmarkLoading,
+    refetch: refetchBookmark,
+  } = useQuery({
     queryKey: ["postBookmark", postId],
     queryFn: () => fetchPostBookmarkData(postId),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     onError: (error) => console.log(error.message),
   });
 
   const { data: postView = [], isLoading: isViewLoading } = useQuery({
     queryKey: ["postView", postId],
     queryFn: () => fetchPostViewData(postId),
+    onError: (error) => console.log(error.message),
+  });
+
+  const { data: allUser = {}, isLoading: isAllUser } = useQuery({
+    queryKey: ["allUser", postId, userData],
+    queryFn: () => fetchAllUserData(Post[0].userid),
+    select: (data) => (Array.isArray(data) && data.length > 0 ? data[0] : {}),
     onError: (error) => console.log(error.message),
   });
 
@@ -133,10 +161,10 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newLike, liked }) => {
       const { data, error } = liked
         ? await supabase
-          .from("PostLike")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newLike.userid)
+            .from("PostLike")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newLike.userid)
         : await supabase.from("PostLike").insert([newLike]);
 
       if (error) {
@@ -157,10 +185,11 @@ const Post = ({ postId }) => {
           return old.filter((like) => like.userid !== newLike.userid);
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postLike", postId], (old) => {
-          if (!old)
-            return [{ ...newLike, createdat: new Date().toISOString() }];
-          return [...old, { ...newLike, createdat: new Date().toISOString() }];
+          if (!old) return [{ ...newLike, createdat: currentDate }];
+          return [...old, { ...newLike, createdat: currentDate }];
         });
       }
 
@@ -168,6 +197,9 @@ const Post = ({ postId }) => {
     },
     onError: (err, { newLike }, context) => {
       queryClient.setQueryData(["postLike", postId], context.previousLike);
+    },
+    onSuccess: (data) => {
+      refetch();
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(["postLike", postId]);
@@ -178,17 +210,16 @@ const Post = ({ postId }) => {
     mutationFn: async ({ newBookmark, bookmarked }) => {
       const { data, error } = bookmarked
         ? await supabase
-          .from("Bookmark")
-          .delete()
-          .eq("postid", postId)
-          .eq("userid", newBookmark.userid)
+            .from("Bookmark")
+            .delete()
+            .eq("postid", postId)
+            .eq("userid", newBookmark.userid)
         : await supabase.from("Bookmark").insert([newBookmark]);
 
       if (error) {
         console.error("Error on mutation:", error.message);
         throw new Error(error.message);
       }
-      console.log("bookmark", data);
       return data;
     },
     onMutate: async ({ newBookmark, bookmarked }) => {
@@ -201,37 +232,33 @@ const Post = ({ postId }) => {
 
       if (bookmarked) {
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          console.log("true bookmark");
           if (!old) return [];
           return old.filter(
             (bookmark) => bookmark.userid !== newBookmark.userid
           );
         });
       } else {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 9);
         queryClient.setQueryData(["postBookmark", postId], (old) => {
-          console.log("false bookmark");
-          if (!old)
-            return [{ ...newBookmark, createdat: new Date().toISOString() }];
-          return [
-            ...old,
-            { ...newBookmark, createdat: new Date().toISOString() },
-          ];
+          if (!old) return [{ ...newBookmark, createdat: currentDate }];
+          return [...old, { ...newBookmark, createdat: currentDate }];
         });
       }
 
       return { previousBookmark };
     },
     onError: (err, { newBookmark }, context) => {
-      queryClient.setQueryData(["postBookmark", postId], context.previousLike);
+      queryClient.setQueryData(
+        ["postBookmark", postId],
+        context.previousBookmark
+      );
+    },
+    onSuccess: (data) => {
+      refetchBookmark();
     },
     onSettled: async () => {
-      const updatedData = await queryClient.fetchQuery({
-        queryKey: ["postBookmark", postId],
-        queryFn: () => fetchPostLikeData(postId),
-      });
-
-      console.log("updatedData", updatedData.length);
-      queryClient.setQueryData(["postBookmark", postId], updatedData);
+      await queryClient.invalidateQueries(["postBookmark", postId]);
     },
   });
 
@@ -264,9 +291,10 @@ const Post = ({ postId }) => {
     isLikeLoading ||
     isCommentLoading ||
     isBookmarkLoading ||
-    isViewLoading;
+    isViewLoading ||
+    isAllUser;
 
-  if (loading) {
+  if (loading || Post.length === 0) {
     return (
       <div
         style={{
@@ -308,23 +336,8 @@ const Post = ({ postId }) => {
   const communityName =
     Array.isArray(communityData) && communityData.length > 0
       ? communityData.find((comm) => comm.communityid === Post[0].communityid)
-        ?.name
+          ?.name
       : "Unknown Communityy";
-
-  const userimg =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.profileimage
-      : "Unknown User";
-
-  const userNickname =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.nickname
-      : "Unknown User";
-
-  const userName =
-    Array.isArray(allUserData) && allUserData.length > 0
-      ? allUserData.find((u) => u.userid === Post[0].userid)?.username
-      : "Unknown User";
 
   const handlePostClick = () => {
     if (!isViewLoading) {
@@ -351,10 +364,11 @@ const Post = ({ postId }) => {
     }
 
     const userId = session.user.id;
-
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newLike = {
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
       userid: userId,
     };
 
@@ -382,12 +396,13 @@ const Post = ({ postId }) => {
     }
 
     const userId = session.user.id;
-
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
     const newBookmark = {
       userid: userId,
       communityid: Post[0].communityid,
       postid: postId,
-      createdat: new Date(),
+      createdat: currentDate,
     };
 
     bookmarkMutation.mutate({ newBookmark, bookmarked });
@@ -439,7 +454,7 @@ const Post = ({ postId }) => {
       console.log("게시글 삭제 성공:", data);
     }
 
-    queryClient.invalidateQueries(["Post", postId]);
+    queryClient.invalidateQueries("Post");
     setShowOptions(false);
     setIsDeleteModalOpen(false);
   };
@@ -477,8 +492,12 @@ const Post = ({ postId }) => {
 
       <div className={styles.postDetail}>
         <div>
-          {userimg ? (
-            <img className={styles.userProfile} src={userimg} alt="profile" />
+          {allUser?.profileimage ? (
+            <img
+              className={styles.userProfile}
+              src={allUser?.profileimage}
+              alt="profile"
+            />
           ) : (
             <img className={styles.userProfile} src={noprofile} alt="profile" />
           )}
@@ -486,8 +505,10 @@ const Post = ({ postId }) => {
 
         <div className={styles.postWriterContent}>
           <div className={styles.postWriter}>
-            <span className={styles.postWriterNickName}>{userNickname}</span>
-            <span className={styles.postWriterID}>@{userName}</span>
+            <span className={styles.postWriterNickName}>
+              {allUser?.nickname}
+            </span>
+            <span className={styles.postWriterID}>@{allUser?.username}</span>
             <span className={styles.postWriteDate}>
               {new Date(Post[0].createdat).toLocaleDateString()}
             </span>

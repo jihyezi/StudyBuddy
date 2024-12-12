@@ -82,7 +82,7 @@ const DatepickerWrapper = styled.div`
 
         .react-datepicker__day--today {
           background-color: ${(props) =>
-            props.selectedDate ? "transparent" : "rgba(255, 116, 116, 0.2)"};
+    props.selectedDate ? "transparent" : "rgba(255, 116, 116, 0.2)"};
         }
 
         .react-datepicker__day:hover {
@@ -168,7 +168,7 @@ const InputDate = (props) => {
   ];
 
   return (
-    <div className={styles.inputContainer}>
+    <div className={props.small ? styles.inputContainer2 : styles.inputContainer}>
       <div className={styles.inputTitle}>{props.title}</div>
       <div className={styles.inputClick} onClick={handleClick}>
         <span className={styles.inputPlaceholder} style={placeholderStyle}>

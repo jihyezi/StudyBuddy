@@ -10,7 +10,7 @@ import supabase from "components/supabaseClient";
 import loadinggif from "assets/images/loading.gif";
 
 const fetchStudyAllData = async () => {
-  const { data, error } = await supabase.from("Study").select("*");
+  const { data, error } = await supabase.from("Study").select("*").order("createdat", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
@@ -79,7 +79,9 @@ const All = () => {
           <img src={loadinggif} style={{ width: "80px" }} alt="Loading" />
         </div>
       ) : (
-        searchPosts.map((post, index) => <StudyPost key={index} study={post} />)
+        searchPosts.map((post, index) => (
+          <StudyPost key={index} studyId={post.studyid} />
+        ))
       )}
     </div>
   );
