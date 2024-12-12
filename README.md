@@ -278,7 +278,8 @@
    <br/>
 
 ### Notifications
-![ScreenRec_2024-12-12-13-38-17](https://github.com/user-attachments/assets/52d2d1df-67a5-430d-b69a-e155593685c7)
+![ScreenRec_2024-12-12-13-40-12](https://github.com/user-attachments/assets/42739c4d-dbdb-4f8c-97bb-b35b3798d413)
+
 
 1. DM, 내가 가입한 커뮤니티의 새 글, 내가 쓴 글(포스트, 댓글)의 댓글이 작성되거나 좋아요가 추가된다면 해당 유저에게 알림이 갑니다.
    <br/>
