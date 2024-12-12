@@ -315,13 +315,13 @@
 ### Post
 
 1. 게시글 작성 : 사용자는 가입한 커뮤니티에 한해 해당 커뮤니티와 관련 게시글을 작성할 수 있습니다.
-<img alt="게시물 작성" src="">
+<img alt="게시물 작성" src="https://github.com/user-attachments/assets/c2fc3425-f0ba-4e37-9bf6-9032899dcb22">
 
 2. 커뮤니티 개설 : 사용자는 새로운 커뮤니티를 생성할 수 있습니다.
 <img alt="커뮤니티 개설" src="https://github.com/user-attachments/assets/2ae449bf-c748-400f-9387-184c86113b05">
 
 3. 스터디 생성 : 사용자는 온라인 또는 오프라인 스터디를 모집할 수 있습니다.
-<img alt="스터디 생성" src="">
+<img alt="스터디 생성" src="https://github.com/user-attachments/assets/683f8605-03f4-4fa7-be2b-d299d0dd2e0a">
    <br/>
 
 ### SignUp
