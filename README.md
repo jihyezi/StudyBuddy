@@ -278,11 +278,13 @@
    <br/>
 
 ### Notifications
+![ScreenRec_2024-12-12-12-52-20](https://github.com/user-attachments/assets/4a521249-64d0-4f09-b5a1-a7bddd3cbbdc)
 
 1. DM, 내가 가입한 커뮤니티의 새 글, 내가 쓴 글(포스트, 댓글)의 댓글이 작성되거나 좋아요가 추가된다면 해당 유저에게 알림이 갑니다.
    <br/>
 
 ### Messages
+![ScreenRec_2024-12-12-12-53-12](https://github.com/user-attachments/assets/db602f05-def1-4cd0-b4bf-fddab09414ca)
 
 1. 새 유저와 대화를 시작하거나 기존 유저와 대화를 할 수 있으며 필요시 대화 내용을 삭제하여 초기화할 수 있습니다.
    <br/>
