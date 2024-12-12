@@ -162,6 +162,11 @@ const Notifications = ({ showNotifications }) => {
     };
   }, [userId, notificationsData, userMap, communityMap, queryClient]);
 
+  // 비로그인 상태 처리
+  if (!userId) {
+    return null;
+  }
+
   if (isUserLoading || isCommunityLoading || isNotificationsLoading)
     return <div>Loading...</div>;
 
