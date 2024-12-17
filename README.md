@@ -343,8 +343,11 @@
 
 ## 6. ❗ 트러블 슈팅
 [Home 컴포넌트 리렌더링 이슈](https://github.com/jihyezi/StudyBuddy/wiki/README-6.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85_Home-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A6%AC%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%9D%B4%EC%8A%88)
+<br/>
 [React Query를 통한 성능 문제 개선](https://github.com/jihyezi/StudyBuddy/wiki/README-6.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85_React-Query%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%84%B1%EB%8A%A5-%EB%AC%B8%EC%A0%9C-%EA%B0%9C%EC%84%A0)
+<br/>
 [배포 후 네이버 API 통신 문제](https://github.com/jihyezi/StudyBuddy/wiki/README-6.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85_%EB%B0%B0%ED%8F%AC-%ED%9B%84-%EB%84%A4%EC%9D%B4%EB%B2%84-API-%ED%86%B5%EC%8B%A0-%EB%AC%B8%EC%A0%9C)
+<br/>
 [좋아요 기능 이슈](https://github.com/jihyezi/StudyBuddy/wiki/README-6.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85_%EC%A2%8B%EC%95%84%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%9D%B4%EC%8A%88)
 <br/><br/><br/>
 
