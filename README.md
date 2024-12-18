@@ -167,107 +167,127 @@
 
 1. **온보딩**
    - StudyBuddy 설명 온보딩을 통해 안내 메시지를 전달합니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/c94234b9-eac7-4a9a-a2ce-aa6735d651b5">
+<p align="center">
+<img width="90%" alt="온보딩" src="https://github.com/user-attachments/assets/c94234b9-eac7-4a9a-a2ce-aa6735d651b5">
+</p>
 <br />
 
 
 2. **Hot 커뮤니티**
    - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다.
-<img alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/d0f09e6c-aefc-4373-b2a4-450781916114">
+<p align="center">
+<img width="90%" alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/d0f09e6c-aefc-4373-b2a4-450781916114">
+</p>
 <br/>
 
 3. **인기글**
    - 인기 게시글을 보여주고 클릭하면 상세 게시글 페이지로 이동합니다.
-<img alt="인기글" src="https://github.com/user-attachments/assets/909bec0c-cb47-48d5-bafb-12759bad686e">
+<p align="center">
+<img width="90%" alt="인기글" src="https://github.com/user-attachments/assets/909bec0c-cb47-48d5-bafb-12759bad686e">
+</p>
 <br/>
 
 4. **태그별 인기 스터디**
    - 태그별 인기 스터디를 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
-<img alt="태그별 인기 스터디" src="https://github.com/user-attachments/assets/81589a68-16fc-41c8-8dba-f3c84e25b725">
+<p align="center">
+<img width="90%" alt="태그별 인기 스터디" src="https://github.com/user-attachments/assets/81589a68-16fc-41c8-8dba-f3c84e25b725">
+</p>
 <br/>
 
 ### Explore
 
 1. **검색 기능**
    - 검색 결과에 맞는 커뮤니티, 게시글, 스터디 목록을 보여줍니다.
-<img alt="검색 기능" src="https://github.com/user-attachments/assets/19661c93-e7f1-40af-83ac-718aaca9ac69">
+<img width="90%" alt="검색 기능" src="https://github.com/user-attachments/assets/19661c93-e7f1-40af-83ac-718aaca9ac69">
 <br/>
 
 2. **검색 기록**
    - 로그인한 아이디별로 검색 기록을 보여주고 선택 삭제 기능을 제공합니다.
-<img alt="검색 기록" src="https://github.com/user-attachments/assets/6b84bdf9-d15d-4426-8c44-f7bf2668876a">
+<img width="90%" alt="검색 기록" src="https://github.com/user-attachments/assets/6b84bdf9-d15d-4426-8c44-f7bf2668876a">
 <br/>
 
 3. **인기태그**
    - 인기 태그를 보여주고 클릭하면 해당 태그를 검색합니다.
-<img alt="인기태그" src="https://github.com/user-attachments/assets/17335eb0-6eb1-4995-9a15-b4ff6a00075e">
+<img width="90%" alt="인기태그" src="https://github.com/user-attachments/assets/17335eb0-6eb1-4995-9a15-b4ff6a00075e">
 <br/>
 
 4. **Hot 커뮤니티**
    - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다.
-<img alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/64c0445b-755b-4ecf-8b90-e914b5f7f478">
+<img width="90%" alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/64c0445b-755b-4ecf-8b90-e914b5f7f478">
 <br/>
 
 5. **인기 스터디**
    - 인기 스터디 게시글을 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
-<img alt="인기 스터디" src="https://github.com/user-attachments/assets/b03b2907-41b1-401e-b8a4-ac029d679712">
+<img width="90%" alt="인기 스터디" src="https://github.com/user-attachments/assets/b03b2907-41b1-401e-b8a4-ac029d679712">
 <br/>
 
 ### Communities
 
 1. **커뮤니티 목록**
  - **로그아웃 또는 미가입 상태**: 커뮤니티 분류 목록이 표시되며, 각 분류를 클릭하면 해당 분류의 게시글을 확인할 수 있습니다.
+<p align="center">
 <img alt="로그아웃 상태 커뮤니티" src="https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04">
-<br />
-<br />
+<p align="center">
+ <br />
 
  - **가입 상태**: 가입한 커뮤니티 목록이 표시되며, 목록에서 커뮤니티를 클릭하면 상세 페이지로 이동할 수 있습니다.
+<p align="center">
 <img alt="커뮤니티 가입 목록" src="https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23">
-<br />
-<br />
+</p>
+ <br />
 
  - **모든 커뮤니티 보기**: 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
+<p align="center">
 <img alt="커뮤니티 모든" src="https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832">
-<br />
-<br />
+</p>
+ <br />
 
 2. **커뮤니티 상세 페이지**
  - **탭 메뉴**: 커뮤니티의 인기 게시글, 최신 게시글, 규칙, 멤버 등의 정보를 확인할 수 있습니다.
+<p align="center">
 <img alt="커뮤니티 상세 페이지" src="https://github.com/user-attachments/assets/ff757b96-adee-4797-96c8-64de09f57509">
-<br />
-<br />
+</p>
+ <br />
 
  - **커뮤니티 가입**: 가입하면 해당 커뮤니티 게시글을 확인할 수 있으며, 가입 목록에도 추가됩니다.
+<p align="center">
 <img alt="커뮤니티 가입" src="https://github.com/user-attachments/assets/2714d823-fb2c-4891-9e7a-7b9ed5238ef8">
-<br />
+</p>
+ <br />
 <br />
 
  - **커뮤니티 탈퇴**: 탈퇴 시에는 가입 목록에서 삭제됩니다.
+<p align="center">
 <img alt="커뮤니티 나가기" src="https://github.com/user-attachments/assets/4aef4df7-264a-47eb-8960-5e02ef3da8d4">
-<br />
-<br />
+<p align="center">
+ <br />
 
 3. **커뮤니티 게시물**
  - **기능**: 게시글에 좋아요, 북마크, 공유 기능이 제공됩니다.
+<p align="center">
 <img alt="좋아요 북마크 공유" src="https://github.com/user-attachments/assets/985ab783-3699-43fa-b9bb-72806af9a71e">
-<br />
-<br />
+</p>
+ <br />
+
 
  - **작성자 권한**: 자신이 작성한 게시글은 삭제할 수 있습니다.
+<p align="center">
 <img alt="게시물 삭제" src="https://github.com/user-attachments/assets/29722794-c925-4dac-8168-961d037aa74e">
-<br />
-<br />
+</p>
+ <br />
 
  - **게시글 상세 정보**: 게시글의 준비 기간, 참고 자료, 결과 등의 세부 사항이 표시됩니다.
  - **댓글**: 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다.
+<p align="center">
 <img alt="상세 게시물 - 댓글" src="https://github.com/user-attachments/assets/37445356-51f9-4f55-8231-f5babd801160">
-<br />
-<br />
+</p>
+ <br />
 
  - **상세 게시글에서 커뮤니티 이동**: 상세 게시글에서 커뮤니티를 클릭하면 커뮤니티 상세 페이지로 이동합니다.
+<p align="center">
 <img alt="상세 게시글 커뮤니티" src="https://github.com/user-attachments/assets/9eb7cba9-17b7-4d5b-9aca-748aeabec8e5">
-<br />
-<br />
+</p>
+ <br />
 
 
 
@@ -276,18 +296,24 @@
 1. 스터디 분류&피드 : 온라인 및 오프라인 스터디 분류가 표시되며, 클릭하면 해당 분류의 스터디를 확인할 수 있습니다.
 
 2. 스터디 상세 페이지 - 정보 확인: 스터디의 진행 방식, 모집 인원, 장소 등의 세부 사항이 표시됩니다. - 댓글 작성: 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다. - 스터디 수정 및 삭제: 사용자가 작성한 스터디에 `…` 아이콘이 표시되며, 클릭 시 수정 및 삭제 옵션이 나타납니다.
-<img alt="스터디" src="https://github.com/user-attachments/assets/6462189c-382c-44dc-9c88-c9babd47753a">
-<br/>
+<p align="center">
+<img width="90%" alt="스터디" src="https://github.com/user-attachments/assets/6462189c-382c-44dc-9c88-c9babd47753a">
+</p>
+ <br/>
 
 ### Notifications
-![ScreenRec_2024-12-12-13-40-12](https://github.com/user-attachments/assets/42739c4d-dbdb-4f8c-97bb-b35b3798d413)
-
 1. DM, 내가 가입한 커뮤니티의 새 글, 내가 쓴 글(포스트, 댓글)의 댓글이 작성되거나 좋아요가 추가된다면 해당 유저에게 알림이 갑니다.
+<p align="center">
+<img width="90%" alt="좋아요 북마크 공유" src="https://github.com/user-attachments/assets/b134b3df-db23-43aa-947c-d1a5d32d1e99">
+</p>
    <br/>
    
 ### Messages
-![ScreenRec_2024-12-12-12-53-12](https://github.com/user-attachments/assets/b50cb1a2-0dd8-4e6c-be84-a617e8435627)
 1. 새 유저와 대화를 시작하거나 기존 유저와 대화를 할 수 있으며 필요시 대화 내용을 삭제하여 초기화할 수 있습니다.
+<p align="center">
+<img width="90%" alt="좋아요 북마크 공유" src="https://github.com/user-attachments/assets/2ba88018-178d-45d2-88a4-fe12ab7604d5">
+</p>
+
    <br/>
    
 ### Bookmarks
