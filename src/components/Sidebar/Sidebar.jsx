@@ -70,8 +70,6 @@ const Sidebar = ({ toggleNotifications, isNotificationsOpen }) => {
     }
   };
 
-  console.log(userData)
-
   const menus = [
     { name: "Home", path: "/", text: "home" },
     { name: "Explore", path: "/explore", text: "explore" },
