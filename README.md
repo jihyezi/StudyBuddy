@@ -167,22 +167,23 @@
 
 1. **온보딩**
    - StudyBuddy 설명 온보딩을 통해 안내 메시지를 전달합니다.
-<img alt="온보딩" src="https://github.com/user-attachments/assets/e8ed284f-d3f2-405c-a991-ce921c34cb66">
+<img alt="온보딩" src="https://github.com/user-attachments/assets/c94234b9-eac7-4a9a-a2ce-aa6735d651b5">
 <br />
+
 
 2. **Hot 커뮤니티**
    - 인기있는 커뮤니티를 보여주고 클릭하면 상세 커뮤니티 페이지로 이동합니다.
-<img alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/e3399857-84e2-4ded-b791-dda5025b4306">
+<img alt="Hot 커뮤니티" src="https://github.com/user-attachments/assets/d0f09e6c-aefc-4373-b2a4-450781916114">
 <br/>
 
 3. **인기글**
    - 인기 게시글을 보여주고 클릭하면 상세 게시글 페이지로 이동합니다.
-<img alt="인기글" src="https://github.com/user-attachments/assets/cc5f8cad-1748-4e52-9455-ca25cf512b3b">
+<img alt="인기글" src="https://github.com/user-attachments/assets/909bec0c-cb47-48d5-bafb-12759bad686e">
 <br/>
 
 4. **태그별 인기 스터디**
    - 태그별 인기 스터디를 보여주고 클릭하면 상세 스터디 페이지로 이동합니다.
-<img alt="태그별 인기 스터디" src="https://github.com/user-attachments/assets/79d2769a-cea6-4bf5-819a-e43904709e87">
+<img alt="태그별 인기 스터디" src="https://github.com/user-attachments/assets/81589a68-16fc-41c8-8dba-f3c84e25b725">
 <br/>
 
 ### Explore
