@@ -4,10 +4,10 @@ import "fonts/Font.css";
 
 // image & icon
 import cancel from "assets/icons/Home/cancel.png";
-import cat from "assets/images/Home/1.jpg";
+import cat from "assets/images/Home/1.webp";
 import group from "assets/icons/Home/group.png";
 
-const RecentCommunity = ({}) => {
+const RecentCommunity = ({ }) => {
   return (
     <div className={styles.community}>
       <img className={styles.cancelIcon} src={cancel} alt="cancel" />
