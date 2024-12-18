@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import styles from "./SignUpModal.module.css"; // 스타일을 CSS 모듈로 가져오기
 
 import close from "assets/icons/Home/close.png";
-import signUpimg from "assets/images/Home/signUpimg.png";
+import signUpimg from "assets/images/Home/signUpimg.webp";
 import passwordicon from "assets/icons/Home/password.png";
 import rightarrow from "assets/icons/Home/rightarrow.png";
 import red_error from "assets/icons/Home/red_error.svg";
