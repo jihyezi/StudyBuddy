@@ -384,12 +384,9 @@
 
 ## 7. 🔧 개선 목표
 * **성능 개선 전**
-<img alt="성능 개선 전1" src="https://github.com/user-attachments/assets/cb954cdd-9c01-4d53-b283-0d1c84a426f2">
-<img alt="성능 개선 전2" src="https://github.com/user-attachments/assets/a7b1f872-b176-4a0e-84b6-3a4b425b926b">
-<br/>
+<br/><br/>
 
 * **성능 개선 후**
-  * 웹폰트 최적화
 
 <br/><br/><br/>
 
