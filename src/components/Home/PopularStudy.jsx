@@ -3,7 +3,7 @@ import styles from "./PopularStudy.module.css";
 import "fonts/Font.css";
 
 // image & icon
-import cat from "assets/images/Home/1.jpg";
+import cat from "assets/images/Home/1.webp";
 import member from "assets/icons/Home/member.png";
 import circle from "assets/icons/Home/circle.png";
 

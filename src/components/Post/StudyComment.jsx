@@ -5,7 +5,6 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 // icon & image
 import more from "assets/icons/Communities/more.png";
-import profile1 from "assets/images/Profile/profile1.png";
 import noprofile from "assets/images/Profile/noprofile.png";
 import editIcon from "assets/icons/Post/edit.png";
 import deleteIcon from "assets/icons/Post/delete.png";

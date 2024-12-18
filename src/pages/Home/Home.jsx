@@ -16,10 +16,10 @@ import PopularStudy from "components/Home/PopularStudy";
 
 import LoginModal from "components/Home/LoginModal";
 
-import onboarding1 from "assets/images/Onboarding/onboarding1.png";
-import onboarding2 from "assets/images/Onboarding/onboarding2.png";
-import onboarding3 from "assets/images/Onboarding/onboarding3.png";
-import onboarding4 from "assets/images/Onboarding/onboarding4.png";
+import onboarding1 from "assets/images/Onboarding/onboarding1.webp";
+import onboarding2 from "assets/images/Onboarding/onboarding2.webp";
+import onboarding3 from "assets/images/Onboarding/onboarding3.webp";
+import onboarding4 from "assets/images/Onboarding/onboarding4.webp";
 
 import Tag from "components/Home/Tag";
 
