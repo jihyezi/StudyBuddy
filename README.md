@@ -389,6 +389,7 @@
 
 * **성능 개선 후**
 <img alt="성능 개선 후" src="https://github.com/user-attachments/assets/67ff48b8-0730-4361-9b40-86329c8e7c8b">
+
   * 웹 폰트 로드 최적화 : font-display: swap 속성을 적용해 폰트 로드 중 텍스트 비가시성 문제(FOIT) 해결. 초기 로딩 속도 개선 및 사용자 경험 향상.
   * PNG → WebP 변환 : PNG 이미지를 WebP 포맷으로 변환해 페이지 로드 속도 단축 및 Google Lighthouse 점수 개선.
 <br/><br/><br/>
