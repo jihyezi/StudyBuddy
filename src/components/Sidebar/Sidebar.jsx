@@ -6,7 +6,7 @@ import { useAuth } from "contexts/AuthContext";
 import { useDataContext } from "api/DataContext";
 import SidebarItem from "components/Sidebar/SidebarItem";
 // Icons
-import logo from "assets/icons/Sidebar/studybuddyLogo.png";
+import logo from "assets/icons/Sidebar/studybuddyLogo.webp";
 import home_off from "assets/icons/Sidebar/home_off.png";
 import home_on from "assets/icons/Sidebar/home_on.png";
 import explore_off from "assets/icons/Sidebar/explore_off.png";

@@ -7,7 +7,7 @@ import EmailLoginModal from "./EmailLoginModal";
 import googleimg from "assets/icons/Home/googleimg.png";
 import emailimg from "assets/icons/Home/emailimg.png";
 import close from "assets/icons/Home/close.png";
-import modalMain from "assets/images/Home/modalMain.png";
+import modalMain from "assets/images/Home/modalMain.webp";
 import { GoogleLogin } from "@react-oauth/google";
 import GoogleLoginButton from "./GoogleLoginButton";
 

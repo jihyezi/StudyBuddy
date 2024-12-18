@@ -4,7 +4,7 @@ import styles from "./EmailLoginModal.module.css"; // 스타일을 CSS 모듈로
 import { useNavigate } from "react-router-dom";
 
 import close from "assets/icons/Home/close.png";
-import emailloginimg from "assets/images/Home/emailloginimg.png";
+import emailloginimg from "assets/images/Home/emailloginimg.webp";
 import passwordicon from "assets/icons/Home/password.png";
 import SignUpModal from "./SignUpModal"; // SignUpModal 가져오기
 import supabase from "../supabaseClient"; // supabase 클라이언트 가져오기

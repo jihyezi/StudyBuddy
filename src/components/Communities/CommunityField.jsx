@@ -27,7 +27,7 @@ import printing from 'assets/icons/Field/printing.png';
 import agriculture from 'assets/icons/Field/agriculture.png';
 import safety from 'assets/icons/Field/safety.png';
 import environment from 'assets/icons/Field/environment.png';
-import logo from 'assets/icons/Sidebar/studybuddyLogo.png';
+import logo from 'assets/icons/Sidebar/studybuddyLogo.webp';
 
 
 const CommunityField = ({ field }) => {
