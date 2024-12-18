@@ -384,10 +384,11 @@
 
 ## 7. 🔧 개선 목표
 * **성능 개선 전**
+<img alt="성능 개선 전" src="https://github.com/user-attachments/assets/161805d9-8236-4c12-b018-887dde4f34e3">
 <br/><br/>
 
 * **성능 개선 후**
-
+<img alt="성능 개선 후" src="https://github.com/user-attachments/assets/67ff48b8-0730-4361-9b40-86329c8e7c8b">
 <br/><br/><br/>
 
 ## 8. 💬 후기
