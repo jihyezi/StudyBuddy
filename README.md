@@ -226,66 +226,66 @@
 1. **커뮤니티 목록**
  - **로그아웃 또는 미가입 상태**: 커뮤니티 분류 목록이 표시되며, 각 분류를 클릭하면 해당 분류의 게시글을 확인할 수 있습니다.
 <p align="center">
-<img alt="로그아웃 상태 커뮤니티" src="https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04">
+<img width="90%" alt="로그아웃 상태 커뮤니티" src="https://github.com/user-attachments/assets/7f2d4859-e26f-4678-997e-cb741a26fe04">
 <p align="center">
  <br />
 
  - **가입 상태**: 가입한 커뮤니티 목록이 표시되며, 목록에서 커뮤니티를 클릭하면 상세 페이지로 이동할 수 있습니다.
 <p align="center">
-<img alt="커뮤니티 가입 목록" src="https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23">
+<img width="90%" alt="커뮤니티 가입 목록" src="https://github.com/user-attachments/assets/67135d31-6d84-484e-b0da-daf4c88e6f23">
 </p>
  <br />
 
  - **모든 커뮤니티 보기**: 모든 커뮤니티는 분야별로 분류되어 정리되어 있습니다.
 <p align="center">
-<img alt="커뮤니티 모든" src="https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832">
+<img width="90%" alt="커뮤니티 모든" src="https://github.com/user-attachments/assets/422b69a4-b0e8-4aa8-b72f-3afeb870f832">
 </p>
  <br />
 
 2. **커뮤니티 상세 페이지**
  - **탭 메뉴**: 커뮤니티의 인기 게시글, 최신 게시글, 규칙, 멤버 등의 정보를 확인할 수 있습니다.
 <p align="center">
-<img alt="커뮤니티 상세 페이지" src="https://github.com/user-attachments/assets/ff757b96-adee-4797-96c8-64de09f57509">
+<img width="90%" alt="커뮤니티 상세 페이지" src="https://github.com/user-attachments/assets/ff757b96-adee-4797-96c8-64de09f57509">
 </p>
  <br />
 
  - **커뮤니티 가입**: 가입하면 해당 커뮤니티 게시글을 확인할 수 있으며, 가입 목록에도 추가됩니다.
 <p align="center">
-<img alt="커뮤니티 가입" src="https://github.com/user-attachments/assets/2714d823-fb2c-4891-9e7a-7b9ed5238ef8">
+<img width="90%" alt="커뮤니티 가입" src="https://github.com/user-attachments/assets/2714d823-fb2c-4891-9e7a-7b9ed5238ef8">
 </p>
  <br />
 <br />
 
  - **커뮤니티 탈퇴**: 탈퇴 시에는 가입 목록에서 삭제됩니다.
 <p align="center">
-<img alt="커뮤니티 나가기" src="https://github.com/user-attachments/assets/4aef4df7-264a-47eb-8960-5e02ef3da8d4">
+<img width="90%" alt="커뮤니티 나가기" src="https://github.com/user-attachments/assets/4aef4df7-264a-47eb-8960-5e02ef3da8d4">
 <p align="center">
  <br />
 
 3. **커뮤니티 게시물**
  - **기능**: 게시글에 좋아요, 북마크, 공유 기능이 제공됩니다.
 <p align="center">
-<img alt="좋아요 북마크 공유" src="https://github.com/user-attachments/assets/985ab783-3699-43fa-b9bb-72806af9a71e">
+<img width="90%" alt="좋아요 북마크 공유" src="https://github.com/user-attachments/assets/985ab783-3699-43fa-b9bb-72806af9a71e">
 </p>
  <br />
 
 
  - **작성자 권한**: 자신이 작성한 게시글은 삭제할 수 있습니다.
 <p align="center">
-<img alt="게시물 삭제" src="https://github.com/user-attachments/assets/29722794-c925-4dac-8168-961d037aa74e">
+<img width="90%" alt="게시물 삭제" src="https://github.com/user-attachments/assets/29722794-c925-4dac-8168-961d037aa74e">
 </p>
  <br />
 
  - **게시글 상세 정보**: 게시글의 준비 기간, 참고 자료, 결과 등의 세부 사항이 표시됩니다.
  - **댓글**: 댓글 섹션에서 댓글을 작성하고 다른 사용자의 댓글을 확인할 수 있습니다.
 <p align="center">
-<img alt="상세 게시물 - 댓글" src="https://github.com/user-attachments/assets/37445356-51f9-4f55-8231-f5babd801160">
+<img width="90%" alt="상세 게시물 - 댓글" src="https://github.com/user-attachments/assets/37445356-51f9-4f55-8231-f5babd801160">
 </p>
  <br />
 
  - **상세 게시글에서 커뮤니티 이동**: 상세 게시글에서 커뮤니티를 클릭하면 커뮤니티 상세 페이지로 이동합니다.
 <p align="center">
-<img alt="상세 게시글 커뮤니티" src="https://github.com/user-attachments/assets/9eb7cba9-17b7-4d5b-9aca-748aeabec8e5">
+<img width="90%" alt="상세 게시글 커뮤니티" src="https://github.com/user-attachments/assets/9eb7cba9-17b7-4d5b-9aca-748aeabec8e5">
 </p>
  <br />
 
