@@ -367,14 +367,19 @@
 
 1. **회원가입**: 사용자는 본인이 사용하는 이메일을 통해 회원가입을 할 수 있습니다.
 2. **중복확인**: 회원가입을 할 때 아이디, 닉네임 중복 확인 기능을 제공합니다.
-![회원가입3GIF](https://github.com/user-attachments/assets/5eadf8b8-7c76-434f-8d8d-0d547a935962)
+<p align="center">
+<img width="90%" alt="회원가입" src="https://github.com/user-attachments/assets/2745b5f0-00c7-4c36-9868-0e304ec9b5b3">
+</p>
+
 <br/>
 
 ### Login/Logout
 
 1. **로그인**: 사용자는 회원가입을 한 이메일을 통해 로그인 할 수 있습니다.
-2. **로그아웃**: 사용자는 로그아웃 버튼을 통해 로그아웃을 할 수 있습니다. 
-![로그인GIF](https://github.com/user-attachments/assets/6559b82e-c311-4573-a6bc-38c33564c0e1)
+2. **로그아웃**: 사용자는 로그아웃 버튼을 통해 로그아웃을 할 수 있습니다.
+<p align="center">
+<img width="90%" alt="로그인" src="https://github.com/user-attachments/assets/d9056906-696f-438d-9fbf-c331bf35cc26">
+</p>
    <br/><br/>
 
 ## 6. ❗ 트러블 슈팅
