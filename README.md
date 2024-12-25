@@ -142,7 +142,10 @@
 ### **하지혜**
 
 - **UI Design**
-- **Page** - Communities - Profile - Bookmark
+- **Page**
+ - Profile
+ - Communities
+ - Bookmark
 
 <br/><br/><br/>
 
